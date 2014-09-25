@@ -1,0 +1,188 @@
+\documentclass[lecture]{csm}
+%\documentclass[blanks,lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2013/14}
+\doctype{Lecture}
+\doctitle{Frequentist Probability}
+\docnumber{5}
+
+% local
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\prob}{\mathbb{P}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+%\newcommand{\pounds}{{£}}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+%----------------------------------------------------------------------
+\section{Relative frequency}
+%----------------------------------------------------------------------
+So far, we have defined probability to be a number between $0$ and $1$ that represents how likely an outcome or event is to occur.
+
+\bit
+\it The \emph{symmetry} that exists in many problems (e.g. those involving dice and cards) allows us to choose sensible values for these probabilities.
+\it How can we define probability in more general scenarios?
+\eit
+
+Suppose that a random experiment is repeated many times under the same conditions.
+\bit
+\it Let $N$ be the number of times that the experiment is repeated. 
+\it Let $N(A)$ be the number of times that event $A$ occurs. 
+\eit
+
+\begin{definition}
+The ratio $N(A)/N$ is called the \emph{relative frequency} of event $A$. 
+\end{definition}
+
+\bit
+\it The relative frequency of event $A$ is the number of times it occurs expressed as a proportion of the total number of repetitions, 
+\eit
+
+\newpage % <<
+
+% defn: frequentist probability
+\begin{definition}[Frequentist model]
+Under the \emph{frequentist model}, the probability of an event $A$ is defined to be the limit of its relative frequency as the number of trials increases without bound:
+\[
+P(A) = \lim_{N\to\infty} \frac{N(A)}{N}.
+\]
+\end{definition}
+
+\bit
+%\it This is called the \emph{frequentist} model of probability.
+\it The frequentist model is dominant in many areas of science (e.g.\ clinical trials).
+\it In practical applications, a large number of random experiments is performed, and the relative frequency of an event is taken as an approximation of its ``true'' probability.
+\eit
+
+\vspace{2ex}
+Frequentist probability has nice properties:
+\bit
+\it $0\leq P(A)\leq 1$ for every event $A\in\mathcal{P}(\Omega)$.
+\it $P(\emptyset)=0$, because $N(\emptyset)=0$ for any number of repeteions.
+\it $P(\Omega)=1$, because $N(\Omega)=N$ for any number of repeteions.
+\it The \emph{complementarity} property:
+\[
+P(A^c) = \frac{N(A^c)}{N}= \frac{N-N(A)}{N} = 1-\frac{N(A)}{N} = 1 - P(A).
+\]
+
+\newpage
+
+\it The \emph{additive} property:
+If $A$ and $B$ are two disjoint events, then
+\[
+\frac{N(A\cup B)}{N} 
+	= \frac{N(A)+N(B)}{N} = \frac{N(A)}{N} + \frac{N(B)}{N}
+\]
+so $P(A\cup B)=P(A)+P(B)$.
+\par
+More generally, if $A_1,A_2,\ldots,A_n$ are pairwise disjoint events, then
+\begin{align*}
+\frac{N(A_1\cup A_2\cup\ldots\cup A_n)}{N} 
+	& = \frac{N(A_1)+N(A_2)+\ldots+N(A_n)}{N} \\
+	& = \frac{N(A_1)}{N} + \frac{N(A_2)}{N}+\ldots+\frac{N(A_n)}{N}
+\end{align*}
+so $P(A_1\cup A_2\cup\ldots\cup A_n)=P(A_1)+P(A_2)+\ldots+P(A_n)$.
+\eit
+%----------------------------------------------------------------------
+\newpage
+\section{Conditional probability}
+%----------------------------------------------------------------------
+Conditional probability is a natural consequence of the frequentist model.
+\bit
+\it Let $N$ be the number of times the experiment is repeated. 
+\it Let $N(A)$ be the number of times that event $A$ occurs. 
+\it Let $N(B)$ be the number of times that event $B$ occurs. 
+\it Let $N(A,B)$ be the number of times that events $A$ and $B$ both occur. 
+\eit
+
+Intuitively, the conditional probability that $A$ occurs given that $B$ occurs, is the number of trials in which $A$ and $B$ both occur as a proportion of the number of trials in which $B$ occurs:
+\[
+P(A|B)	= \lim_{N\to\infty}\frac{N(A,B)}{N(B)} 
+		= \lim_{N\to\infty}\frac{N(A,B)/N}{N(B)/N} 
+		= \frac{P(A\cap B)}{P(B)},
+\]
+which agrees with the definition of conditional probability given previously.
+  
+%----------------------------------------------------------------------
+\newpage
+\section{Infinite sample spaces}
+%----------------------------------------------------------------------
+The frequentist model does not extend to experiments that have infinitely many outcomes.
+
+\begin{example}\label{ex:infinitesamplespace}
+Consider a random experiment in which a coin is tossed repeatedly until the first head occurs. 
+\bit
+\it Let the outcome of the experiment be the number of times that the coin is tossed.
+\eit
+\par
+The sample space for this experiment is an infinite set:
+\bit
+\it $\Omega = \{H,TH,TTH,TTTH,TTTTH,TTTTTH,\ldots\}$, or alternatively,
+\it $\Omega = \{1,2,3,4,5,\ldots\}$.
+\eit
+\end{example}
+
+\vspace*{2ex}
+For any fixed number of repetitions, there are plausible outcomes that will not occur. 
+\bit
+\it How can we define their probability in terms of relative frequeency?
+\eit
+
+\vspace*{2ex}
+Later on, we will define probability as a \emph{measure} on specific collections of events.
+\bit
+\it Our starting point will be a minimal set of properties that such measures should possess.
+\eit
+
+%\break % <<
+%
+%\begin{examplecont}{\ref{ex:infinitesamplespace}}
+%Let $p$ be is the probability of observing a head in any particular trial.  
+%If we assume that the trials are independent, we can assign a probability to each outcome:
+%\[
+%P(\{H\})= p,\quad P(\{TH\})=p(1-p), \quad P(\{TTH\}) = p(1-p)^2, \quad\text{and so on.}
+%\]
+%When $0<p<1$, each of these probabilities is non-zero, and their sum is equal to 1:
+%\begin{align*}
+%P(\{H\}) + P(\{TH\}) + P(\{TTH\}) + \ldots
+%	& = p + p(1-p) + p(1-p)^2 + \ldots \\
+%	& = p\sum_{k=0}^{\infty}(1-p)^k \\
+%	& = \frac{p}{1-(1-p)} = 1.
+%\end{align*}
+%\end{examplecont}
+%
+%This is all very well, but what does ``the probability of observing a head'' actually mean?
+
+%%----------------------------------------------------------------------
+%\section{The Bayesian model}
+%%----------------------------------------------------------------------
+%\subsubsection*{Frequentist model (Neymann/Pearson/Wald)}
+%
+%Data are variable, parameters are fixed:
+%\bit
+%\it Data are observed from repeatable random experiments.
+%\it Unknown parameters are assumed to be constant across repetitions.
+%\eit
+%
+%\subsubsection*{Bayesian model (Bayes/Laplace/de Finetti)}
+%
+%Data are fixed, parameters are variable
+%\bit
+%\it Data are observed from a realized sample.
+%\it Unknown parameters are described probabilistically.
+%\eit
+
+%======================================================================
+\end{document}
+%======================================================================

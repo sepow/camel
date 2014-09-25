@@ -1,0 +1,321 @@
+\documentclass[lecture]{csm}
+%\documentclass[blanks,lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2012/13}
+\doctype{Lecture}
+\doctitle{Conditional Probability}
+\docnumber{4}
+
+% local
+\newcommand{\prob}{\mathbb{P}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+
+%----------------------------------------------------------------------
+\section{Conditional probability}
+%----------------------------------------------------------------------
+What is the probability that an event $A$ occurs, given that another event $B$ occurs?
+\bit
+\it For example, what is the probability that the bus will be late, given that it's raining?
+\eit
+
+
+% modern
+Let $\Omega$ be a finite sample space, and $A,B\in\mathcal{P}(\Omega)$ be two events.
+\bit
+\it If $B$ occurs and $A\cap B = \emptyset$, then $A$ cannot occur.
+\it If $B$ occurs and $B\subseteq A$, then $A$ is certain to occur.
+\it If $B$ occurs, then $A$ will also occur \emph{if and only if} the event $A\cap B$ occurs.
+\eit
+If $B$ occurs, the probability that $A$ occurs is $\prob(A\cap B)$ expressed as a proportion of $\prob(B)$:
+
+% definition
+\begin{definition}
+If $\prob(B)>0$, the \emph{conditional probability of $A$ given $B$} is defined by
+\[
+\prob(A|B) = \frac{\prob(A\cap B)}{\prob(B)}
+\]
+\end{definition}
+
+\newpage
+
+% remark
+\begin{remark}
+\bit
+\it $\prob(A|B) = 0$ whenever $A\cap B = \emptyset$, and
+\it $\prob(A|B) = 1$ whenever $B\subseteq A$.
+\eit
+\end{remark}
+
+% example
+\begin{example}
+Let $A$ and $B$ be two events, with probabilities $\prob(A)=0.3$, $\prob(B)=0.8$ and $\prob(A\cap B)=0.2$.\par
+Find the probabilities $\prob(A\cup B)$, $\prob(A\cap B^c)$, $\prob(A|B)$ and $\prob(A|B^c)$.
+\begin{solution}
+\ben
+\it $\prob(A\cup B) = \prob(A) + \prob(B) - \prob(A\cap B) = 0.3 + 0.8 - 0.2 = 0.9$
+\it $\prob(A\cap B^c) = \prob(A) - \prob(A\cap B) = 0.3 - 0.2 = 0.1$
+\it $\prob(A|B)   = \prob(A\cap B)/\prob(B) = 0.2/0.8 = 0.25$
+\it $\prob(A|B^c) = \prob(A\cap B^c))/\prob(B^c) = 0.1/0.2 = 0.5$
+\een
+\end{solution}
+\end{example}
+
+
+\newpage % <<
+
+\begin{example}[The Second Child Paradox]
+If we know that a man has two children, and that one of them is a boy, what is the probability that he has two boys?
+\begin{solution}
+\bit
+\it Initially there are four equally-likely outcomes: $\Omega=\{BB, BG, GB, GG\}$.
+\it The statement rules out the last of these outcomes ($GG$).
+\it The remaining possibilities are $BB$, $BG$ and $GB$
+\it Hence the probability that the man has two boys is 1/3. 
+\eit
+Alternatively, let $A=\{BB, BG, GB\}$ be the event that the man has at least one boy. Then
+\[
+\prob(\{BB\}|A) = \frac{\prob(\{BB\}\cap A)}{\prob(A)} = \frac{\prob(\{BB\})}{\prob(\{BB,BG,GB\})} = \frac{1/4}{3/4} = \frac{1}{3}.
+\]
+\end{solution}
+\end{example}
+
+
+%----------------------------------------------------------------------
+\section{The law of total probability}
+%----------------------------------------------------------------------
+%\begin{align*}
+%\prob(A|B) 
+%	& = \frac{\prob(A\cap B)}{\prob(B)} = \frac{\prob(B\cap A)}{\prob(B)} = \frac{\prob(B|A)\prob(A)}{\prob(B)}
+%\intertext{and hence}	
+%\prob(A|B)\prob(B) 
+%	& = \prob(A\cap B) = \prob(B\cap A) = \prob(B|A)\prob(A).
+%\end{align*}
+
+% definition: partition
+\begin{definition}
+A (finite) \emph{partition} of a set $B$ is a collection of non-empty sets $\{A_1,A_2,\ldots,A_n\}$ such that every element of $B$ lies in exactly one of these sets, or equivalently,
+\ben
+%\it $\emptyset\notin\{A_1,A_2,\ldots,A_n\}$, 
+\it $A_i\cap A_j = \emptyset$ for all $i\neq j$, and 
+\it $B\subseteq\bigcup_{i=1}^n A_i$.
+\een
+\end{definition}
+
+%\begin{example}
+%The following are all partitions of the set $\{a,b,c\}$:
+%\big\{\{a,c\},\{b,d\}\} and \{
+
+
+% theorem: law of total probability
+\begin{theorem}[The Law of Total Probability]\label{thm:law_of_total_probability}
+If $\{A_1,A_2,\ldots,A_n\}$ is a partition of $B$, then
+\[
+\prob(B) = \sum_{i=1}^n \prob(B\cap A_i) = \sum_{i=1}^n \prob(B|A_i)\prob(A_i)
+\]
+\end{theorem}
+
+\newpage % <<
+
+% proof
+\begin{proof}
+Since 
+\[
+B = (B\cap A_1)\cup (B\cap A_2)\cup,\ldots,(B\cap A_n)
+\]
+is a disjoint union,
+\begin{align*}
+\prob(B) 
+	& = \sum_{\omega\in B}p(\omega) \\
+	& = \sum_{\omega\in B\cap A_1}p(\omega) + \sum_{\omega\in B\cap A_2}p(\omega) 
+		+ \ldots + \sum_{\omega\in B\cap A_n}p(\omega) \\[2ex]
+	& = \prob(B\cap A_1) + \prob(B\cap A_2) + \ldots + \prob(B\cap A_n) \\
+	& = \sum_{i=1}^n \prob(B\cap A_i) \\
+	& = \sum_{i=1}^n \prob(B|A_i)\prob(A_i).\hfill
+\end{align*}
+\qed
+\end{proof}
+
+%----------------------------------------------------------------------
+\section{Bayes' theorem}
+%----------------------------------------------------------------------
+\begin{lemma}
+\label{lem:bayes}
+For any two events $A$ and $B$ such that $\prob(B)>0$,
+\[
+\prob(A|B) = \frac{\prob(B|A)\prob(A)}{\prob(B)}.
+\]
+\end{lemma}
+\begin{proof}
+Set intersection is a commutative operation, so
+\[
+\prob(A|B) = \frac{\prob(A\cap B)}{\prob(B)} = \frac{\prob(B\cap A)}{\prob(B)} = \frac{\prob(B|A)\prob(A)}{\prob(B)}.
+\]
+\qed
+\end{proof}
+
+\newpage % <<
+
+% theorem: Bayes' theorem
+\begin{theorem}[Bayes' Theorem]\label{thm:bayes}
+Let $\{A_1,A_2,\ldots\}$ be a partition of an event $B$ and suppose that $\prob(B)>0$. Then
+\[
+\prob(A_i|B) = \frac{\prob(B|A_i)\prob(A_i)}{\sum_{j=1}^n \prob(B|A_j)\prob(A_j)}
+\]
+\end{theorem}
+
+% proof
+\begin{proof}
+By Lemma~\ref{lem:bayes},
+$$
+\prob(A_i|B) 
+	= \frac{\prob(B|A_i)\prob(A_i)}{\prob(B)}
+	= \frac{\prob(B|A_i)\prob(A_i)}{\sum_{j=1}^n \prob(B|A_j)\prob(A_j)}
+\]
+where the last equality follows by the law of total probability.\qed
+\vfill
+\end{proof}
+
+\newpage % <<
+
+% problem
+\begin{exercise}
+Bob tries to buy a newspaper every day. He tries in the morning with probability $1/3$, in the evening with probability $1/2$ and forgets completely with probability $1/6$. The probability of successfully buying a newspaper in the morning is $9/10$ (plenty of copies left), and in the evening is $2/10$ (often sold out). If Bob buys a newspaper, what is the probability that he bought it in the morning?
+\end{exercise}
+
+% solution
+\begin{solution}
+Let $M$ be the event that Bob tries to buy a newspaper in the morning, $E$ the event that he tries in the evening, and $F$ the event that he forgets completely. Then
+\[
+\prob(M) = 1/3, \qquad \prob(E) = 1/2, \qquad \prob(F) = 1/6.
+\]
+Let $N$ denote the event that Bob buys a newspaper. Then
+\[
+\prob(N|M) = 9/10, \qquad \prob(N|E) = 2/10, \qquad \prob(N|F) = 0.
+\]
+By Bayes' Theorem,
+\begin{align*}
+\prob(M|N) = \frac{\prob(N|M)\prob(M)}{\prob(N)}
+	& = \frac{\prob(N|M)\prob(M)}{\prob(N|M)\prob(M) + \prob(N|E)\prob(E) + \prob(N|F)\prob(F)} \\
+	& = \frac{9/10\times 1/3}{(9/10\times 1/3) + (2/10\times 1/2) + (0\times 1/6)} \\
+	& = 3/4
+\end{align*}
+If Bob buys a newspaper, the probability that he bought it in the morning is $0.75$.
+\end{solution}
+
+
+%----------------------------------------------------------------------
+\section{Independence}
+%----------------------------------------------------------------------
+If the probability that event $A$ occurs is \emph{not} affected by whether or not event $B$ occurs, then
+\[
+\prob(A|B) = \prob(A).
+\]
+In such cases, we say that events $A$ and $B$ are \emph{independent}.
+
+% definition: independence
+\begin{definition}
+Two events $A$ and $B$ are said to be \emph{independent} if $\prob(A\cap B) = \prob(A)\prob(B)$.
+\end{definition}
+
+% lemma
+\begin{lemma}
+If $A$ and $B$ are independent, then $A$ and $B^c$ are also independent.
+\end{lemma}
+% proof
+\begin{proof}
+\[\begin{array}{ll}
+\prob(A\cap B^c) 
+	= \prob(A\setminus B)
+	& = \prob(A) - \prob(A\cap B) \\
+	& = \prob(A) - \prob(A)\prob(B) \quad\text{by independence,} \\
+	& = \prob(A)(1-\prob(B)) \\
+	& = \prob(A)\prob(B^c).
+\end{array}\]
+\end{proof}
+
+\newpage
+\begin{definition}
+A collection of events $\{A_1,A_2,\ldots,A_n\}$ is said to be 
+\ben
+\it \emph{pairwise independent} if $\prob(A_i\cap A_j)=\prob(A_i)\prob(A_j)$ for all $i\neq j$.
+\it \emph{totally independent} if, for every subset 
+$\{B_1,B_2,\ldots,B_m\}\subset \{A_1,A_2,\ldots,A_n\}$, 
+\[
+\prob(B_1\cap B_2\cap \ldots \cap B_m) = \prob(B_1)\prob(B_2)\cdots\prob(B_m),
+\]
+which can also be written as $\prob\left(\bigcap_{j=1}^m B_j\right) = \prod_{j=1}^m \prob(B_j)$.
+\een
+\end{definition}
+%
+%\begin{definition}
+%A collection of events $\{A_1,A_2,\ldots,A_n\}$ is called to be \emph{pairwise independent} if 
+%\[
+%\prob(A_i\cap A_j)=\prob(A_i)\prob(A_j)
+%\]
+%for every pair of distinct events $A_i$ and $A_j$ (i.e.\ with $i\neq j$), and \emph{totally independent} if 
+%\[
+%\prob(A_{i_1}\cap A_{i_2}\cap \ldots \cap A_{i_m}) = \prob(A_{i_1})\prob(A_{i_2})\cdots\prob(A_{i_m})
+%\]
+%for every possible sub-collection of events $\{A_{i_1},A_{i_2},\ldots,A_{i_m}\}\subseteq\{A_1,A_2,\ldots,A_n\}$.
+%\end{definition}
+
+% problem: de Mere's paradox
+\begin{example}[de M\'{e}r\'{e}'s Paradox]
+Show that you are more likely to obtain a six in 4 rolls of a single fair die, than to obtain a double-six in 24 rolls of two fair dice.
+\end{example}
+\begin{solution}
+Assume that the rolls are totally independent of each other.
+%\begin{align*}
+\[\begin{array}{ll}
+\prob(\text{at least one six in 4 rolls of a single die)}
+	& = 1- \prob(\text{no sixes obtained in 4 rolls}) \\
+	& = 1 - (5/6)^4 = 0.5177. \\
+\prob(\text{at least one double six in 24 rolls of two dice}) 
+	& = 1- \prob(\text{no double-sixes in 24 rolls}) \\
+	& = 1 - (35/36)^{24}  = 0.4914. 
+\end{array}\]
+%\end{align*}
+\end{solution}
+
+
+\newpage % <<
+
+% example
+\begin{example}
+Consider a sample space $\Omega=\{1,2,3,4\}$ where each outcome is equally likely. Let $A=\{1,2\}$, $B=\{1,3\}$ and $C=\{1,4\}$. Show that the collection of events $\{A,B,C\}$ is pairwise independent, but not totally independent.
+\end{example}
+% solution
+\begin{solution}
+\bit
+\it $\prob(A)=1/2$ and $\prob(B)=1/2$
+\it $\prob(A\cap B)=\prob(\{1\})=1/4$. 
+\it Hence $\prob(A\cap B) = \prob(A)\prob(B)$, so $A$ and $B$ are independent. 
+\it Similarly, $\prob(A\cap C) = \prob(A)\prob(C)$ and $\prob(B\cap C) = \prob(B)\prob(C)$.
+\eit
+Thus the set $\{A,B,C\}$ is pairwise independent. 
+\bit
+\it $\prob(A\cap B\cap C)=\prob(\{1\}) = 1/4$
+\it However, $\prob(A)\prob(B)\prob(C)=1/8$. 
+\it Hence $\prob(A\cap B\cap C)\neq \prob(A)\prob(B)\prob(C)$.
+\eit
+Thus the set $\{A,B,C\}$ is not totally independent.
+\end{solution}
+
+
+%======================================================================
+\end{document}
+%======================================================================

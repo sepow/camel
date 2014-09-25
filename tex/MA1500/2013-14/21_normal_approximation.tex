@@ -1,0 +1,195 @@
+\documentclass[lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2013/14}
+\doctype{Lecture}
+\doctitle{Normal Approximation}
+\docnumber{21}
+
+% local
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\expe}{\mathbb{E}}
+\newcommand{\var}{\text{Var}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+
+\newcommand{\proofomitted}{\par[\textit{Proof omitted.}]\par}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+
+%----------------------------------------------------------------------
+\section{Approximation of discrete distributions by continuous distributions}
+%----------------------------------------------------------------------
+Recall the PMFs of the binomial and Poisson distributions:
+\bit
+\it If $X\sim\text{Binomial}(n,p)$ then 
+\[
+\prob(X=k)=\displaystyle\frac{n!}{(n-k)!k!} p^k(1-p)^{n-k} \text{\quad for $k=0,1,2,\ldots,n$}.
+\]
+%\bit
+%\it $\expe(X)=np$ and $\var(X)=np(1-p)$.
+%\eit
+\it If $X\sim\text{Poisson}(\lambda)$ then 
+\[
+\prob(X=k)=\displaystyle\frac{\lambda^k}{k!}e^{-\lambda} \text{\quad for $k=0,1,2,\ldots$}.
+\]
+%\bit
+%\it $\expe(X)=\lambda$ and $\var(X)=\lambda$.
+%\eit
+\eit
+
+If $k$ is large, computing $k!$ can take a long time. To avoid this, we make use of the fact that, under certain conditions, both the binomial and Poisson distributions can be approximated by the normal distribution.
+
+\newpage
+%Recall the following:
+Binomial distribution:
+\bit
+\it If $X\sim\text{Binomial}(n,p)$ then %$\expe(X)=np$ and $\var(X)=np(1-p)$.
+\[
+\expe(X)=np \text{\quad and\quad} \var(X)=np(1-p).
+\]
+%\eit
+%
+%\bit
+\it If both $np$ and $n(1-p)$ are sufficiently large,
+\[
+X\sim\text{N}\big(np,np(1-p)\big)\quad\text{approx.}
+\]
+\eit
+
+\vspace*{2ex}
+Poisson distribution:
+\bit
+\it If $X\sim\text{Poisson}(\lambda)$ then %$\expe(X)=\lambda$ and $\var(X)=\lambda$.
+\[
+\expe(X)=\lambda \text{\quad and\quad}\var(X)=\lambda.
+\]
+%\eit
+%
+%%\vspace*{2ex}
+%\bit
+\it If $\lambda$ is sufficiently large,
+\[
+X\sim\text{N}(\lambda,\lambda)\quad\text{approx.}
+\]
+\eit
+
+%----------------------------------------------------------------------
+\newpage
+\subsection{The continuity correction}
+%----------------------------------------------------------------------
+
+% continuity correction
+\begin{definition}[The continuity correction]
+Let $X$ be a discrete random variable, taking values in the set $\{0,\pm 1,\pm 2,\ldots\}$. If the distribution of a continuous random variable $Y$ is taken as an approximation to the distribution of $X$, we set
+\[
+\prob(X=k) = \prob\left(k - \frac{1}{2} < Y < k + \frac{1}{2}\right).
+\] 
+\end{definition}
+
+In particular,
+\bit
+\it $\prob(X\lt  k) = \prob(Y\leq k-1/2)$, 
+\it $\prob(X\leq k) = \prob(Y\leq k+1/2)$,
+\it $\prob(X\geq k) = \prob(Y\geq k-1/2)$,
+\it $\prob(X\gt  k) = \prob(Y\geq k+1/2)$
+\eit
+
+%----------------------------------------------------------------------
+\newpage
+\section{Normal approximation of the binomial distribution}
+%----------------------------------------------------------------------
+
+% theorem: normal approx to binomial
+\begin{theorem}
+If $X\sim\text{Binomial}(n,p)$ where $p\in(0,1)$, then
+\[
+\prob(X=k)\to \frac{1}{\sqrt{2\pi np(1-p)}}\int_{k-1/2}^{k+1/2} \exp\left[-\frac{1}{2}\left(\frac{x-np}{\sqrt{np(1-p)}}\right)^2\right]\,dx 
+\quad\text{as}\quad n\to\infty.
+\]
+\end{theorem}
+\proofomitted
+
+\newpage
+
+% example
+\begin{example}
+A fair coin is tossed $500$ times. What is the probability that $270$ heads are obtained?
+\end{example}
+
+\begin{solution}
+Let $X$ be the number of heads obtained. Then $X\sim\text{Binomial}(500,270)$, so 
+\[
+\prob(X > 270) = \sum_{k=271}^{n}\binom{500}{k}\left(\frac{1}{2}\right)^{500}
+\]
+This is difficult to compute (the exact value is $0.0333$).
+
+Using the normal approximation, the associated normal variable is $Y\sim\text{N}(250,125)$, so
+\begin{align*}
+\prob(X\geq 271)
+	& \approx\prob(Y > 270.5) \\
+	& = 1 - \prob(Y \leq 270.5) \\
+	& = 1 - \prob\left(Z \leq \frac{270.5 - 250}{\sqrt{125}}\right) \qquad\text{where}\quad Z\sim\text{N}(0,1), \\
+	& = 1 - \Phi(1.8336) \\
+	& = 0.0334 \qquad\text{(from tables)}.
+\end{align*}
+\end{solution}
+
+
+%----------------------------------------------------------------------
+\newpage
+\section{Normal approximation of the Poisson distribution}
+%----------------------------------------------------------------------
+
+% theorem: normal approx to Poisson
+\begin{theorem}
+If $X\sim\text{Poisson}(\lambda)$, then
+\[
+\prob(X=k)\to \frac{1}{\sqrt{2\pi\lambda}}\int_{k-1/2}^{k+1/2} \exp\left[-\frac{1}{2}\left(\frac{x-\lambda}{\sqrt{\lambda}}\right)^2\right]\,dx 
+\quad\text{as}\quad \lambda\to\infty.
+\]
+\end{theorem}
+\proofomitted
+
+% example
+\begin{example}
+A newsagent knows from past experience that the weekly demand for a certain magazine has Poisson distribution with mean $20$. How many copies of the magazine should the newsagent stock in order to satisfy the weekly demand with probability $0.95$?
+\end{example}
+
+\newpage
+
+\begin{solution}
+Suppose the newsagent stocks $N$ copies of the magazine. Let $X\sim\text{Poisson}(20)$ represent the weekly demand. We need that 
+\[
+\prob(\text{demand satisfied}) = \prob(X\leq N) = \sum_{k=0}^{N}\frac{20^k}{k!}e^{-20} = 0.95.
+\]
+Using the normal approximation, the associated normal variable is $Y\sim\text{N}(20,20)$, so 
+\begin{align*}
+\prob(X\leq N) = 0.95
+	& \quad\Rightarrow\quad \prob(Y \leq N + 0.5) = 0.95 \\
+	& \quad\Rightarrow\quad \prob\left(Z \leq \frac{N + 0.5 - 20}{\sqrt{20}}\right) = 0.95 \qquad\text{where}\quad Z\sim\text{N}(0,1), \\
+	& \quad\Rightarrow\quad \Phi\left(\frac{N -19.5}{\sqrt{20}}\right) = 0.95 \\
+	& \quad\Rightarrow\quad \frac{N -19.5}{\sqrt{20}} = 1.645 \qquad\text{(from tables: $z_{0.95} = 1.645$)},\\
+	& \quad\Rightarrow\quad N = 27 \qquad\text{(to the nearest integer)}.
+\end{align*}
+Thus the newsagent should stock 27 copies of the magazine.
+\end{solution}
+
+
+%======================================================================
+\end{document}
+%======================================================================

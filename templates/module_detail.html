@@ -1,0 +1,33 @@
+{% extends "modules.html" %}
+{% load staticfiles %}
+
+{% block title %}
+ 	{{ module.code }} 
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}  > <a href="{% url 'module-detail' module.code %}"> {{ module.code }}</a>
+{% endblock %}
+
+
+{% block content-main %}
+	{% if module %}
+	   	<h1>{{ module.title }}</h2>
+		{% if chapters %}
+			<table>
+			{% for ch in chapters %}
+        	<tr>
+            	<td>{{ ch.number }}.</td>
+				<td><a href="{% url 'chapter-detail' module.code ch.number %}">{{ ch.title }}</td>
+        	</tr>
+    		{% endfor %}
+    		</table>
+		{% else %}
+    		<p>No chapters for {{ module.code }} in the database.</p>
+		{% endif %}
+	{% else %}
+	    <p>No module.</p>
+	{% endif %}
+{% endblock %}
+
+

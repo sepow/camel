@@ -1,0 +1,419 @@
+\documentclass[lecture]{csm}
+%\documentclass[blanks,lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2013/14}
+\doctype{Lecture}
+\doctitle{Random Variables}
+\docnumber{6}
+
+% local
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\prob}{\mathbb{P}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+%----------------------------------------------------------------------
+\section{Functions}
+%----------------------------------------------------------------------
+
+\begin{definition}
+A \emph{function} is a relation between the elements of a set $A$ and elements of another set $B$, with the property that each element of $A$ is related to exactly one element of $B$.
+
+\vspace*{2ex}
+Functions are usually denoted as follows:
+
+\[\begin{array}{rlcl}
+f: 	& A & \to		& B \\
+	& a & \mapsto	& f(a).
+\end{array}\]
+\end{definition}
+
+\bit
+\it The set $A$ is called the \emph{domain} of $f$.
+\it The set $B$ is called the \emph{co-domain} of $f$.
+\it The set $f(A)=\{f(a):a\in A\}\subseteq B$ is called the \emph{range} of $f$.
+\eit
+
+\bit
+\it Functions are also known as \emph{mappings}, \emph{transformations} and \emph{correspondences}.
+\it Functions acting on other functions are sometimes called \emph{operators}.
+\eit
+
+%\bit
+%\it $f$ is called \emph{injective} if for all $a_1,a_2\in A$, $f(a_1)=f(a_2) \Rightarrow a_1=a_2$.
+%\it $f$ is called \emph{surjective} if for all b\in B$, there exists $a\in A$ such that $f(a)=b$.
+%\it $f$ is called \emph{bijective} if it is both injective and surjective.
+%\eit
+
+\break % <<
+
+\begin{definition}
+\ben
+\it
+Two functions $f,g:A\to B$ are said to be \emph{equal} if $f(a)=g(a)$ for all $a\in A$.
+\it 
+The \emph{sum} of two functions $f,g:A\to B$ is the function
+\[\begin{array}{rlclcrlcl}
+f+g:	& A & \to		& B				\\
+	& a & \mapsto	& f(a) + g(a).
+\end{array}\]
+\it
+The \emph{product} of two functions $f,g:A\to B$ is the function
+\[\begin{array}{rlclcrlcl}
+fg:	& A & \to		& B \\
+	& a & \mapsto	& f(a)g(a).
+\end{array}\]
+\it
+The \emph{composition} of $f:A\to B$ with $g:B\to C$ is the function
+\[\begin{array}{rlcl}
+g\circ f: 	& A & \to		& C \\
+			& a & \mapsto	& g(f(a)).
+\end{array}\]
+\een
+\end{definition}
+
+\newpage
+
+\begin{example}
+Let $f,g:\R\to\R$ be defined by $f(x)=x^2$ and $g(x)=3x+1$. Find expressions for the functions 
+\ben
+\it $f+g$, 
+\it $fg$,
+\it $g\circ f$.
+\een
+\begin{solution}
+\[\begin{array}{lll}
+(f+g)(x) 		& = f(x) + g(x)		& = x^2 + 3x + 1,\\
+(fg)(x)			& = f(x)g(x) 		& = x^2(3x+1), \\
+(g\circ f)(x)	& = g(f(x))	& = 3x^2 + 1.
+\end{array}\]
+\end{solution}
+\end{example}
+
+%----------------------------------------------------------------------
+\newpage
+\section{Random variables}
+%----------------------------------------------------------------------
+We are not always directly interested in the outcome of a random experiment, but rather in some \emph{consequence} of the outcome.
+\bit
+\it For example, a gambler is often more interested in his losses than in the outcomes of the individual games which led to them.
+\eit
+
+% example
+\begin{example}\label{ex:randomvariables}
+A fair coin is tossed twice. Let $\Omega=\{HH,HT,TH,TT\}$ denote the sample space.
+\ben
+\it The number of heads observed is a function $X:\Omega\to\R$, defined by
+\[
+X(HH)=2,\quad X(HT) = X(TH) = 1,\quad X(TT)=0.
+\]
+\it Suppose we bet $\pounds 1$ on the outcome of this random experiment, and stand to win $\pounds 4$ if two heads occur, but otherwise lose our stake. Our winnings can be represented by a function $Y:\Omega\to\R$, defined by 
+\[
+Y(HH)=4,\quad Y(HT) = Y(TH) = Y(TT) = 0.
+\]
+\een
+\end{example}
+
+\break % <<
+
+\begin{definition}
+Let $\Omega$ be a finite sample space. Any real-valued function 
+\[
+\begin{array}{rlcl}
+X: 	& \Omega & \to  		& \R \\
+	& \omega & \mapsto	& X(\omega)
+\end{array}
+\]	
+is called a \emph{random variable} on $\Omega$.
+\end{definition}
+
+% bullets
+\bit
+\it
+A random variable $X$ associates a real number $X(\omega)$ with each outcome $\omega\in\Omega$.
+\it
+Once an experiment has been performed and its outcome $\omega\in\Omega$ is known, $X$ takes a particular value $X(\omega)\in\R$. This value called a \emph{realisation} of $X$.
+\it
+Random variables are often used to pick out particular features of an experiment that are of interest.
+\it
+Random variables transform one probability space into another.
+\eit
+
+\break % <<
+
+% remark
+\begin{remark}[Notation]
+Random variables:
+\bit
+\it Random variables are denoted by upper-case letters such as $X$ and $Y$.
+\it Values taken by random variables are denoted by lower-case letters, such as $x$ and $y$.
+\eit
+Events and probability:
+\bit
+\it An event such as $\{\omega:X(\omega)\in B\}$ is abbreviated to $\{X\in B\}$.
+\it A probability such as $\prob\big(\{\omega:X(\omega)\in B\})$ is abreviated to $\prob(X\in B)$.
+\eit
+In particular, we use the shorthand notation
+\bit
+\it $\{X = x\} = \{\omega\in\Omega:X(\omega)=x\}$, and
+\it $\prob(X = x) = \prob(\{\omega:X(\omega)=x\})$.
+\eit
+\end{remark}
+
+\begin{remark}
+\bit
+\it If $X$ takes only integer values, we often use the symbol $k$ (rather than $x$) to denote these values, and write 
+\[
+p_k=\prob(X=k) = \prob(\{\omega: X(\omega)=k\}).
+\]
+for the probability that $X$ takes the value $k$.
+\eit
+\end{remark}
+
+\break % <<
+
+% exmple: binomial
+\begin{example}\label{ex:binomial}
+A biased coin is independently tossed three times, each time having probability $p$ of showing heads and $q=1-p$ of showing tails. Let $X$ be the number of heads obtained.
+\bit
+\it The sample space is $\Omega=\{TTT,HTT,THT,TTH,THH,HTH,HHT,HHH\}$.
+\eit
+By independence, the associated probability mass distribution $p(\omega)$ is 
+%, shown along with the corresponding values of $X(\omega)$, is as follows.
+\[
+\begin{array}{|c|cccccccc|} \hline
+\omega 		& TTT & HTT & THT & TTH & THH & HTH & HHT & HHH \\ \hline
+p(\omega) 	& q^3 & pq^2 & pq^2 & pq^2 & p^2q & p^2q & p^2q & p^3 \\  \hline
+\end{array}
+\]
+The number of heads is a random variable $X:\Omega\to\R$, defined by
+\[
+\begin{array}{|c|cccccccc|} \hline
+\omega 		& TTT & HTT & THT & TTH & THH & HTH & HHT & HHH \\ \hline
+X(\omega) 	& 0 & 1 & 1 & 1 & 2 & 2 & 2 & 3 \\ \hline
+\end{array}
+\]
+Let $k\in\{0,1,2,3\}$ and consider the event $\{X=k\} = \{\omega:X(\omega)=k\}$. 
+\par
+The probability of this event is
+\[
+\prob(X=k) = \sum_{\{\omega:X(\omega)=k\}} p(\omega).
+\]
+i.e. the sum of the probabilities of all outcomes that contain exactly $k$ heads.
+
+\break % <<
+
+For $k\in\{0,1,2,3\}$ we have
+\bit
+\it $\prob(X=0) = \prob(\{TTT\}) = q^3$,
+\it $\prob(X=1) = \prob(\{HTT,THT,TTH\}) = 3pq^2$,
+\it $\prob(X=2) = \prob(\{THH,HTH,HHT\}) = 3p^2q$,
+\it $\prob(X=3) = \prob(\{HHH\}) = p^3$.
+\eit
+$X$ is completely determined by the range $\{0,1,2,3\}$ and the associated probabilities,
+\[
+\begin{array}{|c|cccc|} \hline
+k 			& 0 & 1 & 2 & 3 \\ \hline
+\prob(X=k)	& q^3 & 3pq^2 & 3p^2q & p^3 \\ \hline
+\end{array}
+\]
+$X$ transforms the abstract probability space $(\Omega,\prob)$, given by
+\bit
+\it $\Omega=\{TTT,HTT,THT,TTH,THH,HTH,HHT,HHH\}$
+\it $\prob(A) = \sum_{\omega\in A} p(\omega)$
+\eit
+into the more concrete probability space $(\Omega_X,\prob_X)$, given by
+\bit
+\it $\Omega_X=\{0,1,2,3\}$
+\it $\prob_X(A) = \sum_{k\in A} p_k$ where $p_k = \sum_{\{\omega:X(\omega)=k\}} p(\omega)$.
+\eit
+%
+%If we are only interested in the number of heads obtained, we can take $\{0,1,2,3\}$ as our sample space, with respective
+%probabilities $q^3,3pq^2,3p^2q$ and $p^3$, and disregard the original probability space completely.
+
+\end{example}
+
+
+%----------------------------------------------------------------------
+\newpage
+\section{Indicator variables}
+%----------------------------------------------------------------------
+%Perhaps the simplest random variable is the \emph{indicator variable} of an event $A$.
+
+% definition: indicator
+\begin{definition}
+The \emph{indicator variable} $I_A:\Omega\to\R$ of a random event $A\subseteq\Omega$ is defined by
+\[
+I_A(\omega) = 
+	\left\{
+	\begin{array}{ll}
+	1 & \text{if } \omega\in A, \\
+	0 & \text{if } \omega\notin A.
+	\end{array}
+	\right.
+%  \begin{cases}
+%   1 & \text{if } \omega\in A \\
+%   0 & \text{if } \omega\notin A.
+%  \end{cases}
+\]
+\end{definition}
+
+% theorem: properties of indicator functions
+\begin{theorem}
+Let $A$ and $B$ be any two events. Then
+\ben
+\it $I_{A^c} = 1 - I_A$
+\it $I_{A\cap B} = I_A I_B$
+\it $I_{A\cup B} = I_A + I_B - I_{A\cap B}$
+\een
+\end{theorem}
+% proof
+\begin{proof}
+Exercise.
+\end{proof}
+
+
+%----------------------------------------------------------------------
+\section{CDFs and PMFs}
+%----------------------------------------------------------------------
+% definition: cdf
+\begin{definition}
+Let $\Omega$ be a finite sample space.%, and let $X:\Omega\to\R$ be a random variable on $\Omega$.
+\ben
+\it
+The \emph{cumulative distribution function} (CDF) of a random variable $X:\Omega\to\R$ is defined to be the function
+\[
+\begin{array}{cccl}
+F:	& \mathbb{R}	& \longrightarrow	& [0,1] \\
+	& x 			& \mapsto			& \prob(X\leq x).
+\end{array}
+\]
+\it
+The \emph{probability mass function} (PMF) of a random variable $X:\Omega\to\R$ is defined to be the function
+\[
+\begin{array}{cccl}
+p:	& \mathbb{R}	& \longrightarrow	& [0,1] \\
+	& x 			& \mapsto			& \prob(X = x).
+\end{array}
+\]
+\een
+\end{definition}
+\bit
+\it $F(x)$ is the probability that $X$ takes a value \emph{at most} equal to $x$,
+\[
+F(x) = \prob(X\leq x) = \prob\big(\{\omega:X(\omega)\leq x\}\big).
+\]
+\it $p(x)$ is the probability that $X$ takes a value \emph{exactly} equal to $x$,
+\[
+p(x) = \prob(X=x) = \prob\big(\{\omega:X(\omega)= x\}\big).
+\]
+\eit
+
+\break % <<
+
+% example (cont)
+\begin{examplecont}{\ref{ex:randomvariables}}
+Since the coin is \emph{fair}, the PMFs of $X$ and $Y$ are, respectively,
+\[
+p_X(x) = 
+\left\{\begin{array}{ll}
+1/4	& \text{if }x = 0, \\
+1/2	& \text{if }x = 1, \\
+1/4 & \text{if }x = 2, \\
+0	& \text{otherwise,}
+\end{array}\right.
+\text{\qquad and\qquad}
+p_Y(y) = 
+\left\{\begin{array}{ll}
+3/4	& \text{if }y = 0, \\
+1/4	& \text{if }y = 4. \\
+0	& \text{otherwise.}
+\end{array}\right.
+\]
+
+The CDFs of $X$ and $Y$ are, respectively,
+\[
+F_X(x) =
+\left\{\begin{array}{ll}
+0	& \text{if }x < 0, \\
+1/4	& \text{if }0\leq x < 1, \\
+3/4	& \text{if }1\leq x < 2, \\
+1   & \text{if }x \geq 2,
+\end{array}\right.
+\text{\qquad and\qquad}
+F_Y(y) = 
+\left\{\begin{array}{ll}
+0	& \text{if }y < 0, \\
+3/4	& \text{if }0\leq y  < 4, \\
+1   & \text{if }y \geq 4.
+\end{array}\right.
+\]
+Note that we have used subscripts to distinguish between the CDFs and PMFs of $X$ and $Y$.
+
+\break % <<
+
+PMFs are often written in tabular form, 
+\[
+\begin{array}{|c||c|c|c|}\hline
+x			& 0		& 1		& 2 \\ \hline
+\prob(X=x)	& 1/4	& 1/2	& 1/4 \\ \hline
+\end{array}
+\text{\qquad and\qquad}
+\begin{array}{|c||c|c|c|}\hline
+y			& 0		& 4		\\ \hline
+\prob(Y=y)	& 3/4	& 1/4 	\\ \hline
+\end{array}
+\]
+\end{examplecont}
+
+\begin{remark}
+\bit
+\it Any random variable on a finite sample space has a well-defined PMF.
+\it This is also true when the sample space is a countably infinite set.
+\it However, this does not always hold when the sample space is an uncountable set.
+\eit
+\end{remark}
+
+
+%%----------------------------------------------------------------------
+%\section{Categorical data}
+%%----------------------------------------------------------------------
+%A random experiment involves recording the eye colour of a student chosen at random.
+%For simplicity, assume that the only possible colours are brown, blue and green.
+%The sample space $\Omega = \{BR,BL,GR\}$ has $n=3$ outcomes.
+%
+%Consider the random variable $X\Omega\to\R$ defined by
+%\[
+%X(BR) = 1,\qquad X(BL)=2 \quad\text{and}\quad X(GR) = 3.
+%\]
+%Let $p_k = P(X=k)$ for $k\in\{1,2,3\}$. Then 
+%\[
+%\begin{array}{|c||c|c|c|}\hline
+%k			& 1		& 2		& 3 \\ \hline
+%\prob(X=k)	& p_1	& p_2	& p_3 \\ \hline
+%\end{array}
+%\]
+%\bit
+%\it
+%As $\{BR,BL,GR\}$ has no natural order, $X$ simply \emph{re-labels} the outcomes. 
+%\it 
+%$X$ might represent a game of chance, where one point is scored for brown eyes, two for blue, and three for green.
+%\it 
+%$X$ takes numerical values, so we can compute useful quantities, for example the expected score.
+%\eit
+
+%======================================================================
+\end{document}
+%======================================================================

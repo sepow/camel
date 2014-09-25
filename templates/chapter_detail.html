@@ -1,0 +1,39 @@
+<!-- camel: chapter_detail.html -->
+{% extends "module_detail.html" %}
+{% load staticfiles %}
+
+{% block title %}
+ 	{{ module.code }} 
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}  > <a href="{% url 'chapter-detail' module.code chapter.number %}"> {{ chapter.title }}</a>
+{% endblock %}
+
+
+{% block content-main %}
+	{% if module %}
+	   	<h1>{{ module.title }}</h2>
+		{% if chapter %}
+	   		<h2>{{ chapter.number }} {{ chapter.title }}</h2>
+			{% if sections %}
+				<table class="toc">
+					{% for sec in sections %}
+        			<tr>
+            			<td>{{ chapter.number }}.{{ sec.number }}</td>
+            			<td><a href="{% url 'section-detail' module.code chapter.number sec.number %}">{{ sec.title }}</a></td>
+        			</tr>
+    				{% endfor %}
+    			</table>
+			{% else %}
+    			<p>No sections found for chapter {{ chapter.number }} of module {{ module.code }}.</p>
+			{% endif %}
+		{% else %}
+	    	<p>No chapters found for module {{ module.code }}.</p>
+		{% endif %}
+	{% else %}
+	    <p>No module.</p>
+	{% endif %}
+{% endblock %}
+
+

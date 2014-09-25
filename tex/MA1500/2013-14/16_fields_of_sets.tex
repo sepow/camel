@@ -1,0 +1,229 @@
+\documentclass[lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2013/14}
+\doctype{Lecture}
+\doctitle{Fields of Sets}
+\docnumber{16}
+
+% local
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\expe}{\mathbb{E}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+%----------------------------------------------------------------------
+\section{Finite collections of sets}
+%----------------------------------------------------------------------
+Let $\Omega$ be the sample space of some random experiment.
+\bit
+\it Suppose that we are interested in the events $A$ and $B$.
+\it Then we are also interested in the events $A\cup B$, $A\cap B$ and $A^c$.
+\eit
+
+% definition: collection of sets
+\vspace*{2ex}
+Recall that the set of all subsets of $\Omega$ is called its \emph{power set}, 
+$\mathcal{P}(\Omega) = \{A:A\subseteq\Omega\}$.
+
+\begin{definition}
+Any subset of $\mathcal{P}(\Omega) = \{A:A\subseteq\Omega\}$ is called a \emph{collection of sets} over $\Omega$. 
+\end{definition}
+
+% definition: field of sets
+\begin{definition}
+Let $\Omega$ be any set. A collection of sets $\mathcal{F}$ is called a \emph{field of sets} over $\Omega$ if 
+\ben
+\it $\Omega\in\mathcal{F}$,
+\it $\mathcal{F}$ is closed under complementation: if $A\in\mathcal{F}$ then $A^c\in\mathcal{F}$, and
+\it $\mathcal{F}$ is closed under pairwise unions: if $A,B\in\mathcal{F}$ then $A\cup B\in\mathcal{F}$.
+\een
+\end{definition}
+
+% remark
+\begin{remark}
+A field of sets over $\Omega$ is also called an \emph{algebra} of sets over $\Omega$.
+\end{remark}
+
+% example
+\begin{example}
+Let $\Omega=\{a,b\}$. The following collections are both fields of sets over $\Omega$:
+\begin{hidebox}
+\bit
+\it $\mathcal{F} = \{\emptyset,\Omega\}$.
+\it $\mathcal{F} = \big\{\emptyset,\{a\},\{b\},\,\Omega\big\}$.
+\eit
+\end{hidebox}
+\end{example}
+
+% example
+\begin{example}
+Let $\Omega=\{a,b,c\}$. The following collections are all fields of sets over $\Omega$:
+\begin{hidebox}
+\bit
+\it $\mathcal{F} = \{\emptyset,\,\Omega\}$.
+\it $\mathcal{F} = \big\{\emptyset,\{a\},\{b,c\},\,\Omega\big\}$.
+\it $\mathcal{F} = \big\{\emptyset,\{a\},\{b\},\{c\},\{a,b\},\{a,c\},\{b,c\},\,\Omega\big\}$.
+\eit
+\end{hidebox}
+\end{example}
+
+% example
+\begin{example}\label{ex:sigma_fields}
+A fair six-sided die is rolled once. Let $\Omega=\{1,2,3,4,5,6\}$ denote the sample space.
+\bit
+\it The power set $\mathcal{P}(\Omega)$ is a field of sets over $\Omega$.
+\eit
+\vspace*{2ex}
+If we are only interested in whether the outcome is an odd or even number, we need only consider 
+\bit
+\it the events $A=\{1,3,5\}$ and $B=\{2,4,6\}$, and
+\it the field ${\mathcal{F}} = \{\emptyset, A, B, \Omega\}$.
+\eit
+\end{example}
+
+% properties of fields
+\begin{theorem}\label{prop:properties_of_fields}
+Let $\mathcal{F}$ be a field of sets over $\Omega$. Then
+\ben
+\it $\emptyset\in\mathcal{F}$,
+\it $\mathcal{F}$ is closed under pairwise intersections: if $A,B\in\mathcal{F}$ then $A\cap B\in\mathcal{F}$,
+\it $\mathcal{F}$ is closed under set differences: if $A,B\in\mathcal{F}$ then $A\setminus B\in\mathcal{F}$,
+\it $\mathcal{F}$ is closed under finite unions: if $A_1,\ldots,A_n\in\mathcal{F}$ then \ $\bigcup_{i=1}^{n}A_i\in\mathcal{F}$, 
+\it $\mathcal{F}$ is closed under finite intersections: if $A_1,\ldots,A_n\in\mathcal{F}$ then \ $\bigcap_{i=1}^{n}A_i\in\mathcal{F}$.
+\een
+\end{theorem}
+
+\newpage
+
+% proof
+\begin{proof}
+\ben
+\it 
+$\emptyset = \Omega^c$ where $\Omega\in\mathcal{F}$. Since $\mathcal{F}$ is closed under complementation, $\emptyset\in\mathcal{F}$.
+\it
+Let $A,B\in\mathcal{F}$. Then $A\cap B = (A^c\cup B^c)^c$ (De Morgan's laws). Since $\mathcal{F}$ is closed under complementation and pairwise unions, $A\cap B\in\mathcal{F}$.
+\it
+Let $A,B\in\mathcal{F}$. Then $A\setminus B = A\cap B^c = (A^c\cup B)^c$ (De Morgan's laws). Since $\mathcal{F}$ is closed under complementation and pairwise unions, $A\setminus B\in\mathcal{F}$.
+\it
+Proof by induction. Suppose that $\mathcal{F}$ is closed under unions of $n$ sets (where $n\geq 2$). Let $A_1,A_2,\ldots,A_{n+1}\in\mathcal{F}$. By the inductive hypothesis, $\bigcup_{i=1}^nA_i\in\mathcal{F}$, so $\bigcup_{i=1}^{n+1} A_i = \big(\bigcup_{i=1}^{n} A_i\big) \cup A_{n+1} \in\mathcal{F}$, because $\mathcal{F}$ is closed under pairwise unions.
+\it
+Let $A_1,A_2,\ldots,A_n\in\mathcal{F}$. Then $\bigcap_{i=1}^n A_i = \big(\bigcup_{i=1}^n A_i^c\big)^c$ (De Morgan's laws). Since $\mathcal{F}$ is closed under complementation and finite unions, $\bigcap_{i=1}^n A_i\in\mathcal{F}$.
+\een
+\end{proof}
+
+%----------------------------------------------------------------------
+\newpage
+\section{Countable collections of sets}
+%----------------------------------------------------------------------
+
+\bit
+\it A field of sets $\mathcal{F}$ over $\Omega$ is closed under finite unions. 
+\it We extend this idea to collections that are closed under \emph{countable} unions.
+\eit
+
+\begin{definition}
+Let $\{A_1,A_2,\ldots\}$ be a countable collection of sets over $\Omega$.
+\ben
+\it The \emph{union} of the sets $A_1,A_2,\ldots$ is the set
+\[
+\bigcup_{i=1}^\infty A_i = \{\omega:\omega\in A_i \text{ for some }A_i\}.
+\]
+\it The \emph{intersection} of the sets $A_1,A_2,\ldots$  is the set
+\[
+\displaystyle\bigcap_{i=1}^\infty A_i = \{\omega:\omega\in A_i \text{ for all } A_i\}.
+\]
+\een
+\end{definition}
+
+\break % <<
+
+% theorem: De Morgan
+\begin{theorem}[De Morgan's laws]
+For a countable collection of sets $\{A_1,A_2,\ldots\}$,
+\ben
+\it $\big(\bigcup_{i=1}^{\infty} A_i\big)^c = \bigcap_{i=1}^{\infty} A_i^c$,
+\it $\big(\bigcap_{i=1}^{\infty} A_i\big)^c = \bigcup_{i=1}^{\infty} A_i^c$.
+\een
+\end{theorem}
+
+% proof
+\begin{proof}
+\ben
+\it 	\bit
+	\it Let $a\in\big(\bigcup_{i=1}^\infty A_i\big)^c$. Then $a\notin\bigcup_{i=1}^\infty A_i$, so $a\in A_i^c$ for all $A_i$, and therefore
+		\par $\big(\bigcup_{i=1}^\infty A_i\big)^c \subseteq \bigcap_{i=1}^\infty A_i^c$. 
+	\it Let $a\in\bigcap_{i=1}^\infty A_i^c$. Then $a\notin A_i$ for all $A_i$, so $a\notin\bigcup_{i=1}^\infty A_i$, and therefore
+		\par $\bigcap_{i=1}^\infty A_i^c \subseteq \big(\bigcup_{i=1}^\infty A_i\big)^c$.
+	\it Thus it follows that $\big(\bigcup_{i=1}^{\infty} A_i\big)^c = \bigcap_{i=1}^{\infty} A_i^c$, as required.
+	\eit
+\it \bit
+	\it Applying part (1) to the collection of sets $\{A_1^c,A_2^c,\ldots\}$, 
+		\par $\big(\bigcup_{i=1}^\infty A_i^c\big)^c = \bigcap_{i=1}^\infty \big(A_i^c\big)^c = \bigcap_{i=1}^\infty A_i$.
+	\it Taking the complement of both sides, we obtain
+	 	\par $\big(\bigcap_{i=1}^\infty A_i\big)^c = \bigcap_{i=1}^\infty A_i^c$.
+	\eit
+\een
+\end{proof}
+
+% definition: sigma-field
+\begin{definition}
+Let $\Omega$ be any set. A collection of sets $\mathcal{F}$ is called a \emph{$\sigma$-field} over $\Omega$ if 
+\ben
+\it $\Omega\in\mathcal{F}$,
+\it $\mathcal{F}$ is closed under complementation: if $A\in\mathcal{F}$ then $A^c\in\mathcal{F}$, and
+\it $\mathcal{F}$ is closed under countable unions: if $A_1,A_2,\ldots\in\mathcal{F}$ then $\bigcup_{i=1}^{\infty}A_i \in\mathcal{F}$.
+\een
+\end{definition}
+
+
+% theorem: properties of sigma fields
+\begin{theorem}\label{thm:properties_of_sigma_fields}
+Let $\mathcal{F}$ be a $\sigma$-field over $\Omega$. Then
+\ben
+%\it $\emptyset\in\mathcal{F}$,
+%\it $\mathcal{F}$ is closed under set differences: if $A,B\in\mathcal{F}$ then $A\setminus B\in\mathcal{F}$,
+\it $\mathcal{F}$ is closed under finite unions: if $A_1,\ldots,A_n\in\mathcal{F}$ then \ $\bigcup_{i=1}^{n}A_i\in\mathcal{F}$,
+\it $\mathcal{F}$ is closed under finite intersections: if $A_1,\ldots,A_n\in\mathcal{F}$ then \ $\bigcap_{i=1}^{n}A_i\in\mathcal{F}$,
+\it $\mathcal{F}$ is closed under countable intersections: if $A_1,A_2,\ldots\in\mathcal{F}$ then \ $\bigcap_{i=1}^{\infty}A_i \in\mathcal{F}$.
+\een
+\end{theorem}
+
+% proof
+\begin{proof}
+\ben
+\it 
+Let $A_1,A_2,\ldots,A_n\in\mathcal{F}$. Since $\mathcal{F}$ is closed under countable unions and $\emptyset\in\mathcal{F}$, 
+\[
+\bigcup_{i=1}^n A_i = A_1\cup A_2\cup\ldots\cup A_n\cup\emptyset\cup\emptyset\ldots \in\mathcal{F}.
+\]
+\it
+Let $A_1,A_2,\ldots,A_n\in\mathcal{F}$. Since $\mathcal{F}$ is closed under complementation and finite unions,
+\[
+\bigcap_{i=1}^n A_i = A_1\cap\ldots\cap A_n = (A^c_1\cup\ldots\cup A^c_n)^c \in\mathcal{F}.
+\]
+\it
+Let $A_1,A_2,\ldots\in\mathcal{F}$. Since $\mathcal{F}$ is closed under complementation and countable unions,
+\[
+\bigcap_{n=1}^{\infty} A_n = \left(\bigcup_{n=1}^{\infty} A^c_n\right)^c \in\mathcal{F}.
+\] 
+\een
+\end{proof}
+
+
+%======================================================================
+\end{document}
+%======================================================================

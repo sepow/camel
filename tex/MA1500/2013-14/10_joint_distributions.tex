@@ -1,0 +1,279 @@
+\documentclass[lecture]{csm}
+%\documentclass[blanks,lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2013/14}
+\doctype{Lecture}
+\doctitle{Joint Distributions}
+\docnumber{10}
+
+% local
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\expe}{\mathbb{E}}
+\newcommand{\var}{\text{Var}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+%%----------------------------------------------------------------------
+%\section{Probability on the real line}
+%%----------------------------------------------------------------------
+%Let $(\Omega,\prob)$ be a finite probability space, and let $X:\Omega\to\R$ be a random variable. 
+%\bit
+%\it $X$ can take only a finite number of values $x_i$, each with a certain probability $\prob(X=x_i)$.
+%\it Let $\Omega_X = \{x_1,x_2,\ldots,x_n\}\subset\R$ be the range of $X$, and let
+%\[\begin{array}{rlcl}
+%\prob_X: 	& \mathcal{P}(\Omega_X) 	& \to		& [0,1] \\
+%			& B 						& \mapsto	& \sum_{x\in B}\prob(X=x)
+%\end{array}\]
+%\eit
+%Then $(\Omega_X,\prob_X)$ is a finite probability space, with outcomes in $\R$.
+%
+%\begin{remark}[Notation]
+%We need not always explicitly consider the range of a random variable $X:\Omega\to\R$, i.e.\
+%\[
+%X(\Omega)=\{x\in\R: X(\omega)=x \text{ for some } \omega\in\Omega\}.
+%\]
+%Instead we can define the PMF $f(x)=\prob(X=x)$ for all values $x\in\R$, with the convention that $f(x)=0$ whenever $x\notin X(\Omega)$.
+%\end{remark}
+
+%----------------------------------------------------------------------
+\section{Joint distributions}
+%----------------------------------------------------------------------
+% defn: joint cdf
+\begin{definition}
+Let $X,Y:\Omega\to\R$ be two random variables on a finite probability space $(\Omega,\prob)$.
+\ben
+\it The \emph{joint CDF} of $X$ and $Y$ is the function
+\begin{align*}
+F_{X,Y}(x,y) 
+	& = \prob(X\leq x, Y\leq y) \\
+	& = \prob\big(\{\omega\in\Omega : X(\omega)\leq x \text{ and } Y(\omega)\leq y\}\big)
+\end{align*}
+
+\it The \emph{marginal CDFs} of $X$ and $Y$ are the functions
+\begin{align*}
+F_X(x)	& = \prob(X\leq x) = \prob(\{\omega\in\Omega : X(\omega)\leq x\}), \\
+F_Y(y)	& = \prob(Y\leq y) = \prob(\{\omega\in\Omega : Y(\omega)\leq y\})
+\end{align*}
+respectively.
+\een
+\end{definition}
+
+%\begin{remark}
+Note that the joint CDF is a function of two variables:
+\[
+\begin{array}{cccl}
+F_{X,Y}:	& \mathbb{R}^2	& \longrightarrow	& [0,1] \\
+		& (x,y) 			& \mapsto			& \prob(X\leq x, Y\leq y).
+\end{array}
+\]
+%\end{remark}
+
+\newpage % <<
+
+For finite probability spaces, it is easier to use the joint PMF.
+
+% defn: joint pmf
+\begin{definition}
+Let $X,Y:\Omega\to\R$ be two random variables on a finite probability space $(\Omega,\prob)$.
+\ben
+\it The \emph{joint PMF} of $X$ and $Y$ is the function
+\begin{align*}
+p_{X,Y}(x,y) 
+	& = \prob(X=x, Y=y) \\
+	& = \prob\big(\{\omega\in\Omega : X(\omega)=x, Y(\omega)=y\}\big).
+\end{align*}
+\it The \emph{marginal PMF} of $X$ and $Y$ are the functions
+\begin{align*}
+p_X(x)	& = \prob(X=x) = \prob(\{\omega\in\Omega : X(\omega)=x\}), \\
+p_Y(y)	& = \prob(Y=y) = \prob(\{\omega\in\Omega : Y(\omega)=y\})
+\end{align*}
+respectively.
+\een
+\end{definition}
+
+\newpage
+
+% lemma
+\begin{lemma}
+Let $X,Y:\Omega\to\R$ be two random variables on a finite probability space $(\Omega,\prob)$. Then
+\[
+p_X(x) = \sum_y p_{X,Y}(x,y) \quad\text{and}\quad p_Y(y) = \sum_x p_{X,Y}(x,y) \quad\text{for all}\quad x,y\in\R.
+\]
+\end{lemma}
+
+% proof
+\begin{proof}
+Let $\{x_1,x_2,\ldots,x_m\}$ be the range of $X$, and let $\{y_1,y_2,\ldots,y_n\}$ be the range of $Y$. Then
+\bit
+\it $\big\{\{X=x_i\}\cap\{Y=y_j\}\big\}_{j=1}^n$ is a partition of the set $\{X=x_i\}$.
+\it $\big\{\{X=x_i\}\cap\{Y=y_j\}\big\}_{i=1}^m$ is a partition of the set $\{Y=y_j\}$.
+\eit
+By the additivity of probability measures,
+\begin{align*}
+p_X(x_i) & =\prob(X=x_i) = \sum_{j=1}^n \prob(X=x_i,Y=y_j) = \sum_{j=1}^n p_{X,Y}(x_i,y_j), \\
+p_Y(y_j) & =\prob(Y=y_j) = \sum_{i=1}^m \prob(X=x_i,Y=y_j) = \sum_{i=1}^m p_{X,Y}(x_i,y_j).
+%p_X(x_i) =\prob(X=x_i) = \sum_{j=1}^n \prob\big[\{X=x_i\}\cap\{Y=y_j\}\big)\big] = \sum_{j=1}^n \prob(X=x_i,Y=y_j), \\
+%p_Y(y_j) =\prob(Y=y_j) = \sum_{i=1}^m \prob\big[\{X=x_i\}\cap\{Y=y_j\}\big)\big] = \sum_{i=1}^m \prob(X=x_i,Y=y_j).
+\end{align*}
+\qed
+\end{proof}
+
+\newpage
+
+% example: dice
+\begin{example}\label{ex:joint:dice}
+Suppose that a fair die is rolled once. Let $\omega$ denote the outcome, and consider the random variables
+\[
+X(\omega) = \left\{\begin{array}{cl}
+	1 & \text{ if $\omega$ is odd,} \\
+	2 & \text{ if $\omega$ is even,}
+\end{array}\right. 
+\quad\mbox{ and }\quad
+Y(\omega) = \left\{\begin{array}{cl}
+	1 & \text{ if $\omega\leq 3$,} \\
+	2 & \text{ if $\omega\geq 4$.}
+\end{array}\right.
+\]
+Find the joint PMF of $X$ and $Y$.
+\end{example}
+
+\begin{solution}
+\[
+\begin{array}{c|cccccc}
+\omega 	& 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
+X(\omega) 	& 1 & 2 & 1 & 2 & 1 & 2 \\
+Y(\omega) 	& 1 & 1 & 1 & 2 & 2 & 2 \\
+\end{array}
+\]
+The joint PMF of $X$ and $Y$ is shown in the following table.
+\[
+\begin{array}{|c|c|c|} \hline
+	& Y=1 	& Y=2 \\ \hline
+X=1	& 1/3	& 1/6 \\ \hline
+X=2	& 1/6 	& 1/3 \\ \hline
+\end{array}
+\]
+The marginal PMFs are recovered by summing the rows and columns of the table.
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Independence}
+%----------------------------------------------------------------------
+%\bit
+%\it 
+%Recall that two events $A$ and $B$ are \emph{independent} if the fact that $B$ occurs does not affect the probability that $A$ occurs, i.e.\ if and only if $\prob(A\cap B)=\prob(A)\prob(B)$.
+%\it
+%Similarly, we say that two random variables $X$ and $Y$ are independent if the value taken by $X$ does not affect the distribution of $Y$.
+%\eit
+Let $(\Omega,\prob)$ be a finite probability space. Two random variables $X,Y:\Omega\to\R$ are said to be \emph{independent} if the value taken by $X$ does not affect the distribution of $Y$ (and vice versa).
+\bit
+\it Recall that two events $A$ and $B$ are called \emph{independent} if $\prob(A\cap B)=\prob(A)\prob(B)$.
+\eit
+
+
+
+%% defn: independence (general rvs)
+%\begin{definition}
+%Two random variables $X,Y:\Omega\to\R$ are said to be \emph{independent} if the events 
+%\begin{align*}
+%\{X\leq x\} & = \{\omega\,:\, X(\omega)\leq x\} \\
+%\{Y\leq y\} & = \{\omega\,:\, Y(\omega)\leq y\}
+%\end{align*}
+%are independent for all $x,y\in\R$.
+%\end{definition}
+
+% defn: independence
+\begin{definition}
+Two random variables $X,Y:\Omega\to\R$ are said to be \emph{independent} if the events 
+\begin{align*}
+\{X = x\} & = \{\omega\,:\, X(\omega) = x\} \\
+\{Y = y\} & = \{\omega\,:\, Y(\omega) = y\}
+\end{align*}
+are independent for all $x,y\in\R$.
+\end{definition}
+
+\newpage
+%The following is a trivial consequence of the definition.
+% lemma: independence => joint = product of marginals.
+If $X$ and $Y$ are independent, their joint PMF is equal to the product of their marginal PMFs:
+\begin{lemma}
+Two random variables $X,Y:\Omega\to\R$ are independent if and only if
+\[
+p_{X,Y}(x,y) = p_X(x)\,p_Y(y) \quad\text{for all}\quad x,y\in\R.
+%\prob(X=x,Y=y) = \prob(X=x)\prob(Y=y)\quad\text{for all}\quad x,y\in\R.
+\]
+\end{lemma}
+
+% remark
+\begin{remark}
+To check whether two random variables $X$ and $Y$ are independent, we first calculate the marginal PMFs, then check whether or not 
+$\prob(X=x,Y=y) = \prob(X=x)\prob(Y=y)$ for all $x,y\in\R$.
+%$p_{X,Y}(x,y) = p_X(x)p_Y(y)$.
+\end{remark}
+
+\newpage
+
+% example
+\begin{example}\label{ex:tedious}
+Let $X$ and $Y$ be random variables with joint PMF shown in the following table. 
+Find the marginal PMFs of $X$ and $Y$, and determine whether or not $X$ and $Y$ are independent.
+\[\begin{array}{|cc|ccc|}\hline
+	&	& 		& y 		&			\\ 
+	&	& 2		& 3		& 4		\\\hline
+	& 1	& 1/12	& 1/6	& 0 		\\
+x	& 2	& 1/6	& 0		& 1/3 	\\
+	& 3	& 1/12	& 1/6  	& 0		\\ \hline
+\end{array}\]
+\end{example}
+
+\begin{solution}
+The marginal distributions are obtained by summing the rows and columns of the table:
+\[\begin{array}{|c|ccc|}\hline
+x			& 1		& 2		& 3	\\ \hline
+p_X(x)		& 1/4	& 1/2	& 1/4	\\ \hline \hline
+y			& 2		& 3		& 4 	\\ \hline			
+p_Y(y)		& 1/3	& 1/3	& 1/3	\\ \hline
+\end{array}\]
+We have (for example) that $\prob(X=2,Y=3)=0$ but $\prob(X=2)\prob(Y=3) = 1/6$, so $X$ and $Y$ are not independent.
+\end{solution}
+
+% theorem: functions of rvs
+\begin{theorem}
+Let $X$ and $Y$ be independent. Let $g,h:\R\to\R$. Then $g(X)$ and $h(Y)$ are also independent.
+\end{theorem}
+\begin{proof}
+Let $a,b\in\R$. We sum over all pairs $(x,y)$ for which $g(x)=a$ and $h(y)=b$.
+\par
+Let 
+\bit
+\it $J(a)=\{x:g(x)=a\}$,
+\it $J(b)=\{y:h(y)=b\}$ and 
+\it $J(a,b) = \{(x,y):g(x)=a,h(y)=b\}$.
+\eit
+Then
+\begin{align*}
+\prob\big[g(X)=a,h(Y)=b\big]
+%	& = \sum_{\stackss{x,y:}{g(x)=a,h(y)=b}}\prob(X=x,Y=y) \\
+	& = \sum_{(x,y)\in J(a,b)}\prob(X=x,Y=y) \\
+	& = \sum_{(x,y)\in J(a,b)}\prob(X=x)\prob(Y=y) \qquad\text{(by independence),}\\
+	& = \sum_{x\in J(a)}\prob(X=x) \sum_{y\in J(b)}\prob(Y=y) \\
+	& = \prob\big[g(X)=a\big]\,\prob\big[h(Y)=b\big].
+\end{align*}
+\end{proof}
+
+%======================================================================
+\end{document}
+%======================================================================

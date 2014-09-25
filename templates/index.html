@@ -1,0 +1,70 @@
+<!--
+camel: index.html
+-->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+	Cardiff Maths e-Learning
+{% endblock %}
+
+
+{% block breadcrumbs %}
+	{% if user.is_authenticated %}
+		&nbsp;{{ user.username }}
+	{% else %}
+		&nbsp;<a href="{% url 'camel.views.index' %}">Home</a>
+	{% endif %}
+{% endblock %}
+
+
+{% block content-main %}
+<h1>Home Page</h1>
+
+<ul>
+	<li><a href="/modules/">Modules</a></li>
+	<li><a href="/module-list/">Module List</a></li>
+</ul>
+<br/>
+<ul>
+	<li><a href="/login/">Log in</a></li>
+	<li><a href="/logout/">Log out</a></li>
+</ul>
+<br/>
+
+{% if user.is_authenticated %}
+	<h3>Hello {{ user.username }}!</h3>
+{% else %}
+	<h3>Hello stranger!</h3>
+{% endif %}
+
+<h2>Test MathJax</h2>
+<p>Some greek: $\alpha$, $\beta$,...</p>
+
+An integral:
+\begin{equation}
+\Gamma(x) = \int_{0}^{\infty} t^{x-1} e^{-t}\,dt
+\end{equation}
+{% endblock %}
+
+{% block sidebar %}
+    <br/>
+    <h3>Useful links</h3>
+    <ul>
+        <li><a href="http://www.mathcentre.com">Mathcentre</a></li>
+		<li><a href="https://www.khanacademy.org">Khan Acacemy</a></li>
+    </ul>
+{% endblock %}
+
+{% block content-secondary %}
+    <h3>Contacts</h3>
+    <ul>
+        <li>email: evansd8@cf.ac.uk</li>
+    </ul>
+{% endblock %}
+
+
+
+
+
+

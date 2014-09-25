@@ -1,0 +1,229 @@
+\documentclass[lecture]{csm}
+%\documentclass[blanks,lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2012/13}
+\doctype{Lecture}
+\doctitle{Classical Probability}
+\docnumber{3}
+
+% local
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\expe}{\mathbb{E}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+%----------------------------------------------------------------------
+\section{Finite sample spaces}
+%----------------------------------------------------------------------
+
+\begin{definition}
+Let $A$ be a set. The \emph{power set} of $A$, denoted by $\mathcal{P}(A)$, is the set of all possible subsets of a $A$.
+\end{definition}
+\begin{example}
+Note that $\mathcal{P}(A)$ always contains the empty set and $A$ itself.
+$$
+\begin{array}{ll}
+A=\{a\}:	& \mathcal{P}(A) = \big\{\emptyset, \{a\}\big\} \\
+A=\{a,b\}:	& \mathcal{P}(A) = \big\{\emptyset, \{a\}, \{b\}, \{a,b\}\big\} \\
+A=\{a,b,c\}:	\quad & \mathcal{P}(A) = \big\{\emptyset, \{a\}, \{b\}, \{c\}, \{a,b\}, \{a,c\}, \{b,c\}, \{a,b,c\}\big\} \\
+\end{array}
+$$
+\end{example}
+
+For the moment, we consider random experiments with only finitely many possible outcomes. 
+\bit
+\it If $\Omega$ is a finite set, $\mathcal{P}(\Omega)$ contains $2^n$ elements, where $n$ is the cardinality of $\Omega$.
+\it If $\Omega$ is an infinite set, then $\mathcal{P}(\Omega)$ is an uncountable set.
+\eit
+It is not easy to assign probabilities to uncountable collections of events in a sensible way.
+%----------------------------------------------------------------------
+\section{The principle of indifference}
+%----------------------------------------------------------------------
+Suppose we have a finite sample space $\Omega=\{1,2,\ldots,n\}$. If the $n$ outcomes are indistinguishable (except for their names), the \emph{principle of indifference} states that each outcome should be assigned a probability of $1/n$.
+\bit
+\it We say that each outcome is \emph{equally likely} to occur.
+\it This is often an implicit assumption (e.g. "a card is chosen at random").
+\it The probability of an event is proportional to its \emph{cardinality}:
+\[
+\prob(A) = \displaystyle\frac{|A|}{|\Omega|}
+\]
+
+\it Standard examples involve \emph{coins}, \emph{dice} and \emph{cards}.
+\it Problems can be solved by counting the number of ways different events can occur.
+	\bit
+	\it How many ways are there of sampling $k$ elements from a set of $n$ (distinct) elements?
+	\it The answer depends on how we sample the elements.
+	\eit
+\eit
+
+\newpage % <<
+
+%----------------------------------------------------------------------
+\section{Sampling with replacement}
+%----------------------------------------------------------------------
+In many applications, once an element has been chosen it is \emph{replaced} in the set, and is available to be chosen again in subsequent selections. If there are $n$ possible elements, there are $n^k$ distinct choices of $k$ elements under this selection model.
+
+% example: choosing with replacement
+\begin{example} 
+There are exactly $2^k$ binary sequences of length $k$, $3^k$ ternary sequences, etc.
+\end{example}
+
+% example: choosing with replacement
+\begin{example}
+How many different UK vehicle registration plates are possible?
+\end{example}
+\begin{solution}
+UK registration plates are of the form \texttt{\,AB\,12\,CDE\,}: the first two positions can be any letters except \texttt{I}, \texttt{Q} and \texttt{Z}, the third and fourth positions can be any single digit, and the last three positions can be any letters except \texttt{I} and \texttt{Q}. Thus the total number of possible registration plates is $23 \times 23 \times 10 \times 10 \times 24 \times 24 \times 24 = 731\,289\,600$.
+\end{solution}
+
+
+%----------------------------------------------------------------------
+\section{Sampling without replacement}
+%----------------------------------------------------------------------
+It also happens that once an element has been chosen, it is not available to be chosen again in subsequent selections. There are two cases under this selection model, depending on whether or not we take the \emph{order} in which elements are chosen into account.
+
+\begin{definition}
+\ben
+\it A \emph{$k$-permutation} of a set of $n$ elements is a sequence of $k$ elements, taken (without replacement) from the set. The number of $k$-permutations is
+\[
+^nP_k = n(n-1)(n-2)\cdots(n-k+1) = \frac{n!}{(n-k)!}
+\]
+\it A \emph{$k$-combination} of a set of $n$ elements is a subset of $k$ elements, taken (without replacement) from the set. The number of $k$-combinations is
+\[
+^nC_k = \frac{n(n-1)(n-2)\cdots(n-k+1)}{k(k-1)(k-2)\cdots 1} = \frac{n!}{k!(n-k)!}
+\]
+This is called the \emph{binomial coefficient}, and is usually denoted by $\binom{n}{k}$.
+\een
+\end{definition}
+
+% example (simple counting)
+\begin{example}
+A student has two classical CDs, four jazz CDs, three rock CDs and three pop CDs, and wants to arrange them so that all CDs of the same genre are located next to each other. In how many distinct ways can this be done? If the CDs are arranged at random, what is the probability that this event occurs?
+\begin{solution}
+The total number of possible arrangements is $12!= 479\,001\,600$.
+\bit
+\it 
+One such arrangement is \texttt{\,CC\,JJJJ\,RRR\,PPP\,}. There are $2!\times 4!\times 3!\times 3! = 1728$ different ways of achieving this arrangement. 
+\it
+In addition, there are four ways of choosing the first group, three for the second, two for the third and one for the last, so there are $4!= 24$ different ways of ordering the groups.
+\it
+Thus the probability that a random arrangement has the required property is 
+\[
+\displaystyle\frac{1728\times 24}{12!}\approx 0.00008658.
+\]
+\eit
+\end{solution}
+\end{example}
+
+\newpage % <<
+
+% example
+\begin{example}
+Find the probability that a hand of five cards contains 
+\ben 
+\it four cards of the same kind (e.g. four aces),
+\it two (distinct) pairs.
+\een
+\begin{solution}
+The total number of hands is $\binom{52}{5} = 2598960$.
+\ben
+\it
+	\bit
+	\it There are 13 different kinds of card (A,2,3,4,5,6,7,8,9,10,J,Q,K).
+	\it For each kind, there are $48$ different hands that contain all four cards of that kind.
+	\it Hence there are $13\times 48 = 624$ hands containing four cards of the same kind.
+	\it $\prob(\text{four-of-a-kind}) = 624/2598960 = 0.00024$.
+	\eit
+\it 
+	\bit
+	\it Two distinct pairs can be chosen in $\binom{13}{2} = 78$ different ways.
+	\it Each pair can be chosen in $\binom{4}{2} = 6$ different ways, and the 
+	\it The fifth card can be chosen in $44$ different ways.
+	\it Hence there are $78\times 6\times 6\times 44 = 123552$ different ways of choosing two distinct pairs.
+	\it $\prob(\text{two distinct pairs}) = 123552/2598960 = 0.0475$.
+	\eit
+\een	
+\end{solution}
+\end{example}
+
+% example: division paradox
+\begin{example}[The Division Paradox]
+A \emph{fair game} is a game in which the probability of winning is equal to the probability of losing. Two players $A$ and $B$ decide to play a sequence of fair games until one of the players wins 6 games, but they stop when the score is 5:3 in favour of player $A$. How should the prize money be fairly divided?
+\begin{solution}
+Assume that the players carried on playing the sequence of games,
+\bit
+\it The maximum number of additional games is 3.
+\it The possible outcomes are 
+\[
+\Omega=\{AAA,AAB,ABA,BAA,ABB,BAB,BBA,BBB\}.
+\]
+\eit
+The games are fair, so all outcomes are equally likely.
+\bit
+\it Only one outcome is in favour of player $B$, the other seven are in favour of $A$.
+\it The prize money should therefore be divided in the ratio $7:1$ in favour of $A$.
+\eit
+\end{solution}
+\end{example}
+
+\newpage
+
+% example: birthday paradox
+\begin{example}[The Birthday Paradox]
+Find the minimum number of people for which the probability that least two people share a birthday exceeds $0.5$.
+\begin{solution}
+\bit
+\it Suppose we have a set of $k$ randomly chosen people.
+\it Let $n=365$ be the number of days in a year. 
+\it Assume that each birthday is equally likely to occur.
+\eit
+
+Let $p(k,n)$ be the probability that at least two people share a birthday.
+\bit
+\it We want to find the value of $k$ for which $p(k,n) > 0.5$.
+\it There are $n$ choices of birthday for each of the $k$ people, so the total number of possible assignments is $n^k$. 
+\it The number of assignments in which all birthdays are different is the number of permutations of $n$ objects taken $k$ at a time, which is equal to 
+\[
+^nP_k = n(n-1)(n-2)\cdots(n-k+1) = \frac{n!}{(n-k)!}
+\]
+\eit
+
+\newpage
+The probability that no two people share a birthday is this number expressed as a proportion of all possible arrangements:
+\begin{align*}
+p(k,n)
+	& = \prob(\text{At least one pair share a birthday}) \\
+	& =  1 - \prob(\text{No pairs share a birthday}) \\
+	& =  1 - \frac{\text{Number of assignments with all birthdays different}}{\text{Total number of assignments}} \\
+	& =  1 - \frac{n!}{n^k(n-k)!}
+\end{align*}
+
+The probabilities $p(k,365)$ for various values of $k$ are shown below:
+\[
+\begin{array}{|l|cccccccc|} \hline
+k			& 2		& 10		& 15		& 22		& 23		& 50 	& 100		& 366 	\\ \hline
+p(k,365)		& 0.003	& 0.12	& 0.25	& 0.48	& 0.51	& 0.97	& 0.99997 & 1		\\ \hline
+\end{array}
+\]
+\end{solution}
+\end{example}
+
+%======================================================================
+\end{document}
+%======================================================================

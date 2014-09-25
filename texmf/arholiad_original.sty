@@ -1,0 +1,1069 @@
+% filename: arholiad.sty
+%
+% This is ripped-off exam.cls, with the page numbering and points
+% stuff taken out. The purpose is to provide structured format for 
+% questionsa nd solutions, to make it easier for the parser.
+\NeedsTeXFormat{LaTeX2e}
+\def\fileversion{1.0}
+\def\filedate{2014/08/28}
+\ProvidesPackage{arholiad}[\filedate \space v\fileversion \space (de)]
+\ProvidesFile{arholiad.sty}[\filedate \space v\fileversion \space (de)]
+
+% options
+%\newif\if@zoom\@zoomfalse
+%\DeclareOption{zoom}{\@zoomtrue}
+%\ProcessOptions
+%\relax
+
+
+\newif\ifprintanswers
+\printanswersfalse
+\DeclareOption{answers}{\printanswerstrue}
+\DeclareOption{noanswers}{\printanswersfalse}
+
+\newif\ifprintanswersatend
+\printanswersatendfalse
+\DeclareOption{answersatend}{\printanswersatendtrue}
+\DeclareOption{noanswersatend}{\printanswersatendfalse}
+
+\newif\ifcancelspace
+\cancelspacefalse
+\DeclareOption{cancelspace}{\cancelspacetrue}
+\DeclareOption{nocancelspace}{\cancelspacefalse}
+
+%\DeclareOption*{%
+  %\PassOptionsToClass{\CurrentOption}{book}%
+%}
+\ProcessOptions
+\relax
+%\LoadClass{book}
+
+% language
+\newcommand{\questionname}{Question}
+
+% niceness
+\setlength{\parindent}{0em}
+
+% write-to-file
+\AtBeginDocument{
+    \ifx\@undefined\@ansout\newwrite\@ansout\fi
+    \immediate\openout\@ansout=\jobname.ans
+}
+\AtEndDocument{
+	\immediate\closeout\@ansout
+    \newpage
+    \appendix
+    \chapter{Answers}
+	\renewcommand{\labelenumi}{\arabic{enumi}.}
+	\renewcommand{\labelenumii}{(\alph{enumii})}
+	\renewcommand{\labelenumiii}{(\roman{enumiii})}
+	\renewcommand{\labelenumiv}{\alph{enumiv}}
+	\input{\jobname.ans}
+}
+
+\def\ans@write#1{
+    \immediate\write\@ansout{#1}
+}
+
+
+% counters
+\newcounter{exercise}[chapter]
+\newcounter{diagnostic}[chapter]
+\newcounter{formative}[chapter]
+\newcounter{summative}[chapter]
+
+\newcommand{\exercisetype}{exercise}
+\newcommand{\exercisename}{Exercise}
+
+\RequirePackage{environ}
+%\NewEnviron{answer}{%
+%    \ans@write{\BODY}
+%}{}
+
+\NewEnviron{solution}{%
+    \ifprintanswers
+        \begingroup
+        \begin{TheSolution}
+        \BODY
+        \end{TheSolution}
+        \endgroup
+    \fi
+    \ifprintanswersatend
+        \ans@write{\BODY}
+    \fi
+}{}
+
+% exercise (common to diagnostic, formative and summative}
+\newenvironment{exercise}{%
+  \refstepcounter{exercise}
+  \par\vspace{2ex}\noindent\textbf{\large\exercisename\normalsize}\par\vspace{1ex}
+  \ans@write{\noexpand\subsection*{\exercisename}}
+}{}
+
+% diagnostic
+\newenvironment{diagnostic}{%
+  \stepcounter{diagnostic}
+  \renewcommand{\exercisetype}{diagnostic}
+  \renewcommand{\exercisename}{Diagnostic Exercise \thechapter.\thediagnostic}
+  \begin{exercise}
+}{
+  \end{exercise}
+}
+% formative 
+\newenvironment{formative}{%
+  \stepcounter{formative}
+  \renewcommand{\exercisetype}{formative}
+  \renewcommand{\exercisename}{Formative Exercise \thechapter.\theformative}
+  \begin{exercise}
+}{%
+  \end{exercise}
+}
+% summative environment
+\newenvironment{summative}{%
+  \stepcounter{summative}
+  \renewcommand{\exercisetype}{summative}
+  \renewcommand{\exercisename}{Summative Exercise \thechapter.\thesummative}
+  \begin{exercise}
+}{%
+  \end{exercise}
+}
+
+%------------------------------------------------
+% exam.cls rip-off starts here
+%------------------------------------------------
+% write to aux file
+%\def\camel@write#1{%
+%  \begingroup
+%    \edef\reserved@a{\write\@mainaux
+%      {\string\camelinfo{#1}{\noexpand\thepage}}}%
+%    \reserved@a
+%  \endgroup
+%}
+
+%\PgInfo commands are written to the .aux file by the \camel@write
+%command; that's the only place that \PgInfo commands appear.
+%\def\camelinfo#1#2{\expandafter\gdef\csname Pg@#1\endcsname{#2}}
+
+\newcounter{question}
+\newcounter{partno}
+\newcounter{subpart}
+\newcounter{subsubpart}
+\newcounter{choice}
+
+% We define the \subpart and \subsubpart commands when we enter a
+% questions environment (rather than waiting until we enter a subparts
+% of subsubparts environment) so that we can signal an error if a
+% \subpart or \subsubpart command appears outside of the corresponding
+% environment.  (We don't do this for the \part command so that the user
+% can use the standard sectioning \part command outside of a parts
+% environment.)
+
+% The counter ques@object will count the items in each question, where
+% an item is defined as either the question itself, or a part, or a
+% subpart, or a subsubpart, or a choice.  This will be used by
+% \find@quesend to find the last page occupied by the last question
+% begun on or before the current page:
+%\newcounter{ques@object}
+
+% \first@questionobject will be used by the \question command.
+% That is, it will be used only once, but we want to keep its
+% definition here, near the definitions of \addquestionobject and
+% \questionobject@pluspagecheck.
+%\newcommand{\first@questionobject}{%
+%  \setcounter{ques@object}{1}%
+%  \edef\q@object@label{%
+%    question\arabic{question}@object\arabic{ques@object}}%
+%  \camel@write{\q@object@label}%
+%}% first@questionobject
+
+% \addquestionobject will be used by each part, subpart, and
+% subsubpart, and can also be used by the user to mark the end of a
+% question that spills over onto the next page without any part,
+% subpart, etc. starting on that page:
+%\newcommand{\addquestionobject}{%
+%  \addtocounter{ques@object}{1}%
+%  \edef\q@object@label{%
+%    question\arabic{question}@object\arabic{ques@object}}%
+%  \camel@write{\q@object@label}%
+%}% addquestionobject
+
+% hooks (for user customization):w
+\newcommand\questionshook{}
+\newcommand\partshook{}
+\newcommand\subpartshook{}
+\newcommand\subsubpartshook{}
+\newcommand\choiceshook{}
+\newcommand\checkboxeshook{}
+
+
+% questions environment
+\newenvironment{questions}{%
+  \ans@write{\noexpand\begin{enumerate}}
+  \def\@queslevel{question}%
+  \def\question{%
+    \ans@write{\noexpand\item}
+    \def\thequestiontitle{\questionname~thequestion}%
+    \@checkqueslevel{question}%
+    \edef\@queslabel{question.\arabic{chapter}.\arabic{exercise}.\arabic{question}}%
+%    \camel@write{\@queslabel}%
+%    \begingroup
+      \gdef\@currentlabel{\@queslabel}%
+      \label{\@queslabel}%
+%    \endgroup
+    \item
+  } 
+  \def\subpart{%
+    \ans@write{\noexpand\item}
+    \@checkqueslevel{subpart}%
+    \edef\@subpartlabel{subpart.\arabic{question}.\arabic{partno}.\arabic{subpart}}%
+%    \camel@write{\@subpartlabel}%
+    \label{\@subpartlabel}%
+    \item
+  }
+  \def\subsubpart{%
+    \ans@write{\noexpand\item}
+    \@checkqueslevel{subsubpart}%
+    \edef\@subsubpartlabel{subsubpart.\arabic{question}.\arabic{partno}.\arabic{subpart}.\arabic{subsubpart}}
+%    \camel@write{\@subsubpartlabel}%
+%    \addquestionobject
+    \label{\@subsubpartlabel}%
+    \item
+  }
+  \list{\question@number}%
+    {\usecounter{question}%
+    \settowidth{\leftmargin}{10.\hskip\labelsep}%
+    \labelwidth\leftmargin\advance\labelwidth-\labelsep
+    \partopsep=0pt
+    \questionshook
+    }%
+  }% End of the first argument of \newenvironment{questions}
+  {%
+    \endlist
+    \ans@write{\noexpand\end{enumerate}}
+  }% End of the second argument of \newenvironment{questions}
+  
+\def\question@number{\questionlabel}
+\newcommand\questionlabel{\thequestion.}
+
+% -- parts --
+\newenvironment{parts}{%
+  \ans@write{\noexpand\begin{enumerate}}
+  \def\@queslevel{part}%
+  \def\part{%
+    \ans@write{\noexpand\item}
+    \@checkqueslevel{part}%
+    \edef\@partlabel{part.\arabic{chapter}.\arabic{exercise}.\arabic{question}.\arabic{partno}}%
+%    \camel@write{\@partlabel}%
+    \label{\@partlabel}%
+    \item
+  }
+  \list{\partlabel}%
+    {%
+    \usecounter{partno}\def\makelabel##1{\hss\llap{##1}}%
+    \settowidth{\leftmargin}{(m)\hskip\labelsep}%
+    \labelwidth\leftmargin\advance\labelwidth-\labelsep
+    \topsep=0pt
+    \partopsep=0pt
+    \partshook
+    }%
+  }% 
+  {
+  \endlist
+  \ans@write{\noexpand\end{enumerate}}
+  }
+\newcommand\partlabel{\thepartno}
+\def\thepartno{(\alph{partno})}
+
+% -- subparts --
+\newenvironment{subparts}{%
+  \ans@write{\noexpand\begin{enumerate}}
+  \def\@queslevel{subpart}%
+  \list{\subpartlabel}%
+    {%
+    \usecounter{subpart}\def\makelabel##1{\hss\llap{##1}}%
+    \settowidth{\leftmargin}{vii.\hskip\labelsep}%
+    \labelwidth\leftmargin\advance\labelwidth-\labelsep
+    \topsep=0pt
+    \partopsep=0pt
+    \subpartshook
+    }%
+  }%
+  {\endlist \ans@write{\noexpand\end{enumerate}}}
+\newcommand\subpartlabel{\thesubpart.}
+\def\thesubpart{(\roman{subpart})}
+
+% -- subsubparts --
+\newenvironment{subsubparts}{%
+  \ans@write{\noexpand\begin{enumerate}}
+  \def\@queslevel{subsubpart}%
+  \list{\subsubpartlabel}%
+    {%
+    \usecounter{subsubpart}\def\makelabel##1{\hss\llap{##1}}%
+    \settowidth{\leftmargin}{($\psi$)\hskip\labelsep}%
+    \labelwidth\leftmargin\advance\labelwidth-\labelsep
+    \topsep=0pt
+    \partopsep=0pt
+    \subsubpartshook
+    }%
+  }%
+  {\endlist \ans@write{\noexpand\end{enumerate}}}
+\newcommand\subsubpartlabel{\thesubsubpart.}
+\def\thesubsubpart{\alph{subsubpart}}
+
+
+%-----------------------
+% checkqueslevel
+\def\@checkqueslevel#1{%
+  \begingroup
+    \def\@temp{#1}%
+    \ifx\@temp\@queslevel
+      % do nothing.
+    \else
+      \ClassError{exam}{%
+        I found a #1 where I expected to find a \@queslevel
+        \MessageBreak
+      }{%
+        Both #1 and \@queslevel \space can be used only inside the correct 
+        \MessageBreak \space \space
+        environment and outside of any smaller environment
+        \MessageBreak
+      }%
+    \fi
+  \endgroup
+}
+
+%--------------------------------------------------------------------
+%         choices (for multiple choice) and checkboxes
+
+\newcommand{\dewis}[1]{%
+    \choice {#1}
+}
+\newcommand{\dewiscywir}[1]{%
+    \correctchoice {#1}
+    \ifprintanswersatend
+        \ans@write{\thechoice\ #1}
+    \fi
+}
+
+%\renewcommand\thechoice{\Alph{choice}}
+\renewcommand\thechoice{(\alph{choice})}
+\newcommand\choicelabel{\thechoice}
+
+% We will have \@correctchoicetrue when we're printing solutions
+% and we're printing the correct choice of a choices or
+% oneparchoices environment.
+% We'll say \begingroup before saying \@correctchoicetrue
+% and we'll say \endgroup at either the next \choice or \correctchoice
+% or the end of the choices or oneparchoices environment.
+% Thus, we'll never again need to say \@correctchoicefalse
+\newif\if@correctchoice
+\@correctchoicefalse
+
+\newcommand\CorrectChoiceEmphasis[1]{%
+  \def\CorrectChoice@Emphasis{#1}%
+}
+\CorrectChoiceEmphasis{\bfseries}
+\let\correctchoiceemphasis\CorrectChoiceEmphasis
+
+\newenvironment{choices}%
+  {\list{\choicelabel}%
+     {\usecounter{choice}\def\makelabel##1{\hss\llap{##1}}%
+       \settowidth{\leftmargin}{W.\hskip\labelsep}%
+       \def\choice{%
+         \if@correctchoice
+           \endgroup
+         \fi
+         \item
+       } % choice
+       \def\CorrectChoice{%
+         \if@correctchoice
+           \endgroup
+         \fi
+         \ifprintanswers
+           % We can't say \choice here, because that would
+           % insert an \endgroup:
+           \begingroup \@correctchoicetrue
+           \CorrectChoice@Emphasis
+         \fi
+         \item
+       } % CorrectChoice
+       \let\correctchoice\CorrectChoice
+       %\labelwidth\leftmargin\advance\labelwidth-\labelsep
+       \topsep=2pt
+       \partopsep=0pt
+       \choiceshook
+     }%
+  }%
+  {\if@correctchoice \endgroup \fi \endlist}
+
+\newenvironment{oneparchoices}%
+  {%
+    \setcounter{choice}{0}%
+    \def\choice{%
+      \if@correctchoice \endgroup \fi
+      \refstepcounter{choice}%
+      \ifnum\value{choice}>1\relax
+        \penalty -50\hskip 1em plus 1em\relax
+      \fi
+      \choicelabel
+    }% choice
+    \def\CorrectChoice{%
+      \if@correctchoice \endgroup \fi
+      \refstepcounter{choice}%
+      \ifprintanswers
+        \begingroup \@correctchoicetrue 
+        \CorrectChoice@Emphasis
+      \fi
+      \ifnum\value{choice}>1\relax
+        \penalty -50\hskip 1em plus 1em\relax
+      \fi
+      \choicelabel
+    }% CorrectChoice
+    \let\correctchoice\CorrectChoice
+    \let\par\@empty
+    % If we're continuing the paragraph containing the question,
+    % then leave a bit of space before the first choice:
+    \ifvmode\else\enskip\fi
+    \ignorespaces
+  }%
+  {\if@correctchoice \endgroup \fi}
+
+\RequirePackage{amssymb}
+\newcommand{\checkboxchar}[1]{\def\checkbox@char{#1}}
+\newcommand{\checkedchar}[1]{\def\checked@char{#1}}
+\checkboxchar{$\square$}
+\renewcommand\thechoice{(\alph{choice})}
+%\renewcommand\thechoice{\Alph{choice}}
+\checkedchar{$\checkmark$}
+
+\newenvironment{checkboxes}%
+  {\list{\checkbox@char}%
+     {\usecounter{choice}%\def\makelabel##1{\hss\llap{##1}}%
+       %\settowidth{\leftmargin}{10.\hskip\labelsep}%
+       \settowidth{\leftmargin}{W.\hskip\labelsep}%
+       %\settowidth{\leftmargin}{W.\hskip\labelsep\hskip 2.5em}%
+       \def\choice{%
+         \if@correctchoice
+           \endgroup
+         \fi
+         \item
+       } % choice
+       \def\CorrectChoice{%
+         \if@correctchoice
+           \endgroup
+         \fi
+         \ifprintanswers
+           % We can't say \choice here, because that would
+           % insert an \endgroup:
+           \begingroup \@correctchoicetrue
+           \CorrectChoice@Emphasis
+           \item[\checked@char]
+         \else
+           \item
+         \fi
+       } % CorrectChoice
+       \let\correctchoice\CorrectChoice
+       %\labelwidth\leftmargin\advance\labelwidth-\labelsep
+       \topsep=2pt
+       \partopsep=0pt
+       \checkboxeshook
+     }%
+  }%
+  {\if@correctchoice \endgroup \fi \endlist}
+
+\newenvironment{oneparcheckboxes}%
+  {%
+    % Although we're not printing numbers for the choices, we use the
+    % choice counter to keep track of whether a choice is the first
+    % one (in which case we don't leave any additional space) or a
+    % later one (in which case we do leave additional space):    
+    \setcounter{choice}{0}%
+    \def\choice{%
+      \if@correctchoice \endgroup \fi
+      \stepcounter{choice}%
+      \ifnum\value{choice}>1\relax
+        \penalty -50\hskip 1em plus 1em\relax
+      \fi
+      \checkbox@char
+    }% choice
+    \def\CorrectChoice{%
+      \if@correctchoice \endgroup \fi
+      \stepcounter{choice}%
+      \ifprintanswers
+        \begingroup \@correctchoicetrue 
+        \CorrectChoice@Emphasis
+      \fi
+      \ifnum\value{choice}>1\relax
+        \penalty -50\hskip 1em plus 1em\relax
+      \fi
+      \ifprintanswers
+        \checked@char
+      \else
+        \checkbox@char
+      \fi
+    }% CorrectChoice
+    \let\correctchoice\CorrectChoice
+    \let\par\@empty
+    % If we're continuing the paragraph containing the question,
+    % then leave a bit of space before the first choice:
+    \ifvmode\else\enskip\fi
+    \ignorespaces
+  }%
+  {\if@correctchoice \endgroup \fi}
+
+
+\long\def\uplevel#1{%
+  \par\bigskip
+  \vbox{%
+    % We entered internal vertical mode, and so we get \parshape=0.
+    % We set \leftskip to provide the correct left margin for whatever
+    % is in the argument of the \uplevel command:
+    \leftskip=\@totalleftmargin
+    \advance\leftskip-\leftmargin
+    % We adjust \@totalleftmargin and linewidth in case there's a
+    % solution environment inside of the argument to the \uplevel:
+    \advance\@totalleftmargin-\leftmargin
+    \advance\linewidth\leftmargin
+    #1%
+  }% vbox
+  \nobreak
+}
+
+%--------------------------------------------------------------------
+%--------------------------------------------------------------------
+%
+%                     ***************************
+%                     ** SOLUTION ENVIRONMENTS **
+%                     ***************************
+
+
+
+% If the documentclass options include ``answers'', then the command
+% \printanswerstrue is given at the beginning of the run.
+
+% If the documentclass options include ``noanswers'', then the command
+% \printanswersfalse is given at the beginning of the run.
+
+\def\printanswers{\printanswerstrue}
+\def\printanswersatend{\printanswersatendtrue}
+\def\noprintanswers{\printanswersfalse}
+
+% If the documentclass options include ``cancelspace'', then the
+% command \cancelspacetrue is given at the beginning of the run.
+
+% If the documentclass options include ``nocancelspace'', then the
+% command \cancelspacefalse is given at the beginning of the run.
+
+\def\cancelspace{\cancelspacetrue}
+\def\nocancelspace{\cancelspacefalse}
+
+\newcommand\SolutionEmphasis[1]{%
+  \def\Solution@Emphasis{#1}%
+}
+\SolutionEmphasis{}
+
+% If printanswers is true, we print the solution using a TheSolution
+% environment.  If printanswers is false and cancelspace is false, we
+% insert blank vertical space equal to the optional argument (the
+% default value of which is 0pt).
+\newenvironment{esolution}[1][0pt]%
+  {%
+    \ifprintanswers
+      \begingroup
+      \Solution@Emphasis
+      \begin{TheSolution}%
+    \else
+      \ifcancelspace
+        % Do nothing
+      \else
+        \par
+        \penalty 0
+        \vspace*{#1}%
+      \fi
+      \setbox\z@\vbox\bgroup
+    \fi
+  }{%
+    \ifprintanswers
+      \end{TheSolution}%
+      \endgroup
+    \else
+      \egroup
+    \fi
+  }%
+
+% If printanswers is true, we print the solution using a TheSolution
+% environment.  If printanswers is false and cancelspace is false,
+% we insert an empty box of width the current line width and of
+% height equal to the optional argument, which can be a length, or
+% \fill, or \stretch{number}.  If the optional argument is omitted,
+% then the box is entirely omitted when printanswers is false.
+\newenvironment{solutionorbox}[1][-1pt]%
+  {%
+    \ifprintanswers
+      \begingroup
+      \Solution@Emphasis
+      \begin{TheSolution}%
+    \else
+      \ifcancelspace
+        % Do nothing
+      \else
+        \par
+        % Note: It's important that the following test be
+        % ``\ifdim 0pt > #1'' rather than ``\ifdim #1 < 0pt''
+        % That's because if the user says
+        % ``\begin{solutionorbox}{\stretch{1}}''
+        % (or \stretch{anythingelse}), then this will expand to
+        % ``\ifdim 0pt > \z@ plus 1fill\relax''.
+        % The \ifdim will be ``\ifdim 0pt > \z@'', and we'll have
+        % ``plus 1fill\relax'' left over.  This is OK because if the
+        % \ifdim is false, that leftover stuff will be ignored,
+        % and it will only be true if the user omitted the optional
+        % argument, in which case there's no \stretch and thus no
+        % left over part.
+        % If we said ``\ifdim #1 < 0pt'', then we'd get an error
+        % when the user used \stretch, since the leftover stuff
+        % would appear when TeX was looking for <, =, or >.
+        \ifdim 0pt > #1
+          % do nothing
+        \else
+          \makeemptybox{#1}%
+        \fi
+      \fi
+      \setbox\z@\vbox\bgroup
+    \fi
+  }{%
+    \ifprintanswers
+      \end{TheSolution}%
+      \endgroup
+    \else
+      \egroup
+    \fi
+  }%
+  
+% If printanswers is true, we print the solution using a TheSolution
+% environment.  If printanswers is false and cancelspace is false,
+% we insert lined vertical space equal to the optional argument (the
+% default value of which is 0pt).
+\newenvironment{solutionorlines}[1][0pt]%
+  {%
+    \ifprintanswers
+      \begingroup
+      \Solution@Emphasis
+      \begin{TheSolution}%
+    \else
+      \ifcancelspace
+        % Do nothing
+      \else
+        \par
+        \penalty 0
+        \fillwithlines{#1}%
+      \fi
+      \setbox\z@\vbox\bgroup
+    \fi
+  }{%
+    \ifprintanswers
+      \end{TheSolution}%
+      \endgroup
+    \else
+      \egroup
+    \fi
+  }%
+  
+% If printanswers is true, we print the solution using a TheSolution
+% environment.  If printanswers is false and cancelspace is false,
+% we insert dotted lined vertical space equal to the optional
+% argument (the default value of which is 0pt).
+\newenvironment{solutionordottedlines}[1][0pt]%
+  {%
+    \ifprintanswers
+      \begingroup
+      \Solution@Emphasis
+      \begin{TheSolution}%
+    \else
+      \ifcancelspace
+        % Do nothing
+      \else
+        \par
+        \penalty 0
+        \fillwithdottedlines{#1}%
+      \fi
+      \setbox\z@\vbox\bgroup
+    \fi
+  }{%
+    \ifprintanswers
+      \end{TheSolution}%
+      \endgroup
+    \else
+      \egroup
+    \fi
+  }%
+
+% The environment TheSolution is called from the solution,
+% solutionorbox, solutionorlines, and solutionordottedlines
+% environments when printanswers is true.  It uses Donald Arseneau's
+% framed.sty macros (included at the end of this file) to allow the
+% solution to be broken across pages and have each piece enclosed in
+% an fbox (or a colorbox, if the user has given the command
+% \shadedsolutions), (or no box at all, if the user has given the
+% command \unframedsolutions).
+% Of course, the user can change TheSolution with a \renewenvironment
+% command.
+\newcommand{\solutiontitle}{\noindent\textbf{Solution:}\enspace}
+\newenvironment{TheSolution}%
+  {%
+    \vspace{\parskip}%
+    % If we don't set \leftskip and \rightskip to 0pt, then if we
+    % appear inside of an \uplevel command we'd have indentation
+    % inside of the solution box:
+    \leftskip=0pt
+    \rightskip=0pt
+    % If the user said \unframedsolutions, then both
+    % \if@framedsolutions and \if@shadedsolutions are false:
+    \if@framedsolutions
+      % We'll use the default \FrameCommand
+    \else
+      \if@shadedsolutions
+        \def\FrameCommand{\colorbox{SolutionColor}}%
+      \else
+        % It's \unframedsolutions:
+        \def\FrameCommand{}%
+      \fi
+    \fi
+    \MakeFramed{\advance\hsize-\width}%
+    \solutiontitle
+    \ignorespaces
+  }%
+  {%
+    \unskip
+    \endMakeFramed
+  }%
+
+\newif\if@framedsolutions
+\@framedsolutionstrue
+\newif\if@shadedsolutions
+\@shadedsolutionsfalse
+% If the user said \unframedsolutions, then both
+% \if@framedsolutions and \if@shadedsolutions are false.
+
+\def\framedsolutions{\@framedsolutionstrue\@shadedsolutionsfalse}
+\def\shadedsolutions{%
+  \@ifundefined{definecolor}
+  {%
+    \ClassError{exam}{%
+      You must load the color package with the command\MessageBreak
+      \space\space\protect\usepackage{color}\MessageBreak
+      in order to use the command \protect\shadedsolutions
+      \MessageBreak
+      }{%
+      This command makes use of the package color.sty,\MessageBreak
+      and so you have to load color.sty before your\MessageBreak
+      \protect\begin{document} command.\MessageBreak
+      }%
+  }%
+  {%
+    \definecolor{SolutionColor}{gray}{0.8}
+    \@shadedsolutionstrue
+    \@framedsolutionsfalse
+  }%
+}
+\def\unframedsolutions{\@framedsolutionsfalse\@shadedsolutionsfalse}
+
+%--------------------------------------------------------------------
+%--------------------------------------------------------------------
+
+% The following stuff is lifted from:
+%
+% framed.sty   v 0.8a   21-Jul-2003
+% Copyright (C) 1992-2003 by Donald Arseneau
+% These macros may be freely transmitted, reproduced, or modified
+% provided that this notice is left intact.
+%
+% The modifications I made are marked with ``psh'' in a comment:
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Create framed or shaded regions that can break across pages using 
+% \begin{framed} ... \end{framed}    -- ordinary frame box (box at margin)
+% \begin{shaded} ... \end{shaded}    -- shaded background (into margin)
+%    ... leftbar ...                 -- line on left side
+% \begin{MakeFramed}{settings} ... \end{MakeFramed}
+%                        -- generic frame (for new environments)
+%
+% The "framed" environment puts the text into "\fbox" with the
+% settings "\fboxrule=\FrameRule" and "\fboxsep=\FrameSep".
+% You can change these lengths (using "\setlength") and you
+% can even change the definition of "\FrameCommand" to use
+% much fancier boxes.
+%
+% In fact, the "shaded" environment just redefines "\FrameCommand"
+% to use "\colorbox{shadecolor}" (and you have to define the
+% color "shadecolor": \newcolor{shadecolor}...).
+%
+% A page break is allowed, and even encouraged, before the framed
+% environment.  If you want to attach some text (a box title) to the
+% frame, then the text should be inserted by \FrameCommand
+%
+% The contents of the framed regions are restricted: 
+% Floats, footnotes, marginpars and head-line entries will be lost.
+% (Some of these may be handled in a later version.)
+% This package will not work with the page breaking of multicol.sty,
+% or other systems that perform column-balancing.
+%
+% The MakeFramed environment does the work.  Its "settings" argument
+% should contain any adjustments to the text width (applied to \hsize,
+% and using the "\width" of the frame itself) as well as a `restore' 
+% command -- \@parboxrestore or \FrameRestore or something similar.
+% 
+% Expert commands:
+% \MakeFramed, \endMakeFramed: the "MakeFramed" environment
+% \FrameCommand: command to draw the frame around its argument
+% \FrameRestore: restore some text settings, but fewer than \@parboxrestore
+% \FrameRule: length register; \fboxrule for default "framed".
+% \FrameSep: length register; \fboxsep for default "framed".
+% \FrameHeightAdjust: macro; height of frame above baseline at top of page
+% 
+% This is still a `pre-production' version because I can think of many
+% features/improvements that should be made.  Nevertheless, starting 
+% with version 0.5 it should be bug-free.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%psh: Commented out \ProvidesPackage:
+%\ProvidesPackage{framed}[2003/07/21 v 0.8a: 
+%   framed or shaded text with page breaks]
+
+%psh: Created \saved@totalleftmargin and \@sollistdepth:
+\newdimen\saved@totalleftmargin
+\newcount\@sollistdepth
+
+\newenvironment{framed}% using default \FrameCommand
+  {\MakeFramed {\advance\hsize-\width \FrameRestore}}%
+  {\endMakeFramed}
+
+\newenvironment{shaded}{%
+  \def\FrameCommand{\colorbox{shadecolor}}%
+  \MakeFramed {\FrameRestore}}%
+ {\endMakeFramed}
+
+\newenvironment{leftbar}{%
+  \def\FrameCommand{\vrule width 3pt \hspace{10pt}}%
+  \MakeFramed {\advance\hsize-\width \FrameRestore}}%
+ {\endMakeFramed}
+
+\chardef\FrameRestore=\catcode`\| % for debug
+\catcode`\|=\catcode`\% % (debug: insert space after backslash)
+
+\def\MakeFramed#1{\par
+ % measure added width and height; call result \width and \height
+ \setbox\z@\vbox{\vskip-1in \hbox{\hskip-1in 
+   \FrameCommand{\hbox{\vrule \@height .7in \@depth.3in \@width 1in}}}%
+   \vskip\z@skip}%
+ \def\width{\wd\z@}\def\height{\ht\z@}%
+ \edef\fb@frw{\the\width}\edef\fb@frh{\the\height}%
+ % insert pre-penalties and skips
+ \begingroup
+ \skip@\lastskip
+ \if@nobreak\else 
+    \penalty9999 % updates \page parameters
+    \ifdim\pagefilstretch=\z@ \ifdim\pagefillstretch=\z@
+       \edef\@tempa{\the\skip@}%
+       \ifx\@tempa\zero@glue \penalty-30
+       \else \vskip-\skip@ \penalty-30 \vskip\skip@
+    \fi\fi\fi
+    \penalty\z@
+    % Give a stretchy breakpoint that will always be taken in preference
+    % to the \penalty 9999 used to update page parameters.  The cube root
+    % of 10000/100 indicates a multiplier of 0.21545, but the maximum 
+    % calculated badness is really 8192, not 10000, so the multiplier
+    % is 0.2301. 
+    \advance\skip@ \z@ plus-.5\baselineskip
+    \advance\skip@ \z@ plus-.231\height
+    \advance\skip@ \z@ plus-.231\skip@
+    \advance\skip@ \z@ plus-.231\topsep
+    \vskip-\skip@ \penalty 1800 \vskip\skip@
+ \fi
+ \addvspace{\topsep}%
+ \endgroup
+ % clear out pending page break
+ \penalty\@M \vskip 2\baselineskip \vskip\height
+ \penalty9999 \vskip -2\baselineskip \vskip-\height
+ \penalty9999 % updates \pagetotal
+|\message{After clearout, \pagetotal=\the\pagetotal, \pagegoal=\the\pagegoal. }%
+ \fb@adjheight 
+%psh: Added commands:
+  \advance\hsize-\@totalleftmargin
+  \saved@totalleftmargin=\@totalleftmargin
+  \@totalleftmargin=0pt
+  \parshape 0
+  \let\@listdepth=\@sollistdepth
+  \@sollistdepth=0
+  \leftmargin=0pt
+%psh: end of added commands
+ \setbox\@tempboxa\vbox\bgroup
+   #1% Modifications to \hsize (can use \width and \height)
+   \textwidth\hsize \columnwidth\hsize
+%psh: added one line:
+   \linewidth=\hsize
+}
+
+\def\endMakeFramed{\par
+     \kern\z@ \penalty-100 % put depth into height
+ \egroup
+ \begingroup \put@frame \endgroup
+%psh: Added one line:
+ \@totalleftmargin=\saved@totalleftmargin
+}
+
+% \put@frame takes the contents of \@tempboxa and puts all, or a piece,
+% of it on the page with a frame (\FrameCommand).  It recurses until
+% all of \@tempboxa has been used up. (\@tempboxa must have zero depth.)
+
+\def\put@frame{\relax
+ \ifdim\pagegoal=\maxdimen \pagegoal\vsize \fi
+|   \message{=============== Entering putframe ====================^^J
+|     \pagegoal=\the\pagegoal,  \pagetotal=\the\pagetotal. }%
+ \ifinner \else
+    \dimen@\pagegoal \advance\dimen@-\pagetotal % natural space left on page
+  \ifdim\dimen@<2\baselineskip 
+|   \message{Page has only \the\dimen@\space room left; eject. }%
+    \eject \fb@adjheight \put@frame
+  \else % there's appreciable room left on the page
+|    \message{\string\pagetotal=\the\pagetotal,
+|        \string\pagegoal=\the\pagegoal, 
+|        \string\pagestretch=\the\pagestretch,
+|        \string\pageshrink=\the\pageshrink,
+|        \string\fb@frh=\fb@frh. \space}
+|    \message{Box of size \the\ht\@tempboxa\space + \fb@frh}%
+     \begingroup % temporarily set \dimen@ to be...
+     \advance\dimen@.8\pageshrink  % maximum space available on page
+     \advance\dimen@-\fb@frh\relax % space available for frame's contents
+     \expandafter\endgroup
+     % restore \dimen@ to real room left on page
+     \ifdim\dimen@>\ht\@tempboxa % whole box does fit
+|       \message{fits in \the\dimen@. }%
+     \else % box must be split
+|       \message{must be split to fit in \the\dimen@. }%
+        \setbox\@tempboxa\vbox{% simulate frame and flexiblity of the page:
+           \vskip \fb@frh \@plus\pagestretch \@minus.8\pageshrink
+           \kern137sp\kern-137sp\penalty-30
+           \unvbox\@tempboxa}%
+        \edef\fb@resto@set{\boxmaxdepth\the\boxmaxdepth \splittopskip\the\splittopskip}%
+        \boxmaxdepth\z@ \splittopskip\z@
+        \setbox\tw@\vsplit\@tempboxa to\dimen@
+        \setbox\tw@\vbox{\unvbox\tw@}% natural-sized
+|       \message{Box of size \the\ht\@tempboxa\space split to \the\dimen@. 
+|          Natural height of split box is \the\ht\tw@. }%
+        % If the split-to size > (\vsize-\topskip), then set box to full size
+        \begingroup
+          \advance\dimen@\topskip
+          \expandafter\endgroup
+        \ifdim\dimen@>\pagegoal
+|         \message{Frame is big -- Use up the full column. }%
+          \dimen@ii\pagegoal
+          \advance\dimen@ii -\topskip
+          \advance\dimen@ii \FrameHeightAdjust\relax
+        \else  % suspect this is wrong:
+          % If the split-to size > feasible room_on_page, rebox it smaller.
+          \advance\dimen@.8\pageshrink
+          \ifdim\ht\tw@>\dimen@
+|           \message{Box too tall; rebox it to \the\dimen@. }%
+            \dimen@ii\dimen@
+          \else % use natural size
+            \dimen@ii\ht\tw@
+          \fi
+        \fi
+        % Re-box contents to desired size \dimen@ii
+        \advance\dimen@ii -\fb@frh
+        \setbox\tw@\vbox to\dimen@ii \bgroup
+        % remove simulated frame and page flexibility:
+        \vskip -\fb@frh \@plus-\pagestretch \@minus-.8\pageshrink
+        \unvbox\tw@ \unpenalty\unpenalty
+        \ifdim\lastkern=-137sp % whole box went to next page
+|          \message{box split at beginning! }%
+           \egroup \fb@resto@set \eject % (\vskip for frame size was discarded) 
+           \fb@adjheight
+        \else %
+           \egroup \fb@resto@set
+           \ifvoid\@tempboxa % it all fit after all
+|             \message{box split at end! }%
+              \setbox\@tempboxa\box\tw@
+           \else % it really did split
+|             \message{box split as expected. Its reboxed height is \the\ht\tw@. }%
+              \ifdim\wd\tw@>\z@
+%psh: Changed the command that inserts the box:
+%     Instead of \centerline, we shift right by \saved@totalleftmargin:
+%              \centerline{\FrameCommand{\box\tw@}}%  ??? \centerline bad idea
+       \hbox{\hskip \saved@totalleftmargin\FrameCommand{\box\tw@}}%
+              \else
+|               \message{Zero width means likely blank. Don't frame it (guess)}%
+                \box\tw@
+              \fi
+              \hrule \@height\z@
+              \eject
+              \fb@adjheight
+              \put@frame
+  \fi\fi\fi\fi\fi
+  \ifvoid\@tempboxa\else
+%psh: Changed the command that inserts the box:
+%     Instead of \centerline, we shift right by \saved@totalleftmargin:
+%    \centerline{\FrameCommand{\box\@tempboxa}}%
+    \hbox{\hskip\saved@totalleftmargin\FrameCommand{\box\@tempboxa}}%
+    \nointerlineskip \null %{\showoutput \showlists}
+    \penalty-30 \vskip\topsep
+  \fi}
+
+\def\fb@adjheight{%
+  \vbox to\FrameHeightAdjust{}% get proper baseline skip from above.
+  \penalty\@M \nointerlineskip
+  \vskip-\FrameHeightAdjust
+  \penalty\@M} % useful for tops of pages
+
+\edef\zero@glue{\the\z@skip}
+
+\catcode`\|=\FrameRestore
+
+% Provide configuration commands:
+\providecommand\FrameCommand{\fboxrule=\FrameRule \fboxsep=\FrameSep \fbox}
+\@ifundefined{FrameRule}{\newdimen\FrameRule \FrameRule=\fboxrule}{}
+\@ifundefined{FrameSep} {\newdimen\FrameSep  \FrameSep =3\fboxsep}{}
+
+% Height of frame above first baseline when frame starts a page:
+\providecommand\FrameHeightAdjust{6pt}
+
+% \FrameRestore has parts of \@parboxrestore.  See how it is used in the 
+% "settings" argument of \MakeFrame.  Previous behavior can be restored by 
+% using \@parboxrestore there, or redefining:
+% \makeatletter \renewcommand\FrameRestore{\@parboxrestore} \makeatother
+\def\FrameRestore{%
+  \let\if@nobreak\iffalse
+  \let\if@noskipsec\iffalse
+%  \let\par\@@par  ??
+  \let\-\@dischyph
+  \let\'\@acci\let\`\@accii\let\=\@acciii
+%  \parindent\z@ \parskip\z@skip    Definitely omit!
+%  \everypar{}%  ??
+  \linewidth\hsize
+%  \@totalleftmargin\z@
+%  \leftskip\z@skip \rightskip\z@skip \@rightskip\z@skip
+%  \parfillskip\@flushglue \lineskip\normallineskip
+%  \baselineskip\normalbaselineskip
+  \sloppy
+%  \let\\\@normalcr
+}
+
+%  Compatibility with previous versions (temporary!):
+\let\fram@d=\MakeFramed  \let\endfram@d=\endMakeFramed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% This ends the stuff that's lifted from:
+% % framed.sty   v 0.8a   21-Jul-2003
+% % Copyright (C) 1992-2003 by Donald Arseneau
+
+
+%--------------------------------------------------------------------
+%--------------------------------------------------------------------
+
+\endinput
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+

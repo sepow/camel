@@ -1,0 +1,217 @@
+\documentclass[lecture]{csm}
+%\documentclass[blanks,lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2013/14}
+\doctype{Lecture}
+\doctitle{Conditional Distributions}
+\docnumber{12}
+
+% local
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\expe}{\mathbb{E}}
+\newcommand{\var}{\text{Var}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+
+%----------------------------------------------------------------------
+\section{Conditional distributions}
+%----------------------------------------------------------------------
+Let $A$ and $B$ be two events. Recall that the conditional probability of $B$ given $A$ is defined by
+\[
+\prob(B|A) = \frac{\prob(A\cap B)}{\prob(B)}
+\]
+This idea extends to random variables. 
+
+% definition: conditional distribution/mass function
+\begin{definition}
+Let $X$ and $Y$ be two random variables on $(\Omega,\prob)$. Let $x\in\R$ be a fixed number, and suppose that $\prob(X=x)>0$. Then
+\ben
+\it the \emph{conditional CDF of $Y$ given $X=x$}, is the function $F_{Y|X}:\R\to [0,1]$ defined by 
+\[
+F_{Y|X}(y\,|\,x) = \prob(Y\leq y\,|\,X=x);
+\]
+\it the \emph{conditional PMF of $Y$ given $X=x$}, is the function $p_{Y|X}:\R\to [0,1]$ defined by 
+\[
+p_{Y|X}(y\,|\,x) = \prob(Y=y\,|\,X=x).
+\]
+\een
+\end{definition}
+\break % <<
+
+The conditional probability that event $\{Y=y\}$ occurs given that event $\{X=x\}$ occurs is:
+\[
+\prob(Y=y\,|\,X=x) = \displaystyle\frac{\prob(X=x,Y=y)}{\prob(X=x)}.
+\]
+\begin{lemma}
+Let $p_{X,Y}(x,y)$ be the joint PMF of $X$ and $Y$, and let $p_X(x)$ and $p_Y(y)$ be the marginal PMFs of $X$ and $Y$ respectively. The conditional PMF of $Y$ given $X=x$ can be written as 
+\[
+p_{Y|X}(y|x) = \displaystyle \frac{p_{X,Y}(x,y)}{p_X(x)}.
+\]
+\end{lemma}
+
+\begin{proof}
+\[
+p_{Y|X}(y|x) = \prob(Y=y\,|\,X=x) = \frac{\prob(X=x,Y=y)}{\prob(X=x)} = \frac{p_{X,Y}(x,y)}{p_X(x)}.
+\]
+\end{proof}
+\par
+Recall that $X$ and $Y$ are independent if and only if $p_{X,Y}(x,y)=p_X(x)p_Y(y)$ for all $x,y\in\R$.
+\bit
+\it Hence $X$ and $Y$ are independent if and only if $p_{Y|X}(y|x) = p_Y(y)$ for all $x,y\in\R$.
+\eit
+
+%The conditional probability that event $\{Y=y\}$ occurs given that event $\{X=x\}$ occurs is:
+%\[
+%\prob(Y=y\,|\,X=x) = \displaystyle\frac{\prob(X=x,Y=y)}{\prob(X=x)}.
+%\]
+%\bit
+%\it Let $p_{X,Y}(x,y)$ be the joint PMF of $X$ and $Y$.
+%\it Let $p_X(x)$ and $p_Y(y)$ be the marginal PMFs of $X$ and $Y$ respectively.
+%\it The conditional PMF of $Y$ given $X=x$ can be written as 
+%\[
+%p_{Y|X}(y|x) = \displaystyle \frac{p(x,y)}{p_X(x)}.
+%\]
+%\it $X$ and $Y$ are independent if and only if $p_{X,Y}(x,y)=p_X(x)p_Y(y)$ for all $x,y\in\R$.
+%\it Hence $X$ and $Y$ are independent if and only if $p_{Y|X}(y|x) = p_Y(y)$ for all $x,y\in\R$.
+%\eit
+
+\break % <<
+
+% tedious example
+\begin{example}\label{ex:tedious}
+Let $X$ and $Y$ be random variables with joint PMF shown in the following table. 
+\[\begin{array}{|c|c|c|c|}\hline
+	& Y=2	& Y=3	& Y=4	\\ \hline
+X=1	& 1/12	& 1/6	& 0 		\\ \hline
+X=2	& 1/6	& 0		& 1/3 	\\ \hline
+X=3	& 1/12	& 1/6  	& 0		\\ \hline
+\end{array}\]
+Find the conditional distribution of $Y$ given that (i) $X=1$, (ii) $X=2$, (iii) $X=3$.
+\end{example}
+
+\begin{solution}
+ The conditional distributions are obtained by re-scaling the rows of the matrix.
+\[\begin{array}{|cc|c|c|c|}\hline
+				&			& Y=2	& Y=3	& Y=4	\\ \hline 
+p_{Y|X}(y\,|\,0)	=& \prob(Y=y\,|\,X=0)	& 1/3	& 2/3	& 0		\\ \hline
+p_{Y|X}(y\,|\,1)	=& \prob(Y=y\,|\,X=1)	& 1/3	& 0		& 2/3	\\ \hline
+p_{Y|X}(y\,|\,2)	=& \prob(Y=y\,|\,X=2)	& 1/3	& 2/3	& 0		\\ \hline
+\end{array}\]
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Conditional expectation}
+%----------------------------------------------------------------------
+Let $x\in\R$ be a real number for which $\prob(X=x)>0$. 
+\begin{definition}
+\ben
+\it The \emph{conditional expectation of $Y$ given $X=x$} is the real number
+\[
+\expe(Y|X=x) 
+	= \sum_y y\,p_{Y|X}(y|x)
+	= \sum_y y\,\prob(Y=y|X=x).
+\]
+\it The \emph{conditional expectation of $Y$ given $X$} is the random variable
+\[\begin{array}{llll}
+\expe(Y|X):	& \R 	& \to 		& \R \\
+			& x		& \mapsto 	& \expe(Y|X=x)
+\end{array}\]
+\een
+\end{definition}
+
+% remark
+\begin{remark}
+Let $\psi(x) = \expe(Y|X=x)$. Then $\expe(Y|X)=\psi(X)$ is a random variable, whose distribution depends only on the distribution of $X$, and whose expected value is
+\[
+\expe\big[\expe(Y|X)\big] = \expe\big[\psi(X)\big] = \sum_x \psi(x)p_X(x)
+\]
+\end{remark}
+
+%----------------------------------------------------------------------
+\section{The law of total expectation}
+%----------------------------------------------------------------------
+
+% theorem
+\begin{theorem}[The law of total expectation]\label{thm:law_of_total_expectation}
+For any two random variables $X$ and $Y$,
+\[
+\expe\big[\expe(Y|X)\big] = \expe(Y).
+\]
+\end{theorem}
+\begin{proof}
+%Let $\psi(x) = \expe(Y|X=x)$.
+\begin{align*}
+\expe\big[\expe(Y|X)\big] 
+	& = \sum_x \expe(Y|X=x) p_X(x) \\
+	& = \sum_x \left[\sum_y y p_{Y|X}(y|x)\right] p_X(x) \\
+	& = \sum_y y \left[\sum_x p_{Y|X}(y|x)p_X(x)\right] \\
+	& = \sum_y y \left[\sum_x p_{X,Y}(x,y)\right]
+	= \sum_y y p_Y(y)
+	= \expe(Y)
+\end{align*}
+\qed
+\end{proof}
+
+\begin{remark}
+The law of total expectation provides a useful way of computing $\expe(Y)$:
+\[
+\expe(Y) = \sum_x \expe(Y|X=x)\prob(X=x).
+\]
+This is analogous to the \emph{law of total probability}.
+\end{remark}
+
+% tedious example (continued)
+\begin{examplecont}{\ref{ex:tedious}}
+\ben
+\it Find the conditional expectation $Y$ given that (i) $X=1$, (ii) $X=2$, (iii) $X=3$.
+\it Find the distribution of $\expe(Y|X)$, and verify that the law of total expectation holds.
+\een
+\end{examplecont}
+
+\begin{solution}
+The conditional expectation of $Y$ given that $X=1$, $X=2$ and $X=3$ are, respectively,
+\bit
+\it $\expe(Y|X=1) = \left(2\times\frac{1}{3}\right) + \left(3\times\frac{2}{3}\right) + \left(4\times 0\right) = \frac{8}{3}$,
+\it $\expe(Y|X=2) = \left(2\times\frac{1}{3}\right) + \left(3\times 0\right) + \left(4\times\frac{2}{3}\right) = \frac{10}{3}$,
+\it $\expe(Y|X=3) = \left(2\times\frac{1}{3}\right) + \left(3\times\frac{2}{3}\right) + \left(4\times 0\right) = \frac{8}{3}$.
+\eit
+
+The marginal distribution of $X$, along with the associated values of $\expe(Y|X=x)$, are shown in the following table.
+\[\begin{array}{|c|ccc|}\hline
+x				& 1		& 2		& 3		\\ \hline
+\prob(X=x)		& 1/4	& 1/2	& 1/4	\\ \hline \hline
+\expe(Y|X=x)		& 8/3	& 10/3	& 8/3	\\ \hline
+\end{array}\]
+Hence the distribution of $\expe(Y|X)$ is
+\[\begin{array}{|c|cc|}\hline
+z							& 8/3   & 10/3 \\ \hline
+\prob\big[\expe(Y|X)=z\big]	& 1/2   & 1/2  \\ \hline
+\end{array}\]
+and the expected value of $\expe(Y|X)$ is therefore 
+\[
+\expe\big[\expe(Y\,|\,X)\big] = \left(\frac{8}{3}\times\frac{1}{2}\right) + \left(\frac{10}{3}\times\frac{1}{2}\right) = 3.
+\]
+This agrees with the value of $\expe(Y)$ computed from the marginal distribution of $Y$, which verifies that the law of total expectation holds in this case. 
+\end{solution}
+
+
+
+
+
+%======================================================================
+\end{document}
+%======================================================================

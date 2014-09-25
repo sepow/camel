@@ -1,0 +1,440 @@
+\documentclass[lecture]{csm}
+%\documentclass[blanks,lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2013/14}
+\doctype{Lecture}
+\doctitle{Countable and Uncountable Sets}
+\docnumber{13}
+
+% local
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\expe}{\mathbb{E}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+%----------------------------------------------------------------------
+\section{Infinite sample spaces}
+%----------------------------------------------------------------------
+So far, we have considered only \emph{finite sample spaces} $\Omega = \{1,2,3,\ldots,n\}$.
+
+%\bigskip
+%The set of all subsets of $\Omega$ is known as its \emph{power set}, and denoted by $\mathcal{P}(\Omega)$.
+%%\[
+%%\mathcal{P}(\Omega) = \big\{\emptyset, \{1\},\{2\},\ldots,\{n\},\{1,2\},\{1,3\},\ldots\{n-1,n\},\ldots,\{2,3,\ldots,n\},\Omega\big\}
+%%\]
+%
+%\bit
+%\it The \emph{cardinality} of a set is the number of elements it contains.
+%\it If $\Omega = \{1,2,3,\ldots,n\}$, then the cardinality of $\mathcal{P}(\Omega)$ is $2^n$ (a finite number).
+%\eit
+%
+%What is a set of \emph{infinite cardinality?}
+
+\newpage
+
+\begin{example}
+Consider a random experiment in which a coin is tossed repeatedly until the first head occurs. There is an infinite number of possible sequences:
+\[
+H,\quad TH,\quad TTH,\quad TTTH,\quad TTTTH,\quad\ldots
+\]
+Let the outcome of the experiment be the number of times the coin is tossed:
+\[
+\Omega = \{1,2,3,4,5,\ldots\}
+\]
+% pmf
+Let $0<p<1$ be the probability that the coin shows heads. 
+\par
+If we assume that the trials are independent, the probability mass function for this experiment is
+\[
+p(k) = (1-p)^{k-1}p\text{\qquad for\quad} k\in\{1,2,3,\ldots\}.
+\]
+The sum of these probabilities is equal to one:
+\[
+\sum_{k=1}^{\infty} p(k) = p\sum_{k=1}^{\infty} (1-p)^{k-1}  = \frac{p}{1-(1-p)} = 1.
+\]
+Here, we have used the formula for the sum of a geometric progression:% with $a = p$ and $r = (1-p)$:
+\[
+a + ar + ar^2 + \ldots = \frac{a}{1-r} \text{\qquad provided $|r|<1$},
+\]
+with $a = p$ and $r = (1-p)$.
+
+\newpage
+
+Let $A$ be the event that the coin is tossed an even number of times:
+\[
+A = \{2,4,6,\ldots \}.
+\]
+This event corresponds to the sequences $TH, TTTH, TTTTTH,\ldots$.
+
+% recall
+Recall that a \emph{probability mass function} is a function on the sample space,
+\[
+\begin{array}{rcl}
+p:	\Omega & \to & [0,1] \\
+	\omega & \mapsto & p(\omega),
+\end{array}
+\] 
+and the associated \emph{probability measure} is a function on \emph{subsets} of the sample space,
+\[
+\begin{array}{rccl}
+\prob:	& \mathcal{P}(\Omega)	& \to & [0,1] \\
+		& A					& \mapsto & \displaystyle\sum_{\omega\in A} p(\omega).
+\end{array}
+\] 
+The probability that the coin is tossed an even number of times is 
+\[
+\prob(A) 
+	= \sum_{j=1}^{\infty} p(2j) 
+	= \sum_{j=0}^{\infty} p(1-p)^{2j+1}
+	= p(1-p)\sum_{j=0}^{\infty} (1-p)^{2j}
+	= \frac{p(1-p)}{1-(1-p)^2}
+	= \frac{1-p}{2-p}.
+\]
+%Here, we have again used the formula for the sum of a geometric progression, this time with $a = p(1-p)$ and $r = (1-p)^2$.
+%\bit
+%\it Note that if $p=1/2$ then $\prob(A) = 1/3$.
+%\eit
+\end{example}
+
+\newpage
+
+Recall that the set of all subsets of $\Omega$ is known as its \emph{power set}, denoted by $\mathcal{P}(\Omega)$.
+\bit
+\it The \emph{cardinality} of a set is the number of elements it contains.
+\it If $\Omega = \{1,2,3,\ldots,n\}$, then the cardinality of $\mathcal{P}(\Omega)$ is $2^n$ (a finite number).
+\eit
+
+\textbf{Problem}:
+\par\bigskip
+\fbox{\begin{minipage}{\linewidth}
+\bigskip
+\bit
+\it If $\Omega$ is an infinite set, its power set is \emph{uncountable}.% (i.e. it has an uncountable number of subsets).
+\it If $\Omega$ is an uncountable set, its power set is (very) \emph{uncountable}.
+\eit
+\bigskip
+\end{minipage}}
+\bigskip
+
+\textbf{Questions}:
+\par\bigskip
+\fbox{\begin{minipage}{\linewidth}
+\bigskip
+\bit
+\it How can we assign probabilities to the elements of uncountable sets?
+\it Today we look at what it means for a set to be finite, countably infinite or uncountable.
+\eit
+\bigskip
+\end{minipage}}
+\bigskip
+
+%----------------------------------------------------------------------
+\newpage
+\section{Number systems}
+%----------------------------------------------------------------------
+%Georg Cantor (1845--1918) is known as the father of set theory.
+%\begin{quote}
+%By a \textit{set} we understand any collection $M$ into a whole of deÞnite, well-distinguished objects of our intuition or our thought (which will be called the \textit{elements} of $M$).
+%\par\mbox{}\hfill Cantor (1932)
+%\end{quote}
+%
+%\begin{quote}
+%No one shall expel us from the Paradise that Cantor has created.
+%\par\mbox{}\hfill David Hilbert (1932)
+%\end{quote}
+
+%--------------------------------------------------
+\subsection{The natural numbers}
+%--------------------------------------------------
+The set of natural numbers is denoted by 
+\[
+\N = \{1,2,3,\ldots\}.
+\]
+
+Addition and multiplication are \emph{binary operations} on the natural numbers.
+\[
+\begin{array}{ccccc}
++ 	& :	& \N\times\N	& \to 		& \N \\
+	& 	& (a,b) 		& \mapsto 	& a+b \\[3ex]
+\times	& :	& \N\times\N	& \to 		& \N \\
+		&	& (a,b) 		& \mapsto 	& a\cdot b.
+\end{array}
+\]
+
+If $a,b\in\N$ then $a+b\in\N$ and $a\cdot b\in\N$.
+\bit
+\it 
+We say that $\N$ is \emph{closed under addition and multiplication}.
+\eit
+
+\newpage
+
+The set of natural numbers, along with $+$ and $\times$, has the following properties:
+\ben
+\it \textbf{Commutative property}:
+	\bit 
+	\it $a + b = b + a$,
+	\it $a\cdot b = b\cdot a$.
+	\eit
+\it \textbf{Associative property}:
+	\bit 
+	\it $(a + b) + c = a + (b + c)$,
+	\it $(a\cdot b)\cdot c = a \cdot (b\cdot c)$,
+	\eit
+\it \textbf{Distributive property}:
+	\bit 
+	\it $a\cdot(b + c) = (a\cdot b) + (a\cdot c)$,% (left distribuivity),
+	\it $(a + b)\cdot c = (a\cdot c) + (b\cdot c)$.% (right distributivity).
+	\eit
+\it Existence of a \textbf{multiplicative identity} element:
+	\bit
+	\it There exists an element called $1\in\Z$ such that $a \cdot 1 = a$ for all $a\in\Z$.
+	\eit
+\een
+
+%--------------------------------------------------
+\newpage
+\subsection{The integers}
+%--------------------------------------------------
+The set of integers is denoted by
+\[
+\Z = \{\ldots,-3,-2,-1,0,1,2,3,\ldots\}.
+\]
+
+The set of integers, along with $+$ and $\times$, has the following additional properties:
+\ben
+\setcounter{enumi}{4}
+\it Existence of an \textbf{additive identity} element (called the zero element):
+	\bit
+	\it There exists an element called $0\in\Z$ such that $a + 0 = a$ for all $a\in\Z$.
+	\eit
+\it Existence of \textbf{additive inverse} elements:
+	\bit
+	\it For each $a\in\Z$, there exists an element $-a\in\Z$, called the (additive) \emph{inverse} of $a$, such that $a + (-a) = 0$.
+	\eit
+\een
+
+\begin{remark}
+Mathematical objects with the properties (1) --(6) are called \emph{rings}.
+\end{remark}
+
+%--------------------------------------------------
+\newpage
+\subsection{The rational numbers}
+%--------------------------------------------------
+The set of rational numbers (a.k.a. fractions) is denoted by
+\[
+\Q = \{a/b:a\in\Z,b\in\N\}.
+\]
+
+The set of rational numbers, along with $+$ and $\times$, has the following additional property:
+\ben
+\setcounter{enumi}{6}
+\it Existence of \textbf{multiplicative inverse} elements:
+	\bit
+	\it For each $q\in\Q$, there exists an element $q^{-1}\in\Q$ such that $q\cdot q^{-1} = 1$.
+	\eit
+\een
+\begin{remark}
+Mathematical objects with the properties (1) --(7) are called \emph{fields}.
+\end{remark}
+
+%--------------------------------------------------
+\newpage
+\subsection{The real numbers}
+%--------------------------------------------------
+The set of real numbers is denoted by $\mathbb{R}$, and can (vaguely) be defined as
+\[
+\R = \text{the set of infinite decimal expansions.}
+\]
+\bit
+\it We define (for example) $0.999999\ldots$ and $1.000000$ to be equal.
+\it Any number base can be used (e.g. binary expansions, ternary expansions, etc).
+\eit
+
+\begin{remark}[Cauchy sequences converge]
+The set of real numbers $\R$ has the property that, for any sequence $x_1,x_2,\ldots$ of real numbers with the property that $|x_m-x_n|\to 0$ as $m,n\to\infty$, there exists some $x\in\R$ such that $|x_n-x|\to 0$ as $n\to\infty$.
+\bit
+\it In this sense, we can say that $\R$ is \emph{topologically complete}.
+\eit
+\end{remark}
+
+%--------------------------------------------------
+\newpage
+\subsection{The complex numbers}
+%--------------------------------------------------
+The set of complex numbers is denoted by $\mathbb{C}$:
+\[
+\C = \{x+iy : x,y\in\R, i=\sqrt{-1}\}.
+\]
+
+\begin{remark}
+The set of complex numbers has the property that the roots of any polynomial with coefficients in $\C$ are themselves elements of $\C$.
+\bit
+\it In this sense, we can say that $\C$ is \emph{algebraically complete}.
+\eit
+\end{remark}
+
+%----------------------------------------------------------------------
+\newpage
+\section{One-to-one correspondence}
+%----------------------------------------------------------------------
+
+Functions are also known as \emph{mappings}, \emph{transformations}, \emph{correspondences} and \emph{operators}.
+\[
+\begin{array}{rlcl}
+f: 	& A & \to		& B \\
+	& a & \mapsto	& f(a).
+\end{array}
+\]
+
+%\bit
+%\it The set $A$ is called the \emph{domain} of $f$.
+%\it The set $B$ is called the \emph{co-domain} of $f$.
+%\it The set $C=\{f(a):a\in A\}\subseteq B$ is called the \emph{range} of $f$.
+%\eit
+
+\bit
+\it $f$ is called \emph{injective} if for all $a_1,a_2\in A$, $f(a_1)=f(a_2) \Rightarrow a_1=a_2$.
+\it $f$ is called \emph{surjective} if for all $b\in B$, there exists $a\in A$ such that $f(a)=b$.
+\it $f$ is called \emph{bijective} if it is both injective and surjective.
+\eit
+
+Bijective functions represent a \emph{one-to-one correspondence} between the elements of $A$ and $B$.
+
+%----------------------------------------------------------------------
+\newpage
+\section{Countable and uncountable sets}
+%----------------------------------------------------------------------
+\begin{definition}
+\ben
+\it
+A set $A$ is called \emph{finite} if there is a bijection $\phi:A\to\{1,2,\ldots,n\}$; otherwise $A$ is called \emph{infinite}.
+\it
+A set $A$ is called \emph{countable} if it is finite, or there is a bijection $\phi:A\to\N$; otherwise $A$ is called \emph{uncountable}.
+\een
+\end{definition}
+
+% thm: Z countable
+\begin{theorem}
+$\Z$ is countable.
+\end{theorem}
+\begin{proof}
+\vspace*{20ex}
+\end{proof}
+
+\newpage
+
+% thm: Q countable
+\begin{theorem}
+$\Q$ is countable.
+\end{theorem}
+\begin{proof}
+\vspace*{45ex}
+\end{proof}
+
+\newpage
+
+% thm: R uncountable
+\begin{theorem}
+$\R$ is uncountable.
+\end{theorem}
+\begin{proof} We use the method of \emph{proof by contradiction}.
+\par
+Suppose that $\R$ is a countable set. By definition, $\R$ can be defined as the set of all infinite binary expansions (as well as the set of all decimal expansions), so by hypothesis, we can list them all:
+\footnotesize
+\[
+\begin{array}{ccccccccccc}
+\mathbf{1} & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 1 & \ldots \\
+1 & \mathbf{0} & 1 & 0 & 1 & 0 & 1 & 1 & 1 & 0 & \ldots  \\
+0 & 1 & \mathbf{1} & 1 & 0 & 0 & 1 & 0 & 1 & 0 & \ldots  \\
+1 & 0 & 0 & \mathbf{0} & 1 & 1 & 1 & 1 & 1 & 1 & \ldots  \\
+0 & 1 & 1 & 1 & \mathbf{0} & 0 & 0 & 0 & 0 & 1 & \ldots  \\
+1 & 0 & 1 & 0 & 0 & \mathbf{1} & 0 & 1 & 1 & 0 & \ldots  \\
+0 & 0 & 0 & 1 & 0 & 0 & \mathbf{1} & 1 & 0 & 1 & \ldots  \\
+0 & 1 & 0 & 0 & 1 & 1 & 0 & \mathbf{1} & 0 & 0 & \ldots  \\
+0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \mathbf{1} & 1 & \ldots  \\
+1 & 1 & 0 & 0 & 1 & 1 & 1 & 0 & 1 & \mathbf{0} & \ldots  \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \ddots 
+\end{array}
+\]
+\normalsize
+
+\newpage
+
+\bit
+\it Consider the sequence along the diagonal: $1,0,1,0,0,1,1,1,1,0,\ldots$
+\it Suppose we reverse each digit in the sequence: $0,1,0,1,1,0,0,0,0,1,\ldots$
+\it This sequence differs from the first sequence in the first place, differs from the second sequence in the second place, differs from the third sequence in the third place, etc.
+\it This sequence cannot therefore be among those listed.
+\it This contradicts our original assumption that $\R$ is countable.
+\eit
+Our original assumption must therefore have been false, so $\R$ is uncountable
+\end{proof}
+
+% thm: power set uncountable
+\begin{theorem}
+The power set of $\N$ (or any countably infinite set) is uncountable.
+\end{theorem}
+\begin{proof}
+As above, with subsets of $\N$ represented as infinite binary strings.
+\end{proof}
+
+
+%----------------------------------------------------------------------
+\newpage
+\section{The continuum hypothesis}
+%----------------------------------------------------------------------
+
+\begin{definition}
+\ben
+\it
+Two sets $A$ and $B$ are said to have the \emph{same cardinality} if there exists a bijection $\phi:A\to B$.
+\it
+If there exists a bijection $\phi:A\to\N$, we say that $A$ has the \emph{cardinality of the integers}.
+\it
+If there exists a bijection $\phi:A\to\R$, we say that $A$ has the \emph{cardinality of the real numbers}.
+\een
+\end{definition}
+
+\begin{hypothesis}[The continuum hypothesis]
+There is no set whose cardinality is strictly between the cardinality of the integers and the cardinality of the real numbers.
+\end{hypothesis}
+
+In 1940, Kurt G\"{o}del showed that the continuum hypothesis cannot be proved or disproved within the standard framework of set theory.
+
+\newpage
+
+%----------------------------------------------------------------------
+\section*{How do uncountable sets affect me?}
+%----------------------------------------------------------------------
+\bigskip
+
+
+\centering
+\begin{tabular}{|l|l|l|}\hline
+Finite sets				& Finite sums			& $\expe(X) = \displaystyle\sum_{i=1}^n x_i\prob(X_i=x_i)$ \\ % \hline
+Countable sets			& Infinite sums	 		& $\expe(X) = \displaystyle\sum_{i=1}^{\infty} x_i\prob(X_i=x_i)$ \\ % \hline
+Uncountable sets	\qquad	& Integrals (calculus)	& $\expe(X) = \displaystyle\int_{-\infty}^{\infty} x\,f(x)\,dx$ (later) \\ \hline
+\end{tabular}
+
+%======================================================================
+\end{document}
+%======================================================================

@@ -1,0 +1,1 @@
+../../texmf/camel.cls

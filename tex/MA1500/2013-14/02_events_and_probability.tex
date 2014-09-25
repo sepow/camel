@@ -1,0 +1,288 @@
+\documentclass[lecture]{csm}
+%\documentclass[blanks,lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2013/14}
+\doctype{Lecture}
+\doctitle{Events and Probability}
+\docnumber{2}
+
+% local
+\usepackage{float}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\expe}{\mathbb{E}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+\subsection*{History of probability}
+Games of chance have been played since antiquity, but the mathematical principles of chance and uncertainty were first established only in the 17th century.
+
+\vspace*{4ex}
+\begin{tabular}{lll}
+1654		& Classical principles 	& Blaise Pascal (1623--1662) \\
+		&						& Pierre de Fermat (1601--1665)  \\
+1657		& \textit{De Ratiociniis in Ludo Aleae} & Christiaan Huygens (1629--1695) \\
+1713		& \textit{Ars Conjectandi} & Jakob Bernoulli (1654--1705) \\ 
+1718		& \textit{The Doctrine of Chances} & Abraham de Moivre (1667--1754) \\
+1812		& \textit{Theorie Analytique des Probabilites} & Pierre de Laplace (1749-1827) \\
+1919		& Relative frequency & Richard von Mises (1883--1953) \\
+1933		& Modern axiomatic theory & Andrey Kolmogorov (1903--1987)
+\end{tabular}
+
+%----------------------------------------------------------------------
+\section{Random experiments}
+%----------------------------------------------------------------------
+Scientific investigation relies on repeated experimentation under the same conditions:
+
+% for example:
+\begin{tabbing}
+\quad Medical research:\quad 	\= The effect of a new treatment on patients. \\
+\quad Economics:				\> The price of a commodity at various times. \\
+\quad Agriculture: 			\> The effect of a fertiliser on the yield of a crop.
+\end{tabbing}
+
+% defn: expt/outcome/sspace
+\begin{definition}
+\ben
+\it
+Any process of observation or measurement will be called an \emph{experiment} or \emph{trial}.
+\it
+Any experiment whose outcome is uncertain is called a \emph{random experiment}.
+\it
+A random experiment has a set of possible \emph{outcomes}, exactly one of which will occur.
+\it
+The set of all possible outcomes is called the \emph{sample space}, denoted by $\Omega$.
+\it
+Outcomes are also called \emph{elementary events}, denoted by $\omega\in\Omega$.
+\een
+\end{definition}
+
+\break % <<<
+
+% example: sample spaces
+\begin{example}
+A sample space is the set of all possible outcomes:
+\begin{tabbing}
+\underline{Random Experiment}\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad \= \underline{Sample space} \\ 
+A coin is tossed once.	\> $\Omega = \{H,T\}$ \\
+A die is rolled once.	\> $\Omega=\{1,2,3,4,5,6\}$ \\
+A coin is tossed repeatedly until a head occurs. \> $\Omega = \{1,2,3,\ldots\}$ \\
+The height of a randomly chosen student is measured: \> $\Omega = [0,\infty)$
+\end{tabbing}
+\end{example}
+%==================================================================================================
+%\section{Events}
+%==================================================================================================
+\begin{remark}
+Initially we will only consider \emph{finite} sample spaces. 
+\end{remark}
+
+% example: die
+\begin{example}
+A die is rolled once. The sample space can be represented by $\Omega=\{1,2,3,4,5,6\}$.\par
+We may be interested in whether or not the following events occur:
+\begin{tabbing}
+\underline{Event}\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\=\underline{Subset} \\ 
+The outcome is the number $1$.	\> $A = \{1\}$ \\
+The outcome is an even number.	\> $A = \{2,4,6\}$ \\
+The outcome is even but does not exceed $3$.	\> $A = \{2,4,6\}\cap\{1,2,3\}$ \\
+The outcome is not even			\> $A = \Omega\setminus\{2,4,6\}$
+\end{tabbing}
+\end{example}
+
+%----------------------------------------------------------------------
+\section{Events}
+%----------------------------------------------------------------------
+
+% defn: events
+\begin{definition}
+\bit
+\it An \emph{event} is a subset of the sample space. 
+\it If the outcome $\omega\in\Omega$ occurs, and $\omega\in A$ where $A\subseteq\Omega$, we say that event $A$ \emph{occurs}.
+\it Two events $A$ and $B$ with $A\cap B=\emptyset$ are called \emph{disjoint} or \emph{mutually exclusive}.
+\it A collection $\{A_1,A_2,\ldots,A_n\}$ is called \emph{pairwise disjoint} if $A_i\cap A_j = \emptyset$ whenever $i\neq j$.
+\it The empty set $\emptyset$ is called the \emph{impossible event}.
+\it The sample space $\Omega$ is called the \emph{certain event}.
+\eit
+\end{definition}
+
+\begin{remark}
+\bit
+\it If $A$ occurs and $A\subseteq B$, then $B$ also occurs.
+\it If $A$ occurs and $A\cap B=\emptyset$, then $B$ does not occur. 
+\it Not all subsets are necessarily events (see later).
+\eit
+\end{remark}
+
+\begin{definition}
+Let $\Omega$ be any set. The set of all subsets of $\Omega$ is called its \emph{power set}.
+%, denoted by $\mathcal{P}(\Omega) = \{A:A\subseteq\Omega\}$.
+\end{definition}
+
+%----------------------------------------------------------------------
+\section{Probability}
+%----------------------------------------------------------------------
+%Loosely speaking, the \emph{probability} of an event is a number between zero and one, that represents how likely the event is to occur when the associated random experiment is performed.
+\begin{definition}
+Let $\Omega$ be a finite sample space, and let $\mathcal{P}(\Omega)$ denote its power set.
+\ben
+\it A \emph{probability mass function} on $\Omega$ is a function $p:\Omega\to[0,1]$ with the property that
+\[
+\sum_{\omega\in\Omega} p(\omega) = 1.
+\]
+\it A \emph{probability measure} on $\Omega$ is a function $\prob:\mathcal{P}(\Omega)\to[0,1]$ defined by
+\[
+\prob(A) = \sum_{\omega\in A} p(\omega)
+\]
+where $p(\omega)$ is a probability mass function on $\Omega$.
+\it The pair $(\Omega,\prob)$ is called a \emph{(finite) probability space}.
+\een
+\end{definition}
+
+\begin{remark}
+\bit
+\it The number $p(\omega)$ is called the \emph{probability} of outcome $\omega\in\Omega$.
+\it The number $\prob(A)$ is called the \emph{probability} of event $A\in\mathcal{F}$.
+\eit
+\end{remark}
+
+
+%\it The \emph{probability} of an event $A\subseteq\Omega$ is the sum of the probabilities of the outcomes it contains,
+%\[
+%\prob(A) = \sum_{\omega\in A} p(\omega).
+%\]
+
+\break % <<
+
+% example: die
+\begin{example}
+Consider a random experiment in which a fair six-sided die is rolled once.
+\bit
+\it A suitable sample space is $\Omega=\{1,2,3,4,5,6\}$.
+\it Since the die is fair, the associated probability mass function is
+\[\begin{array}{rcl}
+p:	\Omega & \to & [0,1] \\
+	\omega & \mapsto & 1/6.
+\end{array}\] 
+%\it The probability that various events occur can be found:
+\eit
+\begin{tabbing}
+\underline{Event}\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad
+	\=\underline{Subset}\qquad\qquad\qquad\qquad\qquad
+	\=\underline{Probability} \\
+The outcome is the number $1$.	\> $A = \{1\}$ \> $\prob(A) = 1/6$\\
+The outcome is an even number.	\> $A = \{2,4,6\}$  \> $\prob(A) = 3/6$\\
+The outcome is even but does not exceed $3$.	\> $A = \{2,4,6\}\cap\{1,2,3\}$  \> $\prob(A) = 1/6$\\
+The outcome is not even			\> $A = \Omega\setminus\{2,4,6\}$ \> $\prob(A) = 3/6$
+\end{tabbing}
+\end{example}
+
+\begin{exercise}
+Suppose instead that the die is \emph{biased}, with probability mass function given by $p(\omega)=1/8$ for $\omega\in\{1,2,3,4\}$, and $p(\omega)=1/4$ for $\omega\in\{5,6\}$. Check that $p$ is indeed a probability mass function, and compute the probabilites of the above events when the die is rolled once.
+\end{exercise}
+
+
+\break % <<
+%This definition of probability has nice properties.
+\begin{theorem}
+\ben
+\it $\prob(\Omega)=1$.
+\it $\prob(A^c) = 1 - \prob(A)$.
+\it If $A$ and $B$ are disjoint, then $\prob(A\cup B) = \prob(A)+\prob(B)$.
+\een
+\end{theorem}
+
+\begin{proof}
+\ben
+\it By definition, $\displaystyle \prob(\Omega) = \sum_{\omega\in\Omega} p(\omega) = 1$.
+\it Since $A^c=\Omega\setminus A$, $$\displaystyle \prob(A^c) 
+	= \sum_{\omega\in A^c}p(\omega) 
+	= \sum_{\omega\in\Omega}p(\omega) - \sum_{\omega\in A}p(\omega)
+	= 1 - \prob(A).$$
+\it Since $A\cap B=\emptyset$, $$\displaystyle \prob(A\cup B) 
+	= \sum_{\omega\in A\cup B}p(\omega) 
+	= \sum_{\omega\in A}p(\omega) + \sum_{\omega\in B}p(\omega)
+	= \prob(A) + \prob(B).$$
+\een
+\end{proof}
+
+\break % <<
+
+%The following results are direct consequences of the previous theorem.
+\begin{corollary}
+\ben
+\it $\prob(\emptyset)=0$.
+\it If $A\subseteq B$ then $\prob(A)\leq \prob(B)$.
+\it $\prob(A\cup B) = \prob(A)+\prob(B)-\prob(A\cap B)$.
+\een
+\end{corollary}
+
+\begin{proof}
+\ben
+\it Since $\emptyset=\Omega^c$, we have that $\prob(\emptyset) = \prob(\Omega^c) = 1 - \prob(\Omega) = 1 - 1 = 0$.
+\it If $A\subseteq B$ then $$\displaystyle \prob(B) 
+	= \sum_{\omega\in B}p(\omega) 
+	= \sum_{\omega\in A}p(\omega) + \sum_{\omega\in B\setminus A}p(\omega) 
+	\geq \sum_{\omega\in A}p(\omega)
+	= \prob(A).$$
+\it For any two sets $A$ and $B$,
+\begin{align*}
+\prob(A\cup B) 
+	& = \sum_{\omega\in A\setminus B}p(\omega) + \sum_{\omega\in A\cap B}p(\omega) + \sum_{\omega\in B\setminus A}p(\omega) \\
+	& = 	\left(\sum_{\omega\in A}p(\omega)-\sum_{\omega\in A\cap B}p(\omega)\right)
+		 + \sum_{\omega\in A\cap B}p(\omega)
+		 + \left(\sum_{\omega\in B}p(\omega) - \sum_{\omega\in A\cap B}p(\omega)\right) \\%[0.5ex]
+	& =  \prob(A)+\prob(B)-\prob(A\cap B).
+\end{align*}
+\een
+\end{proof}
+
+%\begin{corollary}
+%Let $A_1,A_2,\ldots,A_n$ be a collection of pairwise disjoint events. Then
+%\[
+%\prob\left(\bigcup_{i=1}^n A_i\right) = \sum_{i=1}^n \prob(A_i).
+%\]
+%\end{corollary}
+
+% handout
+\subsection*{Correspondence between set theory and probability theory}
+%\begin{table}[htb]
+%\centering
+\vspace*{3ex}
+\begin{center}
+\begin{tabular}{|c|l|l|} \hline
+Notation 			& Set theory				& Probability theory \\ \hline
+$\Omega$				& Universal set			& Sample space \\ 
+$\omega\in\Omega$	& Element of $\Omega$	& Elementary event, outcome \\
+$A\subseteq\Omega$	& Subset of $\Omega$		& Event $A$ \\
+$A\subseteq B$		& Inclusion				& If $A$ occurs, then $B$ occurs \\
+$A\cup B$			& Union					& $A$ or $B$ (or both) occurs \\ 
+$A\cap B$			& Intersection			& $A$ and $B$ occur\\ 
+$A^c$				& Complement of $A$		& $A$ does not occur \\
+$A\setminus B$		& Difference				& $A$ occurs, but $B$ does not \\
+$A\bigtriangleup B$	& Symmetric difference	& $A$ or $B$ occurs, but not both \\
+$\emptyset$			& Empty set 				& Impossible event \\
+$\Omega$				& Universal set			& Certain event \\ \hline
+\end{tabular}
+\end{center}
+%\caption{Table of correspondence (Grimmett \& Stirzaker 2001).}
+%\end{table}
+
+%======================================================================
+\end{document}
+%======================================================================

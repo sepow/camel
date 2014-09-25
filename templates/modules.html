@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+
+{% block title %} 
+	Modules
+{% endblock %}
+
+{% block breadcrumbs %}
+    &nbsp;<a href="{% url 'modules' %}"> Modules</a>
+{% endblock %}
+
+{% block content-main %}
+<h2><u>Modules</u></h2>
+<br />
+{% if modules %}
+    <table>
+    {% for module in modules %}
+        <tr>
+            <td>{{ module.code }}</td>
+            <td><a href="{% url 'module-detail' module.code %}">{{ module.title }}</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No modules in the database.</p>
+{% endif %}
+
+{% endblock %}
+
+
+

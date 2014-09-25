@@ -1,0 +1,515 @@
+\documentclass[lecture]{csm}
+
+% set meta information
+\modulecode{MA1500}
+\moduletitle{Introduction to Probability Theory}
+\academicyear{2013/14}
+\doctype{Lecture}
+\doctitle{Continuous Distributions}
+\docnumber{18}
+
+% local
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\expe}{\mathbb{E}}
+\newcommand{\var}{\text{Var}}
+\newcommand{\cov}{\text{Cov}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+
+\newcommand{\proofomitted}{\par[\textit{Proof omitted.}]\par}
+
+%======================================================================
+\begin{document}
+\maketitle
+\tableofcontents
+%======================================================================
+
+
+%----------------------------------------------------------------------
+\section{Continuous random variables}
+%----------------------------------------------------------------------
+%A continuous function $f(x)$ is one for which small changes in $x$ result in small changes in $f(x)$:
+
+% definition: continuous
+\begin{definition}
+A random variable $X$ is called \emph{continuous} if its CDF can be written as 
+\[
+F(x) = \int_{-\infty}^x f(t)\,dt\qquad x\in\R
+\]
+for some integrable function $f:\R\to[0,\infty)$ called the \emph{probability density function} (PDF) of $X$.
+\end{definition}
+
+% remark
+\begin{remark}
+%If $X$ is a continuous random variable, then
+\ben
+\it $f(x) = F'(x)$ for all $x\in\R$.
+%\it $\prob(\{\omega:X(\omega)=x\})=0$ for all $x\in\R$.
+\it $\prob(X=x)=0$ for all $x\in\R$.
+\it Probabilities correspond to areas under the PDF: 
+\[
+\prob(a\leq X\leq b) = \int_a^b f(x)\,dx = F(b) - F(a).
+\]
+\it "Law of total probability": $\displaystyle\int_{-\infty}^{\infty} f(x)\,dx = 1.$
+\een
+\end{remark}
+
+% example: simple continuous
+\begin{example}\label{ex:cts_exp}
+Let $X$ be a random variable with CDF
+\[
+F(x) = \left\{\begin{array}{ll}
+	1-e^{-\lambda x} & \text{ for } x>0 \\
+	0				& \text{ otherwise.}
+\end{array}\right.
+\]
+where $\lambda>0$ is a constant. Show that $X$ is a continuous random variable.
+\end{example}
+\begin{solution}
+$X$ is a continuous random variable, because there exists a function $f(x) = \lambda e^{-\lambda x}$ such that
+\begin{align*}
+\int_{-\infty}^x f(t)\,dt 
+	& = \lambda \int_{-\infty}^x e^{-\lambda t}\,dt \\
+	& = \lambda\left[\frac{-e^{-\lambda t}}{\lambda}\right]_{-\infty}^x \\
+	& = 1 - e^{-\lambda x} \\
+	& = F(x).
+\end{align*}
+Here, $X$ is said to have the \emph{negative exponential distribution}, with (rate) parameter $\lambda$.
+\end{solution}
+
+%% problem
+%\begin{example}\label{ex:continuous_rv}
+%A straight rod is thrown down at random onto a horizontal plane, and the angle between the rod and a certain fixed orientation is measured. The result is a number $\omega\in [0,2\pi)=\Omega$. Let us suppose that $\mathcal{F}$ has been constructed so that it contains all open subintervals of $[0,2\pi)$, i.e.\ intervals of the form $(a,b)$ with $0\leq a<b< 2\pi$. By the principle of indifference, a suitable probability measure on $(\Omega,\mathcal{F})$ should assign a probability that the angle lies in a given interval $(a,b)$ to be directly proportional to the length of the interval:
+%\[
+%\prob\big(\big\{\omega:\omega\in(a,b)\big\}\big)=\frac{b-a}{2\pi}.
+%\]
+%
+%Let $X(\omega)=\omega$ and $Y(\omega)=\omega^2$ be two random variables defined on $(\Omega,\mathcal{F},\prob)$. (Note that $Y$ is a function of $X$.) Find the distribution functions of $X$ and $Y$, and show that they are both continuous random variables.
+%\end{example}
+%\begin{solution}
+%To compute the distribution of $X$, let $0\leq x <2\pi$:
+%\begin{align*}
+%F_X(x)	& = \prob\big(\{\omega:0\leq X(\omega)\leq x\}\big) \\
+%		& = \prob\big(\{\omega:0\leq \omega \leq x\}\big) 
+%		= \frac{x}{2\pi}
+%\end{align*}
+%so
+%\[
+%F_X(x) = \begin{cases}
+%	0				& x \leq 0 \\
+%	\displaystyle\frac{x}{2\pi}	& 0 \leq x < 2\pi \\
+%	1				& x \geq 2\pi
+%\end{cases}
+%\]
+%$X$ is continuous because
+%\[
+%F_X(x) = \int_{-\infty}^x f_X(u)\,du \qquad\text{where}\qquad 
+%f_X(u)=\begin{cases}
+%\displaystyle\frac{1}{2\pi}	& 0\leq u\leq 2\pi \\
+%0				& \text{otherwise}.
+%\end{cases}
+%\]
+%
+%To compute the distribution of $Y$, let $0\leq y <4\pi^2$:
+%\begin{align*}
+%F_Y(y)	& = \prob\big(\{\omega: Y(\omega)\leq y\}\big) 
+%		= \prob\big(\{\omega: \omega^2 \leq y\}\big) \\
+%		& = \prob\big(\{\omega: 0\leq \omega \leq \sqrt{y}\}\big) \\
+%		& = \prob\big(X\leq\sqrt{y}\big) 
+%		= \frac{\sqrt{y}}{2\pi}
+%\end{align*}
+%so
+%\[
+%F_Y(y) = \begin{cases}
+%	0						& y \leq 0 \\
+%	\displaystyle\frac{\sqrt{y}}{2\pi}	& 0 \leq y < 2\pi \\
+%	1						& x \geq 2\pi
+%\end{cases}
+%\]
+%$Y$ is continuous because
+%\[
+%F_Y(y) = \int_{-\infty}^x f_Y(u)\,du \qquad\text{where}\qquad 
+%f_Y(y)=\begin{cases}
+%\displaystyle\frac{1}{4\pi\sqrt{y}}	& 0\leq y\leq 4\pi^2 \\
+%0			& \text{otherwise}.
+%\end{cases}
+%\]
+%\end{solution}
+%
+%Recall that $X$ is called a \emph{continuous} random variable if its distribution function can be written as
+%\[
+%F(x) = \int_{-\infty}^x f(u)\,du
+%\]
+%for some integrable function $f:\R\to[0,\infty)$, called the \emph{probability density function} of $X$.
+%
+%%\bit
+%%\it Note that $f(x) = \displaystyle\frac{d}{dx}F(x)$.
+%%\eit
+
+\newpage
+
+% problem
+\begin{example}
+A straight rod is thrown down at random onto a horizontal plane, and the angle between the rod and a certain fixed orientation is measured. In the absence of any further information, the natural probability measure on the sample space $\Omega = [0,2\pi)$ is
+\[
+\prob\big(\big\{\omega:\omega\in(a,b)\big\}\big)=\frac{b-a}{2\pi} \quad\text{for}\quad 0\leq a < b < 2\pi.
+\]
+The distribution functions $F_X$ and $F_Y$ of the random variables $X(\omega)=\omega$ and $Y(\omega)=\omega^2$ are
+\[
+F_X(x) = \begin{cases}
+	0				& x \leq 0, \\[2ex]
+	\displaystyle\frac{x}{2\pi}	& 0 \leq x < 2\pi, \\[2ex]
+	1				& x \geq 2\pi,
+\end{cases}
+\quad\text{and}\quad
+F_Y(y) = \begin{cases}
+	0						& y \leq 0, \\[2ex]
+	\displaystyle\frac{\sqrt{y}}{2\pi}	& 0 \leq y < 4\pi^2, \\[2ex]
+	1						& y \geq 4\pi^2,
+\end{cases}
+\]
+with density functions $f_X$ and $f_Y$ given by
+\[
+f_X(x)=\begin{cases}
+\displaystyle\frac{1}{2\pi}	& 0\leq x\leq 2\pi, \\[2ex]
+0							& \text{otherwise},
+\end{cases}
+\quad\text{and}\quad
+f_Y(y)=\begin{cases}
+\displaystyle\frac{1}{4\pi\sqrt{y}}	& 0\leq y\leq 4\pi^2, \\[2ex]
+0									& \text{otherwise}.
+\end{cases}
+\]
+\end{example}
+
+\newpage
+
+% lemma: properties of pdf
+%\begin{lemma}[Properties of density functions]
+%Let $X$ be a continuous random variable with probability density function $f(x)$. Then
+%\ben
+%\it $\displaystyle\int_{-\infty}^{\infty}f(x)\,dx = 1$.
+%\it $\prob(X = x) = 0$ for all $x\in\R$.
+%\it $\prob(a\leq X\leq b) = \displaystyle\int_a^b f(x)\,dx$.
+%\een
+%\end{lemma}
+%
+%% proof
+%\begin{proof}
+%Let $F$ be the distribution function of $X$. %By Theorem~\ref{thm:properties_cdf},
+%\ben
+%\it % (i)
+%By the properties of CDFs, $F(x)\to 1$ as $x\to\infty$, so
+%\[
+%\int_{-\infty}^{\infty}f(x)\,dx = \lim_{x\to\infty} \int_{-\infty}^{x}f(x)\,dx = \lim_{x\to\infty} F(x)=1.
+%\]
+%\it % (ii)
+%By the properties of CDFs, $F(x+h)\to F(x)$ as $h\downarrow 0$ so
+%\[
+%\prob(X=x) 
+%	= \displaystyle\lim_{h\downarrow 0} \prob(X\leq x+h)-\prob(X\leq x)
+%	= \displaystyle\lim_{h\downarrow 0} F(x+h)-F(x)
+%	= 0.
+%\]	
+%\it % (iii)
+%$\prob(a\leq X\leq b) = F(b) - F(a) + \prob(X=a) = F(b) - F(a) = \displaystyle\int_a^b f(x)\,dx$.
+%\een
+%\end{proof}
+%
+
+% remarks
+\begin{remark}
+Let $X$ be a continuous random variable, and let $f(x)$ denote its PDF. 
+\bit
+\it The numerical value $f(x)$ is \emph{not} a probability. 
+\eit
+However, the following heuristic interpretation is often useful.
+
+\vspace*{2ex}
+Let $x\in\R$ and let $\delta x >0$ be a small positive number. If $f(x)$ is a continuous function, then
+\begin{align*}
+\prob(x\lt X \leq x+\delta x) 	
+	= F(x+\delta x) - F(x) 
+	& = \int_{-\infty}^{x+\delta x} f(x)\,dx - \int_{-\infty}^{x} f(x)\,dx \\
+	& = \int_{x}^{x+\delta x} f(x)\,dx \\
+	& \approx f(x)\delta x.
+\end{align*}
+We can think of $f(x)\delta x$ as the `amount' of probability in the small interval $[x,x+\delta x]$. Note that
+\[
+f(x) = \lim_{\delta x \to 0} \frac{F(x+\delta x) - F(x)}{\delta x} = F'(x).
+\]
+\end{remark}
+
+%----------------------------------------------------------------------
+\newpage
+\section{Independence}
+%----------------------------------------------------------------------
+Recall that the \emph{joint CDF} of two random variables $X$ and $Y$ is defined by
+\[
+F_{X,Y}(x,y) = \prob(X\leq x, Y\leq y) 
+\]
+and that two discrete random variables $X$ and $Y$ are described by their joint PMF
+\[
+p_{X,Y}(x,y)=\prob(X=x,Y=y).
+\]
+
+% definition: jointly continuous, joint density and marginal densities
+\begin{definition}
+\ben
+\it Two random variables $X$ and $Y$ are said to be \emph{jointly continuous} if their joint CDF can be written as
+\[
+F_{X,Y}(x,y) = \int_{-\infty}^y\int_{-\infty}^x f_{X,Y}(s,t)\,ds\,dt\qquad\text{for every }x,y\in\R,
+\]
+where $f_{X,Y}:\R^2\to[0,\infty)$ is an integrable function called the \emph{joint PDF} of $X$ and $Y$.
+\it The PDFs of $X$ and $Y$ are called the \emph{marginal} PDFs, denoted by $f_X(x)$ and $f_Y(y)$ respectively.
+\een
+\end{definition}
+
+\newpage
+
+% independence
+Recall that two discrete random variables $X$ and $Y$ are said to be \emph{independent}, if the events $\{X=x\}$ and $\{Y=y\}$ are independent for all $x$ and $y$:
+\[
+\prob(X=x,Y=y) = \prob(X=x)\prob(Y=y) \text{\quad for all }x,y\in\R.
+\]
+This definition cannot be applied to continuous random variables, because these events  $\{X=x\}$ and $\{Y=y\}$ have zero probability (and are therefore trivially independent).
+
+% definition
+\begin{definition}
+Two arbitrary random variables $X$ and $Y$ are called \emph{independent} if the events
+\begin{align*}
+\{X \leq x\} & = \{\omega\in\Omega\,:\, X(\omega) \leq x\} \\
+\{Y \leq y\} & = \{\omega\in\Omega\,:\, Y(\omega) \leq y\}
+\end{align*}
+are independent for all $x,y\in\R$. 
+\end{definition}
+
+\bit
+\it If $X$ and $Y$ are independent, then $F_{X,Y}(x,y) = F_X(x)F_Y(y)$ for all $x,y\in\R$.
+\it If $X$ and $Y$ are also \emph{discrete}, then $p_{X,Y}(x,y)=p_X(x)p_Y(y)$ for all $x,y\in\R$.
+\it An analogous result applies to independent \emph{continuous} random variables.
+\eit
+
+\newpage
+%We have the following analogue of Theorem~\ref{thm:product_marginal_pmfs}:
+
+% lemma: continuous
+\begin{lemma}\label{thm:product_marginal_pdfs}
+Let $X$ and $Y$ be jointly continuous random variables, with joint density function $f_{X,Y}(x,y)$ and marginal density functions $f_X(x)$ and $f_Y(x)$ respectively. If $X$ and $Y$ are independent, then
+\[
+f_{X,Y}(x,y) = f_X(x)f_Y(y) \quad\text{for all}\quad x,y\in\R
+\]
+\end{lemma}
+\proofomitted
+
+\begin{remark}
+For discrete random variables, the \emph{conditional PMF} of $Y$ given $X=x$ is defined by
+%\[
+%p_{Y|X}(y|x) = \prob(Y=y|X=x) = \frac{\prob(X=x,Y=y)}{\prob(X=x)} = \frac{p_{X,Y}(x,y)}{p_X(x)}.
+%\]
+\[
+p_{Y|X}(y|x) = \frac{p_{X,Y}(x,y)}{p_X(x)}.
+\]
+For continuous random variables, we cannot condition on $\{X=x\}$ because $\prob(X=x)=0$. However, by analogy we can define the \emph{conditional PDF} of $Y$ given $X=x$ to be
+\[
+f_{Y|X}(y|x) = \frac{f_{X,Y}(x,y)}{f_X(x)}.
+\]
+This allows us to define the conditional expectation of $Y$ given $X=x$, and prove a law of total expectation for continuous random variables.
+\end{remark}
+
+%We also have the following analogue of Theorem~\ref{thm:independence_of_functions_of_rvs}:
+%
+%% theorem: unconscious
+%\begin{theorem}\label{thm:independence_of_functions_of_rvs_cts}
+%Let $X$ and $Y$ be continuous random variables on $(\Omega,\mathcal{F})$, and let $g,h:\R\to\R$ be such that $g(X)$ and $h(Y)$ are random variables on $(\Omega,\mathcal{F})$. If $X$ and $Y$ are independent, then $g(X)$ and $h(Y)$ are also independent.
+%\end{theorem}
+%\proofomitted
+
+
+%----------------------------------------------------------------------
+\newpage
+\section{Expectation}
+%----------------------------------------------------------------------
+The expectation of a discrete random variable $X$ with PMF $p(x)$ is defined by a \emph{sum}:
+\[
+\expe(X) = \sum_x x\,p(x)
+\]
+
+In contrast, the expectation of a continuous random variable is defined by an \emph{integral}:
+
+% definition
+\begin{definition}
+The \emph{expectation} of a continuous random variable $X$ with PDF $f(x)$ is
+\[
+\expe(X) = \int_{-\infty}^{\infty} x f(x)\,dx,
+\]
+provided this integral exists.
+\end{definition}
+
+\newpage
+
+%We have the following analogue of Theorem~\ref{lem:law_unconscious_statistician}:
+
+% theorem: law of unconscious statistician
+\begin{theorem}\label{lem:law_unconscious_statistician_cts}
+Let $X:\Omega\to\R$ be a continuous random variable on $(\Omega,\mathcal{F})$, and let $g:\R\to\R$ be a function such that $g(X)$ is a random variable. Then
+\[
+\expe\big[g(X)\big] = \int_{-\infty}^{\infty} g(x)f(x)\,dx
+\]
+\end{theorem}
+\proofomitted
+
+\vspace{2ex}
+\begin{definition}
+Variance, covariance and the correlation coefficient are defined as before:
+\ben
+%\it $\mu'_{\alpha} = \expe(X^{\alpha})$ is the $\alpha$th moment of $X$ about the origin ($\alpha\in\R$).
+%\it $\mu_{\alpha}  = \expe\big[\big(X-\expe(X)\big)^{\alpha}\big]$ is the $\alpha$th moment of $X$ about the mean ($\alpha\in\R$).
+%\it[]
+\it $\var(X) = \expe\big[\big(X-\expe(X)\big)^2\big] = \expe(X^2) - \expe(X)^2$.
+\it $\cov(X,Y) = \expe(XY) - \expe(X)\expe(Y)$.
+\it $\rho(X,Y) = \displaystyle\frac{\cov(X,Y)}{\sqrt{\var(X)\cdot\var(Y)}}$.
+\een
+\end{definition}
+
+\newpage
+
+The following properties of expectation and variance also hold for continuous variables:
+\begin{theorem}
+\ben
+\it $\expe(aX+bY) = a\expe(X) + b\expe(Y)$ for all $a,b\in\R$.
+\it $\var(aX+b) = a^2\var(X)$ for all $a,b\in\R$.
+\it If $X$ and $Y$ are uncorrelated, then 
+\[
+\expe(XY)=\expe(X)\expe(Y) \text{\quad and\quad} \var(X+Y)=\var(X)+\var(Y).
+\]
+%\it If $X$ and $Y$ are uncorrelated, then
+%	\bit
+%	\it $\expe(XY)=\expe(X)\expe(Y)$ and 
+%	\it $\var(X+Y)=\var(X)+\var(Y)$.
+%	\eit
+\een
+\end{theorem}
+
+\begin{proof}
+Exercise Sheet.
+\end{proof}
+
+
+%----------------------------------------------------------------------
+\newpage
+%\section{Examples}
+%----------------------------------------------------------------------
+% example: uniform distribution
+\begin{example}\label{ex:continuous_uniform}
+Let $X$ be a continuous random variable with distribution function
+\[
+F(x) = \begin{cases}
+	\displaystyle\frac{x-a}{b-a}	& \text{if }\ a\leq x\leq b \\[2ex]
+	0							& \text{otherwise.}
+\end{cases}	
+\]
+Find the density function of $X$, and hence find its expected value and variance.
+\end{example}
+
+\begin{solution}
+The density function $f(x) = F'(x)$ is
+\[
+f(x) = \begin{cases}
+	\displaystyle\frac{1}{b-a}	& \text{if }\ a\leq x\leq b \\[0ex]
+	0				& \text{otherwise.}
+\end{cases}	
+\]
+This is the \emph{uniform} distribution on $[a,b]$. 
+
+The expected value and variance are computed as follows:
+\begin{align*}
+\expe(X)
+	& = \int_{-\infty}^{\infty}x f(x)\,dx
+	= \frac{1}{b-a}\int_{a}^{b}x\,dx
+	= \frac{1}{b-a}\left[\frac{x^2}{2}\right] _{a}^{b}
+	= \frac{b^2-a^2}{2(b-a)}
+	= \frac{b+a}{2}. \\[2ex]
+\expe(X^2)
+	& = \int_{-\infty}^{\infty} x^2 f(x)\,dx
+	= \frac{1}{b-a}\int_{a}^{b} x^2\,dx 
+	= \frac{1}{b-a}\left[\frac{x^3}{3}\right]_{a}^{b}
+	= \frac{b^{3}-a^{3}}{3(b-a)}
+	= \frac{(b^{2}+ab+a^{2})}{3}. \\[2ex]
+\var(X)
+	& = \expe(X^2) - \expe(X)^2 
+	= \frac{(b^{2}+ab+a^{2})}{3} - \frac{(b+a)^{2}}{4} 
+	= \frac{(b^{2}-2ab+a^{2})}{12}
+	= \frac{(b-a)^{2}}{12}.
+\end{align*}
+\end{solution}
+
+%% example
+%\begin{example}\label{ex:continuous_exponential}
+%Let $X$ be a continuous random variable with distribution function
+%\[
+%F(x) = \begin{cases}
+%	1-e^{-\lambda x}	& \text{if }\ x\geq 0 \\ 
+%	0				& \text{otherwise.}
+%\end{cases}	
+%\]
+%Find the density function of $X$, and hence find its expected value and variance.
+%\end{example}
+%
+%\begin{solution}
+%This is the (negative) \emph{exponential} distribution with (rate) parameter $\lambda>0$. 
+%
+%The density function $f(x) = F'(x)$ of $X$ is
+%\[
+%f(x) = \begin{cases}
+%	\lambda e^{-\lambda x}	& \text{if }\ x\geq 0 \\ 
+%	0						& \text{otherwise.}
+%\end{cases}	
+%\]
+%The expected value of $X$ is
+%\[
+%\expe(X) = \int xf(x)\,dx = \lambda\int_0^{\infty} xe^{-\lambda x}\,dx
+%\]
+%Integrating by parts,
+%\begin{equation}\label{eq:expe_expo}
+%\int_0^{\infty} xe^{-\lambda x}\,dx
+%	= \left[-\frac{xe^{-\lambda x}}{\lambda}\right]_0^{\infty} + \int_0^{\infty} \frac{e^{\lambda x}}{\lambda}\,dx
+%	= 0 + \frac{1}{\lambda}\int_0^{\infty} e^{-\lambda x}\,dx
+%	= \frac{1}{\lambda}\left[-\frac{e^{-\lambda x}}{\lambda}\right]_0^{\infty}
+%	= \frac{1}{\lambda^2} \tag{*}
+%\end{equation}
+%so 
+%\[
+%\expe(X)=\lambda\cdot\frac{1}{\lambda^2} = \frac{1}{\lambda}.
+%\]
+%To compute the variance, the expected value of $X^2$ is 
+%\[
+%\expe(X^2) = \int x^2 f(x)\,dx = \lambda\int_0^{\infty} x^2 e^{-\lambda x}\,dx
+%\]
+%Integrating by parts,
+%\[
+%\int_0^{\infty} x^2 e^{-\lambda x}\,dx
+%	= \left[x^2\left(-\frac{e^{-\lambda x}}{\lambda}\right)\right]_0^{\infty} + \int_0^\infty 2x\left(\frac{e^{-\lambda x}}{\lambda}\right)\,dx 
+%	= \frac{2}{\lambda}\int_0^{\infty} xe^{-\lambda x}\,dx 
+%	= \frac{2}{\lambda^3} \qquad \text{by Eq.~(\ref{eq:expe_expo}).}
+%\]
+%so 
+%\[
+%\expe(X^2)=\lambda\cdot\frac{2}{\lambda^3} = \frac{2}{\lambda^2},
+%\]
+%and the variance is 
+%\[
+%\var(X) = \expe(X^2) - \expe(X)^2 = \frac{2}{\lambda^2} - \left(\frac{1}{\lambda}\right)^2 = \frac{1}{\lambda^2}.
+%\]
+%\end{solution}
+
+%======================================================================
+\end{document}
+%======================================================================
