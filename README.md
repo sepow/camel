@@ -4,7 +4,6 @@
 
 ### Directory Structure
 
-/root
 	.git/
 	.gitignore
 	
