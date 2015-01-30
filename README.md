@@ -17,8 +17,9 @@
 		wsgi.py
 	
 		management/
-			- refresh.py	# update database
-			- update.py		# update pdf
+			- refresh.py	    # update database
+			- update.py		    # update pdf
+			- readsims.py		# read students enrolled on module
 	
 	data/
         pdf/
@@ -40,8 +41,6 @@
 		modules.json
 		books.json
 	
-	logs/
-	
 	static/
 		base.css
 		camel_logo.png
@@ -55,11 +54,8 @@
 		- login.html
 		- logout-success.html
 
-	tex/ -> /path/to/tex_root
-	
 	texmf/
 		- camel.cls
 		- camel.sty
-		- arholiad.sty
 
 
