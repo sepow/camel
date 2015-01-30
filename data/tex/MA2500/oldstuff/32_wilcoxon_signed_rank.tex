@@ -1,0 +1,476 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{The Wilcoxon Signed-Rank Test}\label{chap:wsr}
+\setcounter{page}{1}
+\startcontents[chapters]
+%----------------------------------------------------------------------
+\dictum{X}{X}{X}
+\chapcontents
+
+%====================================================================
+\section{Ranks}
+%====================================================================
+
+\begin{definition}
+For a random sample $X_1,\ldots,X_n$, the \emph{rank} of observation $X_i$ is its position in the sequence of observations, sorted in ascending order:
+\[
+R(X_i) = \sum_{j=1}^n I(X_j \leq X_i)
+\]
+\end{definition}
+
+Note that the sum of the ranks is always equal to $\frac{1}{2}n(n+1)$:
+\[
+\displaystyle \sum_{i=1}^n R(X_i) = \sum_{i=1}^n i = \frac{1}{2}n(n+1).
+\]
+
+In non-parametric tests based on ranks:
+\bit
+\it Similar numbers of high and low ranks across groups $\Rightarrow$ groups are similar.
+\it Different numbers of high and low ranks across groups $\Rightarrow$ groups are different.
+\eit
+
+%============================= 
+
+\subsection{Ties}
+%============================= 
+If two or more observations have the same value, they are said to be \emph{tied}.
+
+\bit
+\it The distribution is assumed to be continuous, so ties should occur with probability zero.
+\it Ties often occur in practical applications, due to the limited precision of measurements.
+\it The usual approach is to assign an average rank to each of the tied observations.
+\eit
+
+For example, if there are $m-1$ observations strictly smaller than $X_i=X_j$, we set
+\[
+R(X_i) = R(X_j) = \frac{m+(m+1)}{2} = m+\frac{1}{2}
+\]
+
+%====================================================================
+
+\section{The Wilcoxon signed-rank test}
+%====================================================================
+The WSR test is a refinement of the sign test.
+%\bit
+%\it The WSR test is a non-parametric version of the one-sample $t$-test and paired-samples $t$-test.
+\bit
+\it The sign test counts the number observations above (or below) the hypothesized median.
+\it The WSR test sums the ranks of observations above (or below) the hypothesized median.
+\eit
+
+\vspace*{3ex}
+To apply the WSR test, we require the following conditions:
+\ben
+\it The distribution is continuous and symmetric.
+\it The observations can be ranked.
+\it The observations are independent.
+\een
+
+
+\vspace*{3ex}
+Without loss of generality, we consider $H_0:\eta=0$ against a suitable alternative.
+\bit
+\it For the general case $H_0:\eta=\eta_0$, we simply consider the sample 
+\[
+X_1-\eta_0,X_2-\eta_0,\ldots,X_n-\eta_0.
+\]
+\eit
+
+ % <<
+
+% definition: wsr statistic
+\begin{definition}
+Let $X_1,X_2,\ldots,X_n$ be a random sample from a continuous and symmetric distribution having (unknown) median $\eta$. For the null hypothesis $H_0:\eta=0$, the \emph{Wilcoxon signed rank} (WSR) statistic is defined to be
+\[
+W^{+}_n = \sum_{i=1}^n R_i Z_i \quad\text{where}\quad R_i = \sum_{j=1}^n I(|X_j|\leq |X_i|) \quad\text{and}\quad Z_i=I(X_i>0).
+\]
+\end{definition}
+
+% remarks
+Here,
+\bit
+\it $R_i$ is the rank of $|X_i|$ in the sample of absolute values $|X_1|,|X_2|,\ldots,|X_n|$.
+\it $Z_i=1$ if $X_i>0$, otherwise $Z_i=0$.
+\eit
+
+%We also define the complementary statistic $W^{-}_n = \displaystyle\sum_{i=1}^n R(|X_i|) I(X_i<0)$. 
+We also define the complementary statistic $W^{-}_n = \displaystyle\sum_{i=1}^n R_i(1-Z_i)$, and note that
+\[
+W^{+}_n + W^{-}_n = \sum_{i=1}^n R_i = \sum_{i=1}^n i = \frac{1}{2}n(n+1).
+\]
+
+ % <<
+
+% test procedure
+The WSR test procedure is as follows:
+\ben
+\it Compute the differences $D_i = X_i - \eta_0$ (single sample) or $D_i=X_i-Y_i$ (matched pairs).
+\it Compute absolute differences $|D_i|$ and record the sign of $D_i$.
+\it Compute the ranks $R_i$ of the absolute differences $|D_i|$.
+\it Compute the the sum of the ranks of those $|D_i|$ having positive sign. 
+\een
+The final step yields the test statistic $W^{+}_n$.
+
+ % <<
+
+% example
+\begin{example}
+A study of the effects of smoking by mothers on the birthweight of their children involved 12 pairs of mothers. The pairs of mothers were selected so that they were as similar as possible, except that one mother of each pair was a smoker and the other was not. The birthweights (in kilograms) of the babies were as follows.
+\small
+\[\begin{array}{l|cccccccccccc} \hline
+\text{Pair}			& 1      &  2     & 3      & 4      & 5      & 6      & 7      & 8      & 9      & 10     & 11     & 12 		\\ \hline
+\text{Non-smoker}	& 3.22   & 4.48   & 3.90   & 3.47   & 3.07   & 3.23   & 4.25   & 3.31   & 3.33   & 3.78   & 3.18   & 4.60  	\\ 
+\text{Smoker}		& 3.00   & 4.27   & 3.95   & 3.32   & 2.51   & 2.77   & 4.02   & 3.41   & 3.39   & 3.88   & 3.18   & 4.37 	\\ \hline
+\end{array}\]
+\normalsize
+Do these data conform with the hypothesis that mothers who smoke tend to have babies with smaller birthweights than those who do not? 
+\end{example}
+
+\begin{solution}
+The data are in matched pairs so we compute the differences $D_i=X_i-Y_i$, and evaluate
+\[
+H_0:\eta = 0 \quad\text{against}\quad H_1:\eta > 0,
+\]
+where $\eta$ is the (true) median difference between birthweights for the non-smoking group and birthweights for the smoking group.
+
+\small
+\[\begin{array}{|c|cccccccccccc|} \hline
+i			& 1      &  2     & 3      & 4      & 5      & 6      & 7      & 8      & 9      & 10     & 11     & 12   	\\ \hline
+X_i			& 3.22   & 4.48   & 3.90   & 3.47   & 3.07   & 3.23   & 4.25   & 3.31   & 3.33   & 3.78   & 3.18   & 4.60 	\\ 
+Y_i			& 3.00   & 4.27   & 3.95   & 3.32   & 2.51   & 2.77   & 4.02   & 3.41   & 3.39   & 3.88   & 3.18   & 4.37	\\ \hline
+D_i			& 0.22   & 0.21   & -0.05  & 0.15   & 0.56   & 0.46   & 0.23   & -0.10  & -0.06  & -0.10  & 0.00  	& 0.23	\\
+|D_i|		& 0.22   & 0.21   &  0.05  & 0.15   & 0.56   & 0.46   & 0.23   &  0.10  &  0.06  &  0.10  & 0.00  	& 0.23	\\ \hline
+\text{sgn}(D_i)	& +      & +      & -      & +      & +      & +      & +      & -      & -      & -      &      	& +  	\\ 
+%R(|D_i|)		& 8      & 7      & 2      & 6      & 12     & 11     & 9.5    &  4.5   &  3     &  4.5   & 0     	& 9.5  	\\ \hline
+R(|D_i|)		& 7      & 6      & 1      & 5      & 11     & 10     & 8.5    &  3.5   &  2     &  3.5   &      	& 8.5  	\\ \hline
+\end{array}\]
+\vspace*{-2ex}\normalsize
+\bit
+\it The zero difference is discarded, leaving $n=11$ non-zero differences.
+\it Ties are replaced by the average of the corresponding ranks.
+\eit
+From the data, $W^{+}_n = 56$ and $W^{-}_n = 10$. \Big[Check: $W^{+}_n + W^{-}_n = 66 = \frac{1}{2}n(n+1)$.\Big]
+\bit
+\it Large values of $W^{+}_n$ support the alternative hypothesis, $H_1:\eta > 0$. 
+\it From tables, the upper-tail critical value of $W^{+}_n$ for $n=11$ at $\alpha=0.05$ is $w_c = 52$. 
+\eit
+Since $W^{+}_n > w_c$, we reject the null hypothesis and conclude that mothers who smoke tend to have babies with smaller birthweights than those who do not. 
+\end{solution}
+
+%%==========================================================================
+%\begin{example}
+%The data below are a random sample from a symmetric continuous random variable  with mean equal to $\mu$.
+%\begin{center}
+%\begin{tabular}{ccccccccccccc}
+% 97.9	& 111.4	&  97.7	& 112.6	&  98.8	& 114.0	&  98.7	& 101.4	&  98.9	& 115.2	&  97.4	& 117.9 & 118.6 \\
+% 113.0	&  97.0	&  97.8	&  97.6	&  97.5	& 110.9	& 110.7	& 112.5	&  97.3	&  97.2	& 110.8	& 102.9	&
+%\end{tabular}
+%\end{center}
+%Use both the sign test and the Wilcoxon signed rank test to perform the hypothesis test
+%\begin{align*}
+%H_0: & \mu = 100 \\
+%H_1: & \mu\neq 100
+%\end{align*}
+%In each case calculate the $p$-value, or estimate it as closely as you can with the tables available. Comment on which test you would recommend for these data, and on whether a single sample $t$-test would be reliable. 
+%\end{example}
+%
+%\begin{solution}
+%The sign test is based on $S$, the number of observations $\geq 100$; in this example, $S = 13$. Under $H_0:\mu = 100$, the number of observations $\geq 100$ is a random variable having a $\text{Binomial}(25,0.5)$ distribution. The alternative hypothesis is not directed, so a 2-tailed test is indicated. First find $P(S\geq 13) = P(S>12)$. From tables of the Binomial distribution with  $n=25$ and $p=0.5$,  this is equal to $1-0.5 = 0.5$. However, this is a 2-tailed test so 'as extreme or more so' also includes the probability for the left hand tail. This is $P(S \leq 12)$, and from tables this is equal to $0.5$. Thus the $p$-value is $0.5 + 0.5 = 1.0$. Notice that in this case, since the distribution under the null hypothesis is symmetric, the $p$-value for a 2-tailed test is exactly twice the $p$-value for a 1-tailed test. Notice also that this is the maximum $p$-value possible, so non-rejection of the null hypothesis is statistically compulsory.
+%
+%To achieve a significance level $\leq 5\%$ for a 2-tailed test, tables of the Binomial distribution give a critical region $\{S \leq 7 \text{ or } S \geq 18\}$. The significance level is then $2{\times}0.02164 = 0.04328$. (If the critical region $\{S \leq 8 \text{ or } S \geq 17\}$ is chosen, the significance level becomes $2{\times}0.05378 = 0.10756$, which is greater than the required 5\%.) The observed value of S is not in the critical region, so the null hypothesis is not rejected.
+%
+%To perform the Wilcoxon signed rank test, first we calculate the differences from the median specified by the null hypothesis ($100$). These are as follows.
+%\begin{center}
+%\begin{tabular}{ccccccccccccc}
+%-2.1		&   11.4		& -2.3	&   12.6		&   -1.2		& 14.0	& -1.3	&  1.4	& -1.1	& 15.2	& -2.6	&  17.9	& 18.6 \\
+%13.0		&   -3.0  	& -2.2  &	-2.4    	&	-2.5		& 10.9	& 10.7	& 12.5 	& -2.7	&  2.8	& 10.8	&   2.9
+%\end{tabular}
+%\end{center}
+%The signed ranks of the absolute deviations are:
+%\begin{center}
+%\begin{tabular}{ccccccccccccc}
+%-5	&  18	&   -7	&  20	&  -2	&  22	&  -3	&   4	&   -1	&   23	& -10	&  24	&  25 \\
+%21	& -14	&   -6	&  -8	&  -9	&  17	&  15	&  19	&  -11	&  -12 	&  16	&  13	&
+%\end{tabular}
+%\end{center}
+%Thus
+%\[
+%W^{-} = 88 \quad\text{and}\quad W^{+} = 237
+%\]
+%From tables, and using a 2-tailed test with a significance level of 5\%, the critical value is $235$, so the null hypothesis is (just) rejected. The $p$-value for a 2-tailed test is between $0.02$ and $0.05$ (but closer to $0.05$) because the observed value of $W$ is between the $97.5\ssth$ percentile (235) and the $99\ssth$ percentile (248). $P(W^{+} \geq 237)$ is between $0.01$ and $0.025$, and the $p$-value is obtained (for a 2-tailed test) by doubling these probabilities.
+%
+%The Wilcoxon test uses more information than does the sign test. It ranks absolute deviations from the median under $H_0$, then adds the sum of the ranks associated with observations $\geq 100$. The sign test, on the other hand simply counts the number of observations $\geq 100$, without taking into account the ranks. In this example, the observations bigger than $100$ are substantially bigger than 100, hence the different conclusions from the tests. Note the big jump in magnitude between rank 14 (-3.0) and 15 (10.7), and that all subsequent ranks have a positive sign attached. This is because the data are very skewed, and a $t$-test is not very robust for skewed data. Of the three tests, the Wilcoxon signed rank test is the best for this data.
+%\end{solution}
+%
+
+%============================= 
+ % <<
+\section{The mean and variance of $W^{+}_n$}
+%============================= 
+%Under the null hypothesis $H_0:\eta=0$ we have $\prob(X_i>0)=\prob(X_i<0)=0.5$. Hence
+%\begin{align*}
+%\expe(X_i)	& = 0.5\times 0 + 0.5\times 1 = 0.5. \\
+%\expe(X_i^2)	& = 0.5\times 0^2 + 0.5\times 1^2 = 0.5, \text{ and} \\
+%\var(X_i)	& = 0.5 - 0.5^2 = 0.25
+%\end{align*}
+
+% theorem: mean and variance of W+
+\begin{theorem}
+Let $X_1,X_2,\ldots,X_n$ be a random sample from a continuous distribution whose density function is symmetric about its mean. Under the null hypothesis $H_0:\eta=0$, 
+\[
+\expe(W^{+}_n) = \frac{n(n+1)}{4} \qquad\text{and}\qquad \var(W^{+}_n)	= \frac{n(n+1)(2n+1)}{24}.
+\]
+\end{theorem}
+
+\begin{proof}
+Recall that 
+\[
+W^{+}_n = \sum_{i=1}^n R_i Z_i \quad\text{where}\quad R_i = R(|X_i|) \quad\text{and}\quad Z_i=I(X_i>0).
+\]
+%
+%$W^{+}_n = \sum_{i=1}^n R_iZ_i$, where $R_i=R(|X_i|)$ and $Z_i = I(X_i > 0)$.
+Under $H_0:\eta=0$ we have $Z_i\sim\text{Bernoulli}(1/2)$ and hence $\expe(Z_i)=1/2$ and $\var(Z_i)=1/4$. 
+
+%\vspace*{1ex}
+\begin{align*}
+\expe(W^{+}_n) 
+	& = \sum_{i=1}^n R_i\expe(Z_i) 
+	= \frac{1}{2}\sum_{i=1}^n R_i
+	= \frac{1}{2}\sum_{i=1}^n i
+	= \frac{1}{4}n(n+1). \\
+\var(W^{+}_n)
+	& = \sum_{i=1}^n R_i^2 \var(Z_i) 
+	= \frac{1}{4}\sum_{i=1}^n R_i^2
+	= \frac{1}{4}\sum_{i=1}^n i^2
+	= \frac{1}{24}n(n+1)(2n+1)
+\end{align*}
+\end{proof}
+
+%\begin{remark}
+%\bit
+%\it
+%In practice, the sum of the squares of the ranks is equal to the sum of the squares of the first $n$ natural numbers only if there are no ties and no zeros (i.e.\ observations that are exactly equal to $\eta_0$).
+%\it A correction for ties is
+%\[
+%\var(W^{+}_n) = \frac{1}{24}n(n+1)(2n+1) - \frac{1}{48}\sum t(t^2-1)
+%\]
+%where $t$ is the number of tied observations (e.g.\ $t=2$ if there are two identical observations) and the summation is over the number of sets of tied observations.
+%\eit
+%\end{remark}
+
+%============================= 
+ % <<
+\section{Normal approximation}
+%============================= 
+It can be shown that $W^{+}_n$ satisfies the central limit theorem.
+
+\vspace*{2ex}
+Under $H_0:\eta=0$ and provided $n$ is sufficiently large,
+\[
+W^{+}_n \sim N\left(\frac{1}{4}n(n+1), \frac{1}{24}n(n+1)(2n+1)\right) \text{\quad approx.}
+\]
+
+\vspace*{2ex}
+The continuity correction should be applied when defining the test statistic.
+\bit
+\it Lower-talied test:
+\[
+Z = \frac{(W^{+}_n +\frac{1}{2})- \frac{1}{4}n(n+1)}{\sqrt{\frac{1}{24}n(n+1)(2n+1)}}\sim N(0,1) \quad\text{approx.}
+\]
+\it Upper-talied test:
+\[
+Z = \frac{(W^{+}_n -\frac{1}{2})- \frac{1}{4}n(n+1)}{\sqrt{\frac{1}{24}n(n+1)(2n+1)}}\sim N(0,1) \quad\text{approx.}
+\]
+\eit
+
+%$\prob(W^{+}_n < w) = 
+%\[
+%Z = \frac{(W^{+}_n-\frac{1}{2}) -  \frac{1}{4}n(n+1)}{\sqrt{\frac{1}{24}n(n+1)(2n+1)}}
+%\sim N(0,1) \quad\text{approx. for $n$ sufficiently large.}
+%\]
+%\bit
+%\it Note that the continuity correction has been applied here.
+%\eit
+%\[
+%W^{+}_n \sim  N\left(\frac{1}{4}n(n+1),\frac{1}{24}n(n+1)(2n+1)\right) \quad\text{approx. for $n$ sufficiently large (say $n>30$).}
+%\]
+%The approximation can be improved using the continuity correction:
+%\[
+%\prob(W^{+}_n\geq k)
+%	\approx \prob\left[N\left(\frac{1}{4}n(n+1),\frac{1}{24}n(n+1)(2n+1)\right) \geq k - \frac{1}{2}\right].
+%\]
+
+%============================= 
+
+\section{The exact distribution of $W^{+}_n$}
+%============================= 
+If ties and zeroes are ignored, the exact distribution of $W^{+}_n$ under $H_0$ can be obtained for small $n$.
+
+\vspace*{2ex}
+\textbf{Case $n = 2$}. 
+\bit
+\it The set of ranks is $\{1,2\}$, so $W^{+}_2$ takes values in the set $\{0,1,2,3\}$. 
+\it Under $H_0:\eta=0$, the  PMF of $W^{+}_2$ is as follows:
+\eit
+\small
+\[\begin{array}{|c|cccc|}\hline
+\text{Ranks}			& \{-1,-2\}	& \{+1,-2\}	& \{-1,+2\}	& \{+1,+2\}	\\ \hline
+w					& 0	& 1	& 2	& 3 \\ \hline
+\prob(W^{+}_2=w)		& 0.25		& 0.25		&  0.25		& 0.25 		\\ \hline
+\end{array}\]
+\normalsize
+\underline{\textbf{Case $n = 3$}:} 
+\bit
+\it The set of ranks is $\{1,2,3\}$, so $W^{+}_3$ takes values in the set $\{0,1,2,3,4,5,6\}$. 
+
+%There are two possible assignments of signs to rank that make $W^{+}_3$ equal to 3: $\{+1, +2, -3\}$ or $\{-1, -2, +3\}$. In all other cases there is only one assignment of signs to ranks for the value of $W^{+}_3$, for example $W^{+}_3= 0$ only when the ranks all have a negative sign attached. Thus the  PMF of $W^{+}_3$ is as follows:
+\it Under $H_0:\eta=0$, the  PMF of $W^{+}_3$ is as follows:
+\eit
+\small
+\[\begin{array}{|c|ccccccc|}\hline
+w				& 0		& 1		& 2		& 3 		& 4 		& 5 		& 6		\\ \hline
+\prob(W^{+}_2=w)	& 0.125	& 0.125	& 0.125	& 0.25	& 0.125	& 0.125	& 0.125	\\ \hline
+\end{array}\]
+\normalsize
+
+
+
+%For the general case, we can derive a recurrence relation using \emph{generating functions}:
+
+% theorem
+\begin{theorem}
+Under $H_0:\eta=0$,
+\[
+\prob\big(W^{+}_{n+1}=w\big) = \frac{1}{2}\prob\big(W^{+}_n=w\big) + \frac{1}{2}\prob\big(W^{+}_n=w-(n+1)\big).
+\]
+\end{theorem}
+
+\begin{proof}
+\bit
+\it Let $X_1,X_2,\ldots,X_n$ be a random sample from a continuous and symmetric distribution.
+\it Let $R_i$ be the rank of $|X_i|$ among the absolute values $|X_1|,|X_2|,\ldots,|X_n|$:
+%\[
+%R_i = \sum_{j=1}^n I(|X_j| \leq |X_i|).
+%\]
+\eit
+
+Then $W^{+}_n$ can be written as
+\[
+W^{+}_n = \sum_{r=1}^n rU_r \qquad\text{where}\qquad U_{R_i} = \begin{cases} 1 & X_i > 0, \\ 0 & \text{otherwise.}\end{cases}
+\]
+
+\bit
+\it $U_r$ indicates that the observation associated with rank $r$ has a positive sign.
+\it Under the null hypothesis, $U_1,U_2,\ldots,U_n$ is a random sample from the $\text{Bernoulli}(1/2)$ distribution.
+\eit
+
+Let $G_n(t)$ denote the probability generating function of $W^{+}_n$:
+\begin{align*}
+G_n(t) 
+	= \expe(t^{W^{+}_n})  
+	& = \expe(t^{\sum_{r=1}^n rU_r}) \\
+	& = \expe(t^{U_1}t^{2U_2}\cdots t^{nU_n}) \\
+	& = \prod_{r=1}^n \expe(t^{rU_r}) \qquad\text{(by independence)} \\
+	& = \prod_{r=1}^n \Big[t^0\,\prob(U_r=0) + t^r\,\prob(U_r=1)\Big] \\
+	& = \prod_{r=1}^n \frac{1}{2}(1 + t^r). \\
+%\intertext{Similarly,}
+%G_{n+1}(t) 
+%	& = \prod_{r=1}^{n+1} \frac{1}{2}(1 + t^r)
+\intertext{Hence,}
+G_{n+1}(t) 
+	& = \frac{1}{2}(1 + t^{n+1})G_n(t).
+\end{align*}
+
+
+
+By definition,
+\begin{align*}
+G_n(t)		& = \sum_{w=0}^{\frac{1}{2}n(n+1)}\,\prob(W^{+}_n=w)t^w, \\[2ex]
+G_{n+1}(t)	& = \sum_{w=0}^{\frac{1}{2}(n+1)(n+2)}\,\prob(W^{+}_{n+1}=w)t^w.
+\end{align*}
+
+Thus,
+\[
+\sum_{w=0}^{\frac{1}{2}(n+1)(n+2)}\,\prob(W^{+}_{n+1}=w)t^w 
+	= \frac{1}{2}(1+t^{n+1})\sum_{w=0}^{\frac{1}{2}n(n+1)}\,\prob(W^{+}_n=w)t^w,
+\]
+
+Comparing the coefficients of $t^w$ yields the required recurrence relation:
+\[
+\prob\big(W^{+}_{n+1}=w\big) = \frac{1}{2}\prob\big(W^{+}_n=w\big) + \frac{1}{2}\prob\big(W^{+}_n=w-(n+1)\big).
+\]
+%as required.
+This recurrence relation is used to compute the quantiles of $W^{+}_n$ listed in statistical tables.
+\end{proof}
+
+%\begin{remark}
+%This recurrence relation is used to compute the quantiles of $W^{+}_n$ listed in statistical tables.
+%\end{remark}
+
+%*** OLD BELOW ***
+%
+%\bit
+%\it Let $X_1,X_2,\ldots,X_n$ be an i.i.d.\ random sample of size $n$.
+%\it Let $C_n(w)$ be the number of ways that $W^{+}_n$ can take the value $w$. 
+%\eit
+%
+%
+%
+%
+%There are always exactly $2^{n}$ assignments of $+$ and $-$ signs to the ranks, so by the i.i.d.\ property,
+%\[
+%\prob(W^{+}_n= w^{+}) = \frac{1}{2^n}V_n(w^{+})
+%\]
+%
+%
+%\bit
+%\it Let $Z_{r} = 1$ if the rank $r$ has a $+$ sign attached, and $Z_{r} = 0$ if it has a $-$ sign attached.
+%\eit
+%
+%Under the null hypothesis $\prob(Z_{r} = 1) = 0.5$ and $\prob(Z_{r} = 0) = 0.5$, so
+%\[
+%W^{+}_n = \sum_{r=1}^n r Z_r
+%\]
+%
+%\bit
+%\it Let $M_{W^{+}_n}(t)$ denote the moment generating function of $W^{+}_n$.
+%\eit
+%Then
+%\begin{align*}
+%M_{W^{+}_n}(t) = \expe(e^{tW^{+}_n}) 
+%	& = \expe\left(e^{t\sum_{r=1}^n rZ_r}\right) \\
+%	& = \prod_{r=1}^n \expe(e^{trZ_r}) \qquad\text{by independence,} \\
+%	& = \prod_{r=1}^n \frac{1}{2}(e^{0.r.t} + e^{1.r.t})\qquad\text{since $\prob(V_r=0)=\prob(V_r=1)=0.5$} \\
+%	& = \prod_{r=1}^n \frac{1}{2}(1 + e^{rt}) \\
+%	& = \frac{1}{2^n} (1+e^t)(1+e^{2t})\ldots(1+e^{nt}) 
+%\end{align*}
+%By induction,
+%\[
+%M_{W^{+}_n}(t) = \frac{1}{2}(1+e^{(n+1)t})M_{W^{+}_n}(t)
+%\]
+%By definition, we also have
+%\begin{align*}
+%M_{W^{+}_n}(t) 
+%	& = \sum_{w^{+}=0}^{\frac{1}{2}n(n+1)} \prob(W^{+}_n=w^{+})e^{w^{+}t} = \frac{1}{2^{n}}\sum_{w^{+}} V_n(w^{+}) e^{w^{+}t}
+%\intertext{and therefore}
+%M_{W^{+}_{n+1}}(t) 
+%	& = \frac{1}{2^{n+1}}\sum_{w^{+}} V_{n+1}(w^{+}) e^{w^{+}t}
+%\end{align*}
+%
+%Combining these three results, we obtain the following expression:
+%\[
+%M_{W^{+}_{n+1}}(t)
+%	= \frac{1}{2^{n+1}}\sum_{w^{+}} V_{n+1}(w^{+}) e^{w^{+}t}
+%	= \frac{1}{2}(1 + e^{(n+1)t}) \frac{1}{2^n}\sum_{w^{+}} V_n(w^{+}) e^{w^{+}t}
+%\] 
+%
+%Comparing coefficients of $e^{w^{+}t}$ yields a recurrence relation for $V_n(w^{+})$:
+%\[
+%V_{n+1}(w^{+}) = V_n(w^{+}) + V_n(w^{+}-n-1)
+%\]
+%This recurrence relation is used to find the critical values of $W^{+}_n$ found in statistical tables.
+
+%======================================================================
+\stopcontents[chapters]
+\endinput
+%======================================================================

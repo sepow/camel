@@ -1,0 +1,338 @@
+% !TEX root = main.tex
+% ex15_conditional_distributions.tex
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+\question
+Two random variables $X$ and $Y$ have joint PMF shown in the following table:
+\[
+\begin{array}{|cc|ccc|}\hline
+	&       &       & y     &   \\
+    &       & 0     & 1     & 2 \\ \hline
+	& 0     & 1/24  & 3/24  & 2/24 \\
+x   & 1     & 2/24  & 4/24  & 6/24 \\
+	& 2     & 1/24  & 1/24  & 4/24 \\ \hline
+\end{array}
+\]
+\begin{parts}
+\part
+Find the covariance and correlation coefficient of $X$ and $Y$
+\begin{answer}
+To compute $\cov(X,Y)$, we need $\expe(XY)$, $\expe(X)$ and $\expe(Y)$. The marginal PMFs of $X$ and $Y$ are given by
+\[
+\begin{array}{c|cccc}
+x       & 0     & 1      & 2 \\ \hline
+f_X(x)  & 6/24  & 12/24  & 6/24  
+\end{array}
+\]
+and
+\[
+\begin{array}{c|cccc}
+y       & 0     & 1     & 2 \\ \hline
+f_Y(y)  & 4/24  & 8/24  & 12/24  
+\end{array}
+\]
+so
+\begin{align*}
+\expe(X) & = (0\times 6/24) + (1\times 12/24) + (2\times  6/24) = 1 \\
+\expe(Y) & = (0\times 4/24) + (1\times  8/24) + (2\times 12/24) = 32/24
+\end{align*}
+
+To compute $\expe(XY)$, we need the PMF of $Z=XY$:
+\[
+\begin{array}{c|cccc}
+z           & 0     & 1     & 2    & 4 \\ \hline
+f_{XY}(z)   & 9/24  & 4/24  & 7/24 & 4/24 \\
+\end{array}
+\]
+From here,
+\begin{align*}
+\expe(XY) 	& = (0\times 9/24) + (1\times 4/24) + (2\times 7/24) + (4\times 4/24) = 34/24 \\
+\intertext{and therefore}
+\cov(X,Y) 	& = \expe(XY)-\expe(X)\expe(Y) = 34/24 - 32/24 = 1/12
+\end{align*}
+
+To compute $\rho(X,Y)$, we also need $\var(X)$ and $\var(Y)$:
+\begin{align*}
+\expe(X^2) & = (0\times 6/24) + (1\times 12/24) + (4\times  6/24) = 36/24 \\
+\expe(Y^2) & = (0\times 4/24) + (1\times  8/24) + (4\times 12/24) = 56/24
+\intertext{so}
+\var(X)	& = \expe(X^2) - \expe(X)^2 = 36/24 - 1 = 1/2 \\
+\var(Y) & = \expe(Y^2) - \expe(Y)^2 = 56/24 - (32/24)^2	= 5/9
+\intertext{and therefore}
+\rho(X,Y) & = \frac{\cov(X,Y)}{\sqrt{\var(X)}\sqrt{\var(Y)}} = 0.158
+\end{align*}
+\end{answer}
+
+\part
+Find conditional expectation of $X$ given that $Y=1$.
+\begin{answer}
+The conditional PMF of $X$ given $Y=1$ is
+\[
+\begin{array}{c|cccc}
+x         	& 0    & 1    & 2 \\ \hline
+P(X=x|Y=1)	& 3/8  & 4/8  & 1/8 \\
+\end{array}
+\]
+The conditional expectation of $X$ given $Y=1$ is
+\[
+\expe(X|Y=1)
+	= \sum_x x P(X=x|Y=1) 
+	= \left(0\times\frac{3}{8}\right) + \left(1\times\frac{4}{8}\right) + \left(2\times\frac{1}{8}\right) 
+	= \frac{3}{4}
+\]
+Compare this to the unconditional expectation, $\expe(X)=1$
+\end{answer}
+\end{parts}
+
+%--------------------
+
+%---------------------------------------------
+\question
+Two random variables $X$ and $Y$ have joint PMF shown in the following table:
+\[
+\begin{array}{|cc|ccc|}\hline
+	&       &       	& y     &   		\\
+	&       & -1    	& 0     	& 1		\\ \hline
+	& 0     & 2/28	& 2/28	& 3/28 	\\
+x 	& 1     & 1/28	& 2/28  	& 4/28 	\\
+	& 2     & 1/28	& 4/28  	& 9/28 	\\ \hline
+\end{array}
+\]
+
+\begin{parts}
+%--------------------
+\part
+Find the marginal distributions of $X$ and $Y$.
+\begin{answer}
+The marginal distributions are
+\[
+\begin{array}{|c|ccc|}\hline
+x       		& 0     & 1     & 2 \\ \hline
+f_X(x)  		& 7/28  & 7/28  & 14/28 \\ \hline
+\end{array}
+\]
+and
+\[
+\begin{array}{|c|ccc|}\hline
+y       		& 0     & 1     & 2 \\ \hline
+f_Y(y)  		& 4/28  & 8/28  & 16/28  \\ \hline
+\end{array} 
+\]
+\end{answer}
+%--------------------
+\part
+Are $X$ and $Y$ are independent? Justify your answer.
+\begin{answer}
+$X$ and $Y$ are not independent, because (for example)
+\[
+\prob(X=0,Y=-1) = \frac{2}{28}\quad\text{and}\quad \prob(X=0)\prob(Y=-1) = \frac{7}{28}\times\frac{4}{28} = \frac{1}{28}
+\]
+so $\prob(X=0,Y=-1) \neq \prob(X=0)\prob(Y=-1)$.
+\end{answer}
+%--------------------
+\part
+Find the expected values of $X$ and $Y$.
+\begin{answer}
+The expected values are
+\begin{align*}
+\expe(X) 
+	& = \left(0\times\frac{7}{28}\right) + \left(1\times\frac{7}{28}\right) + \left(2\times\frac{14}{28}\right) = \frac{35}{28} = \frac{5}{4}. \\
+\expe(Y) 
+	& = \left(-1\times\frac{4}{28}\right) + \left(0\times\frac{8}{28}\right) + \left(1\times\frac{16}{28}\right) = \frac{12}{28} = \frac{3}{7}. \\
+\end{align*}
+\end{answer}
+%--------------------
+\part
+Find the covariance of $X$ and $Y$.
+\begin{answer}
+The distribution of $Z=XY$ is 
+\[
+\begin{array}{|c|ccccc|}\hline
+z       		& -2     & -1   & 0		& 1		& 2 		\\ \hline
+\prob(XY=z)	& 1/28  & 1/28  & 13/28 	& 4/28	& 9/28	\\ \hline
+\end{array}
+\]
+The product moment $\expe(XY)$ is therefore
+\small
+\[
+\expe(XY) = \left(-2\times\frac{1}{28}\right) + \left(-1\times\frac{1}{28}\right) + \left(0\times\frac{13}{28}\right) + \left(1\times\frac{4}{28}\right) + \left(2\times\frac{9}{28}\right) = \frac{19}{28}
+\]
+\normalsize
+so 
+\[
+\cov(X,Y) = \expe(XY)-\expe(X)\expe(Y) = \frac{19}{28} - \left(\frac{5}{4}\times\frac{3}{7}\right) = \frac{4}{28} = \frac{1}{7}.
+\]
+\end{answer}
+%--------------------
+\part
+Find the conditional expectation of $Y$ given that 
+\begin{subparts}
+\subpart $X=0$,
+\subpart $X=1$,
+\subpart $X=2$.
+\end{subparts}
+\begin{answer}
+The conditional distributions are obtained by re-scaling the rows of the table:
+\[
+\begin{array}{|c|ccc|}\hline
+y       					& -1		& 0		& 1 		\\ \hline
+\prob(Y=y\,|\,X=0)		& 2/7	& 2/7	& 3/7  	\\ \hline
+\prob(Y=y\,|\,X=1)		& 1/7	& 2/7	& 4/7  	\\ \hline
+\prob(Y=y\,|\,X=2)		& 1/14	& 4/14	& 9/14 	\\ \hline
+\end{array}
+\]
+The conditional expectations are therefore
+\begin{align*}
+\expe(Y\,|\,X=0) 
+	& = \left(-1\times \frac{2}{7}\right) + \left(0\times\frac{2}{7}\right) + \left(1\times\frac{3}{7}\right) = \frac{1}{7} \\
+\expe(Y\,|\,X=1) 
+	& = \left(-1\times \frac{1}{7}\right) + \left(0\times\frac{2}{7}\right) + \left(1\times\frac{4}{7}\right) = \frac{3}{7} \\
+\expe(Y\,|\,X=2) 
+	& = \left(-1\times \frac{1}{14}\right)+ \left(0\times\frac{4}{14}\right)+ \left(1\times\frac{9}{14}\right) = \frac{4}{7}
+\end{align*}	
+\end{answer}
+%--------------------
+\part
+Find the distribution of the conditional expectation $\expe(Y\,|\,X)$.
+\begin{answer}
+The distribution of the conditional expectation $g(X)=\expe(Y\,|\,X)$ is determined by the marginal distribution of $X$:
+\[
+\begin{array}{|c|ccc|}\hline
+x       				& 0     & 1     & 2 \\ \hline
+z=g(x) 			& 1/7   & 3/7   & 4/7 \\ \hline
+\prob(g(X)=z)		& 1/4   & 1/4   & 1/2  \\ \hline
+\end{array}
+\]
+\end{answer}
+%--------------------
+\part
+Check that the law of total expectation holds in this case.
+\begin{answer}
+The expected value of $g(X)$ is 
+\[
+\expe(\big(\expe(Y\,|\,X)\big) 
+	= \left(\frac{1}{7}\times \frac{1}{4}\right) + \left(\frac{3}{7}\times\frac{1}{4}\right) + \left(\frac{4}{7}\times\frac{1}{2}\right) 
+	= \frac{3}{7}
+	= \expe(Y)
+\]
+as required.
+\end{answer}
+%--------------------
+\end{parts}
+
+%---------------------------------------------
+\question
+A fair six-sided die is thrown once. Let $X$ be the score shown on the die, and let $A$ be the event that $X$ is an even number. Find the conditional PMF of $X$ given that $A$ occurs, and use this to find the conditional expectation of $X$ given that $A$ occurs.
+\begin{answer}
+The conditional probability that $X=x$ given that event $A$ occurs is
+\[
+f_{X|I_A}(x|1) = \frac{\prob(X=x\text{ and $X$ is even})}{\prob(X\text{ is even})}.
+\]
+Hence the conditional PMF of $X$ given that $A$ occurs is 
+\[
+\begin{array}{|r|cccccc|}\hline
+x       			& 1     & 2     & 3     & 4     & 5     & 6    \\ \hline
+f_{X|I_A}(x|1)		& 0     & 1/3   & 0     & 1/3   & 0     & 1/3  \\ \hline
+\end{array}
+\]
+The conditional expectation of $X$ given $I_A=1$ is therefore
+\[
+\expe(X|I_A=1) = \sum_{x=1}^6 x \, f_{X|I_A}(x|I_A=1) = \left(2\times\frac{1}{3}\right) + \left(4\times\frac{1}{3}\right) + \left(6\times\frac{1}{3}\right) = 4.
+\]
+\end{answer}
+
+
+%---------------------------------------------
+\question
+Two fair coins are tossed. Let $X_1$ and $X_2$ be random variables, with $X_1=1$ if the first coin lands on heads and $X_1=-1$ if it lands on tails, and $X_2=1$ if the second coin lands on heads and $X_2=-1$ if it lands on tails. Now consider the random variables
+\[
+X = \frac{X_1+X_2}{2}\qquad\text{and}\qquad Y = \frac{X_1-X_2}{2}.
+\]
+\begin{parts}
+%--------------------
+\part Compute the correlation coefficient of $X$ and $Y$.
+\begin{answer}
+The joint PMF of $X$ and $Y$ is 
+\[
+\begin{array}{|cc|ccc|}\hline
+	&		&		& y		&		\\
+	&		& -1		& 0		& 1		\\	\hline
+	& -1		& 0		& 1/4	& 0		\\	
+x	& 0		& 1/4	& 0		& 1/4	\\	
+	& 1		& 0		& 1/4	& 0		\\ \hline
+\end{array}
+\]
+The covariance of $X$ and $Y$ is
+\begin{align*}
+\cov(X,Y)
+	& = \expe(XY)-\expe(X)\expe(Y) \\
+	& = \expe\left(\frac{(X_1+X_2)(X_1-X_2)}{4}\right) - \expe\left(\frac{X_1+X_2}{2}\right)\expe\left(\frac{X_1-X_2}{2}\right) \\
+	& = \frac{1}{4}\expe(X_1^2 - X_2^2) - \frac{1}{4}\expe(X_1+X_2)\expe(X_1-X_2) \\
+	& = \frac{1}{4}\big(\expe(X_1^2) - \expe(X_2^2)\big) - \frac{1}{4}\expe(X_1+X_2)\big(\expe(X_1)-\expe(X_2)\big) \\
+	& = 0
+\end{align*}
+Thus $\rho(X,Y) = 0$. Note that $X$ and $Y$ are not independent (e.g.\ if $X=1$ then $Y=0$).
+\end{answer}
+%--------------------
+\part Compute the conditional PMF and conditional expectation of $Y$ given that 
+\begin{subparts}
+\subpart $X=-1$, 
+\subpart $X=0$,
+\subpart $X=1$.
+\end{subparts}
+\begin{answer}
+Given that $X=-1$, the conditional probabilities are
+\[
+\prob(Y=-1|X=-1) = 0,\quad \prob(Y=0|X=-1) = 1,\quad \prob(Y=1|X=-1) = 0.
+\]
+Given that $X=0$, the conditional probabilities are
+\[
+\prob(Y=-1|X=0) = 1/2,\quad \prob(Y=0|X=0) = 0,\quad \prob(Y=1|X=0) = 1/2.
+\]
+Given that $X=1$, the conditional probabilities are 
+\[
+\prob(Y=-1|X=1) = 0,\quad \prob(Y=0|X=1) = 1,\quad \prob(Y=1|X=0) = 0.
+\]
+%\prob(Y=-1|X=0)  = 1/2	& \prob(Y=0|X=0)  = 0	& \prob(Y=1|X=0)  = 1/2 	\\
+%\prob(Y=-1|X=1)  = 0		& \prob(Y=0|X=1)  = 1	& \prob(Y=1|X=1)  = 0 	\\ \hline
+%\end{array}
+
+
+%\[
+%\begin{array}{|lll|}\hline
+%\prob(Y=-1|X=-1) = 0		& \prob(Y=0|X=-1) = 1	& \prob(Y=1|X=-1) = 0 	\\
+%\prob(Y=-1|X=0)  = 1/2	& \prob(Y=0|X=0)  = 0	& \prob(Y=1|X=0)  = 1/2 	\\
+%\prob(Y=-1|X=1)  = 0		& \prob(Y=0|X=1)  = 1	& \prob(Y=1|X=1)  = 0 	\\ \hline
+%\end{array}
+%\end{array}
+%\]
+In each case, the conditional expectation $\expe(Y|X=x)$ is zero:
+\begin{align*}
+\expe(Y|X=-1)	& = (-1\times 0) + (0\times 1) + (1\times 0) = 0, \\
+\expe(Y|X=0)	& = (-1\times 1/2) + (0\times 0) + (1\times 1/2) = 0, \\
+\expe(Y|X=1)	& = (-1\times 0) + (0\times 1) + (1\times 0) = 0.
+\end{align*}
+\end{answer}
+%--------------------
+\part Verify that the law of total expectation holds in this case.
+\begin{answer}
+The law of total expectation is verified in this case, because $\expe(Y) = 0$ and
+\begin{align*}
+\expe\big(\expe(Y|X)\big) 
+	& = \sum_x \expe(Y|X=x)P(X=x) \\
+	& = (0\times 1/4) + (0\times 1/2) + (0\times 1/4) \\
+	& = 0,
+\end{align*}
+so $\expe(Y) = \expe\big(\expe(Y|X)\big)$.
+\end{answer}
+%--------------------
+\end{parts}
+
+
+
+\end{questions}
+\end{exercise}
+%======================================================================
+\endinput
+%======================================================================

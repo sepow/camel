@@ -1,0 +1,396 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Expectation}\label{chap:expectationI}
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+%\section{Introduction}
+%----------------------------------------------------------------------
+Expectation is to random variables what probability is to events.
+\bit
+\it Random events are \emph{sets}, and are studied using \emph{set algebra}. 
+\it Random variables are \emph{functions}, and are studied using \emph{mathematical analysis}.
+\eit
+
+\bigskip
+% disc & continuous
+%Let $X:\Omega\to\R$ be a random variable. 
+Elementary probability theory provides the following computational formulae for the expectation of a random variable $X:\Omega\to\R$.
+\ben
+\it If $\Omega$ is a finite sample space with probability mass function $p:\Omega\to\R$, the expectation of $X$ is
+\[
+\expe(X) = \sum_{\omega\in\Omega} X(\omega) p(\omega).
+\]
+\it If $X$ is a discrete random variable with PMF $f(x)$ and range $\{x_1,x_2,\ldots\}$, the expectation of $X$ is
+\[
+\expe(X) = \sum_{i=1}^{\infty} x_i f(x_i).
+\]
+\it if $X$ is a continuous random variable with PDF $f(x)$, the expectation of $X$ is
+\[
+\expe(X) = \int_{-\infty}^{\infty} x f(x)\,dx.
+\]
+\een
+
+\bit
+%\it These are computational formulae, not formal definitions of expectation.
+\it The convergence of such sums and integrals is not guaranteed under all circumstances.
+\it If $X$ takes only non-negative values, we can accept that $\expe(X)=\infty$.
+\it If $X$ can take both positive and negative values, we need that $\expe(X)<\infty$.
+\eit
+
+%----------------------------------------------------------------------
+\section{Indicator variables}\label{sec:expe_indicator}
+%----------------------------------------------------------------------
+Consider the indicator variable of an event $A$,
+\[
+I_{A}(\omega) = \begin{cases} 
+	1 & \text{if}\ \omega\in A, \\
+	0 & \text{if}\ \omega\notin A.
+\end{cases}	
+\]
+To be consistent with the probability measure $\prob(A)$, the only reasonable definition of expectation for $I_A$ is the following:
+
+\begin{definition}[Expectation of indicator variables]
+The expectation of an indicator variable $I_A:\Omega\to\R$ is defined by
+\[
+\expe(I_A) = \prob(A)
+\]
+\end{definition}
+
+%----------------------------------------------------------------------
+\section{Simple random variables}\label{sec:expe_simple}
+%----------------------------------------------------------------------
+
+% definition: simple r.v.s
+%\begin{definition}
+%%A random variable $X:\Omega\to\R$ is called a \emph{simple random variable} if it can take only finitely many values.
+%A random variable $X:\Omega\to\R$ is called \emph{simple} if it can take only finitely many values.
+%\end{definition}
+
+Let $X$ be a simple random variable, let $\{x_1,x_2,\ldots,x_n$ denote its range, and let $\{A_1,A_2,\ldots,A_n\}$ be a partition of $\Omega$ such that $X(\omega)=x_i$ for all $\omega\in A_i$. Then $X$ can be expressed as a finite linear combination of indicator variables,
+
+\[
+X(\omega) = \sum_{i=1}^n x_i I_{A_i}(\omega)\qquad\text{where}\quad I_{A_i}(\omega) = \begin{cases} 
+	1 & \text{if}\ \omega\in A_i, \\
+	0 & \text{if}\ \omega\notin A_i.
+\end{cases}	
+\]
+
+% definition: expectation of simple r.v.s
+\begin{definition}[Expectation of simple random variables]
+The expectation of a simple random variable $\displaystyle X = \sum_{i=1}^n x_i I_{A_i}$ is defined by
+\[
+\expe(X) = \sum_{i=1}^n x_i \prob(A_i).
+\]
+\end{definition}
+
+\begin{remark}
+%$\expe(X)$ is well-defined because all representations of $X$ give the same value for $\expe(X)$.
+It can be shown all representations of $X$ as finite linear combinations of inidcator variables yield the same value for $\expe(X)$, so the expectation of a simple random variable is well-defined.
+\end{remark}
+
+
+% example: simple r.v.
+\begin{example}\label{ex:expe}
+A fair coin is tossed three times. Let $X:\Omega\to\R$ be the random variable
+\[
+X(\omega) = \begin{cases}
+1	& \text{if}\ \ \omega\in A_1=\{TTT\} \\
+2	& \text{if}\ \ \omega\in A_2=\{TTH,THT,HTT\} \\
+3	& \text{if}\ \ \omega\in A_3=\{THH,HTH,HHT\} \\
+4	& \text{if}\ \ \omega\in A_4=\{HHH\}
+\end{cases}
+\]
+Compute the expected value of $X$.
+\end{example}
+
+\begin{solution}
+$X$ is a simple random variable, so
+\[
+\expe(X) 
+	= \sum_{i=1}^n x_i \prob(A_i) 
+	= \left(1\times\frac{1}{8}\right) +\left(2\times\frac{3}{8}\right) +\left(3\times\frac{3}{8}\right) + \left(4\times\frac{1}{8}\right)
+	= \frac{5}{2}.
+\]
+\end{solution}
+
+
+
+% definition: positivity & domination
+\begin{definition}
+Let $X$ and $Y$ be random variables on $\Omega$.
+\ben
+\it If $X(\omega)\geq 0$ for all $\omega\in\Omega$, we say that $X$ is \emph{non-negative}. This is denoted by $X\geq 0$.
+\it If $X(\omega)\leq Y(\omega)$ for all $\omega\in\Omega$, we say that $X$ is \emph{dominated} by $Y$. This is denoted by $X\leq Y$.
+\een
+\end{definition}
+
+\vspace*{2ex}
+% theorem: properties
+\begin{theorem}[Properties of expectation for simple random variables]
+Let $X,Y:\Omega\to\R$ be simple random variables.% on $(\Omega,\mathcal{F},\prob)$.
+\ben
+\it \textbf{Positivity}. If $X\geq 0$ then $\expe(X)\geq 0$.
+\it \textbf{Linearity}.  For every $a,b\in\R$,\ \ $\expe(aX+bY) = a\expe(X) + b\expe(Y)$.
+\it \textbf{Monotonicity}. If $X\leq Y$ then $\expe(X)\leq\expe(Y)$.
+\een
+\end{theorem}
+
+
+
+\begin{proof}
+Let $\{x_1,x_2,\ldots,x_n\}$ be the range of $X$, and let $\{y_1,y_2,\ldots,y_m\}$ be the range of $Y$. Then $X$ and $Y$ can be written as
+\[
+X(\omega) = \sum_{i=1}^n x_i I_{A_i}(\omega) \quad\text{and}\quad Y(\omega) = \sum_{j=1}^m y_j I_{B_j}(\omega),
+\]
+where $A_i = \{\omega:X(\omega)=x_i\}$ and $B_j = \{\omega:Y(\omega)=y_j\}$
+\ben
+\it % << (i)
+Positivity: \par
+If $X(\omega)\geq 0$ for all $\omega$, we must have that each $x_i\geq 0$. Thus $\expe(X) = \sum_{i=1}^n x_i \prob(A_i)$ is a sum of non-negative terms, so $\expe(X)\geq 0$.
+
+\it % << (ii)
+Linearity:
+\par
+The composite variable $aX + bY$ is a simple random variable, because it can be written as
+\[
+aX(\omega) + bY(\omega) = \sum_{i=1}^n\sum_{j=1}^m (ax_i + by_j) I_{A_i\cap B_j}(\omega).
+\]
+The expectation of $aX+bY$ is therefore defined to be
+\begin{align*}
+\expe(aX+bY)
+	& = \sum_{i=1}^n\sum_{j=1}^m (ax_i + by_j) \prob(A_i\cap B_j) \\
+	& = a\sum_{i=1}^n x_i \sum_{j=1}^m \prob(A_i\cap B_j) + b\sum_{j=1}^m y_j \sum_{i=1}^n \prob(A_i\cap B_j).
+\end{align*}
+By additivity:
+\bit
+\it $\{A_i\cap B_j\}_{j=1}^m$ is a partition of $A_i$, so $\sum_{j=1}^m \prob(A_i\cap B_j) = \prob(A_i)$.
+\it $\{A_i\cap B_j\}_{i=1}^n$ is a partition of $B_j$, so $\sum_{i=1}^n \prob(A_i\cap B_j) = \prob(B_j)$.
+\eit
+Thus,
+\begin{align*}
+\expe(aX+bY)
+	& = a\sum_{i=1}^n x_i\prob(A_i) + b\sum_{j=1}^m y_j\prob(B_j) \\
+	& = a\expe(X) + b\expe(Y).
+\end{align*}
+\it % << (iv)
+Monotonicity:
+\par
+If $X\leq Y$ then $Y-X\geq 0$, so
+\bit
+\it By positivity, $\expe(Y-X)\geq 0$
+\it By linearity, $\expe(Y)-\expe(X)\geq 0$, so $\expe(X)\leq\expe(Y)$ as required.
+\eit
+\een
+\end{proof}
+
+
+
+% example
+\begin{example}
+Extending example~\ref{ex:expe}, let $Y:\Omega\to\R$ be the random variable
+\[
+Y(\omega) = \begin{cases}
+2	& \text{if}\ \ \omega\in A'_1=\{TTT,TTH\} \\
+3	& \text{if}\ \ \omega\in A'_2=\{THT,THH\} \\
+4	& \text{if}\ \ \omega\in A'_3=\{HTT,HTH\} \\
+5	& \text{if}\ \ \omega\in A'_4=\{HHT,HHH\}
+\end{cases}
+\]
+Compute the expected value of (i) $Y$ and (ii) $3X+2Y$.
+\end{example}
+
+\newpage
+\begin{solution}
+Note that $X$ and $Y$ are both non-negative, and that $X\leq Y$.% because $X(\omega)\leq Y(\omega)$ for all $\omega$. 
+\par
+$Y$ is a simple random variable, so its expected value is
+\[
+\expe(Y) 
+	= \sum_{j=1}^4 b_j \prob(B_j) 
+	= \left(2\times\frac{1}{4}\right) +\left(3\times\frac{1}{4}\right) +\left(4\times\frac{1}{4}\right) + +\left(5\times\frac{1}{4}\right)
+	= \frac{14}{4},
+\]
+which verifies that $\expe(X)\leq\expe(Y)$. By the linearity of expectation for simple random variables, 
+\[
+\expe(3X+2Y)
+	= 3\expe(X) + 2\expe(Y)
+	= \left(3\times\frac{5}{2}\right) + \left(2\times\frac{14}{4}\right)
+	= \frac{29}{2}.
+\]
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Non-negative random variables}\label{sec:expe_non-negative}
+%----------------------------------------------------------------------
+
+% theorem: approximating sequences
+\begin{theorem}
+For every non-negative random variable $X\geq 0$, there exists an increasing sequence of simple non-negative random variables
+\[
+0\leq X_1\leq X_2\leq \ldots
+\]
+with the property that $X_n(\omega)\uparrow X(\omega)$ for each $\omega\in\Omega$ as $n\to\infty$.
+\end{theorem}
+
+\proofomitted
+
+% definition: expectation of a non-negative r.v.s
+\begin{definition}[Expectation of non-negative random variables]\label{def:expe_non-negative}
+The \emph{expectation} of a non-negative random variable $X$ is defined to be
+\[
+\expe(X) = \lim_{n\to\infty}\expe(X_n)
+\]
+where the $X_n$ are simple non-negative random variables with $X_n\uparrow X$ as $n\to\infty$.
+\end{definition}
+
+\begin{remark}
+It can be shown that all approximating sequences yield the same value for $\expe(X)$, so the expectation of non-negative random variables is well-defined
+\end{remark}
+
+% remark
+\begin{remark}[Infinite expectation]
+The expectation of non-negative random variables can be infinite:
+\ben
+\it If $\expe(X)<\infty$ we say that $X$ has \emph{finite} expectation.
+\it If $\expe(X)=\infty$ we say that $X$ has \emph{infinite} expectation.
+\een
+\end{remark}
+
+% theorem: properties
+\begin{theorem}[Properties of expectation for non-negative random variables]\label{thm:prop_expe_non-neg}
+For non-negative random variables $X,Y\geq 0$,
+\ben
+\it \textbf{Positivity}. If $X\geq 0$ then $\expe(X)\geq 0$.
+\it \textbf{Linearity}.  $\expe(aX+bY) = a\expe(X) + b\expe(Y)$ for every $a,b\in\R_{+}$.
+\it \textbf{Monotonicity}. If $X\leq Y$ then $\expe(X)\leq\expe(Y)$.
+\it \textbf{Continuity}. If $X_n\to X$ as $n\to\infty$, where the $X_n$ are non-negative, then $\expe(X_n)\to\expe(X)$ as $n\to\infty$.
+\een
+\end{theorem}
+
+\proofomitted
+
+%
+%% proof
+%\begin{proof}
+%\ben
+%\it % << (i)
+%$\expe(X)\geq 0$ follows by construction.
+%\it % << (ii)
+%Let $0\leq X_1\leq X_2\leq \ldots$ and $0\leq Y_1\leq Y_2\leq \ldots$ be sequences of non-negative simple random variables with $X_n\uparrow X$ and $Y_n\uparrow Y$ as $n\to\infty$. Then the random variables $aX_n+bY_n$ are also  non-negative simple random variables, with 
+%\[
+%aX_n+bY_n\ \uparrow\ aX+bY\quad\text{as}\quad n\to\infty.
+%\]
+%By definition,
+%\begin{align*}
+%\expe(aX+bY)
+%	& = \lim_{n\to\infty}\expe(aX_n + bY_n) \\
+%	& = \lim_{n\to\infty}\big[a\expe(X_n) + b\expe(Y_n)\big] \quad\text{(by linearity of expectation for simple RVs)}\\
+%	& = a\lim_{n\to\infty}\expe(X_n) + b\lim_{n\to\infty}\expe(Y_n) \\
+%	& = a\expe(X) + b\expe(Y)
+%\end{align*}
+%\it % << (iii)
+%If $X\geq Y$, then $\expe(X)\geq\expe(Y)$ by positivity and linearity.
+%\een
+%\end{proof}
+
+%Recall: \textbf{Continuity}. If $X_n\to X$ as $n\to\infty$, then $\expe(X_n)\to\expe(X)$ as $n\to\infty$.
+%The \emph{monotone convergence theorem} is a fundamental result in measure theory. In the present context, it establishes the continuity of expectation for positive random variables.
+%% theorem: monotone convergence theorem
+%\begin{theorem}[The monotone convergence theorem]
+%Let $0\leq X_1\leq X_2\leq \ldots$ and $X$ be positive random variables with $X_n(\omega)\uparrow X(\omega)$ as $n\to\infty$ for each $\omega\in\Omega$. Then $\expe(X_n)\uparrow\expe(X)$ as $n\to\infty$.
+%\end{theorem}
+%\proofomitted
+
+%The following lemma will be useful later on.
+%% lemma
+%\begin{lemma}\label{lem:pos_rv_expe_zero}
+%If $X\geq 0$ and $\expe(X)=0$ then $\prob(X=0)=1$.
+%\end{lemma}
+%
+%\begin{proof}
+%Let $X\geq 0$ be such that $\expe(X)=0$, and assume that $\prob(X>0)>0$. 
+%
+%By the right-continuity of distribution functions, there exists $\epsilon>0$ such that $\prob(X>\epsilon)>0$. 
+%
+%This implies that $X\geq \epsilon\,I(X>\epsilon)$, which in turn implies that $\expe(X)\geq \epsilon\,\prob(X>\epsilon) > 0$. 
+%
+%This is a contradiction, so we conclude that $\prob(X>0)=0$
+%\end{proof}
+
+
+%----------------------------------------------------------------------
+\newpage
+\section{Signed random variables}\label{sec:expe_signed}
+%----------------------------------------------------------------------
+
+We can extend the definition of expectation to random variables that take both positive and negative values, but only if the random variables are \emph{integrable}:
+
+\begin{definition}[Integrable random variables]
+A random variable $X$ is said to be \emph{integrable} if $\expe(|X|) < \infty$.
+\end{definition}
+
+\begin{definition}[The positive and negative parts]
+%Let $X:\Omega\to\R$ be a random variable.
+The positive and negative parts of a random variable $X$, denoted by $X^{+}$ and $X^{-}$ respectively, are defined to be
+\[\begin{array}{lll}
+X^{+}(\omega) 
+	& = \max\{0,X(\omega)\}	
+	& = \begin{cases} 
+			X(\omega)	& \text{if } X(\omega)\geq 0, \\
+	   		0 		 	& \text{if } X(\omega) < 0;
+	\end{cases} \\
+X^{-}(\omega)	
+	& = \max\{0,-X(\omega)\} 
+	& = \begin{cases} 
+			-X(\omega)	& \text{if } X(\omega)\leq 0, \\
+			0 		 	& \text{if } X(\omega) > 0.
+		\end{cases}
+\end{array}\]
+\end{definition}
+Note that $X^{+}$ and $X^{-}$ are both non-negative random variables, with $X = X^{+} - X^{-}$.
+
+\begin{definition}[Expectation of signed random variables]
+The \emph{expectation} of an integrable random variable $X:\Omega\to\R$ is
+\[
+\expe(X) = \expe(X^{+}) - \expe(X^{-})
+\]
+where $X^{+}$ and $X^{-}$ are respectively the positive part and negative part of $X$:
+\end{definition}
+
+% remark
+\begin{remark}[Undefined expectation]
+Because $|X| = X^{+} + X^{-}$, it follows by the linearity of expectation for non-negative random variables that
+\[
+\expe(|X|) = \expe(X^{+} + X^{-}) = \expe(X^{+}) + \expe(X^{-}).
+\]
+
+\ben
+\it If $X$ is integrable, then $\expe(X^{+})$ and $\expe(X^{-})$ are both finite.
+\it If $X$ is not integrable, then one or both of $\expe(X^{+})$ and $\expe(X^{-})$ must be infinite:
+	\bit
+	\it if $\expe(X^{+})=\infty$ and $\expe(X^{-})<\infty$, we write $\expe(X) = +\infty$;
+	\it if $\expe(X^{+})<\infty$ and $\expe(X^{-})=\infty$, we write $\expe(X)= -\infty$;
+	\it if $\expe(X^{+})=\infty$ and $\expe(X^{-})=\infty$, we say that $\expe(X)$ \emph{does not exist}.
+	\eit
+\een
+\end{remark}
+
+% theorem: properties of expectation
+\begin{theorem}[Properties of expectation for signed random variables]
+Let $X$ and $Y$ be integrable random variables.
+\ben
+\it \textbf{Monotonicity}. If $X\leq Y$, then $\expe(X)\leq\expe(Y)$.
+\it \textbf{Linearity}. $\expe(aX+bY) = a\expe(X) + b\expe(Y)$ for all $a,b\in\R$.
+\een
+\end{theorem}
+
+\proofomitted
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex10_expectation}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

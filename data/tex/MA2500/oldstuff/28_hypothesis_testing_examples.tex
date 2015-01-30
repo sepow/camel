@@ -1,0 +1,356 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Hypothesis Testing: Examples}\label{chap:hypothesis-testing-examples}
+\setcounter{page}{1}
+\startcontents[chapters]
+%----------------------------------------------------------------------
+\dictum{X}{X}{X}
+\chapcontents
+
+%----------------------------------------------------------------------
+\section{The binomial test}
+%----------------------------------------------------------------------
+\begin{example}
+ Let $X_1,X_2,\ldots,X_n$ be a random sample from the $\text{Bernoulli}(\theta)$ distribution, where $\theta$ is unknown.
+\ben
+\it Find a critical region of size $\alpha$ to test $H_0:\theta=\theta_0$ against $H_1:\theta<\theta_0$.
+\it Find the power function of the test.
+\een
+\end{example}
+
+\begin{solution}
+
+\bit
+\it The sample space is $D = \{0,1\}^n$, which consists of all binary vectors of length $n$.
+\it Let $\mathbf{X}=(X_1,X_2,\ldots,X_n)$ denote the random sample
+\eit
+
+Consider the test statistic 
+\[
+\begin{array}{rccl}
+S: & D & \to & \R \\
+ & \mathbf{X} & \mapsto & \sum_{i=1}^n X_i
+\end{array}
+\]
+\bit
+\it $S$ is the total number of successes in the sample.
+\it Under the null hypothesis, $S\sim\text{Binomial}(n,\theta_0)$,
+\eit
+
+%
+%$S:D\to\R$ defined by $S(\mathbf{X}) = \sum_{i=1}^n X_i$
+%\bit
+%\it $S(\mathbf{X})$ is the total number of successes in the sample.
+%\it Under the null hypothesis, $S(\mathbf{X})\sim\text{Binomial}(n,\theta_0)$,
+%\eit
+
+To test $H_0:\theta=\theta_0$ against $H_1:\theta<\theta_0$, we define the critical region
+%We define our critical region in terms of this test statistic:
+\[
+C = \{\mathbf{x} : S(\mathbf{x}) \leq k\},
+\]
+where $k$ is chosen so that $\prob_{\theta_0}\big[S(\mathbf{X})\leq k\big] = \alpha$.
+
+\bit
+\it Because $S$ is \emph{discrete}, it is unlikely that $\prob_{\theta_0}\big[S(\mathbf{X})\leq k\big] = \alpha$ has an integer solution $k$.
+\it The cautious approach is to take the largest value of $k$ satisfying $\prob_{\theta_0}\big[S(\mathbf{X})\leq k\big] < \alpha$.
+\eit
+
+The power function of the test is
+\[
+\gamma(\theta) 
+	= \prob_{\theta}(S\leq k) 
+%	= \sum_{j=0}^k\prob_{\theta}(S=k)
+	= \sum_{j=1}^k\binom{n}{j}\theta^j(1-\theta)^{n-j}
+\]	
+%\begin{align*}
+%\gamma(\theta) 
+%	& = \prob_{\theta}\big[S(\mathbf{X})\leq k\big] \\
+%	& = \sum_{j=1}^k\binom{n}{j}\theta^j(1-\theta)^{n-j}\text{\quad for\quad $\theta\in [0,\theta_0]$.}
+%\end{align*}
+\end{solution}
+
+
+
+% remark: increase size => increase power
+\begin{remark}
+If we increase the size of the test, its power also increases. 
+\bit
+\it Suppose we take $C^{*} = \{\mathbf{x} : S(\mathbf{x}) \leq k+1 \}$ as our critical region.
+\it The associated power function $\gamma^{*}(\theta)$ satisfies  
+\begin{align*}
+\gamma^{*}(\theta) 
+	& = \prob_{\theta}(S\leq k+1) \\
+	& > \prob_{\theta}(S\leq k) = \gamma(\theta) \text{\quad for all $\theta\in[0,1]$.}
+\end{align*}
+\eit
+\end{remark}
+
+% remark: extend to composite null hypothesis
+\begin{remark}
+\bit
+\it The power function $\gamma(\theta)=\prob_{\theta}(S\leq k)$ is a \emph{decreasing} function of $\theta$ over $[\theta_0,1]$. 
+\it The critical region $C=\{\mathbf{x}:S\leq k\}$ can therefore be used to test the \emph{composite} null hypothesis $H_0:\theta\geq\theta_0$ against the alternative $H_1:\theta<\theta_0$, with no increase in the size of the test:
+%\it The size of the test is unchanged:
+\[
+\alpha = \max_{\theta\geq\theta_0}\prob_{\theta}(S\leq k) = \prob_{\theta_0}(S\leq k).
+\]
+\eit
+\end{remark}
+
+
+
+ % <<
+
+% example: mortality rates
+\begin{example}
+Adult males diagnosed with lung cancer have a mortality rate of $70\%$ within one year of the initial diagnosis. A research laboratory claims that a new treatment reduces this rate. Based on a random sample of $20$ patients, find a critical region of size $\alpha=0.15$ to test the claim, and compute the power of the test to detect a $20\%$ reduction in the mortality rate.
+%For adult males diagnosed with lung cancer, the rate of mortality within one year of the initial diagnosis is $70\%$. A research laboratory claims that a new treatment reduces this mortality rate. Based on a random sample of $20$ patients, find a critical region of size $\alpha=0.15$ to test the claim, and compute the power of the test to detect a $20\%$ reduction in the mortality rate.
+\end{example}
+
+\begin{solution}
+Let $\theta$ be the probability that a patient dies within one year of the initial diagnosis.
+\bit
+\it We wish to test the null hypothesis $H_0:\theta=0.7$ against the alternative $H_1:\theta<0.7$.
+\eit
+
+\vspace{2ex}
+Let $X_1,X_2,\ldots,X_{20}$ be a random sample from the $\text{Bernoulli}(\theta)$ distribution
+\bit
+\it In this context, `success' corresponds to death within one year of the initial diagnosis!
+\eit
+
+\vspace{2ex}
+Let $S=\sum_{i=1}^n X_i$ be the total number of deaths within one year of the initial diagnosis.
+\bit
+\it Under the null hypothesis, $S\sim\text{Binomial}(20,0.7)$.
+\eit
+
+\vspace{2ex}
+A critical region for the test is $C=\{\mathbf{x}:S(\mathbf{x})\leq k\}$, where $k$ is chosen so that 
+\[
+\prob_{H_0}(S\leq k) = 0.15.
+\]
+
+
+
+Tabulated values of the $\text{Binomial}(20,0.7)$ distribution yield
+\[
+\prob_{H_0}(S\leq 11) = 0.1133 \text{\quad and\quad}\prob_{H_0}(S\leq 12) = 0.2277.
+\]
+
+\vspace*{-1ex}
+\bit
+\it It is not possible to find a critical region of size $\alpha=0.15$ exactly.
+\it The conservative approach would be to take $k=11$ and $\alpha=0.1133$.
+\eit
+
+\vspace*{2ex}
+\bit
+\it A $20\%$ reduction in the mortality rate corresponds to $H_1:\theta=0.5$.
+\eit
+\vspace*{1ex}
+For the test of size $\alpha=0.1133$, its power to detect $H_1:\theta=0.5$ is
+\begin{align*}
+\prob_{H_1}(S\leq 11) 
+	& = \prob\big[S\leq 11 \text{ where } S\sim\text{Binomial}(20,0.5)\big] \\
+	& = 0.7483 \text{\quad (from tables)}.
+\end{align*}
+
+For the test of size $\alpha=0.2277$, its power to detect $H_1:\theta=0.5$ is
+\begin{align*}
+\prob_{H_1}(S\leq 12) 
+	& = \prob\big[S\leq 12 \text{ where } S\sim\text{Binomial}(20,0.5)\big] \\
+	& = 0.8684 \text{\quad (from tables)}.
+\end{align*}
+
+\end{solution}
+
+
+% example: z-test
+%----------------------------------------------------------------------
+
+\section{The $z$-test and $t$-test}
+%----------------------------------------------------------------------
+\begin{example}
+Let $X\sim N(\mu,\sigma^2)$ where $\mu$ is unknown but $\sigma^2$ is known. 
+\ben
+\it Find a critical region for testing $H_0:\mu=\mu_0$ against $H_1:\mu > \mu_0$
+\it Find the power function $\gamma(\mu)$ of the test.
+\it Show that the power function is strictly increasing for $\mu>\mu_0$.
+\een
+\end{example}
+
+\begin{solution}
+\ben
+\it % size
+Let $X_1,X_2,\ldots,X_n$ be a random sample from the distribution of $X$
+\bit
+\it The sample mean $\bar{X}$ is an unbiased estimator for $\mu$.
+\it If $\bar{X}-\mu_0$ is large, we would be inclined to reject $H_0$ in favour of $H_1$.
+\eit
+An appropriate test statistic $Z:\R^n\to\R$ is given by
+\[
+Z(X_1,X_2,\ldots,X_n) = \sqrt{n}\left(\frac{\bar{X}-\mu_0}{\sigma}\right)
+\]
+
+\bit
+\it Under the null hypothesis we know that $Z\sim N(0,1)$. 
+\eit
+The critical region for the test is
+$C=\{\mathbf{x}:Z(\mathbf{x})> z_c\}$, i.e.
+\[
+C=\left\{\mathbf{x}: \sqrt{n}\left(\frac{\bar{x}-\mu}{\sigma}\right) > z_c\right\}
+\]
+where $z_c$ is the solution of $\prob_{\mu_0}(Z > z)=\alpha$, or equivalently the solution of $\Phi(z)=1-\alpha$ where $\Phi$ is the CDF of the standard normal distribution.
+%\bit
+%\it i.e. $z_c$ is the solution of $\alpha=1-\Phi(z)$ where $\Phi$ is the CDF of $Z\sim N(0,1)$.
+%\eit
+
+
+\it % power
+For $\mu > \mu_0$, the power function is
+\begin{align*}
+\gamma(\mu) 
+%	& = \prob_{\mu}(Z\geq z_c) \\
+	& = \prob_{\mu}\left[\sqrt{n}\left(\frac{\bar{X}-\mu_0}{\sigma}\right) > z_c\right] \\
+	& = \prob_{\mu}\left[\bar{X} > \frac{\sigma}{\sqrt{n}}z_c+\mu_0\right] \\
+\intertext{}
+	& = \prob_{\mu}\left[\bar{X}-\mu > \frac{\sigma}{\sqrt{n}}z_c + (\mu_0-\mu)\right) \\
+	& = \prob_{\mu}\left[\sqrt{n}\left(\frac{\bar{X}-\mu}{\sigma}\right) > z_c + \frac{\sqrt{n}(\mu_0-\mu)}{\sigma}\right] \\
+	& = 1 - \prob_{\mu}\left[\sqrt{n}\left(\frac{\bar{X}-\mu}{\sigma}\right) \leq z_c + \frac{\sqrt{n}(\mu_0-\mu)}{\sigma}\right] \\
+%	& = \prob\left[Z \geq \frac{\sqrt{n}(\mu_0-\mu)}{\sigma} + z_c\right] \text{\quad where $Z\sim(0,1)$},\\
+	& = 1 - \Phi\left(z_c + \frac{\sqrt{n}(\mu_0-\mu)}{\sigma}\right)
+\end{align*}	
+where $\Phi$ is the CDF of the standard normal distribution $N(0,1)$.
+
+\it % power
+$\gamma(\mu)$ is an increasing function for $\mu>\mu_0$, because
+\[
+\gamma'(\mu) = \frac{\sqrt{n}}{\sigma} \phi\left(z_c + \frac{\sqrt{n}(\mu_0-\mu)}{\sigma}\right) > 0,
+\]
+where $\phi$ is the PDF of the standard normal distribution $N(0,1)$.
+
+The same critical region can thus be used to test $H_0:\mu\leq\mu_0$ against $H_1:\mu>\mu_0$.
+%\]
+\een
+\end{solution}
+
+% t-test
+%----------------------------------------------------------------------
+
+\subsection{The $t$-test}
+%----------------------------------------------------------------------
+\begin{example}
+Let $X\sim N(\mu,\sigma^2)$ where $\mu$ and $\sigma^2$ are both unknown. Find a critical region of size $\alpha$ for testing $H_0:\mu=\mu_0$ against $H_1:\mu < \mu_0$
+\end{example}
+
+\begin{solution}
+Let $X_1,X_2,\ldots,X_n$ be a random sample from the distribution of $X$.
+\bit
+\it Let $\bar{X}$ and $S^2$ denote the sample mean and sample variance respectively.
+\eit
+
+The appropriate test statistic $T:\R^n\to\R$ is given by
+\[
+T(X_1,X_2,\ldots,X_n) = \sqrt{n}\left(\frac{\bar{X}-\mu_0}{S}\right)
+\]
+
+Under $H_0:\mu=\mu_0$, this has \emph{Student's $t$-distribution} with $n-1$ degrees of freedom.
+
+The critical region for our test is
+\[
+C=\left\{\mathbf{x}:\sqrt{n}\left(\frac{\bar{x}-\mu}{s}\right) \leq t_c\right\}
+\]
+where $t_c$ is the solution of solution of $\alpha=F(t)$, and where $F$ is the CDF of Student's $t$ distribution with $n-1$ degrees of freedom.
+\end{solution}
+
+
+%----------------------------------------------------------------------
+
+\section{Normal approximation}
+%----------------------------------------------------------------------
+
+\begin{example}
+Let $X_1,X_2,\ldots,X_n$ be a random sample from the $\text{Bernoulli}(\theta)$ distribution, where $\theta$ is unknown. We reject the null hypothesis $H_0:\theta=1/2$ in favour of $H_1:\theta>1/2$ if the observed number of successes exceeds some constant value $c>0$. Using a normal approximation, find values of $n$ and $c$ for which the size of the test is $0.1$ and whose power at $\theta=2/3$ is $0.95$. 
+%Let $X\sim\text{Binomial}(n,\theta)$, where $\theta$ is unknown. We reject the null hypothesis $H_0:\theta=1/2$ in favour of the alternative hypothesis $H_1:\theta>1/2$ if the observed value of $X$ exceeds some constant value $c>0$. Using a normal approximation, find the values of $n$ and $c$ for which the test is of size $0.1$, and whose power to detect $\theta=2/3$ is $0.95$. 
+\end{example}
+
+\begin{solution}
+Let $X\sim\text{Binomial}(n,\theta)$ be the number of successes. 
+\bit
+\it By the central limit theorem, $X\sim N\big(n\theta,n\theta(1-\theta)\big)$ approx. (if $n$ is sufficiently large).
+\eit
+
+\vspace*{2ex}
+If $H_0:\theta=1/2$ is correct, we have $X\sim N(n/2,n/4)$ approx. Hence
+\[
+Z 
+%	= \frac{X-\expe(X)}{\sqrt{\var(X)}} 
+%	= \frac{X-n/2}{\sqrt{n/4}} 
+	= \frac{2X-n}{\sqrt{n}} \sim N(0,1) \text{\quad approx.}
+\]
+
+\vspace*{2ex}
+For a test of size $\prob_{H_0}\left(X > c\right) = 0.1$, we need that 
+\[
+%\prob_{H_0}\left(X > c\right) = 0.1
+%\quad\Rightarrow\quad
+\prob\left(Z > \frac{2c-n}{\sqrt{n}}\right) = 0.1
+\quad\Rightarrow\quad
+\frac{2c-n}{\sqrt{n}} = 1.282 \text{\quad (from tables).}
+\]
+
+
+
+If $H_1:\theta=2/3$ is correct, then $X\sim N(2n/3,2n/9)$ approx. Hence
+\[
+Z = \frac{3X-2n}{\sqrt{2n}} \sim N(0,1) \text{ approx. under $H_1$.}
+\]
+For a test with power $\prob_{H_1}\left(X > c\right) = 0.95$ at $\theta=2/3$, we need that
+\[
+\prob\left(Z > \frac{3c-2n}{\sqrt{2n}}\right) = 0.95
+\quad\Rightarrow\quad
+\frac{3c-2n}{\sqrt{2n}} = -1.645 \text{\quad (from tables).}
+\]
+
+\bit
+\it We have two equations in two unknowns:
+\[
+2c = n + 1.282\sqrt{n} \text{\quad and\quad} 3c = 2n + 1.645\sqrt{2n}.
+\]
+\it Solving for $n$ and $c$, we find that $n=72.24$ and $c=41.56$.
+\it Thus a sample of size $72$ and a rejection threshold of $42$ would approximately meet the stated requirements.
+\eit
+\end{solution}
+
+%----------------------------------------------------------------------
+
+\section*{Appendix: observed significance levels ($p$-values)}
+%----------------------------------------------------------------------
+% example: two-sided test
+\begin{example}
+Let $X_1,X_2,\ldots,X_{25}$ be a random sample from the $ N(\mu,\sigma^2)$ distribution, where $\mu$ is unknown and $\sigma^2=4$. We want to test the null hypothesis $H_0:\mu=77$ against the alternative $H_1:\mu < 77$. We obtain a realization of the sample, and find that $\bar{x}=76.1$. Find the observed significance level of the test.
+
+\begin{solution}
+We know that $\bar{X}\sim N(\mu,\sigma^2/n)$, so under the null hypothesis with $\mu_0=77$,
+\[
+Z = \sqrt{n}\left(\frac{\bar{X}-\mu_{0}}{\sigma}\right) 
+	= 5\left(\frac{\bar{X}-77}{2}\right) \sim N(0,1).
+\]
+\bit
+\it The observed value of test statistic is $z_{\text{obs}} = 5(76.1-77)/2 = -2.25$.
+\it The observed significance level is $\prob(Z\leq z_{\text{obs}}) = \Phi(-2.25) = 0.012$.
+\eit
+Note:
+\bit
+\it For a test of size $\alpha=0.05$ we would reject $H_0$ in favour of $H_1$.
+\it For a test of size $\alpha=0.01$ we would retain $H_0$.
+\eit
+\end{solution}
+\end{example}
+
+%======================================================================
+\stopcontents[chapters]
+\endinput
+%======================================================================

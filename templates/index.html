@@ -10,41 +10,20 @@ camel: index.html
 
 
 {% block breadcrumbs %}
-	{% if user.is_authenticated %}
-		&nbsp;{{ user.username }}
-	{% else %}
-		&nbsp;<a href="{% url 'camel.views.index' %}">Home</a>
-	{% endif %}
+	&nbsp;<a href="{% url 'camel.views.index' %}">Home</a>
 {% endblock %}
 
 
 {% block content-main %}
-<h1>Home Page</h1>
+{% if user.is_authenticated %}
+	<p>Logged in as <b>{{ user.username }}</b></p>
+{% endif %}
 
 <ul>
 	<li><a href="/modules/">Modules</a></li>
-	<li><a href="/module-list/">Module List</a></li>
-</ul>
-<br/>
-<ul>
-	<li><a href="/login/">Log in</a></li>
-	<li><a href="/logout/">Log out</a></li>
 </ul>
 <br/>
 
-{% if user.is_authenticated %}
-	<h3>Hello {{ user.username }}!</h3>
-{% else %}
-	<h3>Hello stranger!</h3>
-{% endif %}
-
-<h2>Test MathJax</h2>
-<p>Some greek: $\alpha$, $\beta$,...</p>
-
-An integral:
-\begin{equation}
-\Gamma(x) = \int_{0}^{\infty} t^{x-1} e^{-t}\,dt
-\end{equation}
 {% endblock %}
 
 {% block sidebar %}

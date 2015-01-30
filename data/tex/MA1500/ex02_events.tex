@@ -1,0 +1,66 @@
+% !TEX root = main.tex
+
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+% events
+\question
+Identify a sample space, and the subset corresponding to event $A$, in each of the following scenarios:
+\begin{parts}
+%--------------------
+\part A coin is tossed three times. $A$ is the event that at least two heads are obtained.
+\begin{answer}
+\par
+$\Omega	= \{HHH, HHT, HTH, THH, HTT, THT, TTH, TTT\}$ and $A = \{HHH, HHT, HTH, THH\}$. Alternatively, if we are only interested in the number of heads, we could take $\Omega=\{0,1,2,3\}$ and $A=\{2,3\}$.
+\end{answer}
+%--------------------
+\part A game of football is played. $A$ is the event that the match ends in a draw.
+\begin{answer}
+$\Omega=\{(a,b):a,b = 0,1,2,\ldots\}$ and $A=\{(a,b): a=b\}$ where $a$ and $b$ are the numbers of goals scored by the first and second teams, respectively. Note that this is a (countably) infinite set. 
+\par
+Alternatively, we could take $\Omega=\{W,D,L\}$ and $A=\{D\}$ where $W,D,L$ are respectively the events that the first team wins, draws or loses the game.
+\end{answer}
+%--------------------
+\part A couple have two children. $A$ is the event that both are girls.
+\begin{answer}
+$\Omega=\{GG,GB,BG,BB\}$ and $A=\{GG\}$.
+\par
+Alternatively, we could take $\Omega=\{0,1,2\}$ and $A=\{2\}$.
+\end{answer}
+%--------------------
+\part A shot hits a circular target of radius 10cm. $A$ is the event that the shot hits within 3cm of the centre.
+\begin{answer}
+$\Omega=\{(x,y): x^2+y^2\leq 10^2\}$ and $A=\{(x,y): x^2+y^2\leq 3^2\}$.
+\end{answer}
+\end{parts}
+
+%----------------------------------------
+% properties of fields
+\question
+A family of sets $\mathcal{F}$ over $\Omega$ is said to be
+\bit
+\it \emph{closed under finite unions} if $A_1\cup A_2\cup\ldots\cup A_n\in\mathcal{F}$ whenever $A_1,A_2,\ldots A_n\in\mathcal{F}$,
+\it \emph{closed under finite intersections} if $A_1\cap A_2\cap\ldots\cap A_n\in\mathcal{F}$ whenever $A_1,A_2,\ldots A_n\in\mathcal{F}$.
+\eit
+Suppose that $\mathcal{F}$ is a field of sets over $\Omega$. Show that
+\begin{parts}
+%--------------------
+%--------------------
+\part $\mathcal{F}$ is closed under finite unions, and that
+\begin{answer}
+Proof by induction. Suppose that $\mathcal{F}$ is closed under unions of $n$ sets (where $n\geq 2$). Let $A_1,A_2,\ldots,A_{n+1}\in\mathcal{F}$. By the inductive hypothesis, $\cup_{i=1}^nA_i\in\mathcal{F}$. Thus $\cup_{i=1}^{n+1} A_i = \big[\cup_{i=1}^{n} A_i\big] \cup A_{n+1} \in\mathcal{F}$, because $\mathcal{F}$ is closed under pairwise unions.
+\end{answer}
+%--------------------
+\part $\mathcal{F}$ is closed under finite intersections.
+\begin{answer}
+Let $A_1,A_2,\ldots,A_n\in\mathcal{F}$. Then $\cap_{i=1}^n A_i = \big[\cup_{i=1}^n A_i^c\big]^c$ (De Morgan's laws). Hence $\cap_{i=1}^n A_i\in\mathcal{F}$ because $\mathcal{F}$ is closed under complementation and finite unions. 
+\end{answer}
+%--------------------
+\end{parts}
+%----------------------------------------
+\end{questions}
+\end{exercise}
+
+%======================================================================
+\endinput
+%======================================================================

@@ -1,3 +1,6 @@
+<!--
+camel: module_detail.html
+-->
 {% extends "modules.html" %}
 {% load staticfiles %}
 
@@ -6,19 +9,18 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-    {{ block.super }}  > <a href="{% url 'module-detail' module.code %}"> {{ module.code }}</a>
+	{{ block.super }}&gt;&nbsp;<a href="{% url 'module-detail' module.code %}">{{ module.code }}</a>
 {% endblock %}
-
 
 {% block content-main %}
 	{% if module %}
-	   	<h1>{{ module.title }}</h2>
+	   	<h1>{{ module.code }} {{ module.title }}</h2>
 		{% if chapters %}
-			<table>
-			{% for ch in chapters %}
+			<table class="toc">
+			{% for chapter in chapters %}
         	<tr>
-            	<td>{{ ch.number }}.</td>
-				<td><a href="{% url 'chapter-detail' module.code ch.number %}">{{ ch.title }}</td>
+            	<td>{{ chapter.number }}.</td>
+				<td><a href="{% url 'chapter-detail' module.code chapter.number %}">{{ chapter.title }}</td>
         	</tr>
     		{% endfor %}
     		</table>
@@ -27,6 +29,38 @@
 		{% endif %}
 	{% else %}
 	    <p>No module.</p>
+	{% endif %}
+	
+	{% if genres %}
+	{% load mptt_tags %}
+
+	{{ genres.get_root }}
+
+	<ul>
+	    {% recursetree genres %}
+	        <li>
+	            {{ node.name }}
+	            {% if not node.is_leaf_node %}
+	                <ul class="children">
+	                    {{ children }}
+	                </ul>
+	            {% endif %}
+	        </li>
+	    {% endrecursetree %}
+	</ul>
+
+	<ul>
+	    {% for genre in genres %}
+	        <li>
+	            {{ genre.name }}
+	            {% if not genre.is_leaf_node %}
+	                <ul class="children">
+	                    {{ children }}
+	                </ul>
+	            {% endif %}
+	        </li>
+	    {% endfor %}
+	</ul>
 	{% endif %}
 {% endblock %}
 

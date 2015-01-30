@@ -1,0 +1,26 @@
+[
+{
+	"pk": 1, 
+	"model": "camel.module", 
+	"fields": {
+		"year": "201415", 
+		"code": "MA0000", 
+		"title": "Test Module", 
+		"students": [3,4], 
+		"teacher": 1, 
+		"twitter_widget_id": ""
+	}
+},
+{
+	"pk": 2, 
+	"model": "camel.module", 
+	"fields": {
+		"year": "201415", 
+		"code": "MA2500", 
+		"title": "Foundations of Probability and Statistics",
+		"students": [3,4], 
+		"teacher": 1, 
+		"twitter_widget_id": ""
+	}
+}
+]		

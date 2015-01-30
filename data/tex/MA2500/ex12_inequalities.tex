@@ -1,0 +1,165 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+%==========================================================================
+\question
+Let $X\sim\text{Uniform}[0,20]$ be a continuous random variable.
+\ben
+\item Use Chebyshev's inequality to find an upper bound on the probability $\prob(|X-10| \geq z)$. 
+\item Find the range of $z$ for which Chebyshev's inequality gives a non-trivial bound. 
+\item Find the value of $z$ for which $\prob(|X-10|\geq z) \leq 3/4$.
+\een
+\begin{answer} % <<<
+\ben
+\item 
+By Chebyshev's inequality, $\displaystyle\prob(|X-10|\geq z) \leq \frac{\var(X)}{z^2} = \frac{100}{3z^2}$.
+\item 
+For a non trivial bound, we need that 
+$\displaystyle\prob(|X-10|\geq z) \leq \frac{100}{3z^2} < 1$ and hence $\displaystyle z^2 > \frac{100}{3}$.
+
+We reject the case $z=-10/\sqrt{3}$ because $\prob(|X-10|>-10/\sqrt{3})=1$.
+
+Thus we conclude that $z>10/\sqrt{3}$.
+\item 
+This time we need that $\displaystyle\prob(|X-10|\geq z) \leq \frac{100}{3z^2} < \frac{3}{4}$ and hence $\displaystyle z^2 > \frac{400}{9}$.
+
+As before, we reject the case $z=-20/3$ because $\prob(|X-10|>-20/3)=1$.
+
+Thus we conclude that $z>20/3$.
+\een
+\end{answer}
+
+
+%%==========================================================================
+%\question
+%Let $c$ be a constant, and let $X_1,X_2,\ldots$ be a sequence of random variables with $\expe(X_n) = c$ and $\var(X_n) = 1/\sqrt{n}$ for each $n$. 
+%Show that the sequence converges to $c$ in probability as $n\to\infty$.
+%\begin{answer} % <<<
+%Let $\epsilon>0$. By Chebyshev's inequality,
+%\[
+%\prob\big(|X_n-c|\geq\epsilon\big) \leq \frac{\var(X_n)}{\epsilon^2} = \frac{1}{\epsilon^2\sqrt{n}}
+%\]
+%for all $n\in\N$. Thus $\displaystyle \lim_{n\to\infty} \prob\big(|X_n-c|\geq\epsilon\big) = 0$, so the sequence converges to $c$ in probability.
+%\end{answer}
+
+
+%==========================================================================
+\question
+Let $X$ be a discrete random variable, taking values in the range $\{1,2,\ldots,n\}$, and suppose that $\expe(X)=\var(X)=1$. Show that $\prob(X \geq k + 1) \leq k^2$ for any integer $k$.
+\begin{answer} % <<<
+Using the fact that $X-1\geq 0$,
+\[
+\prob(X\geq k+1) = \prob(X-1\geq k) = \prob(|X-1|\geq k).
+\]
+By Chebyshev's inequality, with $\expe(X)=0$ and $\var(X)=1$,
+\[
+\prob(|X-1|\geq k) \leq \frac{\var(X)}{k^2} = \frac{1}{k^2}
+\]
+\end{answer}
+
+%==========================================================================
+\question
+Let $k\in\N$. Show that Markov's inequality is tight (i.e.\ cannot be improved) by finding a non-negative random variable $X$ such that
+\[
+\prob\big[X\geq k\expe(X)\big] = \frac{1}{k}.
+\]
+\begin{answer} % <<<
+Let $X$ be a random variable taking values in the set $\{0,k\}$, such that $\prob(X=k)=1/k$ and $\prob(X=0)=1-1/k$. Then $\expe(X)=1$ and $\prob\big(X\geq k\expe(X)\big) = \prob\big(X\geq k\big) = \prob\big(X=k) = 1/k$ as required.
+\end{answer}
+
+
+
+%%==========================================================================
+%\question
+%Suppose that a continuous random variable $X$ has mean $3.6$ and standard deviation $1.2$. Find a lower bound for the probability $\prob(1.2\leq X\leq 6.0)$.
+%\begin{answer} % <<<
+%The centre of the interval $[1.2,6.0]$ is equal to the mean $3.6$, so the event $1.2 \leq X \leq 6.0$ can be written as $|X-3.6| \leq 2.4$. Furthermore, by Chebyshev's inequality,
+%\[
+%\prob(|X-3.6|> 2.4) \leq \frac{\var(X)}{2.4^2} = \frac{1.2^2}{2.4^2} = \frac{1}{4}
+%\]
+%Thus we have
+%\begin{align*}
+%\prob(1.2 \leq X \leq 6.0)  
+%	& = \prob(|X-3.6| \leq 2.4) \\
+%	& = 1 - \prob(|X-3.6|> 2.4) \\
+% 	& \geq 1 - \frac{1}{4} = \frac{3}{4}
+%\end{align*}
+%\end{answer}
+
+
+%==========================================================================
+\question
+What does the Chebyshev inequality tell us about the probability that the value taken by a random variable deviates from its expected value by six or more standard deviations?
+\begin{answer}
+For any random variable $X$ with finite variance $\sigma^2$,
+\[
+\prob(|X-\mu|\geq 6\sigma) \leq \frac{\sigma^2}{(6\sigma)^2} = \frac{1}{36}.
+\]
+\end{answer}
+
+
+%==========================================================================
+\question
+Let $S_n$ be the number of successes in $n$ Bernoulli trials with probability $p$ of success on each trial. Use Chebyshev's Inequality to show that, for any $\epsilon > 0$, the upper bound
+\[
+\prob\left(\left|\frac{S_n}{n}-p\right|\geq\epsilon\right) \leq \frac{1}{4n\epsilon^2}
+\]
+is valid for any $p$.
+\begin{answer} % <<<
+For the $\text{Binomial}(n,p)$ distribution, Chebyshev's inequality yields
+\[
+\prob\left(\left|\frac{S_n}{n}-p\right|\geq\epsilon\right) \leq \frac{p(1-p)}{n\epsilon^2}
+\]
+The result then follows by the fact that for any $p$,
+\[
+p(1-p) = \frac{1}{4}-\left(\frac{1}{4}-p+p^2\right) = \frac{1}{4}-\left(\frac{1}{2}-p\right)^2 \leq \frac{1}{4}
+\]
+\end{answer}
+
+
+%==========================================================================
+\question
+Let $X\sim N(0,1)$.
+\ben
+\item 
+Use Chebyshev's Inequality to find upper bounds for the probabilities $\prob(|X|\geq 1)$, $\prob(|X|\geq 2)$ and $\prob(|X|\geq 3)$.
+\item
+Use statistical tables to find the area under the standard normal curve over the intervals $[-1,1]$, $[-2,2]$ and $[-3,3]$. 
+\item
+Compare the bounds computed in part (a) with the exact values found in part (b). How good is the Chebyshev inequality in this case?
+\een
+\begin{answer}
+\ben
+\item $\prob(|X|\geq 1)\leq 1$, $\prob(|X|\geq 2)\leq 1/4$ and $\prob(|X|\geq 3)\leq 1/9$.
+\item From tables, $\prob(|X|\geq 1)=0.3173$, $\prob(|X|\geq 2)=0.0455$ and $\prob(|X|\geq 3)=0.0027$.  
+\item Chebyshev's inequality provides only crude bounds on the tail probabilities of the standard normal distribution.
+\een
+\end{answer}
+
+
+%==========================================================================
+\question
+Let $X$ be a random variable with mean $\mu\neq 0$ and variance $\sigma^2$, and define the \emph{relative deviation} of $X$ from its mean by $\displaystyle D  = \left|\frac{X-\mu}{\mu}\right|$. Show that 
+\[
+\displaystyle \prob(D \geq a) \leq \left(\frac{\sigma}{\mu a}\right)^2.
+\]
+\begin{answer} 
+By Chebyshev's inequality,
+\[
+\prob(D\geq a) 
+	= \prob\left(\left|\frac{X-\mu}{\mu}\right|\geq a\right)
+	= \prob\big(|X-\mu|\geq |\mu|a)
+	\leq \frac{\sigma^2}{\mu^2 a^2}
+\]
+\end{answer}
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

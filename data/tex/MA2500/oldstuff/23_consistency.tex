@@ -1,0 +1,270 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Consistency}\label{chap:consistency}
+\setcounter{page}{1}
+\startcontents[chapters]
+%----------------------------------------------------------------------
+\dictum{X}{X}{X}
+\chapcontents
+
+%----------------------------------------------------------------------
+\section{Bias}
+%----------------------------------------------------------------------
+Intuitively, a good estimator is one that is \emph{close} to the true value for \emph{most} sample realizations.
+
+\vspace*{1ex}
+\bit
+\it Let $X$ be a random variable and let $F(x,\theta)$ denote its CDF (where $\theta\in\Theta$ is unknown).
+\it
+Let $X_1,X_2,\ldots, X_n$ be a random sample of size $n$ from the distribution of $X$
+\it
+Let $\hat{\theta}_n = \hat{\theta}(X_1,X_2,\ldots,X_n)$ be an estimator of $\theta$.
+\eit
+
+%\vspace*{1ex}
+% defn: bias
+\begin{definition}
+\ben
+\it The \emph{bias} of $\hat{\theta}_n$ is the expected difference between $\hat{\theta}_n$ and the true parameter value:
+\[
+\bias(\hat{\theta}_n) = \expe(\hat{\theta}_n-\theta) = \expe(\hat{\theta}_n) - \theta.
+\]
+\it 
+$\hat{\theta}_n$ is said to be an \emph{unbiased} estimator if 
+\[
+\expe(\hat{\theta}_n) = \theta \text{ for all $\theta\in\Theta$.}
+\]
+\it 
+$\hat{\theta}_n$ is said to be an \emph{asymptotically unbiased} estimator if 
+\[
+\expe(\hat{\theta}_n)\to\theta \text{ as $n\to\infty$, for all $\theta\in\Theta$.} 
+\]
+\een
+\end{definition}
+
+% example: binomial
+\begin{example}
+Let $X_1,X_2,\ldots,X_n$ be a random sample from a $\text{Bernoulli}(\theta)$ distribution. We have shown that the MLE of $\theta$ is
+\[
+\hat{\theta}_n = \frac{1}{n}\sum_{i=1}^n X_i \text{\qquad(proportion of successes).}
+\]
+The expected value of $\hat{\theta}_n$ over the sample space is
+\[
+\expe(\hat{\theta}_n) 
+	= \expe\left(\frac{1}{n}\sum_{i=1}^n X_i\right) 
+	= \frac{1}{n}\sum_{i=1}^n \expe(X_i)
+	= \theta.
+\]
+Hence $\hat{\theta}_n$ is an unbiased estimator for $\theta$.
+\end{example}
+
+% example: sample mean estimator of the variance
+\begin{example}
+Consider the sample mean estimator of the variance ($\sigma^2$) of a distribution:
+\[
+\hat{\sigma}^2_n = \frac{1}{n}\sum_{i=1}^n (X_i-\Xbar)^2
+\qquad\text{where}\qquad
+\Xbar = \frac{1}{n}\sum_{i=1}^n X_i.
+\]
+Using the fact that $\expe(\Xbar) = \mu$ and $\var(\Xbar) = \sigma^2/n$, 
+\begin{align*}
+\expe(\hat{\sigma}^2_n) 
+%	& = \expe\left(\frac{1}{n}\sum_{i=1}^n (X_i-\Xbar)^2\right) \\
+%	& = \expe\left(\frac{1}{n}\sum_{i=1}^n X_i^2-n\Xbar^2\right) \\
+	& = \frac{1}{n}\sum_{i=1}^n \expe(X_i^2) - \expe(\Xbar^2) \\
+%	& = \frac{1}{n}\left[ n(\sigma^2+\mu^2)-n\left(\frac{\sigma^2}{n} + \mu^2\right)\right]
+	& = (\sigma^2+\mu^2)-\left(\frac{\sigma^2}{n} + \mu^2\right)
+	= \left(1-\frac{1}{n}\right)\sigma^2.
+\end{align*}
+
+\bit
+\it $\hat{\sigma}^2_n$ is a \emph{negatively biased} estimator of $\sigma^2$:
+\[
+\bias(\hat{\sigma}^2_n) = \expe(\hat{\sigma}^2_n - \sigma^2) = \expe(\hat{\sigma}^2_n) - \sigma^2 = -\frac{\sigma^2}{n}.
+\]
+\it $\hat{\sigma}^2_n$ is an \emph{asymptotically unbiased} estimator of $\sigma^2$:  \[
+\bias(\hat{\sigma}^2_n) = -\frac{\sigma^2}{n} \to 0 \text{\quad as $n\to\infty$.}
+%\quad (provided that $\sigma^2<\infty$).}
+\]
+\eit
+\end{example}
+
+% exercise
+\begin{exercise}
+Show that the \emph{sample variance} $\displaystyle S_n^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i-\Xbar)^2$ is an unbiased estimator of $\sigma^2$.
+\end{exercise}
+
+
+% example: uniform
+\begin{example}
+Let $X_1,X_2,\ldots,X_n$ be a random sample from the $\text{Uniform}(0,\theta)$ distribution. Find the bias of both the method-of-moments estimator $\hat{\theta}_{MM} = 2\Xbar$, and the maximum likelihood estimator $\hat{\theta}_{ML}=\max\{X_i\}$.
+\end{example}
+
+\begin{solution}
+\ben
+\it $\hat{\theta}_{MM}$ is an \emph{unbiased} estimator of $\theta$:
+\[
+\bias(\hat{\theta}_{MM}) 
+	= \expe(\hat{\theta}_{MM} - \theta)
+	= \expe(\hat{\theta}_{MM}) - \theta
+	= 2\expe(\Xbar) -\theta
+	= 2\left(\frac{1}{2}\theta\right) - \theta
+	= 0.
+\]
+%\it Let $Y=\max\{X_1,X_2,\ldots,X_n\}$. 
+\it Because the $X_i$ are independent, the CDF of $\hat{\theta}_{ML}$ is given by
+\[
+\prob(\hat{\theta}_{ML} \leq y) = \left\{\begin{array}{ll}
+	0	& y \leq 0, \\[1ex]
+	\displaystyle\left(\frac{y}{\theta}\right)^n & 0 < y < \theta, \\[1ex]
+	1	& y \geq \theta.
+\end{array}\right.
+\]
+A simple calculation shows that $\displaystyle\expe(\hat{\theta}_{ML}) = \left(\frac{n}{n+1}\right)\theta$.
+% = \left(1-\frac{1}{n+1}\right)\theta$.
+\par
+Hence $\hat{\theta}_{MM}$ is a \emph{negatively biased} estimator of $\theta$:
+\[
+\bias(\hat{\theta}_{ML}) 
+	= \expe(\hat{\theta}_{ML}) - \theta
+	= \left(\frac{n}{n+1}\right)\theta - \theta
+	= \left(1-\frac{1}{n+1}\right)\theta - \theta
+	= -\frac{1}{n+1}\theta.
+\]
+
+\bit
+\it Note that $\hat{\theta}_{ML}$ is an \emph{asymptotically unbiased} estimator for $\theta$,
+\it[]
+\it Note also that $\hat{\theta}_n = \displaystyle\left(\frac{n+1}{n}\right)\max\{X_i\}$ is an unbiased estimator for $\theta$.
+\eit
+\een
+\end{solution}
+
+%% exercise
+%\begin{exercise}
+%\bit
+%\it[]
+%Show that $\hat{\theta}_n = \displaystyle\left(\frac{n+1}{n}\right)\max\{X_i\}$  is an unbiased estimator of $\theta$.
+%\eit
+%\end{exercise}
+
+
+%----------------------------------------------------------------------
+
+\section{Consistency}
+%----------------------------------------------------------------------
+
+% definition
+\begin{definition}
+%An estimator $\hat{\theta}_n$ is said to be \emph{consistent} if $\hat{\theta}_n$ converges to the true value $\theta$ in probability as $n\to\infty$, for all $\theta\in\Theta$, i.e.\ for all $\epsilon>0$,
+An estimator $\hat{\theta}_n$ is said to be \emph{consistent} if $\hat{\theta}_n\to\theta$ in probability as $n\to\infty$, for all $\theta\in\Theta$, 
+\par
+i.e.\ for all $\epsilon>0$,
+\[
+\prob(|\hat{\theta}_n - \theta|>\epsilon)\to 0 \text{\quad as $n\to\infty$ for all $\theta\in\Theta$.} 
+\]
+\end{definition}
+
+%\begin{remark}
+%\end{remark}
+
+% example
+\begin{example}
+Let $X_1,X_2,\ldots,X_n$ be a random sample from a distribution with mean $\mu$ and variance $\sigma^2$. If $\sigma^2<\infty$, show that the sample mean $\Xbar_n$ and sample variance $S^2_n$ are consistent estimators of $\mu$ and $\sigma^2$ respectively.
+\vspace*{1ex}
+\begin{solution}
+\ben
+% mean
+\it If $\sigma^2<\infty$, then by the law of large numbers, $\Xbar_n\to\mu$ in probability as $n\to\infty$, i.e.
+\[
+\prob(|\Xbar_n-\mu|>\epsilon) \leq \frac{\sigma^2}{n\epsilon^2} \to 0 \text{\quad as $n\to\infty$.}
+\]
+Since this holds for every $\mu\in\R$, we conclude that the sample mean is a consistent estimator for the true mean of a distribution.
+
+% variance
+\it The sample variance can be written as
+\[
+S^2_n 
+	= \frac{1}{n-1}\sum_{i=1}^n (X_i-\Xbar_n)^2 
+	= \left(1+\frac{1}{n-1}\right)\left(\frac{1}{n}\sum_{i=1}^n (X_i-\Xbar_n)^2\right)
+\]
+
+\bit
+\it Clearly, we have $\displaystyle\left(1+\frac{1}{n-1}\right)\to 1$ as $n\to\infty$.
+\it Furthermore, if $\sigma^2<\infty$ then by the law of large numbers,
+\[
+\frac{1}{n}\sum_{i=1}^n (X_i-\Xbar_n)^2 \to \expe\big[(X_i-\Xbar_n)^2\big] = \sigma^2 \text{\quad in probability as $n\to\infty$.}
+\]
+\it Thus $S^2_n \to \sigma^2$ in probability as $n\to\infty$.
+\eit
+Since this holds for all $\sigma^2>0$, we conclude that the sample variance is a consistent estimator for the true variance of a distribution.
+\een
+\end{solution}
+\end{example}
+
+%----------------------------------------------------------------------
+\section{Asymptotic normality}
+%----------------------------------------------------------------------
+
+% definition
+\begin{definition}
+An estimator $\hat{\theta}_n$ is said to be \emph{asymptotically normal} if the distribution of $\sqrt{n}(\hat{\theta}_n-\theta)$ converges to a normal distribution as $n\to\infty$, for all $\theta\in\Theta$.
+\end{definition}
+
+%$X_n\to X$ \emph{in distribution} if $\prob(\hat{\theta}_n \leq z(x)\to F(x)$ as $n\to\infty$ for every point $x\in\R$ at which $F(x)=\prob(X\leq x)$ is continuous.
+
+% example
+\begin{example}[Sample Mean]
+Let $X_1,X_2,\ldots,X_n$ be a random sample from a distribution with mean $\mu$ and variance $\sigma^2$. If $\sigma^2<\infty$, show that the sample mean $\Xbar_n$ and sample variance $S^2_n$ are asymptotically normal estimators of $\mu$ and $\sigma^2$ respectively.
+
+\begin{solution}
+% mean
+(1) If $\sigma^2>0$, then by the central limit theorem,
+\[
+\frac{\sum_{i=1}^n X_i- n\mu}{\sigma\sqrt{n}} \to N(0,1) \text{\quad in distribution as $n\to\infty$,}
+\]
+or equivalently,
+\[
+\sqrt{n}(\Xbar_n-\mu) \to N(0,\sigma^2) \text{\quad in distribution as $n\to\infty$.}
+\]
+Since this holds for every $\mu\in\R$, we conclude that $\Xbar$ is an asymptotically normal estimator for the true mean of a distribution.
+
+% variance
+(2) To show that $S^2_n$ is asymptotically normal, let us write
+\[
+S^2_n 	= \left(1+\frac{1}{n-1}\right)\left(\frac{1}{n}\sum_{i=1}^n X_i^2 - \Xbar_n^2\right)
+\]
+\bit
+\it By the central limit theorem, $\displaystyle\frac{1}{n}\sum_{i=1}^n X_i^2$ and $\Xbar_n^2$ are both asymptotically normal. 
+\it A linear combination of normal random variables is normal.
+\it Hence $S^2_n$ is asymptotically normal.
+\eit
+\end{solution}
+\end{example}
+
+%
+%%-----------------------------
+%% example: sample mean estimate of the variance
+%\begin{example}
+%Consider the sample mean estimate of the variance, given by $\displaystyle\hat{\sigma}^2_n = \frac{1}{n}\sum_{i=1}^n \expe(X_i-\Xbar)^2$.
+%\ben
+%\it Show that $\hat{\sigma}^2_n$ is a biased estimator of $\sigma^2$, and find its bias. 
+%\it Show also that $\hat{\sigma}^2_n$ is asymptotically unbiased as $n\to\infty$.
+%\een
+%\end{example}
+%
+%\begin{solution}
+%By the previous example, 
+%$\displaystyle\expe(\hat{\sigma}^2_n) = \left(\frac{n-1}{n}\right)\expe(s_n^2) = \left(\frac{n-1}{n}\right)\sigma^2$. Thus 
+%\[
+%\bias(\hat{\sigma}^2_n) = \expe(\hat{\sigma}^2_n) - \sigma^2 = - \frac{\sigma^2}{n} \qquad \text{(negatively biased)}.
+%\]
+%This is asymptotically unbiased because $\bias(\hat{\sigma}^2_n) \to 0$ as $n\to\infty$ for all $\sigma^2\in[0,\infty)$.
+%\end{solution}
+
+
+
+%======================================================================
+\stopcontents[chapters]
+\endinput
+%======================================================================

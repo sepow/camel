@@ -1,0 +1,125 @@
+% !TEX root = main.tex
+%======================================================================
+\chapter{Independence}\label{chap:independence}
+%======================================================================
+
+%----------------------------------------------------------------------
+\section{Independence}
+%----------------------------------------------------------------------
+If the probability that event $A$ occurs is \emph{not} affected by whether or not event $B$ occurs, then
+$
+\prob(A|B) = \prob(A).
+$
+In such cases, we say that events $A$ and $B$ are \emph{independent}:
+
+% definition: independence
+\begin{definition}
+Two events $A$ and $B$ are said to be \emph{independent} if $\prob(A\cap B) = \prob(A)\prob(B)$.
+\end{definition}
+
+% lemma
+\begin{lemma}
+If $A$ and $B$ are independent, then $A$ and $B^c$ are also independent.
+\end{lemma}
+% proof
+\begin{proof}
+\[\begin{array}{ll}
+\prob(A\cap B^c) 
+%	= \prob(A\setminus B)
+	= \prob(A) - \prob(A\cap B)
+	& = \prob(A) - \prob(A)\prob(B) \quad\text{by independence,} \\
+	& = \prob(A)(1-\prob(B))
+	= \prob(A)\prob(B^c).
+\end{array}\]
+\end{proof}
+
+\begin{example}
+A fair die is rolled once. Let $A$ be the event that the outcome is an even number, and let $B$ be the event that the outcome is divisible by $3$. Are $A$ and $B$ independent?
+\end{example}
+\begin{solution}
+\bit
+\it $\prob(A) = \prob(\{2,4,6\}) = 1/2$, $\prob(B) = \prob(\{3,6\}) = 1/3$, $\prob(A\cap B) = \prob(\{6\}) = 1/6$.
+\it Thus we see that $\prob(A\cap B) = \prob(A)\prob(B)$, so $A$ and $B$ are independent.
+\eit
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Pairwise independence and total indepencence}
+%----------------------------------------------------------------------
+
+\begin{definition}
+A family of events $\{A_1,A_2,\ldots\}$ is said to be 
+\ben
+\it \emph{pairwise independent} if $\prob(A_i\cap A_j)=\prob(A_i)\prob(A_j)$ for all $i\neq j$.
+\it \emph{totally independent} if, for every finite subset 
+$\{B_1,B_2,\ldots,B_m\}\subseteq \{A_1,A_2,\ldots\}$, we have
+\[
+\prob(B_1\cap B_2\cap \ldots \cap B_m) = \prob(B_1)\prob(B_2)\cdots\prob(B_m).
+\]
+This can also be written as 
+$\prob\left(\bigcap_{j=1}^m B_j\right) = \prod_{j=1}^m \prob(B_j).$
+\een
+\end{definition}
+%
+%\begin{definition}
+%A collection of events $\{A_1,A_2,\ldots,A_n\}$ is called to be \emph{pairwise independent} if 
+%\[
+%\prob(A_i\cap A_j)=\prob(A_i)\prob(A_j)
+%\]
+%for every pair of distinct events $A_i$ and $A_j$ (i.e.\ with $i\neq j$), and \emph{totally independent} if 
+%\[
+%\prob(A_{i_1}\cap A_{i_2}\cap \ldots \cap A_{i_m}) = \prob(A_{i_1})\prob(A_{i_2})\cdots\prob(A_{i_m})
+%\]
+%for every possible sub-collection of events $\{A_{i_1},A_{i_2},\ldots,A_{i_m}\}\subseteq\{A_1,A_2,\ldots,A_n\}$.
+%\end{definition}
+
+%\newpage
+% problem: de Mere's paradox
+\begin{example}[de M\'{e}r\'{e}'s Paradox]
+Show that you are more likely to obtain a six in 4 rolls of a single fair die, than to obtain a double-six in 24 rolls of two fair dice.
+\end{example}
+\begin{solution}
+Assume that the rolls are totally independent of each other.
+%\begin{align*}
+\[\begin{array}{ll}
+\prob(\text{at least one six in 4 rolls of a single die)}
+	& = 1- \prob(\text{no sixes obtained in 4 rolls}) \\
+	& = 1 - (5/6)^4 = 0.5177. \\
+\prob(\text{at least one double six in 24 rolls of two dice}) 
+	& = 1- \prob(\text{no double-sixes in 24 rolls}) \\
+	& = 1 - (35/36)^{24}  = 0.4914. 
+\end{array}\]
+%\end{align*}
+\end{solution}
+
+
+%\newpage % <<
+
+% example
+\begin{example}
+Consider a sample space $\Omega=\{1,2,3,4\}$ where each outcome is equally likely. Let $A=\{1,2\}$, $B=\{1,3\}$ and $C=\{1,4\}$. Show that $\{A,B,C\}$ is pairwise independent, but not totally independent.
+\end{example}
+% solution
+\begin{solution}
+\bit
+\it $\prob(A)=1/2$ and $\prob(B)=1/2$
+\it $\prob(A\cap B)=\prob(\{1\})=1/4$. 
+\it Hence $\prob(A\cap B) = \prob(A)\prob(B)$, so $A$ and $B$ are independent. 
+\it Similarly, $\prob(A\cap C) = \prob(A)\prob(C)$ and $\prob(B\cap C) = \prob(B)\prob(C)$.
+\eit
+Thus the set $\{A,B,C\}$ is pairwise independent. 
+\bit
+\it $\prob(A\cap B\cap C)=\prob(\{1\}) = 1/4$
+\it However, $\prob(A)\prob(B)\prob(C)=1/8$. 
+\it Hence $\prob(A\cap B\cap C)\neq \prob(A)\prob(B)\prob(C)$.
+\eit
+Thus the set $\{A,B,C\}$ is not totally independent.
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex05_independence}
+%----------------------------------------------------------------------
+%======================================================================
+\endinput
+%======================================================================

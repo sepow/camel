@@ -1,0 +1,117 @@
+%------------------------------------------------
+% main.tex - MA2500 2014-15
+%------------------------------------------------
+\documentclass{camel}
+%\documentclass[screen]{camel}
+%\documentclass[blanks]{camel}
+%\documentclass[answers]{camel}
+%\documentclass[answersatend]{camel}
+\usepackage{camel}
+
+\academicyear{2014-15}
+\modulecode{MA2500}
+\moduletitle{Foundations of Probability and Statistics}
+
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[subfigure]{labelformat=empty}
+\captionsetup[figure]{skip=2ex}
+
+\RequirePackage{graphicx}
+\graphicspath{{./figures/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.gif}
+
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\prob}{\mathbb{P}}
+
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+
+\setlength{\parindent}{0ex}
+\setlength{\parskip}{0.5ex}
+%\usepackage{shorttoc}
+%\usepackage{titletoc}
+%\usepackage{libertine} %MikTeX says this is depreciated, alternative?
+%
+%\newcommand\partialtocname{}
+%\newcommand\ToCrule{\noindent\rule[1pt]{\textwidth}{0.5pt}}
+%\newcommand\ToCtitle{{\large\bfseries\partialtocname}\vskip2pt\ToCrule}
+%\makeatletter
+%\newcommand\chapcontents{%
+%  \ToCtitle
+%  \ttl@printlist[chapters]{toc}{}{1}{}\par\nobreak
+%  \ToCrule}
+%\makeatother
+\usepackage{titletoc}
+%\usepackage{minitoc}
+
+\renewcommand{\chaptername}{Lecture}
+\usepackage{titlesec}
+
+\titleformat{\chapter}
+	{\bfseries\huge}{\chaptername~\thechapter}{1em}{}
+
+\titleformat{\section}
+	{\Large\bfseries}{\thesection}{1em}{}
+	
+%\newpagestyle{special}[\small\sffamily]{
+%\headrule
+%\sethead[\usepage][\textsl{\chaptertitle}][]
+%{}{\textsl{\chaptertitle}}{\usepage}}
+%\pagestyle{special}
+
+%\usepackage{shorttoc}
+%\usepackage{libertine}
+
+\newcommand\minitocrule{\noindent\rule[1pt]{\textwidth}{0.5pt}}
+\newcommand\chapcontents{%
+  \minitocrule
+  \printlist[chapters]{toc}{}{}{}\par\nobreak
+  \minitocrule\vspace*{3ex}}
+\makeatother
+
+\newcommand{\dictum}[3]{
+\fbox{\begin{minipage}{\linewidth}\centering
+\vspace*{1ex}
+To be read in preparation for the \textbf{#1} lecture on \textbf{#2} in \textbf{#3}.
+\vspace*{1ex}\end{minipage}}\bigskip
+}
+
+\newpagestyle{main}[\small\scshape]{
+\headrule
+\sethead{\themodulecode}{}{\thechapter.~\chaptertitle} % odd
+\setfoot{}{}{\thepage}
+}
+\pagestyle{main}
+
+\renewcommand{\labelenumi}{(\arabic{enumi})}
+\renewcommand{\labelenumii}{(\alph{enumii})}
+
+\usepackage{array}
+
+%------------------------------------------------
+\begin{document}
+\renewcommand{\thepage}{(\roman{page})}
+\maketitle
+%\tableofcontents
+\newpage
+\setcounter{page}{1}
+\renewcommand{\thepage}{\arabic{page}}
+%------------------------------------------------
+
+\input{01_introduction}
+\input{02_sets}
+\input{03_probability_measures}
+%\input{04_conditional_probability}
+
+%------------------------------------------------
+\end{document}
+%------------------------------------------------
+

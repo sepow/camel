@@ -1,0 +1,125 @@
+% !TEX root = main.tex
+
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+% cond prob
+\question
+A fair six-sided die is rolled repeatedly. How many times should it be rolled to ensure that the probability of getting a six is at least 0.8?
+
+\begin{answer}
+For convenience, let $p=1/6$ denote the probability that the die shows a six.
+\par
+Let $A_1$ be the event that we observe a six on the first roll, $A_2$ that we observe a six on the second roll, and so on. 
+\par
+Let $A$ be the event that we observe at least one six in $n$ rolls. The complementary event $A^c$ is the event that we do not observe a six on any of the $n$ rolls. This can be written as
+\[
+A^c = A_1^c\cap A_2^c\cap\ldots\cap A_n^c
+\]
+If we assume that the rolls are independent of each other, the set of events $\{A_1,A_2,\ldots,A_n\}$ is totally independent, and hence $\{A_1^c,A_2^c,\ldots,A_n^c\}$is also totally independent. The probability of getting at least one six in $n$ rolls is therefore given by 
+\begin{align*}
+\prob(A) 
+	& = 1 - \prob(A^c) \\
+	& = 1 - \prob(A_1^c\cap A_2^c\cap\ldots\cap A_n^c) \\
+	& = 1 - \prob(A_1^c)\prob(A_2^c)\cap\ldots\cap A_n^c) \\
+	& = 1 - [1-\prob(A_1)][1-\prob(A_2)]\cdots[1-\prob(A_n)] \\
+	& = 1 - (1-p)^n \\
+\end{align*}
+
+Let $n$ denote the number of rolls. To find the required value of $n$, we need that $\prob(A)\geq 0.8$, i.e.\
+\begin{align*}
+1-(1-p)^n \geq 0.8	
+	& \Rightarrow (1-p)^n \leq 0.2 \\
+	& \Rightarrow n\log (1-p) \leq \log 0.2 \\
+	& \Rightarrow n\geq \frac{\log 0.2}{\log(1-p)} = \frac{\log 0.2}{\log(5/6)} \approx 8.827 \\
+\end{align*}
+
+Therefore we should roll the die at least $n=9$ times.
+\end{answer}
+
+%----------------------------------------
+% independence
+\question
+A multiple choice test has five questions, with each question having four alternative
+choices. At least three questions must be answered correctly to pass the test.
+If a candidate chooses her answers at random, what is the probability that she passes the test? State any assumptions you make.
+\begin{answer}
+Assumption: The choices are independent of each other. 
+\par
+Let $A_i$ be the event that exactly $i$ questions are answered correectly ($i=0,1,2,3,4,5$), and let $A$ be the event that the student passes the test. Then
+\begin{align*}
+\prob(A) 	
+	& = \prob(A_3\cup A_4\cup A_5) \\
+	& = \prob(A_3) + \prob(A_4) + \prob(A_5) \qquad\text{(because events $A_3$, $A_4$ and $A_5$ are disjoint)} \} \\
+	& = 10(0.25)^3(0.75)^2 + 5(0.25)^4(0.75) + (0.25)^5 \\
+	& = 0.1035.
+\end{align*}
+\end{answer}
+
+%----------------------------------------
+\question
+Two fair dice are rolled. Show that the event that their sum is $7$ is independent of the score shown on the first die.
+\begin{answer}
+For every $j\in\{1,2,3,4,5,6\}$,
+\bit
+\it $\prob(\text{first die shows $j$ and sum is $7$}) = \frac{1}{36}$
+\it $\prob(\text{first die shows $j$})\prob(\text{sum is $7$}) = \frac{1}{6}\times\frac{1}{6} = \frac{1}{36}$
+\eit
+Alternatively, let $A$ be the event that the sum is $7$ and let $B$ be the event that any score is shown on the first die. Then $\prob(A)=1/6$ and  $\prob(B)=1$, while $\prob(A\cap B)=1/6$, so $A$ and $B$ are independent.
+\end{answer}
+
+%----------------------------------------
+\question
+A fair die is rolled twice, each roll being independent of the other. Let $A$ be the event that the first roll shows $3$, let $B$ be the event that the second roll shows $4$, and let $C$ be the event that the total of the two rolls is $7$.
+\begin{parts}
+\part Define a suitable sample space, and identify the subsets corresponding to events $A$, $B$ and $C$.
+\begin{answer}
+\bit
+\it $\Omega = \{(a,b):1\leq a,b\leq 6\}$
+\it $A = \{(3,b):1\leq b\leq 6\}$
+\it $B = \{(a,4):1\leq a\leq 6\}$
+\it $C = \{(a,b):1\leq a,b\leq 6\mbox{ and }a+b=7\}$
+\eit
+The sample space $\Omega$ contains $36$ outcomes, and the events $A$, $B$ and $C$ each contains $6$ outcomes. Because each outcome is equally likely, $\prob(A)=\prob(B)=\prob(C)=1/6$.
+\end{answer}
+
+\part Show that $\{A,B,C\}$ is pairwise independent but not totally independent.
+\begin{answer}
+To show that the set $\{A,B,C\}$ is pairwise independent, we need to show that any two events chosen from the set are independent of each other. For $A$ and $B$, their intersection $A\cap B$ is the event $\{(3,4)\}$, consisting of the single outcome $(3,4)$. This means that $\prob(A\cap B)=1/36$ and therefore
+\[
+\prob(A\cap B) = \prob(A)\prob(B)
+\]
+so $A$ and $B$ are pairwise independent. Similarly, $A\cap C=\{(3,4)\}$ which implies that $\prob(A\cap C)=\prob(A)\prob(C)$, and $B\cap C=\{(3,4)\}$ implies that $\prob(B\cap C)=\prob(B)\prob(C)$.  Hence, the set $\{A,B,C\}$ is pairwise independent.  However, the intersection of all three events is also $\{(3,4)\}$ so $\prob(A\cap B\cap C)=1/36$ and hence
+\[
+\prob(A\cap B\cap C) \neq \prob(A)\prob(B)\prob(C)
+\]
+so the set $\{A,B,C\}$ is \emph{not} independent.
+\end{answer}
+\end{parts}
+
+%----------------------------------------
+\question
+A coin has probability $p$ of showing heads. Let $q_n$ be the probability that in $n$ independent tosses, a head is observed an even number of times (for this question, take $0$ to be an even number). Using the partition theorem, show that 
+\[
+q_n = p(1-q_{n-1}) + (1-p)q_{n-1}\quad\text{for any}\quad n\geq 1.
+\]
+\begin{answer}
+Let $n\geq 1$, let $A_1,\ldots,A_n$ be any sequence of tosses, and let $N(A_1,\ldots,A_n)$ be the number of heads in the sequence. Using the fact that $A_n$ is independent of the previous tosses $A_1,\ldots,A_{n-1}$, it follows that the number $N(A_1,\ldots,A_n)$ is even if and only if
+\bit
+\it $A_n$ is heads and $N(A_1,\ldots,A_{n-1})$ is odd, which occurs with probability $p(1-q_{n-1})$, or
+\it $A_n$ is tails and $N(A_1,\ldots,A_{n-1})$ is even, which occurs with probability $(1-p)q_{n-1}$
+\eit
+Hence
+\[
+q_n = p(1-q_{n-1}) + (1-p)q_{n-1}
+\]
+as required.
+\end{answer}
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+
+%======================================================================
+\endinput
+%======================================================================

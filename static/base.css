@@ -19,6 +19,76 @@ container
 
 */
 
+/* show/hide */
+div.answer, div.solution {
+    display: hidden;
+	cursor: pointer;
+	background:lightyellow;
+    border:1px solid #000;
+	padding:3px;
+}
+
+/*
+div.inner_solution {
+    background-color:#FFFFE0;
+    display: hidden;
+	padding: 5px;
+}
+*/
+div.step {
+    display: hidden;
+	cursor: pointer;
+}
+
+div.inner_step {
+    background-color:#E9F9ED;
+	border-style:solid;
+	border-width:1px; 
+    display: hidden;
+	padding: 5px;
+}
+
+p.answer_title, p.solution_title {
+	text-align: right;
+  	font-size: 75%;
+	margin-right:3px;
+	margin-top:0px;
+    margin-bottom:0px;
+    
+} 
+
+.visible > div {
+  display: block;
+}
+
+.hidden > div {
+  display: none
+}
+
+#maintitle {
+    border:1px solid #000;
+  	font-size:175%;
+	text-align:center;
+    margin:0;
+    padding-top:10px;
+    padding-bottom:10px;
+}
+
+/* spacing between blocks */
+p + p, li + li, div + div { 
+    margin-top: 10px;
+}
+
+/* prevent macros from flashing up at the start */
+div.macros {
+	display: none;
+}
+
+/* chapter and section headers */
+h1.section {
+	padding:0px;
+  	font-size:150%;
+}
 /* monospace font (for code blocks) */
 .mono {
 	text-align:		left;
@@ -29,6 +99,59 @@ container
 	visibility: 	visible;
     position: 		absolute;
 }
+
+/* styles for latex blocks */
+div.theorem, div.proof, div.remark, div.definition, div.example, div.exercise, div.solution, div.answer {
+    border:1px solid #000;
+	padding:3px;
+}
+
+div.theorem {
+	background:MistyRose;
+}
+div.proof {
+	background:lightyellow;
+}
+div.remark {
+	background:lavenderblush;
+}
+div.definition {
+	background:lavender;
+}
+div.example {
+	background:powderblue;
+}
+div.exercise {
+	background:lightblue;
+}
+div.solution {
+	background:antiquewhite;
+}
+div.answer {
+	background:antiquewhite;
+}
+
+/* figures */
+div.figure {
+    border:1px solid #000;
+	padding:3px;
+}
+/*
+div.solution {
+	background:lightyellow;
+    border:1px solid #000;
+	padding:3px;
+}
+*/
+
+/* exercises
+.formative {
+	color:blue;
+}
+.summative {
+	color:red;
+}
+
 /* colours for the different types of exercise */
 .diagnostic {
 	color:green;
@@ -260,7 +383,7 @@ p, ul, dl {
 hr {
 	color:black;
     height:2px;
-    border:0;
+    border:1;
 }
 ul {
     padding-left:2em;

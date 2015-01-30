@@ -1,0 +1,246 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{The Sign Test}\label{chap:signtest}
+\setcounter{page}{1}
+\startcontents[chapters]
+%----------------------------------------------------------------------
+\dictum{X}{X}{X}
+\chapcontents
+
+%====================================================================
+%====================================================================
+\section{The sign test}
+%====================================================================
+%====================================================================
+\bit
+\it Let $X$ be a random variable with unknown median $\eta$.
+\it Let $X_1, X_2, . . . , X_n$ be a random sample from the distribution of $X$.
+\eit
+
+The \emph{sign test} evaluates the null hypothesis $H_0:\eta=\eta_0$ against a suitable alternative. 
+
+\vspace*{2ex}
+Conditions:
+%
+%
+%\begin{align*}
+%H_0:\ & \eta = \eta_0 \\
+%H_1:\ & \eta \neq \eta_0 \\
+%\end{align*}
+%
+\ben
+\it The distribution is continuous.
+\it The observations can be ranked.
+\it The observations are independent.
+\een
+
+%If we want to evaluate a hypothesized mean ($\mu_0$), we must also assume that 
+%\bit
+%\it The distribution is symmetric.
+%\eit
+
+% % <<
+
+%\subsection*{The Basic Idea}
+The test statistic $S^{+}_n$ is the number of observations that are greater than $\eta_0$: 
+\[
+S^{+}_n = \sum_{i=1}^n I(X_i>\eta_0) 
+\]
+
+By independence, 
+\[
+S^{+}_n\sim\text{Binomial}(n,\theta)\text{\quad where\quad} \theta=\prob(X_i>\eta_0).
+\]
+
+
+
+We also define the complementary statistic 
+\[
+S^{-}_n = \displaystyle\sum_{i=1}^n I(X_i<\eta_0).
+\]
+Note that $S^{+}_n + S^{-}_n = n$.
+
+\bit
+\it Under the null hypothesis $H_0:\eta=\eta_0$ we have $\prob(X_i>\eta_0)=1/2$.
+\eit
+
+\vspace*{2ex}
+The distribution of the test statistic $S^{+}_n$ under $H_0$ is therefore
+\[
+S^{+}_n\sim\text{Binomial}(n,1/2).
+\]
+%Under the null hypothesis, $S^{+}$ has binomial distribution with parameters $n$ and $p=0.5$.
+%\bit
+%\it  so $S^{+}\sim\text{Binomial}(n,0.5)$ under $H_0$.
+%\eit
+
+\bit
+%\it Under $H_0:\eta=\eta_0$, we expect half of the observations to be bigger than $\eta_0$. 
+%\it $S^{+}_n$ small suggests that $\eta < \eta_0$;\quad $S^{+}_n$ large suggests that $\eta > \eta_0$.
+\it $S^{+}_n$ small suggests that $\eta < \eta_0$.
+\it $S^{+}_n$ large suggests that $\eta > \eta_0$.
+\eit
+
+%Under the null hypothesis, $S^{+}$ has binomial distribution with parameters $n$ and $p=0.5$.
+%\bit
+%\it $\prob_{H_0}(X_i>\eta_0)=0.5$ so $S^{+}\sim\text{Binomial}(n,0.5)$ under $H_0$.
+%\eit
+
+\vspace*{2ex}
+To perform the sign test, we 
+\bit
+\it assume that $S^{+}_n\sim\text{Binomial}(n,\theta)$ and
+\it test $H_0:\theta = 1/2$ against a suitable alternative, for example $H_1:\theta\neq 1/2$. 
+\eit
+
+ % <<
+
+% example: sign test (one sample)
+\begin{example}[Sign test]
+The following are measurements of the breaking strength of a certain kind of two-inch cotton ribbon.
+\[\begin{array}{cccccccccc}
+163 & 165 & 160 & 189 & 161 & 171 & 158 & 151 & 169 & 162 \\
+163 & 139 & 172 & 165 & 148 & 166 & 172 & 163 & 187 & 173 \\
+\end{array}\]
+Use the sign test to evaluate $H_0:\eta=160$ against $H_1:\eta>160$ at significance level $\alpha=0.05$.
+\end{example}
+
+\begin{solution}
+Assume that the population is continuous. 
+\small
+\[\begin{array}{cccccccccc} \hline
+163 & 165 & 160 & 189 & 161 & 171 & 158 & 151 & 169 & 162 \\
++ & + & 0 & + & + & + & - & - & + & + \\ \hline
+163 & 139 & 172 & 165 & 148 & 166 & 172 & 163 & 187 & 173 \\
++ & - & + & + & - & + & + & + & + & + \\ \hline
+\end{array}\]
+\normalsize
+\bit
+\it We have $n=19$ signs (one discarded) and the test statistic $S^{+}_n=15$. 
+\it Under the null hypothesis, $S^{+}_n\sim\text{Binomial}(19,1/2)$. 
+\it From tables (and using interpolation), we find that $\prob_{H_0}(S^{+}_n\geq 15) = 0.0167$ approx. 
+\it Thus we reject $H_0$ at significance level $\alpha=0.05$.
+\eit
+\end{solution}
+
+
+ % <<
+% example: sign test (paired samples)
+\begin{example}[Sign test for paired samples]
+To evaluate a new traffic-control system, the number of accidents that occurred at 12 dangerous junctions were recorded during the four weeks prior to the installation of the new system, and for the four weeks after its installation. The following data were obtained.
+\small
+\[\begin{array}{|l|rrrrrrrrrrrr|} \hline
+\text{Junction}	& \phantom{1}1 & \phantom{1}2 & \phantom{1}3 & \phantom{1}4 & \phantom{1}5 & \phantom{1}6 & \phantom{1}7 & \phantom{1}8 & \phantom{1}9 & 10 & 11 & 12 \\ \hline
+\text{Before}	& 3 & 5 & 2 & 3 & 3 & 3 & 0 & 4 & 1 &  6 &  4 &  1 \\
+\text{After}		& 1 & 2 & 0 & 2 & 2 & 0 & 2 & 3 & 3 &  4 &  1 &  0 \\ \hline
+\end{array}\]
+\normalsize
+Use the sign test to decide whether or not the new system is more effective than the old system.
+\end{example}
+
+\begin{solution}
+Let $\eta_1$ and $\eta_2$ denote the median number of accidents before and after the new system was installed, respectively. We test $H_0:\eta_1=\eta_2$ against $H_1:\eta_1 > \eta_2$.
+\[\begin{array}{|l|rrrrrrrrrrrr|} \hline
+\text{Junction}	& \phantom{1}1 & \phantom{1}2 & \phantom{1}3 & \phantom{1}4 & \phantom{1}5 & \phantom{1}6 & \phantom{1}7 & \phantom{1}8 & \phantom{1}9 & 10 & 11 & 12 \\ \hline
+%\text{Before}		& 3 & 5 & 2 & 3 & 3 & 3 & 0 & 4 & 1 &  6 &  4 &  1 \\
+%\text{After}			& 1 & 2 & 0 & 2 & 2 & 0 & 2 & 3 & 3 &  4 &  1 &  0 \\ \hline
+\text{Difference}	& + & + & + & + & + & + & - & + & - &  + &  + &  + \\ \hline
+\end{array}\]
+
+%\par\centering
+%\begin{tabular}{|l|cccccccccccc|} \hline
+%Junction		& 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\ \hline
+%Before		& 3 & 5 & 2 & 3 & 3 & 3 & 0 & 4 & 1 &  6 &  4 &  1 \\
+%After		& 1 & 2 & 0 & 2 & 2 & 0 & 2 & 3 & 3 &  4 &  1 &  0 \\ \hline
+%Difference	& + & + & + & + & + & + & - & + & - &  + &  + &  + \\ \hline
+%\end{tabular}
+%\flushleft\par
+\bit
+\it We have $n=12$, and the value of the test statistic is $s^{+}_n = 10$, where $S^{+}_n\sim\text{Binomial}(12,\theta)$.
+\it Under $H_0:\theta=0.5$, from tables we obtain $\prob_{H_0}(S^{+}_n\geq 10) = 0.0192 < 0.05$.
+\it We conclude that the system has reduced the number of accidents at dangerous junctions.
+\eit
+\end{solution}
+
+%============================= 
+\section{Normal approximation}
+%============================= 
+By the central limit theorem, if $X\sim\text{Binomial}(n,\theta)$ and $n$ is sufficiently large, then 
+\[
+X\sim N\big[n\theta,n\theta(1-\theta)\big] \text{\quad approx.}
+\]
+
+%For large samples ($n\geq 10$), the test statistic $S^{+}_n$ thus has approximate distribution $S^{+}_n\sim N(n/2,n/4)$ under the null hypothesis $H_0:\theta=1/2$ .
+For large samples ($n\geq 10$), under $H_0:\theta=1/2$ we have $S^{+}_n\sim N(n/2,n/4)$ approx.
+
+%
+%%----------------------------------------------------------------------
+%
+%\subsection{The continuity correction}
+%%----------------------------------------------------------------------
+%
+% continuity correction
+\begin{definition}[The continuity correction]
+Let $X$ be a discrete random variable, taking values in the set $\{0,\pm 1,\pm 2,\ldots\}$. If the distribution of a continuous random variable $Y$ is taken as an approximation to the distribution of $X$, we set
+\[
+\prob(X=k) = \prob\left(k - \frac{1}{2} < Y < k + \frac{1}{2}\right).
+\] 
+\end{definition}
+
+\vspace*{-1ex}In particular,
+%\small
+\bit
+\it $\prob(X\lt  k) = \prob(Y\leq k-1/2)$, 
+\it $\prob(X\leq k) = \prob(Y\leq k+1/2)$,
+\it $\prob(X\geq k) = \prob(Y\geq k-1/2)$,
+\it $\prob(X\gt  k) = \prob(Y\geq k+1/2)$
+\eit
+%\normalsize
+
+ % <<
+
+% example: sign test (large sample)
+\begin{example}[Sign test for large samples]
+The following data are the amounts of sulphur oxide (in tons) emitted by a large industrial plant over a period of 40 days.
+\[\begin{array}{cccccccccc}
+17 & 15 & 20 & 29 & 19 & 18 & 22 & 25 & 27 &  9 \\
+24 & 20 & 17 &  6 & 24 & 14 & 15 & 23 & 24 & 26 \\
+19 & 23 & 28 & 19 & 16 & 22 & 24 & 17 & 20 & 13 \\
+19 & 10 & 23 & 18 & 31 & 13 & 20 & 17 & 24 & 14
+\end{array}\]
+Use the sign test to evaluate $H_0:\eta=21.5$ against $H_1:\eta<21.5$ at significance level $\alpha=0.01$.
+\end{example}
+
+\begin{solution}
+Assume that sulphur oxide emissions per day has continuous distribution.
+
+The test statistic is 
+\[
+S^{+}_n = \sum_{i=1}^n I(X_i > \eta_0) \sim \text{Binomial}(n,\theta) \text{\quad where\quad} \theta=\prob(X_i>\eta_0).
+\]
+
+\bit
+\it The null hypothesis can be written as $H_0:\theta=1/2$.
+\it Because the sample is relatively large, $S^{+}_n\sim N\big[n\theta,n\theta(1-\theta)\big]$ approx.
+\eit
+
+Using the continuity correction (for a lower-tailed test), the test statistic is 
+\[
+Z = \displaystyle\frac{(S^{+}_n+1/2)-n\theta}{\sqrt{n\theta(1-\theta)}}.
+\]
+
+Here, we have $n=40$ and $S^{+}_n=16$ (the number values exceeding $\mu_0 = 21.5$). 
+
+Under $H_0:\theta=1/2$, the value of the test statistic is
+\[
+z = \frac{16.5 - 20}{\sqrt{10}} = -1.1068.
+\]
+\bit
+\it From tables, the critical value is $z_c = \Phi^{-1}(0.01) = -2.33$ (approx). 
+\it Thus we retain $H_0$, and conclude that the median amount of sulphur oxide emitted by the plant is not less than $21.5$ tons per day.
+\eit
+\end{solution}
+%======================================================================
+\stopcontents[chapters]
+\endinput
+%======================================================================

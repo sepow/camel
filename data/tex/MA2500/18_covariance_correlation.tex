@@ -1,0 +1,290 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Covariance and Correlation}\label{chap:cov}
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+\section{Bivariate Distributions}
+%----------------------------------------------------------------------
+\begin{definition}
+Let $X,Y:\Omega\to\R$ be two random variables defined on the same probability space, let $F_{X,Y}$ denote their joint CDF, and let $g:\R^2\to\R$ be a (Borel) measureable function on $\R^2$. Then% \emph{expected value} of $g(X,Y):\Omega\to\R$ is given by 
+\[
+\expe\big[g(X,Y)\big] = \iint g(x,y)\,dF(x,y)
+\]
+whenever this integral exists. In particular,
+\ben
+\it % << discrete
+if $X$ and $Y$ are jointly discrete, with joint PMF $f_{X,Y}(x,y)$, then 
+\[
+\expe\big[g(X,Y)\big] = \sum_{x,y} g(x,y)f_{X,Y}(x,y)
+\]
+whenever this sum exists, and
+\it % << cts
+if $X$ and $Y$ are jointly continuous, with joint PDF $f_{X,Y}(x,y)$, then
+\[
+\expe\big[g(X,Y)\big] = \iint g(x,y)f_{X,Y}(x,y)\,dx\,dy
+\]
+whenever this integral exists.
+\een
+\end{definition}
+
+%----------------------------------------------------------------------
+\section{Covariance}
+%----------------------------------------------------------------------
+% defn: product moment
+\begin{definition}
+The \emph{product moment} of $X$ and $Y$ is defined to be
+\[
+\expe(XY) = \iint xy\,dF(x,y)
+\]
+whenever this integral exists. In particular, 
+\ben
+\it % << discrete
+if $X$ and $Y$ are jointly discrete, with joint PMF $f_{X,Y}(x,y)$, then
+\[
+\expe(XY) = \sum_{x,y} xy\, f_{X,Y}(x,y)
+\]
+whenever this sum is absolutely convergent, and
+\it % << cts
+if $X$ and $Y$ are jointly continuous, with joint PDF $f_{X,Y}(x,y)$, then
+\[
+\expe(XY) = \iint xy\, f_{X,Y}(x,y)\,dx\,dy
+\]
+whenever this integral is absolutely convergent.
+\een
+\end{definition}
+%
+%\end{definition}
+%
+%In particular
+%\[
+%\expe(XY) = 
+%\left\{\begin{array}{ll}
+%	\displaystyle\sum_{x,y} xy f_{X,Y}(x,y)		& \text{if $X$ and $Y$ are jointly discrete}, \\[4ex]
+%	\displaystyle\int xy f_{X,Y}(x,y)\,dxdy		& \text{if $X$ and $Y$ are jointly continuous}.
+%\end{array}\right.
+%\]
+
+
+
+% defn: product moment
+\begin{definition}
+\ben
+\it The \emph{covariance} of $X$ and $Y$ is 
+\begin{align*}
+\cov(X,Y) 	& = \expe\left[(X-\expe X)(Y-\expe Y)\right] \\
+			& = \expe(XY) - \expe(X)\expe(Y)
+\end{align*}
+\it The \emph{correlation coefficient} of $X$ and $Y$ is 
+\[
+\rho(X,Y) = \frac{\cov(X,Y)}{\sqrt{\var(X)\cdot\var(Y)}}
+\]
+\een
+\end{definition}
+
+% remark
+\begin{remark}
+\bit 
+\it $\cov(X,Y)$ is the product moment of the \emph{centred} variables $X-\expe(X)$ and $Y-\expe(Y)$.
+%\it $\cov(X,Y)$ is the product moment of the \emph{centred} variables $X-\expe X$ and $Y-\expe Y$.
+\it $\rho(X,Y)$ is the product moment of the \emph{standardized} variables $\displaystyle\frac{X-\expe(X)}{\sqrt{\var(X)}}$ and $\displaystyle\frac{Y-\expe(Y)}{\sqrt{\var(Y)}}$.
+\eit
+\end{remark}
+
+
+\begin{remark}[Variance of sums of random variables]
+For any random variables $X_1,X_2,\ldots,X_n$,
+\[
+\var\left(\sum_{i=1}^n X_i\right) = \sum_{i=1}^n \var(X_i) + 2\sum_{i=1}^{n}\sum_{j=i+1}^n \cov(X_i,X_j).
+\]
+\end{remark}
+
+%% theorem: bilinearity of covariance
+%\begin{theorem}[Bilinearity of covariance]
+%\[
+%%\cov(a_1X_1+a_2X_2,b_1Y_1+b_2Y_2) = a_1b_1\cov(X_1,Y_1) + a_1b_2\cov(X_1,Y_2) + a_2b_1\cov(X_2,Y_1) + a_2b_2\cov(X_2,Y_2).
+%\cov(aX_1+bX_2,cY_1+dY_2) = ac\cov(X_1,Y_1) + ad\cov(X_1,Y_2) + cb\cov(X_2,Y_1) + cd\cov(X_2,Y_2).
+%\]
+%\end{theorem}
+%\begin{proof}
+%Exercise.
+%\end{proof}
+%----------------------------------------------------------------------
+\section{Correlation}
+%----------------------------------------------------------------------
+Correlation quantifies the (linear) dependence between random variables.
+
+% definition: correlation 
+\begin{definition} 
+Two random variables $X$ and $Y$ are said to be \emph{correlated} if $\expe(XY)\neq\expe(X)\expe(Y)$.%, otherwise they are said to be \emph{uncorrelated}.
+\end{definition}
+
+% lemma: independent implies uncorrelated
+\begin{lemma}
+If $X$ and $Y$ are independent, they are uncorrelated.% (so $\expe(XY)=\expe(X)\expe(Y)$).
+\end{lemma}
+
+We prove the lemma only for discrete random variables (the continuous case is similar).
+\vspace{0ex}
+% proof
+\begin{proof}
+Since $X$ and $Y$ are independent, $f_{X,Y}(x,y)=f_X(x)f_Y(y)$ for all $x,y\in\R$. Hence
+\begin{align*}
+\expe(XY) = \sum_{x,y} xy\, f_{X,Y}(x,y)
+	& = \sum_{x,y} xy\, f_X(x)f_Y(y) \text{\qquad(by independence),}\\
+	& = \left(\sum_x x\, f_X(x)\right)\left(\sum_y y\, f_Y(y)\right)
+	= \expe(X)\expe(Y).
+\end{align*}
+%\vspace*{-2ex}
+\end{proof}
+
+% theorem: var_of_sum_is_sum_of_var
+\begin{theorem}
+If $X$ and $Y$ are uncorrelated, $\var(X+Y) = \var(X) + \var(Y)$.
+\end{theorem}
+
+% proof
+\begin{proof}
+Let $X$ and $Y$ be uncorrelated. Then $\expe(XY)=\expe(X)\expe(Y)$, so
+\begin{align*}
+\var(X+Y)	& = \expe\left(\big[X+Y - \expe(X+Y)\big]^2\right) \\
+			& = \expe\left(\big[X-\expe(X)\big]^2 + 2\big[XY - X\expe(Y) - Y\expe(X) + \expe(X)\expe(Y)\big] + \big[Y-\expe(Y)\big]^2\right) \\
+			& = \var(X) + 2\left[\expe(XY)-\expe(X)\expe(Y)\right] + \var(Y) \\
+			& = \var(X) + \var(Y).
+\end{align*}
+\end{proof}
+
+
+
+% example: negative binomial
+\begin{example}
+Let $Y_1,\ldots,Y_r$ be independent and identically distributed random variables, with each $Y_i\sim\text{Geometric}(p)$. Find the mean and variance of their sum $X = \sum_{i=1}^r Y_i$.
+\begin{solution}
+Since $Y_i\sim\text{Geometric}(p)$, we know that $\expe(Y_i)=\displaystyle\frac{1-p}{p}$ and $\var(Y_i)=\displaystyle\frac{1-p}{p^2}$. Hence by the linearity of expectation,
+\[
+\expe(X) = \expe(Y_1)+\expe(Y_2)+\ldots+\expe(Y_r) = \frac{r(1-p)}{p}
+\]
+and because the $Y_i$ are independent,
+\[
+\var(X) = \var(Y_1)+\var(Y_2)+\ldots+\var(Y_r) = \frac{r(1-p)}{p^2}
+\]
+\textbf{Remark}: In this case, $X$ has the \emph{negative binomial} distribution, with parameters $r$ and $p$.
+\end{solution}
+\end{example}
+
+%----------------------------------------------------------------------
+
+\section{The Cauchy-Schwarz Inequality}
+%----------------------------------------------------------------------
+% lemma
+\begin{lemma}\label{lem:pos_rv_expe_zero}
+If $X\geq 0$ and $\expe(X)=0$ then $\prob(X=0)=1$.
+\end{lemma}
+
+\proofomitted
+%\begin{proof}
+%Let $X\geq 0$ with $\expe(X)=0$, and assume that $\prob(X>0)>0$. 
+%\bit
+%\it Because $\prob(X\leq x)$ is right-continuous, there exists $\epsilon>0$ such that $\prob(X>\epsilon)>0$. 
+%\it This implies that $X\geq \epsilon I(X>\epsilon)$.
+%\it Taking the expected value of both sides, $\expe(X)\geq \epsilon\,\prob(X>\epsilon) > 0$ (by monotonicity). 
+%\eit
+%This is a contradiction, so we conclude that $\prob(X>0)=0$.
+%\end{proof}
+
+% theorem: Cauchy-Schwarz Inequality
+\begin{theorem}[Cauchy-Schwarz inequality]
+For any two random variables $X$ and $Y$,
+\[
+\expe(XY)^2 \leq \expe(X^2)\expe(Y^2)
+\]
+with equality if and only if $\prob(Y=aX)=1$ for some $a\in\R$.
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:pos_rv_expe_zero}, $X^2$ and $Y^2$ are non-negative random variables, so we can assume that $\expe(X^2)>0$ and $\expe(Y^2)>0$ (otherwise both sides of the inequality are identically zero).
+
+%Let $a,b\in\R$ and consider the random variable $aX+bY$. By properties of expectation, 
+%\begin{align*}
+%(aX+bY)^2\geq 0 
+%	& \Rightarrow \expe\left((aX+bY)^2\right) \geq 0 \\
+%	& \Rightarrow a^2\expe(X^2) + 2ab\expe(XY) + b^2\expe(Y^2) \geq 0 \\
+%\end{align*}
+%The left-hand side of the last inequality is a quadratic expression in the variable $a$. Since the expression is always positive, the quadratic has at most one real root. Thus its discriminant $4b^2\expe(XY)-4b^2\expe(X)\expe(Y)$ must be non-positive, so provided $b\neq 0$ we have that
+%\[
+%\expe(XY)^2 - \expe(X^2)\expe(Y^2) \leq 0
+%\]
+Let $a\in\R$ consider the random variable $Z=aX-Y$. 
+\par
+By the properties of expectation,
+\begin{align*}
+Z^2\geq 0 \text{ for all } a\in\R
+	& \Rightarrow \expe(Z^2)\geq 0 \text{ for all } a\in\R \\
+	& \Rightarrow \expe(a^2X^2 - 2aXY + Y^2) \geq 0 \text{ for all } a\in\R \\
+	& \Rightarrow a^2\expe(X^2) - 2a\expe(XY) + \expe(Y^2) \geq 0 \text{ for all } a\in\R.
+\end{align*}
+
+\bit
+\it Let $h(a)=a^2\expe(X^2) - 2a\expe(XY) + \expe(Y^2)$. This is a quadratic expression in $a$.
+\eit
+Since $h(a)\geq 0$ for all $a\in\R$, the roots of the quadratic equation $h(a)=0$, given by
+\[
+a = \frac{\expe(XY)\pm\sqrt{\expe(XY)^2-\expe(X^2)\expe(Y^2)}}{\expe(X^2)}
+\]
+are either both complex (discriminant is negative) or co-incide (discriminant is zero). 
+\bit
+\it Hence $\expe(XY)^2-\expe(X^2)\expe(Y^2) \leq 0$, or equivalently, $\expe(XY)^2\leq \expe(X^2)\expe(Y^2)$.
+\eit
+
+Finally, the discriminant is zero if and only if the quadratic has real roots, which occurs if and only if $\expe(Z^2)=0$ for some $a\in\R$, i.e.
+\[
+\expe\left((aX-Y)^2\right) = 0\qquad\text{for some $a\in\R$.}
+\]
+Hence, because $(aX-Y)^2$ is a non-negative random variable, we have by Lemma~\ref{lem:pos_rv_expe_zero} that
+\begin{align*}
+\expe\big[(aX-Y)^2\big]=0
+		& \quad\Rightarrow\quad \prob\big[(aX-Y)^2 = 0\big] = 1 
+		\quad\Rightarrow\quad \prob\big(Y = aX) = 1. 
+\end{align*}		
+\end{proof}
+
+
+% corollary: correlation coefficient
+\begin{corollary}
+The correlation coefficient satisfies the inequality 
+\[
+|\rho(X,Y)|\leq 1,
+\]
+with equality if and only if $\prob(Y=aX+b)=1$ for some $a\in\R$.
+\end{corollary}
+
+% proof
+\begin{proof}
+Apply the Cauchy-Schwarz inequality to $X-\expe X$ and $Y-\expe Y$:
+\begin{align*}
+\cov(X,Y)^2 
+	& =		\expe\big((X-\expe X)(Y-\expe Y)\big) \\
+	&\leq 	\expe\big((X-\expe X)^2\big)\expe\big((Y-\expe Y)^2\big) 
+	= 	\var(X)\var(Y),
+\end{align*}
+with equality if and only if there exists $a\in\R$ such that
+\[
+\prob\big[Y-\expe Y = a(X-\expe X)] = 1.
+%\prob\big[Y-\expe Y = a(X-\expe X)] = \prob\big[Y = aX + (\expe Y - a\expe X)\big]= 1.
+%\prob(Y = aX + b) = 1 \text{\qquad where\qquad b = \expe Y - a\expe X)\big]= 1.
+\]
+Hence,
+\[	
+|\rho(X,Y)| = \left|\frac{\cov(X,Y)}{\sqrt{\var(X)\var(Y)}}\right| \leq 1
+\]
+with equality if and only if $\prob(Y = aX + b) = 1$,  where $b = \expe Y - a\expe X$.
+\end{proof}
+
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex18_covariance_correlation}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

@@ -1,0 +1,167 @@
+% !TEX root = main.tex
+% ex06_classical.tex
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+%\question
+%\begin{answer}
+%\end{answer}
+%----------------------------------------
+% example (simple counting)
+\question
+A student has two classical CDs, four jazz CDs, three rock CDs and three pop CDs, and wants to arrange them so that all CDs of the same genre are located next to each other. In how many distinct ways can this be done? If the CDs are arranged at random, what is the probability that this occurs?
+\begin{answer}
+The total number of possible arrangements is $12!= 479\,001\,600$.
+\bit
+\it 
+One such arrangement is \texttt{\,CC\,JJJJ\,RRR\,PPP\,}. There are $2!\times 4!\times 3!\times 3! = 1728$ different ways of achieving this arrangement. 
+\it
+In addition, there are four ways of choosing the first group, three for the second, two for the third and one for the last, so there are $4!= 24$ different ways of ordering the groups.
+\it
+Thus the probability that a random arrangement has the required property is 
+\[
+\displaystyle\frac{1728\times 24}{12!}\approx 0.00008658.
+\]
+\eit
+\end{answer}
+
+%----------------------------------------------------------------------
+\question (Tuesday's Child Paradox)
+A man tells you that he has two children, and that one is a boy born on a Tuesday. What is the probability that he has two boys?
+
+% solution
+\begin{answer}
+\bit
+\it There are $2\times 7\times 2\times 7 = 196$ possible (Gender,Day,Gender,Day) combinations.
+\it 27 of these 196 include a boy born on a Tuesday.
+\it 13 of these 27 have two boys, so the probability is 13/27.
+\eit
+Let $A$ be the event that the man has one boy born on a Tuesday.
+\[
+\prob(BB|A) = \frac{\prob(A|BB)\prob(BB)}{\prob(A)}
+\]
+If the man has two boys, there are 49 possible birthday combinations, of which 13 correspond to the event that one was born on a Tuesday 
+\[
+\prob(A|BB) = \frac{13}{49}
+\]
+Furthermore, since the events $\{BB,BG,GB,GG\}$ are disjoint we have
+\begin{align*}
+\prob(A) 
+	& = \prob(A\cap BB) + \prob(A\cap BG) + \prob(A\cap GB) + \prob(A\cap GG) \\
+	& = \prob(A|BB)\prob(BB) + \prob(A|BG)\prob(BG) + \prob(A|GB)\prob(GB) + \prob(A|GG)\prob(GG) \\
+	& = \left(\frac{13}{49}\times\frac{1}{4}\right) + \left(0\times\frac{1}{4}\right) 
+		+ \left(\frac{1}{7}\times\frac{1}{4}\right) + \left(\frac{1}{7}\times\frac{1}{4}\right) \\
+	& = \left(\frac{27}{49}\times\frac{1}{4}\right)
+\end{align*}
+so
+\[
+\prob(BB|A) = \frac{\prob(A|BB)\prob(BB)}{\prob(A)} = \frac{13/49\times 1/4}{27/49\times 1/4} = \frac{13}{27}
+\]
+\end{answer}
+
+%----------------------------------------
+% division paradox
+\question (Division Paradox)
+Two players $A$ and $B$ play a series of games. The players agree beforehand that the winner of the series will be the person who first wins 5 games. For some reason, the players have to stop at the point when player $A$ has won 3 games and player $B$ has won 2 games. Based on past experience, the probability that player $A$ wins a game is $p$, and the probability that $B$ wins a game is $q$ (where $p+q=1$). In view of this, how should should the players divide the prize money? State any assumptions you make.
+
+\begin{answer}
+Assumption: Assume that the outcome of any particular game is independent of the outcome of all other games. 
+\par
+A maximum of $4$ additional games are required.
+\bit
+\it If $A$ wins at least $2$ of the $4$ games, then $A$ wins the series.
+\it If $B$ wins at least $3$ of the $4$ games, then $B$ wins the series.
+\eit
+Let $W_j$ be the event that player $A$ wins $j$ of the additional games ($j=0,1,2,3,4$). By independence,
+\begin{align*}
+\prob(W_0) = q^4,\quad
+\prob(W_1) = 4pq^3,\quad
+\prob(W_2) = 6p^2q^2,\quad
+\prob(W_3) = 3p^3q,\quad
+\prob(W_4) = p^4.
+\end{align*}
+
+\small
+\begin{align*}
+\prob(\text{$A$ wins at least $2$ games}) & = \prob(W_2) + \prob(W_3) + \prob(W_4) = p^2(6q^2 + 4pq + p^2) \\
+\prob(\text{$B$ wins at least $3$ games}) & = \prob(W_0) + \prob(W_1) = q^3(q + 4p)
+\end{align*}
+\normalsize
+The prize money should therefore be divided in the ratio 
+\[
+p^2(6q^2 + 4pq + p^2) : q^3(q + 4p)
+\]
+\end{answer}
+
+%%----------------------------------------------------------------------
+%% example: test for disease
+%\begin{example}
+%One out of every $100$ people has a certain disease. A test for the disease is $95\%$ accurate, meaning that if a person has the disease, the test shows this with probability $0.95$. If a person is tested positively, what is the probability that the person actually has the disease? 
+%\end{example}
+%
+%\begin{answer}
+%Let $A$ be the event that the person has the disease. Let $B$ be the event that
+%the person tested positively: 
+%\[
+%P(A)=0.01,\ P(A^c)=0.99,\ P(B|A)=0.95 \text{ and } P(B|A^c)=0.05.
+%\]
+%Then
+%\begin{align*}
+%P(A|B)	& = \frac{P(B|A)P(A)}{P(B|A)P(A)+P(B|A^c)P(A^c)} \\
+%		& = \frac{0.95\times 0.01}{(0.95\times 0.01)+(0.05\times 0.99)} \\
+%		& \approx 0.16
+%\end{align*}
+%Given a positive test, the probability that a person has the disease is 16\%. Out of every 100 patients, we expect only one to have the disease, and that person will probably test positive. We also expect around five people (5\% of the total) to test positive incorrectly (false positives). Of the six people who might test positive, we would expect one of them to actually have the disease; one in six is approximately 16\%.
+%\end{answer}
+
+%----------------------------------------------------------------------
+% example: Monty Hall
+\question (The Monty Hall Problem)
+You are a contestant in a game show. A prize is concealed behind one of three doors; the other two doors each conceals a goat. You win the prize if you choose the door behind which the prize is hidden. After you have chosen a door, but before the door is opened, the host opens one of the other two doors to reveal a goat, and then asks if you would like to switch from your current selection to the remaining unopened door. Should you switch, or should you stick with your original selection?
+
+% solution
+\begin{answer}
+\bit
+\it Let $A$, $B$ and $C$ be the events that the prize is behind doors $a$, $b$ and $c$ respectively.
+\eit
+Assume that the prize is placed uniformly at random behind the doors,
+\[
+\prob(A) = \frac{1}{3},\quad \prob(B) = \frac{1}{3}, \quad \prob(C) = \frac{1}{3},\quad
+\]
+Let $M$ be the event that Monty opens door $a$.
+\bit
+\it We know that event $A$ has not occurred (the prize is not behind door $a$).
+\it We need to find $\prob(B|M)$ and $\prob(C|M)$.
+\eit
+By Bayes' theorem,
+\begin{align*}
+\prob(B|M)		& = \frac{\prob(B)\prob(M|B)}{\prob(M)} \\
+\prob(C|M)		& = \frac{\prob(C)\prob(M|C)}{\prob(M)}
+\end{align*}
+Now,
+\bit
+\it $\prob(M|A) = 0$ (if the prize is behind door $a$, Monty can not open $a$),
+\it $\prob(M|B) = 1/2$ (if the prize is behind door $b$, Monty can open either $b$ or $c$),
+\it $\prob(M|C) = 1$ (if the prize is behind door $c$, Monty can only open $b$),
+\eit
+The prize can only be behind one door, so $A$,$B$ and $C$ are disjoint events, so by the law of total probability,
+\begin{align*}
+\prob(M) 
+	& = \prob(M\cap A) + \prob(M\cap B) + \prob(M\cap C) \\
+	& = \prob(M|A)\prob(A) + \prob(M|B)\prob(B) + \prob(M|C)\prob(C) \\
+	& = (0\times 1/3) + (1/2\times 1/3) + (1\times 1/3) \\
+	& = \frac{1}{2}
+\end{align*}
+Thus
+\begin{align*}
+\prob(B|M) & = \frac{\prob(B)\prob(M|B)}{\prob(M)} = \frac{1/3\times 1/2}{1/2} = \frac{1}{3} \\
+\prob(C|M) & = \frac{\prob(C)\prob(M|C)}{\prob(M)} = \frac{1/3\times 1}{1/2} = \frac{2}{3} \\
+\end{align*}
+so if we switch doors, we will double our chances of winning the prize.
+\end{answer}
+
+\end{questions}
+\end{exercise}
+%======================================================================
+\endinput
+%======================================================================

@@ -1,0 +1,72 @@
+%------------------------------------------------
+% main.tex - MA2500 2014-15
+%------------------------------------------------
+\documentclass{camel}
+\usepackage{camel}
+
+% module information
+\academicyear{2014-15}
+\modulecode{MA2500}
+\moduletitle{Foundations of Probability and Statistics}
+\booktitle{Reading Material}
+
+% packages
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[subfigure]{labelformat=empty}
+\captionsetup[figure]{skip=2ex}
+\usepackage{graphicx}
+\graphicspath{{./figures/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.gif}
+\usepackage{mathtools} % for \MoveEqLeft
+
+% spacing
+\addtolength{\tabcolsep}{1ex}
+\renewcommand{\arraystretch}{1.3}
+
+% macros
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\supp}{\text{supp}}
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\expe}{\mathbb{E}}
+\newcommand{\var}{\text{Var}}
+\newcommand{\cov}{\text{Cov}}
+
+% naughty macros
+\def\it{\item}
+\def\bit{\begin{itemize}}
+\def\eit{\end{itemize}} 
+\def\ben{\begin{enumerate}}
+\def\een{\end{enumerate}}
+
+%------------------------------------------------
+\begin{document}
+%------------------------------------------------
+\makefrontmatter
+%\input{01_introduction}
+\input{02_sets}
+\input{03_probability_measures}
+\input{04_conditional_probability}
+\input{05_random_variables}
+\input{06_distributions}
+\input{07_transformations}
+\input{08_transformations_examples}
+\input{09_series_and_integrals}
+\input{10_expectation}
+\input{11_computation_of_expectation}
+\input{12_inequalities}
+\input{13_PGFs}
+\input{14_MGFs}
+\input{15_law_of_large_numbers}
+\input{16_central_limit_theorem}
+\input{17_joint_distributions}
+\input{18_covariance_correlation}
+\input{19_conditional_distributions}
+\input{20_bivariate_normal}
+%------------------------------------------------
+\end{document}
+%------------------------------------------------
+

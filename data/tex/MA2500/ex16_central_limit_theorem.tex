@@ -1,0 +1,154 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+%==========================================================================
+\question
+The continuous uniform distribution on $(a,b)$ has the following PDF:
+\[
+f(x) = \begin{cases}
+	\displaystyle\frac{1}{b-a} 	& a < x < b,  \\[2ex]
+	0				& \text{otherwise.}
+\end{cases}
+\]
+Use the central limit theorem to deduce the approximate distribution of the sample mean of $n$ independent observations from this distribution when $n$ is large.
+\begin{answer} 
+The mean is 
+\begin{align*}
+\mu 
+	& = \int_{a}^{b}\frac{x}{b-a}\,dx = \frac{a+b}{2},
+\intertext{and the second moment is}
+\mu_{2}
+	& = \int_{a}^{b}\frac{x^{2}}{b-a}\,dx = \frac{a^{2}+ab+b^{2}}{3}, 
+\intertext{so the variance is}	
+\sigma^{2} 
+	& = \expe(X^{2}) - \expe(X)^{2} = \frac{(b-a)^{2}}{12}
+\end{align*}
+By the central limit theorem, if $X$ is a random variable with mean $\mu$ and variance $\sigma^{2}$, the distribution of the sample mean $\bar{X}$ of a random sample of $n$ independent observations is approximately $N(\mu,\frac{\sigma^{2}}{n})$, the approximation being better for larger $n$. In this case, the approximate distribution of $\bar{X}$ is $N\left(\frac{a+b}{2},\frac{(b-a)^{2}}{12n}\right)$. 
+\end{answer}
+
+
+%==========================================================================
+\question
+The exponential distribution with scale parameter $\theta>0$ has the following PDF:
+\[
+f(x) = \begin{cases}
+	\displaystyle\frac{1}{\theta} e^{-x/\theta} 	& x > 0,  \\[2ex]
+	0					& \text{otherwise.}
+\end{cases}
+\]
+Use the central limit theorem to deduce the approximate distribution of the sample mean of $n$ independent observations from this distribution when $n$ is large.
+\begin{answer} % <<<
+\begin{align*}
+\expe(X) 
+	& = \frac{1}{\theta}\int_{0}^{\infty} x e^{-x/\theta}\,dx = \theta, \\
+\expe(X^2)
+	& = \frac{1}{\theta}\int_{0}^{\infty} x^2 e^{-x/\theta}\,dx  = 2\theta^2 \\
+\var(Y)
+	& = \expe(X^2) - \expe(X)^{2} = \theta^2.
+\end{align*}
+
+By the CLT, the distribution of $\bar{X}$ is approximately $\text{N}(\mu,\frac{\sigma^{2}}{n})$, the approximation being better for larger $n$. In this case, the approximate distribution of $\bar{X}$ is $\text{N}\left(\theta,\theta^2/n\right)$. 
+\end{answer}
+
+
+%==========================================================================
+\question
+Let $X\sim\text{Binomial}(n_1,p_1)$ and $X_2\sim\text{Binomial}(n_2,p_2)$ be independent random variables.
+\ben
+\it
+Use the central limit theorem to find the approximate distribution of $Y = X_1 - X_2$ when $n_1$ and $n_2$ are both large.
+\it
+Let $Y_1 = X_1/n_1$ and $Y_2 = X_2/n_2$. Show that $Y_1 - Y_2$ is approximately normally distributed with mean $p_1 - p_2$ and variance $\frac{p_1q_1}{n_1} +\frac{p_2q_2}{n_2}$ when $n_1$ and $n_2$ are both large.
+\it
+Show that when $n_1$ and $n_2$ are both large,
+\[
+\frac{(Y_1 -Y_2 )-(p_1 -p_2 )}{\sqrt{\frac{p_1 (1-p_1 )}{n_1 } +\frac{p_2 (1-p_2 )}{n_2 } } } 
+	 \sim N(0,1) \qquad\text{approx.}
+\]
+\een
+
+\begin{answer}
+\ben
+\it
+The mean and variance of $X_1$ are respectively $n_1p_1$ and $n_1p_1q_1$ where $q_1=1-p_1$. The mean and variance of $X_2$ are respectively $n_2p_2$ and $n_2p_2q_2$ where $q_2=1-p_2$. Since $Y = X_1 - X_2$ is a linear combination of random variables,
+\[
+\expe(Y) = \expe(X_1)-\expe(X_2) = n_1p_1- n_2p_2
+\]
+and since $X_1$ and $X_2$ are independent,
+\[
+\var(Y) = \var(X_1) + \var(X_2) = n_1p_1q_1 + n_2p_2q_2.
+\]
+Because both $X_1$ and $X_2$ are the sums of Bernoulli random variables, the CLT applies, so the approximate distribution of $Y$ is
+\[ 
+Y\sim N(n_1p_1- n_2p_2, n_1p_1q_1 + n_2p_2q_2)
+\]
+\it
+For large $n_1$ and $n_2$, by the CLT the distribution of $X_1$ is approximately $N(n_1p_1,n_1p_1(1 - p_1))$ for $n_1$ large, and the distribution of $X_2$ is approximately $N(n_2p_2,n_2p_2(1 - p_2))$ for $n_2$ large. Thus the distributions of $Y_1$ and $Y_2$ are approximately $N\left(p_1,\frac{p_1q_1}{n_1}\right)$ and $N\left(p_2,\frac{p_2q_2}{n_2}\right)$ respectively, and the distribution of $Y_1 - Y_2$ is therefore approximately $N\left(p_1-p_2, \frac{p_1q_1}{n_1}+\frac{p_2q_2}{n_2}\right)$ for large $n_1$ and $n_2$.
+\it
+The usual standardization for the normal distribution (subtract the mean and divide by the standard deviation) yields the result. This is used in devising approximate tests and confidence intervals for the difference of proportions.
+\een
+\end{answer}
+
+
+%==========================================================================
+\question
+5\% of items produced by a factory production line are defective. Items are packed into boxes of 2000 items. As part of a quality control exercise, a box is chosen at random and found to contain 120 defective items. Use the central limit theorem to estimate the probability of finding at least this number of defective items when the production line is operating properly.
+\begin{answer} % <<<
+Let $X$ be the number of defective items in a box. Then $X\sim\text{Binomial}(n,p)$ with $n=2000$ and $p=0.05$. Since $n$ is large, $X$ has approximately normal distribution with mean equal to $np(1-p)=100$, and variance equal to $npq=95$. The standardized variable $Z=(X-100)/\sqrt{95}$ has therefore approximately the standard normal distribution $N(0,1)$.
+Thus
+\[
+\prob(X\geq 120) = \prob\left(Z\geq\frac{120 - 100}{\sqrt{95}}\right) = \prob(Z\geq 2.0520) \approx 0.0202
+\]
+where the probability $\prob(Z\geq 2.0520)\approx 0.0202$ can be obtained from statistical tables.
+\end{answer}
+
+
+%==========================================================================
+\question
+Use the central limit theorem to prove the law of large numbers.
+\begin{answer} % <<<
+Let $X_1,X_2,\ldots$ be a sequence of i.i.d. random variables, and define $S_n=\sum_{i=1}^n X_i$. To prove the (weak) law of large numbers, we need to show that
+\[
+\prob\left(\left|\frac{S_n}{n}-\mu\right|\geq\epsilon\right) \to 0 \qquad\text{as}\quad n\to\infty
+\]
+Now,
+\[
+\prob\left(\left|\frac{S_n}{n}-\mu\right|\geq\epsilon\right)
+	= \prob\left(\left|\frac{S_n-n\mu}{\sigma\sqrt{n}}\right|\geq\frac{n\epsilon}{\sigma\sqrt{n}}\right)
+	= \prob\left(\left|\frac{S_n-n\mu}{\sigma\sqrt{n}}\right|\geq\frac{\sqrt{n}\epsilon}{\sigma}\right)
+\]
+By the central limit theorem, $\displaystyle\frac{S_n-n\mu}{\sigma\sqrt{n}}$ is approximately distributed according to $N(0,1)$, so this probability is approximated by the area under the standard normal curve between $\displaystyle\frac{\sqrt{n}\epsilon}{\sigma}$ and infinity, which approaches zero as $n\to\infty$.
+\end{answer}
+
+
+%==========================================================================
+\question
+We perform a sequence of independent Bernoulli trials, each with probability of success $p$, until a fixed number $r$ of successes is obtained. The total number of failures $Y$ (up to the $r$th succes) has the \emph{negative binomial} distribution with parameters $r$ and $p$, so the PMF of $Y$ is
+\[
+\prob(Y=k) = \binom{k+r-1}{k} (1-p)^k p^r,\qquad k=0,1,2,\ldots
+\]
+Using the fact that $Y$ can be written as the sum of $r$ independent geometric random variables, show that this distribution can be approximated by a normal distribution when $r$ is large.
+
+\begin{answer}
+If $Y\sim\text{NB}(r,p)$, we can write
+\[
+Y = X_1 + X_2 + \ldots + X_r\qquad\text{where}\quad X_i\sim\text{Geometric}(p).
+\]
+Let $X\sim\text{Geometric}(p)$. Since $\var(X)<\infty$, it follows by the central limit theorem that 
+\[
+\frac{Y - r\expe(X)}{\sqrt{r\var(X)}} \to \text{N}(0,1) \quad\text{in distribution as }r\to\infty.
+\]
+In fact, since $\expe(X)=(1-p)/p$ and $\var(X)=(1-p)/p^2$, we see that $Y$ can be approximated by the 
+$\displaystyle\text{N}\left(\frac{r(1-p)}{p}, \frac{r(1-p)}{p^2}\right)$ distribution as $r\to\infty$.
+\end{answer}
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

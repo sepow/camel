@@ -1,0 +1,340 @@
+% !TEX root = main.tex
+%======================================================================
+\chapter{Covariance and Correlation}\label{chap:covar}
+%======================================================================
+
+Let $X$ and $Y$ be simple random variables, let $\{x_1,x_2,\ldots,x_m\}$ be the range of $X$, and let $\{y_1,y_2,\ldots,y_n\}$ be the range of $Y$.
+
+Recall that $X$ and $Y$ together are described by their joint PMF:
+\[
+f(x,y) = \prob(X=x,Y=y).
+\]
+
+%----------------------------------------------------------------------
+\section{Functions of two random variables}
+%----------------------------------------------------------------------
+Let $(\Omega,\prob)$ be a finite probability space.
+\bit
+\it A simple random variable $X:\Omega\to\R$ is described by its PMF:
+\[
+f(x) = \prob(X=x).
+\]
+\it A pair of simple random variables $X,Y:\Omega\to\R$ are described by their joint PMF:
+\[
+f(x,y) = \prob(X=x,Y=y).
+\]
+\eit
+
+% lemma
+\begin{lemma}\label{lem:lus2}
+Let $(\Omega,\prob)$ be a finite probability space, let $X,Y:\Omega\to\R$ be random variables over $\Omega$, and let $f(x,y)$ denote their joint PMF. Then for any function $g:\R^2\to\R$,
+\[
+\expe\big[g(X,Y)\big] = \sum_{x,y} g(x,y)f(x,y).
+\]
+where the sum is taken over all pairs $(x,y)$ for which $f(x,y)>0$.
+\end{lemma}
+\proofomitted
+
+\break % <<
+
+% corollary
+%Taking $g(X,Y)=XY$ in Lemma~\ref{lem:lus2} leads to the following definition.
+
+\begin{definition}
+The \emph{product moment} of two random variables $X$ and $Y$ is defined by
+\[
+\expe(XY) = \sum_{x,y} xy\,f(x,y).
+\]
+%where the sum is taken over all pairs $(x,y)$ for which $f(x,y)>0$.
+\end{definition}
+
+\bit
+\it The product moment $\expe(XY)$ quantifies the \emph{dependence} between $X$ and $Y$.
+\eit
+
+% lemma: independent implies uncorrelated
+\begin{lemma}\label{lem:independent_implies_uncorrelated}
+If $X$ and $Y$ are independent then $\expe(XY)=\expe(X)\expe(Y)$.
+\end{lemma}
+
+% proof
+\begin{proof}
+$X$ and $Y$ are independent, so $f(x,y)=f_X(x)f_Y(y)$ for all $x,y\in\R$.
+Hence
+\begin{align*}
+\expe(XY) = \sum_{x,y} xy\, f(x,y)
+	& = \sum_{x,y} xy\, f_X(x)f_Y(y) \\
+	& = \left(\sum_x x\, f_X(x)\right)\left(\sum_y y\, f_Y(y)\right) \\
+	& = \expe(X)\expe(Y).
+\end{align*}
+
+Here is a more explcit proof, in which we specify the possible values taken by $X$ and $Y$.
+\bit
+\it Let $\{x_1,\ldots,x_m\}$ denote the range of $X$.
+\it Let $\{y_1,\ldots,y_n\}$ denote the range of $Y$. 
+\eit
+Then
+\begin{align*}
+\expe(XY) 
+	= \sum_{i=1}^m\sum_{j=1}^n x_i y_j \, f(x_i,y_j) 
+	& = \sum_{i=1}^m\sum_{j=1}^n x_i y_j \, f_X(x_i)f_Y(y_j) \\
+	& = \left(\sum_{i=1}^m x_i \, f_X(x_i)\right)\left(\sum_{j=1}^n y_j \, f_Y(y_j)\right) \\
+	& = \expe(X)\expe(Y).
+\end{align*}
+\end{proof}
+
+%----------------------------------------------------------------------
+\section{Correlation}
+%----------------------------------------------------------------------
+
+% definition: uncorrelated
+\begin{definition} 
+Two random variables $X$ and $Y$ are said to be \emph{correlated} if $\expe(XY)\neq\expe(X)\expe(Y)$, otherwise they are said to be \emph{uncorrelated}.
+\end{definition}
+
+% theorem: properties of variance
+\begin{theorem}\label{thm:additivity_of_variance}
+If $X$ and $Y$ are uncorrelated then $\var(X+Y) = \var(X) + \var(Y)$.
+\end{theorem}
+
+% proof
+\begin{proof}
+If $X$ and $Y$ are uncorrelated, we have $\expe(XY)=\expe(X)\expe(Y)$, so
+\begin{align*}
+\var(X+Y)	& = \expe\left(\big[X+Y - \expe(X+Y)\big]^2\right) \\
+			& = \expe\left(\big[X-\expe(X)\big]^2 + 2\big[XY-\expe(X)\expe(Y)\big] + \big[Y-\expe(Y)\big]^2\right) \\
+			& = \var(X) + 2\left[\expe(XY)-\expe(X)\expe(Y)\right] + \var(Y) \\
+			& = \var(X) + \var(Y).
+\end{align*}
+\vspace*{-3ex}
+\end{proof}
+\begin{remark}
+If $X$ and $Y$ are independent then they are uncorrelated, but the converse is not necessarily true.
+\end{remark}
+
+%Independent variables are uncorrelated, but uncorrelated variables are not necessarily independent.
+% example
+\begin{example}
+Let $X$ and $Y$ be two Bernoulli random variables with parameter $\frac{1}{2}$. Show that the random variables $U=X+Y$ and $V=|X-Y|$ are uncorrelated but not independent.
+\end{example}
+
+\begin{solution}
+The PDFs of $U$, $V$ and $UV$ are shown in the following table:
+\[
+\begin{array}{|l|ccc|}\hline
+k				& 0		& 1		& 2	\\ \hline
+\prob(U=k)		& 1/4	& 1/2	& 1/4	\\ \hline
+\prob(V=k)		& 1/2	& 1/2	& \\ \hline
+\prob(UV=k) 		& 1/2	& 1/2	& \\ \hline
+\end{array}
+%\qquad\qquad
+%\begin{array}{|cc|cc|c|}\hline
+%X & Y & U & V & UV \\ \hline
+%0 & 0 & 0 & 0 & 0 \\
+%0 & 1 & 1 & 1 & 1 \\
+%1 & 0 & 1 & 1 & 1 \\
+%1 & 1 & 2 & 0 & 0 \\ \hline
+%\end{array}
+\]
+
+%The probability mass functions are:
+%\[\begin{array}{|c|ccc|}\hline
+%u			& 0		& 1		& 2	\\ \hline
+%P(U=u)		& 1/4	& 1/2	& 1/4	\\ \hline \hline
+%v			& 0		& 1		& \\ \hline			
+%P(V=v)		& 1/2	& 1/2	& \\ \hline \hline
+%w			& 0		& 1		& \\ \hline			
+%P(UV=w) 		& 1/2	& 1/2	& \\ \hline
+%\end{array}\]
+%
+\bit
+\it $\expe(U) = \sum_k k\prob(U=k) = \left(0\times 1/4\right) + \left(1\times 1/2\right) + \left(1\times 1/4\right) = 1$.
+\it $\expe(V) = \sum_k k\,\prob(V=k) = \left(0\times 1/2\right) + \left(1\times 1/2\right) = 1/2$.
+\it $\expe(UV) = \sum_k k\,\prob(UV=k) = \left(0\times 1/2\right) + \left(1\times 1/2\right) = 1/2$.
+\eit
+Hence $U$ and $V$ are uncorrelated, because $\expe(UV)=\expe(U)\expe(V)$. However, 
+\bit
+\it $\prob(U=0,V=0) = 1/4$, but 
+\it $\prob(U=0)\prob(V=0) = 1/4 \times 1/2 = 1/8$.
+\eit
+Hence $U$ and $V$ are not independent, because $\prob(U=0,V=0)\neq\prob(U=0)\prob(V=0)$.
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Covariance}
+%----------------------------------------------------------------------
+
+% definition: covariance 
+\begin{definition}
+The \emph{covariance} of $X$ and $Y$ is 
+\begin{align*}
+\cov(X,Y) 
+	& = \expe\left[(X-\expe X)(Y-\expe Y)\right]  \\
+	& = \expe(XY) - \expe(X)\expe(Y)
+\end{align*}
+\end{definition}
+
+\begin{remark}
+\ben
+\it Variance is a special case of covariance: $\var(X) = \cov(X,X)$.
+\it $X$ and $Y$ are uncorrelated if and only if $\cov(X,Y)=0$. 
+\een
+\end{remark}
+
+% tedious example (continued)
+\begin{example}
+Let $X$ and $Y$ be random variables with joint PMF shown in the following table. 
+\small
+\[\begin{array}{|c|c|c|c|}\hline
+	& Y=2	& Y=3	& Y=4	\\ \hline
+X=1	& 1/12	& 1/6	& 0 		\\ \hline
+X=2	& 1/6	& 0		& 1/3 	\\ \hline
+X=3	& 1/12	& 1/6  	& 0		\\ \hline
+\end{array}\]
+\normalsize
+Find the covariance of $X$ and $Y$.
+%\[\begin{array}{|cc|ccc|}\hline
+%	&	& 		& Y(\Omega) 	&			\\ 
+%	&	& 2		& 3		& 4		\\\hline
+%	& 1	& 1/12	& 1/6	& 0 		\\
+%X(\Omega)	& 2	& 1/6	& 0		& 1/3 	\\
+%	& 3	& 1/12	& 1/6  	& 0		\\ \hline
+%\end{array}\]
+\end{example}
+
+\begin{solution}
+To find $\expe(X)$ and $\expe(Y)$, we need the marginal PMFs of $X$ and $Y$:
+\[\begin{array}{|c|ccc|}\hline
+k		& 1		& 2		& 3		\\ \hline
+P(X=k)	& 1/4	& 1/2	& 1/4	\\ \hline
+\end{array}\]
+\[\begin{array}{|c|ccc|}\hline
+k		& 2		& 3		& 4		\\ \hline
+P(Y=k)	& 1/3	& 1/3	& 1/3	\\ \hline
+\end{array}\]
+\bit
+\it $\expe(X) = \left(1\times 1/4\right) + \left(2\times 1/2\right) + \left(3\times 1/4\right) = 2$.
+\it $\expe(Y) = \left(2\times 1/3\right) + \left(3\times 1/3\right) + \left(4\times 1/3\right) = 3$.
+\eit
+
+To find $\expe(XY)$, we compute the PMF of the random variable $Z=XY$:
+\[\begin{array}{|c|cccccc|}\hline
+k		& 2		& 3		& 4		& 6		& 8		& 9	\\ \hline
+P(XY=k)	& 1/12	& 1/6	& 1/6	& 1/12	& 1/3	& 1/6 \\ \hline
+\end{array}\]
+The expectation of $XY$ is therefore equal to
+\[
+\expe(XY) = \left(2\times\frac{1}{12}\right) + \left(2\times\frac{1}{6}\right) + \left(4\times\frac{1}{6}\right) + \left(6\times\frac{1}{12}\right) + \left(8\times\frac{1}{3}\right) + \left(9\times\frac{1}{6}\right) = 6.
+\]
+Hence the covariance of $X$ and $Y$ is
+\begin{align*}
+\cov(X,Y)
+	& =\expe(XY)-\expe(X)\expe(Y) \\
+	& = 6 - (2\times 3) \\
+	& = 0.
+\end{align*}
+Thus $X$ and $Y$ are uncorrelated (although they are not independent).
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{The correlation coefficient}
+%----------------------------------------------------------------------
+
+\begin{definition}
+The \emph{correlation coefficient} of $X$ and $Y$ is 
+\[
+\rho(X,Y) = \frac{\cov(X,Y)}{\sqrt{\var(X)\cdot\var(Y)}}
+\]
+\end{definition}
+
+\begin{remark}
+\bit
+\it We will show that $|\rho(X,Y)|\leq 1$ for any two random variables $X$ and $Y$.
+\it $\rho(X,Y)$ provides a \emph{standardized} assessment of (linear) dependence between $X$ and $Y$.
+\it Note that $X$ and $Y$ are uncorrelated if and only if $\rho(X,Y)=0$. 
+\eit
+\end{remark}
+%% theorem
+%\begin{theorem}\label{thm:correlation}
+%For any two random variables $X$ and $Y$, 
+%\[
+%|\rho(X,Y)|\leq 1,
+%\]
+%with equality if and only if $Y=aX$ for some $a\in\R$.
+%\end{theorem}
+%
+% theorem
+\begin{theorem}[Cauchy-Schwarz inequality]\label{thm:cauchyschwarz}
+For any two random variables $X$ and $Y$, 
+\[
+\expe(XY)^2\leq\expe(X^2)\expe(Y^2)
+\]
+with equality if and only if $Y=aX$ for some $a\in\R$.
+
+\end{theorem}
+
+\break % <<
+
+\begin{proof}
+Let $a\in\R$ consider the random variable $Z=aX-Y$. 
+\par
+By the properties of expectation,
+\begin{align*}
+Z^2\geq 0 \text{ for all } a\in\R
+	& \Rightarrow \expe(Z^2)\geq 0 \text{ for all } a\in\R \\
+	& \Rightarrow \expe(a^2X^2 - 2aXY + Y^2) \geq 0 \text{ for all } a\in\R \\
+	& \Rightarrow a^2\expe(X^2) - 2a\expe(XY) + \expe(Y^2) \geq 0 \text{ for all } a\in\R.
+\end{align*}
+
+\bit
+\it Let $h(a)=a^2\expe(X^2) - 2a\expe(XY) + \expe(Y^2)$. This is a quadratic expression in $a$.
+\eit
+Since $h(a)\geq 0$ for all $a\in\R$, the roots of the quadratic equation $h(a)=0$, given by
+\[
+a = \frac{\expe(XY)\pm\sqrt{\expe(XY)^2-\expe(X^2)\expe(Y^2)}}{\expe(X^2)}
+\]
+are either both complex (discriminant is negative) or co-incide (discriminant is zero). 
+\bit
+\it Hence $\expe(XY)^2-\expe(X^2)\expe(Y^2) \leq 0$, or equivalently, $\expe(XY)^2\leq \expe(X^2)\expe(Y^2)$.
+\eit
+Finally, the discriminant is zero if and only if $Z=0$.
+\bit
+\it Hence $\expe(XY)^2=\expe(X^2)\expe(Y^2)$ if and only if $Y=aX$ for some $a\in\R$.\qed
+\eit
+\end{proof}
+
+% theorem
+\begin{theorem}\label{thm:correlation}
+For any two random variables $X$ and $Y$, 
+\[
+|\rho(X,Y)|\leq 1,
+\]
+with equality if and only if $Y=aX$ for some $a\in\R$.
+\end{theorem}
+
+\begin{proof}
+By the Cauchy-Schwarz inequality,
+\begin{align*}
+\cov(X,Y)^2
+	& = \expe\Big(\big[X-\expe(X)\big]\big[Y-\expe(Y)\big]\Big)^2 \\
+	& \leq \expe\Big(\big[X-\expe(X)\big]^2\big)\expe\Big(\big[Y-\expe(Y)\big]^2\Big) \\
+	& = \var(X)\var(Y),
+\end{align*}
+with equality if and only if $Y=aX$ for some $a\in\R$. Hence,
+\[
+|\cov(X,Y)| \leq \sqrt{\var(X)\var(Y)},
+\text{ which implies that }
+|\rho(X,Y)|	\leq 1,
+\]
+with equality if and only if $Y=aX$ for some $a\in\R$. 
+\end{proof}
+
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex13_covariance}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

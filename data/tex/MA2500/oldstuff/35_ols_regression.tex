@@ -1,0 +1,705 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Linear Regression}\label{chap:regression}
+\setcounter{page}{1}
+\startcontents[chapters]
+%----------------------------------------------------------------------
+\dictum{X}{X}{X}
+\chapcontents
+
+%====================================================================
+\section{Regression}
+%====================================================================
+Bivariate statistical analysis investigates how two random variables (or populations) are related.
+\bit
+\it Let $X$ be the \emph{explanatory} variables (e.g. mark in Year 1 probability exam).
+\it Let $Y$ be the associated \emph{response} variable (e.g. mark in Year 2 probability exam).
+\eit
+
+\vspace*{2ex}
+If we know that $X$ takes the value $x$, can we predict the value of $Y$?
+\bit
+\it $Y$ is a random variable, so we cannot predict its value with certainty.
+\it Instead we focus on the problem of estimating its expected value $E(Y)$.
+\eit
+
+\vspace*{2ex}
+The expected value of $Y$ is usually a function of $x$.
+\bit
+\it Let $\mu(x) = \expe(Y|X=x)$. This is called the \emph{regression function}.
+\it Let $e(x) = Y - \expe(Y|X=x)$. This is called the \emph{error variable} at $X=x$.
+\eit
+
+%In general, the distribution of $E$ depends on $X$ (we will assume independence in due course).
+%\[
+%Y = \expe(Y|X=x) + R
+%\]
+%
+\vspace*{1ex}
+If $X$ is also a random variable, the relationship between $X$ and $Y$ can be written as
+\[
+Y = \expe(Y|X) + e(X)
+\]
+%Thus $Y$ is separated into two parts.
+By the law of total expectation we have $\expe\big[\expe(Y|X)\big] = \expe(Y)$, so $\expe(e)=0$.
+
+
+
+%\bit
+%\it $\expe(Y|X)$ is a function of $\mathbf{X}$, called the \emph{regression function}.
+%\it $R$ is a random variable, called the \emph{residual variable}.
+%\eit
+%
+%$Y$ is separated into two parts,
+$Y$ is separated into two parts.
+\bit
+%\it We assume that the error distribution is independent of $X$.
+%\it $\mu(x)$ is that part of $Y$ \emph{explained} by the fact that $X=x$.
+%\it $e(x)$ is that part of $Y$ \emph{not explained} by the fact that $X=x$. 
+\it $\mu(X)=\expe(Y|X)$ is that part of $Y$ \emph{explained} by $X$.
+\it $e(X)=Y-\expe(Y|X)$ is that part of $Y$ \emph{not explained} by $X$. 
+\eit
+Recall the law of total variance:
+\[
+\var(Y) = \var\big[\expe(Y|X)\big] + \expe\big[\var(Y|X)\big]
+\]
+
+\bit
+\it $\var\big[\expe(Y|X)\big]$ is the \emph{explained} variance: 
+	\bit
+	\it[-] The variance of the model $\mu(X)$ with respect to the distribution of $X$.
+	\eit
+\it $\expe\big[\var(Y|X)\big]$ is the \emph{unexplained} variance.
+	\bit
+	\it[-] The expected variance of the error $e(X)$ with respect to the distribution of $X$.
+	\eit
+\eit
+
+The second part follows because
+\bit
+\it By the law of total expectation: $\expe\big[\expe(Y|X)\big] = \expe(Y)$ so $\expe(e)=0$.
+%\it $\expe\big[\var(Y|X)\big] = \var\expe\big(\big[[Y-\expe(Y|X)\big]^2|X\big) = \var(e)$.
+\it $\var(Y|X) = \expe\big(\big[Y-\expe(Y|X)\big]^2|X\big) = \var(e|X)$.
+\eit
+If the error distribution is independent of $X$, it follows that $\expe\big[\var(Y|X)\big] = \var(e)$.
+
+%We will assume that the error distribution is independent of $X$ (homoscedastic property).
+%\bit
+%\it 
+%\it The random variable $Y-\expe(Y|X)$ is called the \emph{error} at $X$.
+%\it The variance $\var(Y|X) = \expe\big(\big[[Y-\expe(Y|X)\big]^2|X\big)$ is the \emph{error variance} at $X$.
+%\eit
+
+
+
+% linear models
+A model $\mu(x)=\expe(Y|X=x)$ is called a \emph{linear model} if it is linear in its parameters.
+\bit
+\it $\mu(x) = \alpha + \beta x$ is a linear model
+\it $\mu(x) = \alpha + \beta x + \gamma x^2$ is also a linear model.
+\it $\mu(x) = \alpha\exp(\beta x)$ is not a linear model.
+\eit
+
+\vspace*{2ex}
+% simple linear models
+We will consider the \emph{simple} linear model:
+\bit
+\it $\mu(x) = \alpha + \beta x$.
+%\it The error is assumed to be independent of $X$.
+%\it The error is assumed to have $N(0,\sigma^2)$ distribution.
+\eit
+
+\vspace*{2ex}
+% simple linear models
+Assumptions:
+\bit
+\it The observations $(X_i,Y_i)$ are independent.
+\it The error variable $e_i = Y_i-\expe(Y_i|X_i)$ is independent of $X$.
+\it The error variable has $N(0,\sigma^2)$ distribution.
+\eit
+
+\vspace*{2ex}
+Given that $X_i=x_i$, the model for $Y_i$ can be written as
+\[
+Y_i = \alpha + \beta x_i + e_i \text{\quad where\quad} e_i\sim N(0,\sigma^2).
+\]
+
+%=======================================
+
+\section{Parameter estimation}
+%=======================================
+The model is
+\[
+Y_i = \alpha + \beta x_i + e_i \text{\quad where\quad} e_i\sim N(0,\sigma^2).
+\]
+
+The mean and variance of $Y_i$ are:
+\begin{align*}
+\expe(Y_i|X=x_i)
+	& = \alpha + \beta x_i \\
+\var(Y_i|X=x_i)
+	& = \sigma^2.
+\end{align*}
+
+In fact, $Y_i\sim N(\alpha+\beta x_i, \sigma^2)$.
+\bit
+\it Let $\{(x_1,y_1),(x_2,y_2),\ldots,(x_n,y_n)\}$ be a realisation of the sample.
+%\it Let $f_Y(y)$ denote the PDF of the $N(\alpha+\beta x_i, \sigma^2)$ distribution.
+\eit
+
+The likelihood function is:
+\begin{align*}
+L(\alpha,\beta,\sigma^2)
+%	& = \prod_{i=1}^n f_Y(y_i) \\
+	& = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{1}{2}\left(\frac{y_i-(\alpha+\beta x_i)}{\sigma}\right)^2\right] \\
+	& = \left(\frac{1}{\sqrt{2\pi\sigma^2}}\right)^n \exp\left[-\frac{1}{2\sigma^2}\sum_{i=1}^n \big[y_i-(\alpha+\beta x_i)\big]^2\right].
+\end{align*}
+
+The log-likelihood function is:
+\begin{align*}
+\ell(\alpha,\beta,\sigma^2)
+	& = - \frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n \big[y_i-(\alpha+\beta x_i)\big]^2.
+\end{align*}
+
+The MLE estimates of $\alpha$ and $\beta$ are obtained by miminizing
+\[
+H(\alpha,\beta) = \sum_{i=1}^n \big[y_i-(\alpha+\beta x_i)\big]^2
+\]
+\bit
+\it $H(\alpha,\beta)$ is the sum of the squared errors $e_i=y_i-(\alpha+\beta_i)$.
+\it This is the total squared deviation between the observed values $y_i$ and the corresponding model values $\alpha+\beta x_i$.
+\it To minimize $H(\alpha,\beta)$ is known as the \emph{method of least squares}.
+\eit
+
+% partial derivatives
+The partial derivatives of $H(\alpha,\beta)$ with respect to $\alpha$ and $\beta$ are
+\begin{align*}
+\frac{\partial H}{\partial\alpha} 
+	& = 2\sum_{i=1}^n \big[y_i-(\alpha+\beta x_i)\big] (-1) \\
+\frac{\partial H}{\partial\beta} 
+	& = 2\sum_{i=1}^n \big[y_i-(\alpha+\beta x_i)\big] (-x_i) \\
+\end{align*}
+
+To find the MLEs of $\alpha$ and $\beta$, we set the partial derivatives to equal zero.
+% alpha
+\begin{align*}
+\frac{\partial H}{\partial\alpha} = 0
+	& \ \Rightarrow\  \sum_{i=1}^n y_i- n\alpha -\beta\sum_{i=1}^n x_i = 0 \\
+	& \ \Rightarrow\  n\alpha  = \sum_{i=1}^n y_i- \beta\sum_{i=1}^n x_i \\
+	& \ \Rightarrow\  \alpha = \bar{y}-\beta\bar{x}.
+\end{align*}
+
+% beta
+\begin{align*}
+\frac{\partial H}{\partial\beta} =0
+	& \ \Rightarrow\  \sum_{i=1}^n x_i y_i - \alpha\sum_{i=1}^n x_i -\beta\sum_{i=1}^n x_i^2 = 0 \\
+	& \ \Rightarrow\  \sum_{i=1}^n x_i y_i - (\bar{y}-\beta\bar{x})\sum_{i=1}^n x_i -\beta\sum_{i=1}^n x_i^2 = 0 \\
+	& \ \Rightarrow\  \sum_{i=1}^n x_i(y_i-\bar{y}) - \beta\sum_{i=1}^n x_i(x_i-\bar{x}) = 0 \\
+	& \ \Rightarrow\  \sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y}) - \beta\sum_{i=1}^n (x_i-\bar{x})^2 = 0 \\
+	& \ \Rightarrow\  \beta = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sum_{i=1}^n (x_i-\bar{x})^2}
+\end{align*}
+
+The maximum-likelihood estimators of $\alpha$ and $\beta$ are therefore
+%\[
+%\hat{\alpha} = \bar{y}-\left[\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sum_{i=1}^n (x_i-\bar{x})^2}\right]\bar{x},
+%\qquad
+%\hat{\beta} = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sum_{i=1}^n (x_i-\bar{x})^2}
+%\]
+\[
+\hat{\alpha} = \bar{Y}-\hat{\beta}\bar{x}
+\text{\quad and\quad}
+\hat{\beta} = \frac{\sum_{i=1}^n (x_i-\bar{x})(Y_i-\bar{Y})}{\sum_{i=1}^n (x_i-\bar{x})^2}.
+\]
+
+%\begin{exercise}
+%Inspect the second partial derivative to verify that the likelihood indeed reaches a maximum at $\hat{\alpha}$ and $\hat{\beta}$.
+%\end{exercise}
+
+%=======================================
+
+\section{Example}
+%=======================================
+\begin{example}
+Following a class test, 10 students were asked about the number of hours they had revised for the test. The data is shown in the table below.
+\begin{center}
+\begin{tabular}{|l|cccccccccc|} \hline
+Hours studied ($x$)	&  4	 &  9 & 10 & 14 &  4 &  7 & 12 & 22 &  1 & 17 \\ 
+Test score ($y$)		& 31 & 58 & 65 & 73 & 37 & 44 & 60 & 91 & 21 & 84 \\ \hline
+\end{tabular}
+\end{center}
+Perform a simple linear regression to estimate the relationship between the number of hours studied and the score achieved in the test.
+
+\end{example}
+\begin{solution}
+It is easy to show that 
+\begin{align*}
+\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})	
+		& = \sum_{i=1}^n x_iy_i - \frac{1}{n}\left(\sum_{i=1}^n x_i\right)\left(\sum_{i=1}^n y_i\right) \text{ and} \\
+\sum_{i=1}^n (x_i - \bar{x})^2				
+		& = \sum_{i=1}^n x_i^2 - \frac{1}{n}\left(\sum_{i=1}^n x_i\right)^2.
+\end{align*}
+
+
+
+From the table,
+\bit
+\it $n=10$,
+\it $\sum_i x_i = 100$ and $\sum_i y_i = 564$,
+\it $\sum_i x_i^2 = 1376$ and $\sum_i x_iy_i = 6945$.
+\eit
+This yields
+\[
+\sum_{i=1}^n(x_i-\bar{x})^2  = 376 \text{\quad and\quad} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) = 1305.
+\]
+Thus
+%\[
+%\begin{array}{lll}
+%\hat{\beta}	
+%	& = \displaystyle\frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n(x_i-\bar{x})^2} 
+%	& = \displaystyle\frac{1305}{376}	= 3.47,\text{ and} \\	
+%\hat{\alpha}
+%	& = \displaystyle\bar{y} - \hat{\beta}\bar{x} 
+%	& = \displaystyle\frac{564}{10} - \left(\frac{1305}{376}\right)\left(\frac{100}{10}\right) = 21.69.
+%\end{array}
+%\]
+\begin{align*}
+\hat{\beta}	
+	& = \displaystyle\frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n(x_i-\bar{x})^2} 
+	= \displaystyle\frac{1305}{376}	= 3.47,\\	
+\intertext{and}
+\hat{\alpha}
+	& = \displaystyle\bar{y} - \hat{\beta}\bar{x} 
+	= \displaystyle\frac{564}{10} - \left(\frac{1305}{376}\right)\left(\frac{100}{10}\right) = 21.69.
+\end{align*}
+
+\vspace*{2ex}
+The estimated relationship is therefore $\hat{y} = 21.69 + 3.471 x$.
+\end{solution}
+
+
+%=======================================
+\section{Residual variance}
+%=======================================
+\bit
+\it The \emph{predicted value} of $Y$ at $X=x_i$ is defined by $\hat{y}_i = \hat{\alpha} + \hat{\beta}x_i$.
+\it The \emph{residual} at $X=x_i$ is defined by $\hat{e}_i = y_i - \hat{y}_i$.
+% = y_i - (\hat{\alpha}+\hat{\beta}x_i) \sim N(0,\sigma^2)$.
+\eit
+
+%\begin{align*}
+%\hat{e}_i
+%	& y_i - \hat{y}_i \\
+%	& y_i - (\hat{\alpha}+\hat{\beta}x_i) \sim N(0,\sigma^2) \\
+%\end{align*}
+
+To find the MLE of the error variance $\sigma^2$, recall the log-likelihood function:
+\[
+\ell(\alpha,\beta,\sigma^2)
+	= \frac{n}{2}\log(2\pi\sigma^2) + \frac{1}{2}\sum_{i=1}^n \big[y_i-(\alpha+\beta x_i)\big]^2.
+\]
+The first partial derivative of $\ell(\alpha,\beta,\sigma^2)$ with respect to $\sigma^2$ is
+\[
+\frac{\partial\ell}{\partial(\sigma^2)} 
+	= \frac{n}{2\sigma^2} - \frac{1}{2(\sigma^2)^2}\sum_{i=1}^n \big[y_i-(\alpha+\beta x_i)\big]^2.
+\]
+Setting this equal to zero,
+\[
+\sigma^2 = \frac{1}{n}\sum_{i=1}^n \big[y_i-(\alpha+\beta x_i)\big]^2.
+\]
+Substituting our estimates for $\alpha$ and $\beta$, we obtain the MLE
+\[
+\hat{\sigma^2} = \frac{1}{n}\sum_{i=1}^n \hat{e}_i^2 \text{\quad where\quad} \hat{e}_i = y_i-(\hat{\alpha}+\hat{\beta} x_i)\big.
+\]
+The maximum-likelihood estimate for the error variance $\sigma^2$ is therefore equal to the sample mean of the squared residuals $\hat{e}_i$.
+
+%\subsection*{Residual analysis}
+%To test required assumptions we plot the points $(x_i,e_i)$ on a scatter diagram.
+%\bit
+%\it The points should be evenly distributed about the horizontal axis.
+%\it Their distribution about horizontal axis should be independent of $x_i$.
+%\eit
+
+%=======================================
+
+\section{Distribution of the MLEs}
+%=======================================
+\bit
+\it $\hat{\alpha}$, $\hat{\beta}$ and $\hat{e}_i$ linear functions of $Y_1,Y_2,\ldots,Y_n$.
+\it The $Y_i$ are independent normal variables.
+\it Hence $\hat{\alpha}$, $\hat{\beta}$ and $\hat{e}_i$ are also normal variables.
+\eit
+
+%=======================================
+\subsection{The intercept}
+%=======================================
+Consider the MLE of the intercept, $\hat{\alpha} = \bar{Y}-\beta\bar{x}$. Its expected value is
+\begin{align*}
+\expe(\hat{\alpha})
+	= \expe(\bar{Y}-\beta\bar{x})
+	& = \expe\left(\frac{1}{n}\sum_{i=1}^n Y_i - \frac{\beta}{n}\sum_{i=1}^n x_i\right) \\
+	& = \frac{1}{n}\sum_{i=1}^n \expe(Y_i) - \frac{\beta}{n}\sum_{i=1}^n x_i \\
+	& = \frac{1}{n}\sum_{i=1}^n (\alpha+\beta x_i) - \frac{\beta}{n}\sum_{i=1}^n x_i
+	= \alpha.
+\end{align*}
+Hence $\hat{\alpha}$ is an unbiased estimator for $\alpha$.
+
+
+Since $\var(Y_i)=\sigma^2$, the variance of $\hat{\alpha}$ is 
+\begin{align*}
+\var(\hat{\alpha})
+	& = \var\left(\frac{1}{n}\sum_{i=1}^n Y_i - \frac{\beta}{n}\sum_{i=1}^n x_i\right) \\
+	& = \frac{1}{n^2}\sum_{i=1}^n \var(Y_i)
+	= \frac{\sigma^2}{n}.
+\end{align*}
+
+Hence $\hat{\alpha} \sim N(\alpha,\sigma^2/n)$.
+\bit
+\it This can be used to find confidence intervals for $\alpha$.
+\eit
+
+%=======================================
+
+\subsection{The gradient}
+%=======================================
+Consider the MLE of the gradient, $\hat{\beta} = \displaystyle\frac{\sum_{i=1}^n (x_i-\bar{x})(Y_i-\bar{Y})}{\sum_{i=1}^n (x_i-\bar{x})^2}$. 
+
+It is easy to see that
+\[
+\expe(Y_i) = \alpha + \beta x_i 
+\text{\quad and\quad}
+\expe(\bar{Y}) = \alpha + \beta\bar{x}.
+\]
+%Hence $\expe(Y_i-\bar{Y})= \beta(x_i-\bar{x})$, so the expected value of $\hat{\beta}$ is
+The expected value of $\hat{\beta}$ is therefore
+\begin{align*}
+\expe(\hat{\beta})
+	& = \expe\left[\frac{\sum_{i=1}^n (x_i-\bar{x})(Y_i-\bar{Y})}{\sum_{i=1}^n (x_i-\bar{x})^2}\right] \\
+	& = \frac{\sum_{i=1}^n (x_i-\bar{x})\expe(Y_i-\bar{Y})}{\sum_{i=1}^n (x_i-\bar{x})^2} \\
+`	& = \frac{\sum_{i=1}^n \beta(x_i-\bar{x})^2}{\sum_{i=1}^n (x_i-\bar{x})^2} = \beta.
+%	& = \frac{\alpha\sum_{i=1}^n (x_i-\bar{x}) + \beta\sum_{i=1}^n x_i(x_i-\bar{x})}{\sum_{i=1}^n (x_i-\bar{x})^2} \\
+%	& = \frac{\alpha\sum_{i=1}^n (x_i-\bar{x}) + \beta\sum_{i=1}^n (x_i-\bar{x})^2}{\sum_{i=1}^n (x_i-\bar{x})^2} \\
+%	& = \beta.
+\end{align*}
+
+Hence $\hat{\beta}$ is an unbiased estimator for $\beta$.
+
+
+
+%Consider the MLE of the gradient, $\hat{\beta} = \displaystyle\frac{\sum_{i=1}^n (x_i-\bar{x})(Y_i-\bar{Y})}{\sum_{i=1}^n (x_i-\bar{x})^2}$. Its expected value is 
+%
+%\begin{align*}
+%\expe(\hat{\beta})
+%	& = \expe\left(\frac{\sum_{i=1}^n (x_i-\bar{x})(Y_i-\bar{Y})}{\sum_{i=1}^n (x_i-\bar{x})^2}\right) \\
+%	& = \frac{\sum_{i=1}^n (x_i-\bar{x})\expe(Y_i-\bar{Y})}{\sum_{i=1}^n (x_i-\bar{x})^2} \\
+%`	& = \frac{\sum_{i=1}^n (x_i-\bar{x})(\alpha+\beta x_i)}{\sum_{i=1}^n (x_i-\bar{x})^2} \\
+%	& = \frac{\alpha\sum_{i=1}^n (x_i-\bar{x}) + \beta\sum_{i=1}^n x_i(x_i-\bar{x})}{\sum_{i=1}^n (x_i-\bar{x})^2} \\
+%	& = \frac{\alpha\sum_{i=1}^n (x_i-\bar{x}) + \beta\sum_{i=1}^n (x_i-\bar{x})^2}{\sum_{i=1}^n (x_i-\bar{x})^2} \\
+%	& = \beta.
+%\end{align*}
+%
+%Hence $\hat{\beta}$ is an unbiased estimator for $\beta$.
+
+
+
+Since $\var(Y_i)=\sigma^2$, the variance of $\hat{\beta}$ is
+\begin{align*}
+\var(\hat{\beta})
+	& = \var\left[\frac{\sum_{i=1}^n (x_i-\bar{x})(Y_i-\bar{Y})}{\sum_{i=1}^n (x_i-\bar{x})^2}\right] \\
+%	& = \frac{\sum_{i=1}^n(x_i-\bar{x})}{\sum_{i=1}^n(x_i-\bar{x})^2}\right]^2\var(Y_i) \\
+%	& = \frac{\sum_{i=1}^n(x_i-\bar{x})^2\var(Y_i)}{\left[\sum_{i=1}^n(x_i-\bar{x})^2\right]^2} \\
+	& = \frac{1}{\left[\sum_{i=1}^n(x_i-\bar{x})^2\right]^2}\sum_{i=1}^n(x_i-\bar{x})^2\var(Y_i) \\
+%	& = \frac{\sum_{i=1}^n(x_i-\bar{x})^2}{\left[\sum_{i=1}^n(x_i-\bar{x})^2\right]^2} \sigma^2 \\
+	& = \frac{\sigma^2}{\sum_{i=1}^n(x_i-\bar{x})^2}.
+%	& = \left[\frac{\sum_{i=1}^n(x_i-\bar{x})}{\sum_{i=1}^n(x_i-\bar{x})^2}\right]^2\var(Y_i) \\
+%	& = \frac{\sum_{i=1}^n(x_i-\bar{x})^2}{\left[\sum_{i=1}^n(x_i-\bar{x})^2\right]^2} \sigma^2 \\
+%	& = \frac{\sigma^2}{\sum_{i=1}^n(x_i-\bar{x})^2}.
+\end{align*}
+
+%Hence $\hat{\beta}\sim N\left(\beta,\frac{\sigma^2}{\sum_{i=1}^n(x_i-\bar{x})^2}\right)$.
+
+Hence $\hat{\beta}\sim N\Big[\beta,\sigma^2 / \sum_{i=1}^n(x_i-\bar{x})^2\Big]$.
+\bit
+\it This can be used to find confidence intervals for $\beta$.
+\eit
+
+%=======================================
+
+\subsection{The error variance}
+%=======================================
+Consider the MLE of the error variance, $\hat{\sigma}^2 = \displaystyle\frac{1}{n}\sum_{i=1}^n \big[y_i-(\hat{\alpha}+\hat{\beta} x_i)\big]^2$.
+Let us write
+\begin{align*}
+\sum_{i=1}^n\big[Y_i-(\alpha+\beta x_i)\big]^2
+	& = \sum_{i=1}^n\big[(\hat{\alpha}-\alpha) + (\hat{\beta}-\beta)x_i + (Y_i-(\hat{\alpha}+\hat{\beta}x_i))\big]^2 \\
+	& = n(\hat{\alpha}-\alpha)^2 + (\hat{\beta}-\beta)^2\sum_{i=1}^n x_i^2 + n\hat{\sigma}^2.
+\end{align*}
+For brevity, we denote this as $Q=Q_1+Q_2+Q_3$.
+\bit
+\it $Y_i-(\alpha+\beta x_i)$ are independent $N(0,\sigma^2)$ variables, so $Q/\sigma^2\sim\chi^2_{n}$.
+%\it $Y_i-(\alpha+\beta x_i)$ are independent $N(0,\sigma^2)$ variables, so $\frac{1}{\sigma^2}Q\sim\chi^2_{n}$.
+\it $\sqrt{n}(\hat{\alpha}-\alpha)/\sigma \sim N(0,1)$, so $Q_1/\sigma^2 \sim \chi^2_1$.
+\it $(\hat{\beta}-\beta)\sqrt{\sum_{i=1}^n x_i^2}/\sigma \sim N(0,1)$, so $Q_2/\sigma^2 \sim \chi^2_1$.
+%\it $\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2}(\hat{\beta}-\beta)/\sigma \sim N(0,1)$, so $Q_2/\sigma^2 \sim \chi^2_1$.
+%\it Thus it follows that $Q_3/\sigma^2\sim\chi^2_{n-2}$.
+\eit
+Thus it follows that $\displaystyle \frac{Q_3}{\sigma^2} = \frac{n\hat{\sigma}^2}{\sigma^2} \sim\chi^2_{n-2}$.
+%This can be used to find confidence intervals for $\sigma^2$.
+\bit
+\it This can be used to find confidence intervals for $\sigma^2$.
+\eit
+
+
+%=======================================
+
+\section{Test statistics for $\alpha$ and $\beta$}
+%=======================================
+
+Recall that
+\bit
+\it $\hat{\alpha} \sim N(\alpha,\sigma^2/n)$
+\it $\hat{\beta}\sim N\Big[\beta,\sigma^2 / \sum_{i=1}^n(x_i-\bar{x})^2\Big]$
+\eit
+
+The error variance $\sigma^2$ is usually unknown, so we must use the estimated error variance instead:
+\[
+\hat{\sigma^2} = \frac{1}{n}\sum_{i=1}^n \hat{e}_i^2 
+\text{\quad or alternatively \quad} 
+\hat{\sigma^2} = \frac{1}{n-2}\sum_{i=1}^n \hat{e}_i^2 \text{\quad (unbiased)}
+\]
+where $\hat{e}_i = y_i-(\hat{\alpha}+\hat{\beta} x_i)$ are the residuals.
+%
+This yields the following test statistics:
+\begin{align*}
+T_1 & = \frac{\hat{\alpha}-\alpha}{\sqrt{\hat{\sigma}^2/(n-2)}} \\[2ex]
+T_2 & = \frac{\hat{\beta}-\beta}{\sqrt{n\hat{\sigma}^2/[(n-2)\sum_{i=1}^n(x_i-\bar{x})^2]}}
+\end{align*}
+
+
+
+\bit
+\it Under the null hypothesis $H_0:\alpha=0$, 
+\[
+T_1 = \frac{\hat{\alpha}-\alpha}{\sqrt{\hat{\sigma}^2/(n-2)}} \sim t_{n-2}.
+\]
+\it Uhder the null hypothesis $H_0:\beta=0$,
+\[
+T_2 = \frac{\hat{\beta}-\beta}{\sqrt{n\hat{\sigma}^2/[(n-2)\sum_{i=1}^n(x_i-\bar{x})^2]}} \sim t_{n-2}.
+\]
+\eit
+
+\vspace*{2ex}
+The latter can be used to evaluate whether or not $Y$ depends (linearly) on $X$:
+\begin{align*}
+H_0: 	&\ Y = \alpha+e, \\
+H_1:	&\ Y = \alpha+\beta X + e.
+\end{align*}
+
+%=======================================
+
+\section{ANOVA for regression}
+%=======================================
+The total deviation of a single observation from the overall mean can be divided into two components:
+\[
+Y_i - \bar{Y} = (\hat{Y}_i - \bar{Y}) + (Y_i-\hat{Y}_i).
+\]
+Squaring these and summing over $i=1,2,\ldots,n$,
+\[
+\sum_{i=1}^n(Y_i - \bar{Y})^2 = \sum_{i=1}^n(\hat{Y}_i - \bar{Y})^2 + \sum_{i=1}^n(Y_i-\hat{Y}_i)^2.
+\]
+
+Under $H_0:\beta=0$, it can be shown that 
+\[
+\sum_{i=1}^n (\hat{Y}_i-\bar{Y})^2	\sim \chi^2_1
+\text{\quad and\quad}
+\sum_{i=1}^n (Y_i-\hat{Y}_i)^2		\sim \chi^2_{n-2}
+\]
+%
+%\begin{align*}
+%\sum_{i=1}^n (\hat{Y}_i-\bar{Y})^2	& \sim \chi^2_1, \\
+%\sum_{i=1}^n (Y_i-\hat{Y}_i)^2		& \sim \chi^2_{n-2}
+%\end{align*}
+
+Hence the test statistic
+\[
+F = \frac{\sum_{i=1}^n (\hat{Y}_i-\bar{Y})^2}{\frac{1}{n-2}\sum_{i=1}^n (Y_i-\hat{Y}_i)^2} 
+%\sim F_{1,n-2} \text{\quad under $H_0:\beta=0$.}
+\]
+has the $F_{1,n-2}$ distribution under $H_0:\beta=0$.
+
+
+
+Let
+\[
+\begin{array}{lll}
+S_T	& = \displaystyle\sum_{i=1}^n (Y_i-\bar{Y})^2
+\qquad & \text{The \emph{total} sum-of-squares,} \\
+S_M	& = \displaystyle\sum_{i=1}^n (\hat{Y}_i-\bar{Y})^2
+\qquad & \text{The \emph{regression} or \emph{model} sum-of-squares,} \\
+S_E	& = \displaystyle\sum_{i=1}^n (Y_i-\hat{Y}_i)^2
+\qquad & \text{The \emph{error} sum-of-squares.} 
+\end{array}
+\]
+
+\vspace*{2ex}
+\bit
+\it The regression sum-of-squares can be computed via
+%\begin{align*}
+%S_M & = \frac{\big[\sum_{i=1}^n (X_i-\bar{X})(Y_i-\bar{Y})\big]^2}{\sum_{i=1}^n (X_i-\bar{X})^2}. \\
+%S_E & = S_T - S_M
+%\end{align*}
+\[
+S_M = \frac{\big[\sum_{i=1}^n (X_i-\bar{X})(Y_i-\bar{Y})\big]^2}{\sum_{i=1}^n (X_i-\bar{X})^2}.
+\]
+\it The error sum-of-squres can then be computed by the relation 
+\[
+S_E = S_T - S_M.
+\]
+\eit
+
+%==========================================================================
+\begin{example}
+The table below shows the deaths due to bronchitis ($x$), and corresponding daily temperatures, averaged over a long period.
+\begin{center}
+\begin{tabular}{lcccccccccc}\hline
+$x$ & 253 & 232 & 210 & 200 & 191 & 187 & 134 & 102 & 81 & 25 \\
+$y$ & 35 & 37 & 39 & 41 & 43 & 45 & 47 & 49 & 51 & 53 \\ \hline
+\end{tabular}
+\end{center}
+Use the model $y_{i} = {\alpha} + {\beta}x_{i} + {\epsilon}_{i}$ and perform a least squares regression of $y$ on $x$. Test at the 5\% level whether the slope of the regression line is significantly different from zero.
+\end{example}
+
+\begin{solution}
+%\begin{align*}
+%n				& = 10 \\
+%\sum x_{i}		& = 1615 \\
+%\sum x_{i}^{2}	& = 308929 \\
+%\sum (x_i-\bar{x})^2			& = 308929 - (1615)^{2}/10 = 48106.5 \\
+%\sum y_{i} 		& =  440 \\
+%\sum y_{i}^{2} 	& = 19690 \\
+%\sum (y_i-\bar{y})^2 			& = 19690 - (440)^{2}/10 = 330 \\
+%\sum x_{i}y_{i}	& = 67209 \\
+%\sum (x_i-\bar{x})(y_i-\bar{y})	& = 67209 - (1615){\times}(440)/10 = -3851
+%\end{align*}
+The various quantities of interest are computed here:
+\bit
+\it $n = 10$.
+\it $\sum x_{i} = 1615$.
+\it $\sum x_{i}^{2}	= 308929$.
+\it $\sum (x_i-\bar{x})^2	= 308929 - (1615)^{2}/10 = 48106.5$.
+\it $\sum y_{i} =  440$.
+\it $\sum y_{i}^{2}  = 19690$.
+\it $\sum (y_i-\bar{y})^2 = 19690 - (440)^{2}/10 = 330$.
+\it $\sum x_{i}y_{i}	= 67209$.
+\it $\sum (x_i-\bar{x})(y_i-\bar{y})	= 67209 - (1615){\times}(440)/10 = -3851$.
+\eit
+
+The OLS estimates of the regression coefficients are
+\begin{align*}
+\hat{\beta}		&\quad = \frac{\sum (x_i-\bar{x})(y_i-\bar{y})}{\sum (x_i-\bar{x})^2} = \frac{-3851}{48106.5} = -0.080052 \\
+\hat{\alpha}	&\quad = \bar{y}-\hat{\beta}\bar{x} = 44 + 0.080052{\times}161.5 = 56.928326
+\end{align*}
+
+The least squares regression line is 
+\[
+y = 56.928326 - 0.080052x.
+\]
+
+%The analysis of variance table to test the null hypothesis that the slope ${\beta} = 0$.
+%\begin{center}
+%\begin{tabular}{|c|c|c|c|c|} \hline
+%Source of Variation	& df	& ss		& ms		& F			\\ \hline
+%Regression			& 1		& 308.2785	& 308.2875	& 113.54 	\\ \hline
+%Error				& 8		&  21.7215	&   2.7152	&			\\ \hline
+%Total				& 9		& 330.0		&			&			\\ \hline 
+%\end{tabular}
+%\end{center}
+To test the null hypothesis $H_0:\beta=0$, we compute the model sum-of-squares:
+\[
+S_M 
+	= \frac{\big[\sum (x_i-\bar{x})(y_i-\bar{y})\big]^{2}}{\sum (x_i-\bar{x})^2} 
+	=\frac{(-3851)^{2}}{48106.5} 
+	= 308.2785
+\]
+and the error sum-of-squares,
+\[
+S_E
+	= \sum (y_i-\bar{y})^2 - S_R = 330.0 - 308.2785 =  21.7215.
+\]
+The test statistic is
+\[
+F = \frac{S_M}{\frac{1}{n-2}S_E} = \frac{308.2785}{21.7215/8} = 113.54.
+\]
+
+Critical values of the $F_{1,8}$-distribution are
+\bit
+\it $5.318$ at sig. level $0.05$
+\it $7.570$ at sig. level $0.025$
+\it $11.25$ at sig. level $0.001$
+\it $14.68$ at sig. level $0.005$
+\eit
+
+\vspace*{2ex}
+Thus the null hypothesis ${\beta} = 0$ is strongly rejected at the $5\%$ significance level.
+\end{solution}
+
+
+%--------------------------------------------------
+\section{The coefficient of determination}
+%--------------------------------------------------
+For any pair of random variables $X$ and $Y$, the \emph{correlation coefficient} is defined by
+%\[
+%\rho(X,Y) 
+%	= \frac{\cov(X,Y)}{\sqrt{\var(X)\var(Y)}}
+%	= \frac{\expe\Big(\big(X-\expe(X)\big)\big(Y-\expe(Y)\big)\Big)}
+%			{\sqrt{\expe\Big(\big(X-\expe(X)\big)^2\Big)\expe\Big(\big(Y-\expe(Y)\big)^2\Big)}}
+%\]
+%
+\[
+\rho(X,Y) 
+	= \frac{\cov(X,Y)}{\sqrt{\var(X)\var(Y)}}
+	= \frac{\expe\big[(X-\expe X)(Y-\expe Y)\big]}
+			{\sqrt{\expe\big[(X-\expe X)^2\big]\expe\big[(Y-\expe Y)^2\big]}}
+\]
+
+For a bivariate random sample $\{(x_1,y_1),\ldots,(x_n,y_n)\}$, the \emph{empirical} correlation coefficient, also called the \emph{Pearson} correlation coefficient, is defined by
+\[
+r = \frac{\sum_{i=1}^n(x_i-\bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2\sum_{i=1}^n(y_i-\bar{y})^2}} 
+\]
+
+For the simple linear regression model $Y=\alpha+\beta x + e$,
+\[
+\hat{\beta} = r\sqrt{\frac{\sum_{i=1}^n(y_i-\bar{y})^2}{\sum_{i=1}^n(x_i-\bar{x})^2}}
+\]
+where $\hat{\beta}$ is the MLE of $\beta$.
+
+
+%The square of the empirical correlation coefficient is called the \emph{coefficient of determination}, denoted by $R^2$:
+The \emph{coefficient of determination} is the square of the empirical correlation coefficient. This is denoted by
+\[
+R^2 = \frac{\big[\sum_{i=1}^n(x_i-\bar{x})(y_i - \bar{y})\big]^2}{\sum_{i=1}^n(x_i-\bar{x})^2\sum_{i=1}^n(y_i-\bar{y})^2}. 
+\]
+
+\vspace*{2ex}
+Recall that the total sum-of squares and regression sum-of-squares are
+\[
+S_T	= \displaystyle\sum_{i=1}^n (y_i-\bar{y})^2
+\text{\quad and\quad}
+S_M = \frac{\big[\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})\big]^2}{\sum_{i=1}^n (x_i-\bar{x})^2}
+\text{\quad respectively.}
+\]
+
+\vspace*{2ex}
+We see that $R^2$ is the regression sum-of-squares divided by the total sum-of-squares:
+\[
+R^2 = \frac{S_M}{S_T}.
+\]
+\bit
+\it Thus $R^2$ is the proportion of the total variation explained by the regression line.
+\it It quantifies how well the model fits the data (sometimes called the \emph{goodness-of-fit}).
+\eit
+
+
+%======================================================================
+\stopcontents[chapters]
+\endinput
+%======================================================================

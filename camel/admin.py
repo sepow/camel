@@ -2,25 +2,33 @@
 camel: admin.py
 '''
 from django.contrib import admin
-from camel.models import Module, Student, Chapter, Section, Exercise
+
+from django.contrib.auth.models import User
+from camel.models import Module, TreeNode
+
+class UserAdmin(admin.ModelAdmin):
+	list_display = ('username', 'last_name', 'first_name','email')
+	ordering = ('username',)
 
 class ModuleAdmin(admin.ModelAdmin):
 	list_display = ('code', 'title', 'year')
 	ordering = ('code', 'year',)
 
-class ChapterAdmin(admin.ModelAdmin):
-	list_display = ('module', 'number', 'title')
-	ordering = ('module', 'number',)
-
-class SectionAdmin(admin.ModelAdmin):
-	list_display = ('number', 'title', 'chapter')
-	ordering = ('chapter', 'number',)
+class TreeNodeAdmin(admin.ModelAdmin):
+	list_display = ('node_id','parent','mpath','label','node_type','number','title','htex')
+	ordering = ('node_id',)
 
 admin.site.register(Module, ModuleAdmin)
-admin.site.register(Student)
+admin.site.register(TreeNode, TreeNodeAdmin)
 
-admin.site.register(Chapter, ChapterAdmin)
-# admin.site.register(Chapter)
-# admin.site.register(Section)
-admin.site.register(Section, SectionAdmin)
-admin.site.register(Exercise)
+# No! adding chapters will screw the latex numbering!!
+# class ChapterAdmin(admin.ModelAdmin):
+#     list_display = ('module', 'number', 'title')
+#     ordering = ('module', 'number',)
+#
+# class SectionAdmin(admin.ModelAdmin):
+#     list_display = ('number', 'title', 'chapter')
+#     ordering = ('chapter', 'number',)
+# admin.site.register(Chapter, ChapterAdmin)
+# admin.site.register(Section, SectionAdmin)
+# admin.site.register(Exercise)

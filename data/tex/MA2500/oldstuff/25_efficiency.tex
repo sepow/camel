@@ -1,0 +1,448 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Efficiency}\label{chap:efficiency}
+\setcounter{page}{1}
+\startcontents[chapters]
+%----------------------------------------------------------------------
+\dictum{X}{X}{X}
+\chapcontents
+
+%----------------------------------------------------------------------
+
+\section{Some conditions}
+%----------------------------------------------------------------------
+Let $X$ be a continuous random variable, and let $f(x;\theta)$ denote its PDF where $\theta\in\Theta$ is an unknown scalar parameter.
+
+\vspace{1.5ex}
+\bit
+\it How can we quantify the amount of information that $X$ carries about $\theta$?
+\eit
+
+\vspace{1.5ex}
+We assume that our model $\mathcal{C} = \{f(x;\theta):\theta\in\Theta\}$ satisfies the following conditions:
+\ben
+\it The PDFs are distinct: $\theta\neq\theta' \Rightarrow f(x;\theta)\neq f(x;\theta')$.
+\it The PDFs have common support for all $\theta\in\Theta$.
+\it The true value of $\theta$ is an interior point of $\Theta$.
+\it $f(x;\theta)$ is twice differentiable as a function of $\theta$.
+\it The integral $\int f(x;\theta)\,dx$ is twice differentiable under the integral sign as a function of $\theta$.
+\een
+
+\vspace{2ex}
+We shalll not consider these conditions in detail.
+
+%----------------------------------------------------------------------
+
+\section{The score function}
+%----------------------------------------------------------------------
+Let $X_1,X_2,\ldots,X_n$ be a random sample from the distribution of $X$. Recall the log-likelihood function:
+\[
+%\ell(\theta) = \ell(\theta;X_1,X_2,\ldots,X_n) = \sum_{i=1}^n f(X_i;\theta)
+\ell(\theta) = \sum_{i=1}^n \log f(X_i;\theta)
+\]
+To find the MLE of $\theta$, we take the derivative of $\ell(\theta)$ with respect to $\theta$:
+\[
+\ell'(\theta) = \sum_{i=1}^n \frac{\partial\log f(X_i;\theta)}{\partial\theta} 
+\]
+
+The summands in this expression are called the \emph{scores} of the random sample:
+
+%% defn: scores
+%\begin{definition}
+%The \emph{scores} of the observations $X_1,X_2,\ldots,X_n$ for the density $f(x;\theta)$ are the random variables
+%\[
+%Y_i = \frac{\partial \log f(X_i;\theta)}{\partial\theta}
+%\]
+%\end{definition}
+
+% defn: scores
+\begin{definition}
+The \emph{score function} of a random variable $X$ for the density function $f(x;\theta)$ is %the random variable
+\[
+u(X) = \frac{\partial \log f(X;\theta)}{\partial\theta}
+\]
+\end{definition}
+Note that this is itself a random variable (a transformation of $X$).
+
+
+
+% lemma: expected score is zero
+\begin{lemma}\label{lem:score}
+Under the conditions stated above, the expected value of the score function is zero:
+\[
+\expe\left(\frac{\partial\log f(X;\theta)}{\partial\theta}\right) = 0.
+\]
+\end{lemma}
+
+\begin{proof}
+\bit
+\it We start with the identity
+$\displaystyle
+\int_{-\infty}^{\infty} f(x;\theta)\,dx = 1.
+$
+\it Taking the derivative with respect to $\theta$, this becomes
+$\displaystyle
+\int_{-\infty}^{\infty} \frac{\partial f(x;\theta)}{\partial\theta} \,dx = 0.
+$
+\it By the chain rule,
+$\displaystyle
+\frac{\partial\log f(x;\theta)}{\partial\theta}  = \frac{1}{f(x;\theta)}\frac{\partial f(x;\theta)}{\partial\theta}.
+$
+\it Thus we have that
+$\displaystyle
+\int_{-\infty}^{\infty} \frac{\partial\log f(x;\theta)}{\partial\theta}f(x;\theta) \,dx = 0.
+$
+\it
+The LHS of this expression is $\displaystyle\expe\left(\frac{\partial\log f(X;\theta)}{\partial\theta}\right)$, which concludes the proof.
+\eit
+\end{proof}
+
+%----------------------------------------------------------------------
+
+\section{Fisher information}
+%----------------------------------------------------------------------
+
+% defn
+\begin{definition}
+The \emph{Fisher information} of a random variable $X$ is the variance of its score function,
+\[
+I(\theta) = \var\left(\frac{\partial\log f(X;\theta)}{\partial\theta}\right)
+\]
+\end{definition}
+
+The following result gives conveient way of computing $I(\theta)$.
+% lemma
+\begin{lemma}\label{lem:fisher}
+Under the conditions stated above, the Fisher information satisfies
+\[
+I(\theta) = -\expe\left(\frac{\partial^2\log f(X;\theta)}{\partial\theta^2}\right).
+\]
+\end{lemma}
+
+\begin{proof}
+The expected value of the score function is zero:
+\[
+\int_{-\infty}^{\infty} \frac{\partial\log f(x;\theta)}{\partial\theta}f(x;\theta) \,dx = 0.
+\]
+Taking the derivative of both sides with respect to $\theta$,
+\[
+\int_{-\infty}^{\infty} \frac{\partial^2\log f(x;\theta)}{\partial\theta^2}\,f(x;\theta) \,dx 
++
+\int_{-\infty}^{\infty} \frac{\partial\log f(x;\theta)}{\partial\theta}\,\frac{\partial f(x;\theta)}{\partial\theta} \,dx 
+= 0.
+\]
+By the chain rule, 
+\[
+\frac{\partial\log f(x;\theta)}{\partial\theta}  = \frac{1}{f(x;\theta)}\frac{\partial f(x;\theta)}{\partial\theta}.
+%\frac{\partial f(x;\theta)}{\partial\theta} = \frac{\partial\log f(x;\theta)}{\partial\theta}\,f(x;\theta).
+\]
+Thus we have
+\[
+\int_{-\infty}^{\infty} \frac{\partial^2\log f(x;\theta)}{\partial\theta^2}\,f(x;\theta) \,dx 
++
+\int_{-\infty}^{\infty} \left(\frac{\partial\log f(x;\theta)}{\partial\theta}\right)^2f(x;\theta)\,dx 
+= 0.
+\]
+\bit
+\it The first term on the LHS is $\displaystyle\expe\left(\frac{\partial^2\log f(X;\theta)}{\partial\theta^2}\right)$.
+\it The second term on the LHS is the Fisher information, $I(\theta)$.
+\eit
+This means that
+\[
+\expe\left(\frac{\partial^2\log f(X;\theta)}{\partial\theta^2}\right) + I(\theta) = 0
+\]
+%as required.
+and the result follows.
+%
+%\[
+%I(\theta) + \int_{-\infty}^{\infty} \left(\frac{\partial\log f(x;\theta)}{\partial\theta}\right)^2\,f(x;\theta)\,dx = 0.
+%\]
+%Hence
+%\[
+%I(\theta)	= -\expe\left(\frac{\partial^2\log f(X;\theta)}{\partial\theta^2}\right),
+%\]
+%as required.
+\end{proof}
+
+% example: bernoulli
+\begin{example}
+Find the Fisher information of an observation from the $\text{Bernoulli}(\theta)$ distribution.
+\begin{solution}
+Let $X\sim\text{Bernoulli}(\theta)$. The PMF of $X$ can be written as
+\[
+f(x;\theta)=\theta^x(1-\theta)^{1-x} \text{\quad for $x\in\{0,1\}$, and zero otherwise.}
+\]
+To compute the Fisher information, we need the following:
+\begin{align*}
+\log f(x;\theta)
+	& = \ x\log\theta + (1-x)\log(1-\theta), \\[2ex]
+%\frac{\partial}{\partial\theta} \log f(x;\theta),
+%	& = \ \frac{x}{\theta} - \frac{1-x}{1-\theta} \\[2ex]
+%\frac{\partial^2}{\partial\theta^2} \log f(x;\theta),
+%	& = \ -\frac{x}{\theta^2} - \frac{1-x}{(1-\theta)^2}.
+\frac{\partial \log f(x;\theta)}{\partial\theta}
+	& = \ \frac{x}{\theta} - \frac{1-x}{1-\theta}, \\[2ex]
+\frac{\partial^2 \log f(x;\theta)}{\partial\theta^2}
+	& = \ -\frac{x}{\theta^2} - \frac{1-x}{(1-\theta)^2}.
+\end{align*}
+%\bit
+%\it $\displaystyle\log f(x;\theta)
+%	= x\log\theta + (1-x)\log(1-\theta)$.
+%\it $\displaystyle\frac{\partial}{\partial\theta} \log f(x;\theta)
+%	= \frac{x}{\theta} - \frac{1-x}{1-\theta}$.
+%\it $\displaystyle\frac{\partial^2}{\partial\theta^2} \log f(x;\theta)
+%	= -\frac{x}{\theta^2} - \frac{1-x}{(1-\theta)^2}$.
+%\eit
+Note that since $\expe(X)=\theta$, the expected value of the score is zero:
+\[
+\expe\left(\frac{\partial\log f(X;\theta)}{\partial\theta}\right) 
+	= \expe\left(\frac{X}{\theta} - \frac{1-X}{1-\theta}\right)
+	= \frac{\theta}{\theta} - \frac{1-\theta}{1-\theta}
+	= 0.
+\]
+The Fisher information is 
+\begin{align*}
+I(\theta)
+	& = -\expe\left(-\frac{X}{\theta^2}-\frac{1-X}{(1-\theta)^2}\right) \\
+	& = \frac{\theta}{\theta^2}+\frac{1-\theta}{(1-\theta)^2} \\
+	& = \frac{1}{\theta}+\frac{1}{1-\theta} \\
+	& = \frac{1}{\theta(1-\theta)}
+\end{align*}
+Recall that if $X\sim\text{Bernoulli}(\theta)$, then $\var(X)=\theta(1-\theta)$:
+\bit
+\it If the variance is small ($\theta\approx 0 \text{ or } \theta\approx 1$), $X$ carries a lot of information about $\theta$.
+\it If the variance is large ($\theta\approx 1/2$), $X$ carries relatively little information about $\theta$.
+\eit
+\end{solution}
+\end{example}
+
+
+% exercise
+\begin{exercise}
+Show that the Fisher information of $X\sim\text{Binomial}(n,\theta)$ is equal to
+$\displaystyle\frac{n}{\theta(1-\theta)}$.
+\end{exercise}
+
+
+
+% example: normal
+\begin{example}
+Find the Fisher information of an observation from the $N(\theta,\sigma^2)$ distribution, whose mean $\theta$ is unknown but whose variance $\sigma^2$ is known. 
+
+\vspace*{1ex}
+\begin{solution}
+Let $X\sim N(\theta,\sigma^2)$. Then
+%\[
+%f(x;\theta) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\theta)^2}{2\sigma^2}\right).
+%\]
+%Hence,
+\begin{align*}
+f(x;\theta) 
+	& = \ \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\theta)^2}{2\sigma^2}\right), \\
+\log f(x;\theta) 
+	& = \ -\frac{1}{2}\log(2\pi\sigma^2) - \frac{(x-\theta)^2}{2\sigma^2}, \\
+\frac{\partial\log f(x;\theta)}{\partial\theta} 
+	& = \ \frac{x-\theta}{\sigma^2}, \\
+\frac{\partial^2\log f(x;\theta)}{\partial\theta^2} 
+	& \ -\frac{1}{\sigma^2}.
+\end{align*}
+The Fisher information is 
+\[
+I(\theta)
+	= -\expe\left(\frac{\partial^2\log f(X;\theta)}{\partial\theta^2}\right)
+	= \frac{1}{\sigma^2}.
+\]
+\bit
+\it If the variance is small, $X$ carries a lot of information about $\theta$.
+\it If the variance is large, $X$ carries relatively little information about $\theta$.
+\eit
+\end{solution}
+\end{example}
+
+%----------------------------------------------------------------------
+
+\section{The Cram\'{e}r-Rao lower bound}
+%----------------------------------------------------------------------
+\bit
+\it Let $X$ be a random variable having PDF $f(x,\theta)$, where $\theta$ is an unknown scalar parameter. 
+\it Let $X_1,X_2,\ldots,X_n$ be a random sample from the distribution of $X$. 
+\it Let $I(\theta)$ be the Fisher information of a single observation
+\eit
+
+By independence, the Fisher information of the sample is $nI(\theta)$:
+\begin{align*}
+I(\theta;X_1,X_2,\ldots,X_n) 
+	& = \var\left(\frac{\partial}{\partial\theta}\log f(X_1,X_2,\ldots,X_n;\theta)\right) \\
+	& = \var\left(\sum_{i=1}^n \frac{\partial}{\partial\theta}\log f(X_i;\theta)\right) \\
+	& = \sum_{i=1}^n \var\left(\frac{\partial}{\partial\theta}\log f(X_i;\theta)\right) \\
+	& = nI(\theta).
+\end{align*}
+
+% thm: CRLB
+\begin{theorem}[Cramer-Rao lower bound]\label{thm:crlb}
+If $\hat{\theta}$ is an unbiased estimator of $\theta$, then
+\[
+\var(\hat{\theta}) \geq \frac{1}{nI(\theta)}
+\]
+\end{theorem}
+\proofomitted
+
+% remark
+\begin{remark}
+\bit
+\it The CRLB provides a \emph{lower limit} on the variability of an unbiased estimator or, equivalently, an \emph{upper limit} on the amount of information we can extract from a random sample.
+\it There are many generalizations of the theorem, which deal with biased estimators, vectors of parameters, non-independent samples, discrete distributions, and so on.
+\it The CRLB has deep connections with the \emph{Heisenberg Uncertainty Principle}.
+\eit
+\end{remark}
+
+%----------------------------------------------------------------------
+
+\section{Efficient estimators}
+%----------------------------------------------------------------------
+
+% definition: efficiency
+\begin{definition}
+If the variance of an unbiased estimator $T(X)$ attains the Cram\'{e}r-Rao lower bound, then $T(X)$ is said to be an \emph{efficient} estimator.
+\end{definition}
+
+% example: mean of normal sample
+\begin{example}
+Let $X_1,X_2,\ldots,X_n$ be a random sample from the $N(\theta,\sigma^2)$ distribution, whose mean $\theta$ is unknown, but whose variance $\sigma^2$ is known. Show that $\bar{X}$ is an efficient estimator of $\theta$.
+\end{example}
+\begin{solution}
+\bit
+\it
+Let $X\sim N(\theta,\sigma^2)$. Its Fisher information is $I(\theta) = \displaystyle\frac{1}{\sigma^2}$.
+\it $\bar{X}$ is an unbiased estimator of $\theta$, so its variance is bounded below by the CRLB:
+\[
+%\var(\bar{X}) \geq \frac{1}{nI(\theta)} = \frac{\sigma^2}{n}
+\var(\bar{X}) \geq \frac{1}{nI(\theta)} 
+%\quad\Rightarrow\quad
+\text{\quad which means that \quad}
+\var(\bar{X}) \geq \frac{\sigma^2}{n}.
+\]
+\it
+However we know that $\var(\bar{X}) = \displaystyle\frac{\sigma^2}{n}$. Thus $\bar{X}$ is an efficient estimator for $\theta$.
+\eit
+%The variance of $\bar{X}$ attains the CRLB, so it is an efficient estimator of the true mean $\theta$.
+\end{solution}
+
+%-----------------------------
+% example: variance of normal sample
+\begin{example}
+Let $X_1,X_2,\ldots,X_n$ be a random sample from the $N(\mu,\theta)$ distribution, whose mean $\mu$ is known but whose variance $\theta$ is unknown. Show that the statistic
+\[
+T(X_1,X_2,\ldots,X_n) = \frac{1}{n}\sum_{i=1}^{n} (X_i-\mu)^2 
+\]
+is an efficient estimator of the variance $\theta$.
+\end{example}
+
+\begin{solution}
+Let $X\sim N(\mu,\theta)$. First we note that $T$ is unbiased, because
+\[
+\expe(T) = \frac{1}{n}\sum_{i=1}^{n} \expe\big[(X_i-\mu)^2\big] = \var(X) = \theta.
+\]
+
+Since the $X_i$ are independent, the variance of $T$ is
+\begin{align*}
+\var(T) 
+	= \frac{1}{n}\var\big[(X-\mu)^2\big]
+	& = \frac{1}{n}\Big(\expe\big[(X-\mu)^4\big] - \expe\big[(X-\mu)^2\big]^2\Big) \\
+	& = \frac{1}{n}\big(3\theta^2 - \theta^2\big) \\
+	& = \frac{2\theta^2}{n}
+\end{align*}
+
+%The Fisher information of a single observation $X\sim N(\mu,\theta)$ is
+%\[
+%I(\theta) = -\expe\left(\frac{\partial^2\log f(x;\theta)}{\partial\sigma^2}\right)
+%\]
+%where $f(x;\theta)$ is the PDF of the $N(\mu,\theta)$ distribution:
+%\[
+%f(x;\theta) = \frac{1}{\sqrt{2\pi\theta}}\exp\left(-\frac{(x-\mu)^2}{2\theta}\right).
+%\) 
+%
+Let where $f(x;\theta)$ denote the PDF of the $N(\mu,\theta)$ distribution:
+%\[
+%f(x;\theta) = \frac{1}{\sqrt{2\pi\theta}}\exp\left(-\frac{(x-\mu)^2}{2\theta}\right).
+%\]
+%
+\begin{align*}
+f(x;\theta) 
+	& = \ \frac{1}{\sqrt{2\pi\theta}}\exp\left(-\frac{(x-\mu)^2}{2\theta}\right), \\[2ex]
+\log f(x;\theta)
+	& = \ \log\left(\frac{1}{\sqrt{2\pi}}\right) + \log\left(\frac{1}{\sqrt{\theta}}\right)  - \frac{(x-\mu)^2}{2\theta}, \\[2ex]
+\frac{\partial\log f(x;\theta)}{\partial\theta}
+	& = \ -\frac{1}{2\theta} + \frac{(x-\mu)^2}{2\theta^2}, \\[2ex]
+\frac{\partial^2\log f(x;\theta)}{\partial\theta^2}
+	& = \ \frac{1}{2\theta^2} - \frac{(x-\mu)^2}{\theta^3}.
+\end{align*}
+
+%Then
+%\begin{align*}
+%\log f(x;\theta)
+%	& = \log\left(\frac{1}{\sqrt{2\pi}}\right) + \log\left(\frac{1}{\theta^{1/2}}\right)  - \frac{(x-\mu)^2}{2\theta} \\
+%\frac{\partial}{\partial\theta}\log f(x;\theta)
+%	& = -\frac{1}{2\theta} + \frac{(x-\mu)^2}{2\theta^2} \\
+%\frac{\partial^2}{\partial\theta^2}\log f(x;\theta)
+%	& = \frac{1}{2\theta^2} - \frac{(x-\mu)^2}{\theta^3}
+%\end{align*}
+The Fisher information is therefore given by
+%\begin{align*}
+%I(\theta) 
+%	= -\expe\left(\frac{\partial^2\log f(X;\theta)}{\partial\sigma^2}\right)
+%	& = -\expe\left(\frac{1}{2\theta^2} - \frac{(X-\mu)^2}{\theta^3}\right) \\
+%	& = -\frac{1}{2\theta^2} + \frac{\expe(X-\mu)^2}{\theta^3} 
+%	= -\frac{1}{2\theta^2} + \frac{\theta}{\theta^3} 
+%	= \frac{1}{2\theta^2}
+%\end{align*}
+\begin{align*}
+I(\theta) 
+	= -\expe\left(\frac{\partial^2\log f(X;\theta)}{\partial\sigma^2}\right)
+	= -\expe\left(\frac{1}{2\theta^2} - \frac{(X-\mu)^2}{\theta^3}\right)
+%	= -\frac{1}{2\theta^2} + \frac{\expe(X-\mu)^2}{\theta^3} 
+	= -\frac{1}{2\theta^2} + \frac{\theta}{\theta^3} 
+	= \frac{1}{2\theta^2}.
+\end{align*}
+
+%Thus we have
+%\begin{align*}
+%I(\theta) 
+%	& = -\expe\left(\frac{\partial^2\log f(X;\theta)}{\partial\sigma^2}\right) \\
+%	& = -\expe\left(\frac{1}{2\theta^2} - \frac{(X-\mu)^2}{\theta^3}\right) \\
+%	& = -\frac{1}{2\theta^2} + \frac{\expe(X-\mu)^2}{\theta^3} \\
+%	& = -\frac{1}{2\theta^2} + \frac{\theta}{\theta^3} \text{\qquad (because $\expe(X-\mu)^2=\var(X)=\theta$)} \\
+%	& = \frac{1}{2\theta^2}
+%\end{align*}
+%
+
+
+
+By the Cram\'{e}r-Rao theorem,
+\[
+\var(T) \geq \frac{1}{nI(\theta)} = \frac{2\theta^2}{n}
+\]
+%\[
+%%\var(\bar{X}) \geq \frac{1}{nI(\theta)} = \frac{\sigma^2}{n}
+%\var(T) \geq \frac{1}{nI(\theta)} 
+%%\quad\Rightarrow\quad
+%\text{\quad which means that \quad}
+%\var(T) \geq \frac{2\theta^2}{n}.
+%\]
+
+\vspace{2ex}
+\bit
+%\it We have previously shown that $\var(T) = \displaystyle\frac{2\theta^2}{n}$.
+\it The variance of $T$ attains the CRLB.
+\it Thus $T$ is an efficient estimator of the variance of the Normal distribution.
+\eit
+
+\end{solution}
+
+
+
+
+%======================================================================
+\stopcontents[chapters]
+\endinput
+%======================================================================

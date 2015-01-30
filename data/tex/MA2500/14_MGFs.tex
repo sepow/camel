@@ -1,0 +1,339 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Moment Generating Functions}\label{chap:mgfs}
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+\section{Moment generating functions}
+%----------------------------------------------------------------------
+
+\bit
+\it PGFs are defined only for discrete random variables taking non-negative integer values. 
+\it MGFs are defined for any random variable.
+\eit
+
+% definition
+\begin{definition}
+The \emph{moment generating function} (MGF) of a random variable $X$ is a function $M:\R\to [0,\infty]$ given by
+\[
+M(t) = \expe(e^{tX}).
+\] 
+\end{definition}
+
+% remarks
+\begin{remark}
+\ben
+\it $e^{tX}$ is non-negative, so its expectation is well-defined, and $\expe(e^{tX})\geq 0$.
+\it
+For a discrete random variable $X$ taking non-negative integer values, 
+\[
+M(t) = \expe(e^{tX}) = \expe\big[(e^t)^X\big] = G(e^t),
+\]
+where $G$ is the PGF of $X$.
+\it 
+MGFs are related to \emph{Laplace transforms}.
+\een
+\end{remark}
+
+% example: discrete (easy)
+\begin{example}
+The MGFs of some notable discrete distributions can be computed as follows:
+\[
+\begin{array}{llll}
+X\sim\text{Bernoulli}(p):\quad	& G(t) = 1 - p + pt\quad	&\quad\Rightarrow\quad & M(t) =  1 - p + pe^t		\\[2ex]
+X\sim\text{Binomial}(n,p):		& G(t) = (1-p+pt)^n			&\quad\Rightarrow\quad & M(t) = (1 - p + pe^t)^n	\\[2ex]
+X\sim\text{Poisson}(\lambda):	& G(t) = e^{\lambda(t-1)}	&\quad\Rightarrow\quad & M(t) = e^{\lambda(e^t-1)}	\\ 
+\end{array}
+\]
+\end{example}
+
+MGFs have properties similar to those of PGFs:
+% theorem
+\begin{theorem}
+\ben
+\it If $X$ and $Y$ are independent, then $M_{X+Y}(t) = M_X(t)M_Y(t)$.
+\it If $Y = a + bX$, then $M_Y(t) = e^{at} M_X(bt)$
+\een
+\end{theorem}
+
+% proof
+\begin{proof}
+\ben
+\it By independence, 
+\[
+M_{X+Y}(t) = \expe(e^{t(X+Y)}) = \expe(e^{tX}e^{tY}) = \expe(e^{tX})\expe(e^{tY}) = M_X(t)M_Y(t).
+\]
+\it For $Y=a+bX$, 
+\[
+M_Y(t) = \expe\big(e^{t(a+bX)}\big) = e^{at}\expe\big(e^{btX}\big) = e^{at}M_X(bt).
+\]
+\een
+\end{proof}
+
+% theorem
+\begin{theorem}\label{taylor:mgf}
+Let $M(t)$ be the MGF of the random variable $X$. If $M(t)$ converges on an open interval $(-R,R)$ centred at the origin, then 
+\[
+M(t) = \sum_{k=0}^{\infty} \frac{\expe(X^k)}{k!} t^k
+\]
+\end{theorem}
+
+% proof
+\begin{proof}
+%Within its radius of convergence, $M(t)$ is equal to its Taylor expansion:
+Using the series expansion of $e^{tX}$ and the linearity of expectation,
+\[
+M(t) 
+	= \expe(e^{tX}) 
+	= \expe\left(\sum_{k=0}^{\infty} \frac{(tX)^k}{k!}\right)
+	= \sum_{k=0}^{\infty} \frac{\expe(X^k)}{k!} t^k
+\]
+\end{proof}
+
+\begin{corollary}
+Let $X$ be a random variable, and let $M(t)$ denote its MGF. Then %$\expe(X) = M'(0)$, and more generally,
+\[
+\expe(X^n) = M^{(n)}(0),
+\]
+where $M^{(n)}(0)$ is the $n$th derivative of $M(t)$ evaluated at $t=0$. In particular,
+\[
+M(0) = 1,\quad M'(0) = \expe(X),\quad M''(0) = \expe(X^2),\quad \text{and so on.}
+\]
+%Thus $M(t)$ is the \emph{exponential generating function} of the moment sequence $\mu_0,\mu_1,\mu_2,\ldots$, so
+%\[
+%M^{(n)}(0) = \mu_n \quad\text{for all } n
+%\]
+%where $M^{(n)}(0)$ denotes the $n$th derivative of $M(t)$ evaluated at $t=0$:
+%\[
+%M^{(n)}(0) = \left.\frac{d^{n}M}{dt^{m}}\right|_{t=0}.
+%\]
+%In particular, $M(0)=1$, $M'(0)=\expe(X)$ and $M''(0)-M'(0)^2=\var(X)$.
+\end{corollary}
+
+
+
+% example: exponential
+\begin{example}[Exponential distribution]
+Let $X\sim\text{Exponential}(\lambda)$ where $\lambda>0$ is a rate parameter. 
+\ben
+\it Show that the MGF of $X$ is given by $M(t)=\displaystyle\frac{\lambda}{\lambda-t}$.
+\it Use $M(t)$ to find the mean and variance of $X$.
+\een
+\end{example}
+
+\begin{solution}
+\ben
+\it % << (i)
+The PDF of $X$ is $f(x)=\lambda e^{-\lambda x}$ for $x>0$ (and zero otherwise), so
+\begin{align*}
+M(t) 
+	= \int_0^\infty e^{tx} f(x)\,dx 
+	= \lambda \int_0^\infty e^{tx} e^{-\lambda x}\,dx 
+	& = \lambda \int_0^\infty e^{-(\lambda-t)x}\,dx \\
+	& = \frac{-\lambda}{\lambda-t} \left[e^{-(\lambda-t)x}\right]_0^\infty
+	= \frac{\lambda}{\lambda-t}.
+\end{align*}
+\it % << (ii)
+\bit
+\it $M'(t) = \displaystyle \frac{\lambda}{(\lambda-t)^2}$, which yields $\mu_1 = M'(0)  = \displaystyle\frac{1}{\lambda}$.
+\it $M''(t) = \displaystyle \frac{2\lambda}{(\lambda-t)^3}$ which yields $\mu_2 = M''(0)  = \displaystyle\frac{2}{\lambda^2}$.
+\it Thus $\sigma^2 = \mu_2 - \mu_1^2 = \displaystyle\frac{1}{\lambda^2}$.
+\eit
+\een
+\end{solution}
+%-------------------------
+
+%-------------------------
+% example
+\begin{example}[Gamma distribution]
+The PDF of the $\text{Gamma}(k,\theta)$ distribution is given by
+\[
+f(x) = \left\{\begin{array}{ll}
+	\displaystyle\frac{x^{k-1}e^{-x}}{\Gamma(k)} & x>0, \\
+	0 & \text{othewise.}
+\end{array}\right.
+\]
+Show that the MGF of the $\text{Gamma}(k,\theta)$ distribution is given by
+\[
+M(t) = \frac{1}{(1-\theta t)^k}
+\]
+\end{example}
+
+\begin{solution}
+Let $X\sim\text{Gamma}(k,1)$. Then
+% PDF of $X$ is 
+%$
+%f(x) = \left\{\begin{array}{ll}
+%	\displaystyle\frac{x^{k-1}e^{-x}}{\Gamma(k)} & x>0, \\
+%	0 & \text{othewise.}
+%\end{array}\right.
+%$
+%
+%Its MGF can be computed as follows:
+\begin{align*}
+M(t) = \expe(e^{tX})
+	= \int_0^\infty e^{tx} f(x)\,dx 
+	& = \frac{1}{\Gamma(k)}\int_0^\infty x^{k-1}e^{-(1-t)x}\,dx \\
+	& = \frac{1}{\Gamma(k)}\frac{1}{(1-t)^k}\int_0^\infty \big[(1-t)x\big]^{k-1}e^{-(1-t)x}(1-t)\,dx \\
+	& = \frac{1}{\Gamma(k)}\frac{1}{(1-t)^k}\int_0^\infty y^{k-1} e^{-y}\,dy \\
+	& = \frac{1}{(1-t)^k}.
+\end{align*}
+The scaled variable $Y=\theta X$ has distribution $Y\sim\text{Gamma}(k,\theta)$, so by the properties of MGFs, 
+\[
+M_Y(t) = M_X(\theta t) = \frac{1}{(1-\theta t)^k}.
+\]
+\end{solution}
+%-------------------------
+
+%-------------------------
+% example
+\begin{example}[Normal distribution]
+By first considering the MGF of the $N(0,1)$ distribution, show that the MGF of the $N(\mu,\sigma^2)$ distribution is given by
+\[
+M(t) = \exp\left(\mu t + \frac{1}{2}\sigma^2t^2\right).
+\]
+\end{example}
+
+\begin{solution}
+Let $Z\sim N(0,1)$ be a standard normal variable; this has PDF
+\[
+f(z) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}z^2}\qquad (z\in\R).
+\]
+Thus
+\[
+M(t) = \expe(e^{tZ})
+	 = \int_{-\infty}^{\infty} e^{tz} f(z)\,dz 
+	 = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{tz-\frac{1}{2}z^2}\,dz 
+\]
+The exponent $tz-\frac{1}{2}z^2$ can be written as $\frac{1}{2}t^2 -\frac{1}{2}(z-t)^2$, so
+\begin{align*}
+M(t)
+	& = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{\frac{1}{2}t^2} e^{-\frac{1}{2}(z-t)^2}\,dz \\
+	& = e^{\frac{1}{2}t^2} \left(\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{-\frac{1}{2}(z-t)^2}\,dz\right) \\
+	& = e^{\frac{1}{2}t^2}.
+\end{align*}
+
+Let $X=\mu+\sigma Z$. Then $X\sim N(\mu,\sigma^2)$ and by the properties of MGFs,
+\[
+M_X(t) = e^{\mu t}M_Z(\sigma t) = e^{\mu t}e^{\frac{1}{2}\sigma^2t^2}= e^{\mu t + \frac{1}{2}\sigma^2t^2},
+\]
+as required.
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Characteristic functions}
+%----------------------------------------------------------------------
+
+MGFs are useful, but the expectations that define them may not always be finite. Characteristic functions do not suffer this disadvantage.
+
+% definition
+\begin{definition}
+The \emph{characteristic function} of a random variable $X$ is a function $\phi:\R\to\C$ given by 
+\[
+\phi(t) = \expe(e^{itX}) \qquad\text{where}\qquad i=\sqrt{-1}.
+\]
+\end{definition}
+
+% fourier
+\begin{remark}
+\bit
+%\it $\phi(t) = \expe(\cos tX)+ i\expe(\sin tX)$.
+\it If $M(t)$ is the MGF of $X$, its characteristic function is given by $\phi(t) = M(it)$.
+\it $\phi:\R\to\C$ exists for all $t\in\R$.
+\it Characteristic functions are related to \emph{Fourier transforms}.
+\eit
+\end{remark}
+
+
+%-------------------------
+% theorem
+\begin{theorem}%[Properties of characteristic functions]\label{thm:properties_cf}
+\ben
+%\it $\phi(0)=1$ and $|\phi(t)|\leq 1$ for all $t$.
+\it If $X$ and $Y$ are independent, then $\phi_{X+Y}(t) = \phi_X(t)\phi_Y(t)$.
+\it If $Y = a + bX$, then $\phi_Y(t) = e^{-iat}\phi_X(bt)$
+\een
+\end{theorem}
+\proofomitted
+
+%% proof
+%\begin{proof}
+%\ben
+%\it % << (i)
+%$\phi(0)=\expe(e^0)=\expe(1) = 1$, and 
+%$\displaystyle |\phi(t)| = \left|\int e^{itx}\,dF(x)\right| \leq \int |e^{itx}|\,dF(x) = 1$.
+%\it % << (ii)
+%By independence, $\phi_{X+Y}(t) = \expe(e^{it(X+Y)}) = \expe(e^{itX}e^{itY})$, and since 
+%\[
+%e^{itX} = \cos(tX) + i\sin(tX)\quad\text{and}\quad e^{itY} = \cos(tY) + i\sin(tY),
+%\]
+%we see that 
+%\[
+%e^{itX}e^{itY} = \big[\cos(tX)\cos(tY) - \sin(tX)\sin(tY)\big] + i\big[\cos(tX)\sin(tY) + \sin(tX)\cos(tY)\big]
+%\]
+%Taking the expectation of both sides, and using the fact that $X$ and $Y$ are independent, 
+%\begin{align*}
+%\phi_{X+Y}(t) 
+%	& = \expe\big(\cos(tX)+i\sin(tX)\big)\expe\big(\cos(tY)+i\sin(tY)\big) \\
+%	& = \expe(e^{itX})\expe(e^{itY}) \\
+%	& = \phi_X(t)\phi_Y(t).
+%\end{align*}
+%\it % << (ii)
+%$\phi_Y(t) 
+%	= \expe\big(e^{it(a+bX)}\big) 
+%	= \expe\big(e^{iat}e^{i(bt)X}\big) 
+%	= e^{iat}\expe(e^{i(bt)X}) 
+%	= e^{iat}\phi_X(bt)$.
+%\een
+%\end{proof}
+
+%----------------------------------------------------------------------
+\subsection{The inversion theorem} 
+%----------------------------------------------------------------------
+The \emph{inversion theorem} asserts that a random variable is entirely specified by its characteristic function, meaning that $X$ and $Y$ have the same characteristic function if and only if they have the same distribution. We state the inversion theorem only for continuous distributions:
+% theorem
+\begin{theorem}[Fourier inversion theorem]
+If $X$ is continuous with density function $f$ and characteristic function $\phi$, then
+\[
+f(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} e^{-itx}\phi(t)\,dt 
+\] 
+at every point $x$ at which $f$ is differentiable.
+\end{theorem}
+\proofomitted
+
+%% corollary
+%\begin{corollary}
+%Two random variables $X$ and $Y$ have the same characteristic function if and only if they have the same distribution function.
+%\end{corollary}
+
+%----------------------------------------------------------------------
+\subsection{The continuity theorem} 
+%----------------------------------------------------------------------
+For a sequence of random variables $X_1,X_2,\ldots$, the \emph{continuity theorem} asserts that if the cumulative distribution functions $F_1,F_2,\ldots$ of the sequence approaches some limiting distribution $F$, then the charactaristic functions $\phi_1,\phi_2,\ldots$ of the sequence approaches the characteristic function of $F$.
+
+% convergence in distribution
+\begin{definition}
+A sequence of distribution functions $F_1,F_2,\ldots$ is said to \emph{converge} to the distribution function $F$, denoted by $F_n\to F$, if $F_n(x)\to F(x)$ as $n\to\infty$ at each point $x$ at which $F$ is continuous.
+\end{definition}
+
+% theorem: continuity
+\begin{theorem}[Continuity theorem]
+Let $F_1,F_2,\ldots$ and $F$ be distribution functions, and let $\phi_1,\phi_2,\ldots$ and $\phi$ denote the corresponding characteristic functions. 
+\ben
+\it If $F_n\to F$ then $\phi_n(t)\to\phi(t)$ for all $t$.
+\it If $\phi_n(t)\to\phi(t)$ then $F_n\to F$ provided $\phi(t)$ exists and is continuous at $t=0$.
+\een
+\end{theorem}
+\proofomitted
+
+%\begin{remark}
+%The inversion and continuity theorems are needed to prove the central limit theorem (Lecture~\ref{chap:clt}).
+%\end{remark}
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex14_MGFs}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

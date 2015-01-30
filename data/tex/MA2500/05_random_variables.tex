@@ -1,0 +1,177 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Random Variables}\label{chap:random_variables}
+%----------------------------------------------------------------------
+
+%----------------------------------------------------------------------
+\section{Random variables}
+%----------------------------------------------------------------------
+Random variables are functions that transform abstract sample spaces to the real numbers.
+
+\begin{definition}
+Let $\Omega$ be the sample space of some random experiment, and let $\mathcal{F}$ be a $\sigma$-field of events over $\Omega$.
+A \emph{random variable} on $(\Omega,\mathcal{F})$ is a function 
+\[
+\begin{array}{rccl}
+	X:	& \Omega	& \to		& \R \\[1ex]
+		& \omega	& \mapsto	& X(\omega)
+\end{array}
+\]
+with the property that $\{\omega: X(\omega)\in B\}\in\mathcal{F}$ for every $B\in\mathcal{B}$, where $\mathcal{B}$ is the Borel $\sigma$-field over $\R$.
+\end{definition}
+
+\begin{remark}
+\bit
+\it The set $\{\omega: X(\omega)\in B\}$ contains precisely those outcomes that are mapped by $X$ into the set $B$.
+\it $X$ is a random variable only if every set of this form is an element of the $\sigma$-field $\mathcal{F}$.
+\it This condition means that, for any Borel set $B$, the probability that $X$ takes a value in $B$ is well-defined.
+\eit
+\end{remark}
+
+Let us define the following notation:
+\[
+\{X\in B\} = \{\omega: X(\omega)\in B\}
+\]
+
+
+\bit
+\it The expression $\{X\in B\}$ should not be taken literally: $X$ is a function, while $B$ is a subset of the real numbers. 
+\it Instead, think of $\{X\in B\}$ as the event that $X$ takes a value in $B$.
+\it The condition $\{X\in B\}\in\mathcal{F}$ ensures that the probability of this event is well-defined.
+\eit
+
+We denote the probability of $\{X\in B\}$ by $\prob(X\in B)$, by which we mean
+\[
+\prob(X\in B) = \prob\big(\{\omega: X(\omega) \in B\}\big)
+\]
+
+\newpage
+
+\begin{proposition}\label{prop:rv_alt}
+A function $X:\Omega\to\R$ is a random variable if and only if $\{X\leq x\}\in\mathcal{F}$ for every $x\in\R$.
+\end{proposition}
+
+\proofomitted
+
+\begin{remark}
+To check whether or not a function $X:\Omega\to\R$ is a random variable, by the proposition we need not verify that $\{X\in B\}\in\mathcal{F}$ for all Borel sets $B\in\mathcal{B}$. Instead, it is enough to verify only that the sets $\{\omega: X(\omega)\leq x\}$ are included in $\mathcal{F}$ (for every $x\in\R$).
+\end{remark}
+
+%\begin{proposition}
+%A function $X:\Omega\to\R$ is a random variable if 
+%\bit
+%\it $\{X\leq x\}\in\mathcal{F}$ for every $x\in\R$, or
+%\it $\{X\gt  x\}\in\mathcal{F}$ for every $x\in\R$, or
+%\it $\{X\lt  x\}\in\mathcal{F}$ for every $x\in\R$, or
+%\it $\{X\lt  x\}\in\mathcal{F}$ for every $x\in\R$.
+%\eit
+%\end{proposition}
+
+
+%----------------------------------------------------------------------
+\section{Indicator variables}
+%----------------------------------------------------------------------
+The elementary random variable is the \emph{indicator variable} of an event $A$.
+
+% definition: indicator function
+\begin{definition}
+The \emph{indicator variable} of an event $A$ is the random variable $I_A:\Omega\to\R$ defined by
+\[
+I_A(\omega) =
+  \begin{cases}
+   1 & \text{if } \omega\in A, \\
+   0 & \text{if } \omega\notin A.
+  \end{cases}
+\]
+\end{definition}
+
+% theorem: properties of indicator variables
+\begin{theorem}
+Let $A$ and $B$ be any two events. Then
+\ben
+\it $I_{A^c} = 1 - I_A$
+\it $I_{A\cap B} = I_A I_B$
+\it $I_{A\cup B} = I_A + I_B - I_{A\cap B}$
+\een
+\end{theorem}
+
+\begin{proof}
+Exercise. Note that for two functions to be equal, they must be equal at every point of their common domain, so for the first part we need to show that $I_{A^c}(\omega) = 1-I_A(\omega)$ for every $\omega\in\Omega$, and similarly for parts (2) and (3).
+\end{proof}
+
+%----------------------------------------------------------------------
+%\newpage
+\section{Simple random variables}
+%----------------------------------------------------------------------
+
+% defn
+\begin{definition}
+A \emph{simple random variable} is one that takes only finitely many values.
+\end{definition}
+
+If $X:\Omega\to\R$ is a simple random variable, it can be represented as:
+\[
+X(\omega)= \sum_{i=1}^n a_i I_{A_i}(\omega)
+\]
+where
+\bit
+\it $\{a_1,a_2,\ldots,a_n\}\subset\R$ is the range of $X$, and 
+\it $\{A_1,A_2,\ldots,A_n\}$ is a partition of the sample space, $\Omega$.
+\eit
+
+%----------------------------------------------------------------------
+\section{Probability on $\mathbb{R}$}
+%----------------------------------------------------------------------
+
+% definition
+\begin{definition}
+Let $(\Omega,\mathcal{F},\prob)$ be a probability space and let $X:\Omega\to\R$ be a random variable on $(\Omega,\mathcal{F})$. The function 
+\[
+\begin{array}{rccl}
+	\prob_X:	& \mathcal{B}	& \to 		& [0,1] \\
+				& B				& \mapsto 	& \prob(X\in B).
+\end{array}
+\]
+is called the \emph{distribution} of $X$.
+\end{definition}
+
+%\newpage
+% theorem
+\begin{theorem}
+$\prob_X$ is a probability measure on $(\R,\mathcal{B})$.
+\end{theorem}
+
+% proof
+\begin{proof}
+First we need to show that $\prob_X(\R) = 1$:
+\[
+\prob_X(\R) = \prob(X\in\R) = \prob\big(\big\{\omega:X(\omega)\in\R\big\}\big) = 1. 
+\]
+
+We also need to show that $\prob_X$ is countably additive. If $B_1,B_2,\ldots$ is a sequence of pairwise disjoint sets in $\mathcal{B}$, then
+\begin{align*}
+\prob_X\big(\textstyle\bigcup_{i=1}^{\infty} B_i\big)
+	& = \prob\big(\big\{\omega : X(\omega)\in \textstyle\bigcup_{i=1}^{\infty} B_i\big\}\big) \\
+	& = \prob\big(\textstyle\bigcup_{i=1}^{\infty} \{\omega : X(\omega)\in B_i\}\big) \\
+	& = \sum_{i=1}^{\infty} \prob\big(\{\omega : X(\omega)\in B_i\}\big) \quad\text{because the $B_i$ are disjoint,} \\
+	& = \sum_{i=1}^{\infty} \prob_X(B_i),
+\end{align*}
+which concludes the proof.
+\end{proof}
+
+
+\begin{remark}
+%\fbox{\begin{minipage}{\linewidth}\centering
+A random variable $X$ transforms an abstract probability space $(\Omega,\mathcal{F},\prob)$ into a more tractable probability space $(\R,\mathcal{B},\prob_X)$, where we can apply the methods of \emph{real analysis}.
+%\end{minipage}}
+\end{remark}
+
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex05_random_variables}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

@@ -1,0 +1,317 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{The Likelihood Ratio Test}\label{chap:likelihood-ratio}
+\setcounter{page}{1}
+\startcontents[chapters]
+%----------------------------------------------------------------------
+\dictum{X}{X}{X}
+\chapcontents
+
+%==========================================================================
+\section{Likelihood ratio tests} 
+%==========================================================================
+Let $X$ be a random variable and let $F_{\theta}$ denote its CDF, where $\theta\in\Theta$ is an unknown parameter.
+\bit
+\it We wish to test the null hypothesis $H_0:\theta\in\Theta_0$ against the alternative $H_1:\theta\in\Theta_1$.  
+\it Let $\mathbf{X}=(X_1,X_2,\ldots,X_n)$ be a random sample from the distribution of $X$.
+\it Let $D\subseteq\R^n$ denote the sample space.
+\eit
+
+% defn: likelihood ratio
+\begin{definition}
+The \emph{likelihood ratio} statistic $\lambda:D\to\R$ for testing $H_0:\theta\in\Theta_0$ against $H_1:\theta\in\Theta_1$ is defined by
+\[
+\lambda(\mathbf{x}) = \frac{\max\{L(\theta;\mathbf{x}):\theta\in\Theta_0\}}{\max\{L(\theta;\mathbf{x}):\theta\in\Theta_1\}} 
+\]
+\end{definition}
+
+% simple case
+If both $H_0$ and $H_1$ are simple hypotheses, say $H_0:\theta=\theta_0$ and $H_1:\theta=\theta_1$, this reduces to
+\[
+\lambda(\mathbf{x}) = \frac{L(\theta_0;\mathbf{x})}{L(\theta_1;\mathbf{x})}
+\]
+
+\bit
+\it If the test statistic $\lambda(\mathbf{x})$ is small, we might be inclined to reject $H_0$.
+\eit
+
+% defn: likelihood ratio test
+\begin{definition}
+The \emph{likelihood ratio test} (LRT) of $H_0:\theta\in\Theta_0$ against $H_1:\theta\in\Theta_1$ is defined by the critical region
+\[
+C = \left\{\mathbf{x}:\lambda(\mathbf{x}) \leq k\right\} \subseteq D,
+\]
+where $k$ is chosen so that $\prob_{H_0}\big[\lambda(\mathbf{x})\leq k]=\alpha$.
+\end{definition}
+
+% simple case
+If both $H_0$ and $H_1$ are simple hypotheses, say $H_0:\theta=\theta_0$ and $H_1:\theta=\theta_1$, this is called the \emph{simple likelihood ratio test} (SLRT).
+%, with $k$ chosen so that $\alpha = \prob_{\theta_0}\big[\lambda(\mathbf{x})\leq k]$.
+
+% example
+\begin{example}
+Let $X$ be a random sample of size $1$ from the $\text{Exponential}(\theta)$ distribution, where $\theta$ is an unknown scale parameter. Construct a likelihood ratio test of size $\alpha$ to test the simple null hypothesis $H_0:\theta=2$ against the simple alternative $H_1:\theta=3$.
+\end{example}
+
+\begin{solution}
+%The CDF and PDF of $X$ are $F(x) = 1 - e^{-x/\theta}$ and $f(x) = (1/\theta)e^{-x/\theta}$ resp.
+The PDF of $X\sim\text{Exponential}(\theta)$ is $f(x;\theta) = (1/\theta)e^{-x/\theta}$.
+
+%The CDF and PDF of $X$ are $F(x) = 1 - \exp(-x/\theta)$ and $f(x) = (1/\theta)\exp(-x/\theta)$ resp.
+%\bit
+%\it CDF: $F(x) = 1 - e^{-x/\theta}$.
+%\it CDF: $F(x) = 1 - \exp\left(-\frac{x}{\theta}\right)$.
+%\it PDF: $f(x) = (1/\theta)e^{-x/\theta}$.
+%\it PDF: $F(x) = \frac{1}{\theta}e^{-x/\theta}$.
+%\it PDF: $f(x) = \frac{1}{\theta}\exp\left(-\frac{x}{\theta}\right)$.
+%\it PDF: $f(x) = \frac{1}{\theta}e^{-\frac{x}{\theta}}$.
+%\eit
+
+The likelihood ratio is
+\[
+\lambda(x) = \frac{L(2;x)}{L(3;x)} = \frac{f(x;2)}{f(x;3)} = \frac{(1/2)e^{-x/2}}{(1/3)e^{-x/3}} = (3/2)e^{-x/6}.
+\]
+\bit 
+\it The LRT is defined by the critical region $C = \{x:\lambda(x)\leq k\}$.
+\it We need to find the value of $k$ for which $\prob_{H_0}\big[\lambda(X)\leq k\big] = \alpha$.
+\eit
+Now,
+\[
+\prob_{H_0}\big[\lambda(X)\leq k\big]
+	= \prob_{H_0}\left[\frac{3}{2} e^{-X/6} \leq k\right] 
+	= 1 - \prob_{H_0}\left[X \leq -6\log\left(\frac{2k}{3}\right)\right].
+\]
+
+Under $H_0:\theta=2$, the CDF of $X$ is 
+%\[
+%F(x)=\prob(X\leq x)=1-e^{-x/2},
+%\]
+\[
+F(x)=\prob(X\leq x)=1-\exp\left(-\frac{x}{2}\right),
+\]
+Hence,
+\[
+\prob_{H_0}\big[\lambda(X)\leq k\big]
+	= 1 - F\left[-6\log\left(\frac{2k}{3}\right)\right] 
+	= \exp\left[3\log\left(\frac{2k}{3}\right)\right] 
+	= \left(\frac{2k}{3}\right)^3.
+\]
+%\begin{align*}
+%\prob_{H_0}(\lambda(X)\leq k)
+%	& = \prob_{H_0}\left(\frac{3}{2} e^{-X/6} \leq k\right) \\
+%	& = \prob_{H_0}\left(-\frac{X}{6} \leq \log\frac{2k}{3}\right) \\
+%	& = \prob_{H_0}\left(X \geq 6\log\frac{2k}{3}\right) \\
+%	& = 1 - F(6\log (2k/3) \\
+%	& = \exp\big[3\log(2k/3)\big] \\
+%	& = (2k/3)^3
+%\end{align*}
+\bit
+\it Setting this equal to $\alpha$, we obtain $k=(3/2)\alpha^{1/3}$
+\it The critical region for the test is $C = \{x:\lambda(x)\leq (3/2)\alpha^{1/3}\}$.
+\eit
+\end{solution}
+
+
+%==========================================================================
+\section{Most powerful tests} 
+%==========================================================================
+Consider a test of the simple hypothesis $H_0:\theta=\theta_0$ against the simple alternative $H_1:\theta=\theta_1$.
+\bit
+%\it Let $D\subseteq\R^n$ denote the sample space.
+\it Let $C\subset D$ be a critical region for the test, where $D\subseteq\R^n$ is the sample space.
+\eit
+
+\vspace*{2ex}
+Recall that 
+\bit
+\it The \emph{size} of the test is $\alpha = \prob_{\theta_0}(\mathbf{X}\in C)$,
+\it The \emph{power} of the test at $\theta_1$ is $\gamma(\theta_1) = \prob_{\theta_1}(\mathbf{X}\in C)$. 
+\eit
+
+\begin{definition}
+\ben
+\it A critical region $C$ of size $\alpha$ for testing $H_0:\theta=\theta_0$ against $H_1:\theta=\theta_1$ is called a \emph{best critical region} of size $\alpha$ if for every subset $A\subset D$ of size $\alpha$,
+\[
+\prob_{\theta_1}(\mathbf{X}\in C) \geq \prob_{\theta_1}(\mathbf{X}\in A).
+\]
+\it The test associated with a best critical region is called a \emph{most powerful test}.
+\een
+\end{definition}
+
+
+\vspace*{2ex}
+The following theorem shows that the simple likelihood ratio test (SLRT) is a most powerful test for testing a simple hypothesis against a simple alternative.
+
+ % <<
+%\section{The Neyman-Pearson Lemma}
+%
+%The \emph{Neymann-Pearson Lemma} shows that the SLRT is a most powerful test for testing a simple hypothesis against a simple alternative.
+
+% theorem: Neyman Pearson
+\begin{theorem}[The Neyman-Pearson Lemma]
+Consider a test of the simple hypothesis $H_0:\theta=\theta_0$ agains the simple alternative $H_1:\theta=\theta_1$, based on a random sample $\mathbf{X}=(X_1,\ldots,X_n)$ from a distribution with unknown parameter $\theta$. If $k>0$ and $C$ is a subset of the sample space with $\alpha = \prob_{H_0}(\mathbf{X}\in C)$, and is such that
+\bit
+\it[(i)]  $\displaystyle \lambda(\mathbf{x}) = \frac{L(\theta_0|\mathbf{x})}{L(\theta_1|\mathbf{x})} \leq k$ for all $\mathbf{x}\in C$, and
+\it[(ii)] $\displaystyle \lambda(\mathbf{x}) = \frac{L(\theta_0|\mathbf{x})}{L(\theta_1|\mathbf{x})} \geq k$ for all $\mathbf{x}\notin C$,
+\eit
+then $C$ is a best critical region of size $\alpha$ for the test.
+\end{theorem}
+
+% proof: Neyman Pearson
+\begin{proof}(for continuous distributions).
+Let $A\subset D$ be another critical region of size $\alpha$. 
+
+\vspace*{1ex}
+Then $\prob_{\theta_0}(\mathbf{X}\in A) = \prob_{\theta_0}(\mathbf{X}\in C)=\alpha$, or equivalently
+\[
+\int_C L(\theta_0\,|\,\mathbf{x})\,dx = \int_A L(\theta_0\,|\,\mathbf{x})\,dx = \alpha.
+\]
+
+\vspace*{2ex}
+We need to show that $\prob_{\theta_1}(\mathbf{X}\in A) \leq \prob_{\theta_1}(\mathbf{X}\in C)$, or equivalently
+\[
+%\int_A L(\theta_1\,|\,\mathbf{x})\,dx \leq \int_C L(\theta_1\,|\,\mathbf{x})\,dx.
+\int_C L(\theta_1\,|\,\mathbf{x})\,dx \geq \int_A L(\theta_1\,|\,\mathbf{x})\,dx.
+\]
+
+Now,
+\begin{itemize}
+\item If $\mathbf{x}\in C\setminus A$ then $\mathbf{x}\in C$, so $L(\theta_1\,|\,\mathbf{x}) \geq \displaystyle\frac{1}{k}L(\theta_0\,|\,\mathbf{x})$.
+\item If $\mathbf{x}\in A\setminus C$ then $\mathbf{x}\notin C$, so  $L(\theta_1\,|\,\mathbf{x}) \leq \displaystyle\frac{1}{k}L(\theta_0\,|\,\mathbf{x})$.
+\end{itemize}
+Thus
+\begin{align*}
+\int_C L(\theta_1\,|\,\mathbf{x})\,dx - \int_A L(\theta_1\,|\,\mathbf{x})\,dx
+	& = \int_{C\setminus A} L(\theta_1\,|\,\mathbf{x})\,dx - \int_{A\setminus C} L(\theta_1\,|\,\mathbf{x})\,dx \\
+	& \geq \frac{1}{k}\left(\int_{C\setminus A} L(\theta_0\,|\,\mathbf{x})\,dx - \int_{A\setminus C} L(\theta_0\,|\,\mathbf{x})\,dx\right) \\
+	& = \frac{1}{k}\left(\int_{C} L(\theta_0\,|\,\mathbf{x})\,dx - \int_{A} L(\theta_0\,|\,\mathbf{x})\,dx\right) \\
+	& = \frac{1}{k}(\alpha-\alpha) \\
+	& = 0.
+\end{align*}	
+The proof for discrete distributions follows similarly (with integrals replaced by sums).
+\end{proof}
+
+ % <<
+
+% example: SLRT for Poisson
+\begin{example}[SLRT for the mean of a Poisson distribution]
+Let $X_1,\ldots,X_n$ be a random sample from the $\text{Poisson}(\theta)$ distribution. Find a most powerful test of simple hypothesis $H_0:\theta=2$ against the simple alternative $H_1:\theta = 1/2$.
+\end{example}
+
+\begin{solution}
+The PMF of a Poisson random variable $X$ with mean $\theta$ is 
+\[
+f(x) = \prob(X=x) = \begin{cases}
+\displaystyle\frac{\theta^{x} e^{-\theta}}{x!}		& x=0,1,2,\ldots \\
+0														& \text{otherwise.}
+\end{cases}
+\]
+
+The likelihood function is therefore
+\[
+L(\theta|\mathbf{x}) = \frac{\theta^{S(\mathbf{x})} e^{-n\theta}}{\prod_{i=1}^n x_i!}
+\qquad\text{where}\qquad
+S(\mathbf{x}) = \sum_{i=1}^n x_i.
+\]
+
+For the null value $\theta_0=2$ and the alternative value $\theta_1=1/2$, 
+\[
+L(\theta_0|\mathbf{x}) = \frac{2^{S(\mathbf{x})} e^{-2n}}{\prod_{i=1}^n x_i!} 
+\text{\quad and\quad}
+L(\theta_1|\mathbf{x}) = \frac{(1/2)^{S(\mathbf{x})} e^{-n/2}}{\prod_{i=1}^n x_i!} 
+\]
+so the likelihood ratio is
+\[
+\lambda(\mathbf{x})
+	= \frac{L(\theta_0|\mathbf{x})}{L(\theta_1|\mathbf{x})} 
+	= \frac{2^{S(\mathbf{x})} e^{-2n}}{(1/2)^{S(\mathbf{x})} e^{-n/2}}
+	= 4^{S(\mathbf{x})} e^{-3n/2}.
+\]
+By the Neyman-Pearson lemma, a most powerful test of size $\alpha$ is defined by the critical region
+\[
+C = \{\mathbf{x}:\lambda(x)\leq k\} = \{\mathbf{x}:4^{S(\mathbf{x})} e^{-3n/2}\leq k\}
+\]
+where $k$ is chosen to ensure that $\prob_{H_0}\big[\lambda(\mathbf{X})\leq k\big]=\alpha$.
+
+\vspace*{2ex}
+To simplify this expression, note that
+\begin{align*}
+4^{S(\mathbf{x})} e^{-3n/2}\leq k
+	& \quad \Rightarrow\quad 
+		S(\mathbf{x})\log 4 - \frac{3n}{2} \leq \log k \\
+	& \quad \Rightarrow\quad 
+		S(\mathbf{x}) \leq \frac{3n/2 + \log k}{\log 4}
+\end{align*}
+
+A most powerful test of size $\alpha$ is therefore defined by the critical region
+\[
+C = \left\{\mathbf{x}:\sum_{i=1}^n x_i \leq k'\right\},
+\]
+where $k'$ is chosen to ensure that $\prob_{H_0}\big[S(\mathbf{X})\leq k'\big] = \alpha$.
+%\prob_{H_0}\big[\sum_{i=1}^n X_i \leq k'\big]=\alpha$.
+\end{solution}
+
+ % <<
+
+% example: SLRT for normal variance
+\begin{example}[SLRT for the variance of a normal distribution]
+Let $X_1,\ldots,X_n$ be a random sample from the $N(\mu,\sigma^2)$ distribution, where $\mu$ is known but $\sigma^2$ is unknown.
+\ben
+\it Find a most powerful test of size $\alpha$ for $H_0:\sigma^2=\sigma_0^2$ against $H_1:\sigma^2=\sigma_1^2$.
+\it Show that the test is equivalent to a chi-squared test with $n$ degrees of freedom.
+\it Show that the test is a most powerful test for $H_0:\sigma^2=\sigma_0^2$ against the composite alternative $H_1:\sigma^2 > \sigma_0^2$.
+\een
+\end{example}
+
+\begin{solution}
+\ben
+\it % (i)
+The likelihood functions are
+\begin{align*}
+L(\sigma_0^2|\mathbf{x})	& = \frac{1}{(\sigma_0\sqrt{2\pi})^n} \exp\left(-\frac{\sum_{i=1}^n(x_i-\mu)^2}{2\sigma_0^2}\right) \\
+L(\sigma_1^2|\mathbf{x})	& = \frac{1}{(\sigma_1\sqrt{2\pi})^n} \exp\left(-\frac{\sum_{i=1}^n(x_i-\mu)^2}{2\sigma_1^2}\right)
+\end{align*}
+By the Neyman-Pearson lemma, a best critical region consists of those $\mathbf{x}\in\R^n$ for which
+\[
+\lambda(\mathbf{x})
+	= \frac{L(\sigma_0^2|\mathbf{x})}{L(\sigma_1^2|\mathbf{x})} 
+	= \left(\frac{\sigma_1}{\sigma_0}\right)^n \exp\left(-\frac{\sigma_1^2 - \sigma_0^2}{2\sigma_1^2\sigma_0^2}\sum_{i=1}^n(x_i-\mu)^2\right)
+	\leq k
+\]
+where $k$ is a constant, chosen to ensure that $\prob_{H_0}\big[\lambda(\mathbf{X}) \leq k\big]=\alpha$. To simplify,
+%Taking logarithms, 
+\[
+n\log\left(\frac{\sigma_1}{\sigma_0}\right) - \frac{\sigma_1^2-\sigma_0^2}{2\sigma_1^2\sigma_0^2}\sum_{i=1}^n(x_i-\mu)^2 \leq \log k,
+\]
+which reduces to the decision criterion
+\[
+\sum_{i=1}^n(x_i-\mu)^2
+	\geq \left[ n\log\left(\frac{\sigma_1}{\sigma_0}\right)-\log k\right]\left(\frac{2\sigma_1^2\sigma_0^2}{\sigma_1^2-\sigma_0^2}\right) = k',
+\]
+where $k'$ is a constant, chosen to ensure that the size of the critical region is $\alpha$.
+\it % (ii)
+The decision criterion $\sum_{i=1}^n(x_i-\mu)^2 > k'$ can be re-written as
+\[
+T(\mathbf{x}) = \sum_{i=1}^n\left(\frac{x_i-\mu}{\sigma_0}\right)^2 \geq k''
+\]
+where $k''$ is another constant, again chosen to ensure that $\prob_{H_0}(\mathbf{X}\in C)=\alpha$. 
+
+\bit
+\it Under $H_0$, because $X_i\sim N(\mu,\sigma^2_0)$ it follows that $T(\mathbf{X})\sim \chi^2(n)$.
+\eit
+
+\it % (c)
+The critical region does not depend on the particular value of $\sigma_1^2$ specified in $H_1$. \par
+\bit
+\it The same critical region would used for any $\sigma_1^2 > \sigma_0^2$.\par
+\it The test can therefore be extended to the composite alternative $H_1:\sigma^2 > \sigma_0^2$.\par
+\it Such tests are called \emph{uniformly most powerful} tests.  
+\eit
+\een
+\end{solution}
+
+
+%======================================================================
+\stopcontents[chapters]
+\endinput
+%======================================================================

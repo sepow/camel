@@ -1,0 +1,340 @@
+% !TEX root = main.tex
+%======================================================================
+\chapter{Moments}\label{chap:moments}
+%======================================================================
+
+%----------------------------------------------------------------------
+\section{Transformations of random variables}
+%----------------------------------------------------------------------
+Let $(\Omega,\prob)$ be a finite probability space, let $X$ be a random variable on $\Omega$, and let $\{x_1,\ldots,x_n\}$ be its range.
+
+\bigskip
+For any function $g:\R\to\R$, the \emph{composition} of $g$ with $X$ is defined to be the function
+\[\begin{array}{rlcl}
+g(X): 	& \Omega & \to		& \R \\
+		& \omega & \mapsto	& g\big[X(\omega)\big].
+\end{array}\]
+
+The function $g(X)$ is also a random variable on $\Omega$. Let $\{y_1,y_2,\ldots,y_m\}$ denote its range.
+
+\bigskip
+The PMF of $g(X)$ is completely determined by the PMF of $X$:
+\[
+\prob\big[g(X)=y_j\big] = \sum_{x_i\in B_j}\prob(X=x_i) 
+\quad\text{where}\quad 
+B_j  = \{x_i:g(x_i)=y_j\}
+\]
+Note that the sets $B_1,B_2,\ldots,B_m$ form a partition of $\{x_1,x_2,\ldots,x_n\}$.
+
+
+\bigskip
+To compute the expected value of the transformed variable $g(X)$, the following theorem shows that we need not compute its PMF explicitly. The result is sometimes called the \emph{law of the unconscious statistician}. 
+% theorem
+\begin{theorem}\label{thm:lus}
+Let $f(x)$ denote the PMF of $X$. Then for any function $g:\R\to\R$, the expected value of $g(X)$ is
+\[
+\expe\big[g(X)\big] = \sum_{i=1}^n g(x_i)f(x_i)
+\]
+\end{theorem}
+
+% proof
+\begin{proof}
+Let $\{y_1,\ldots,y_m\}$ be the range of $g(X)$, and let
+\[
+B_j  = \{x_i:g(x_i)=y_j\}.
+\]
+Then $\prob\big[g(X)=y_j\big] = \sum_{x_i\in B_j}\prob(X=x_i)$, so
+\begin{align*}
+\expe\big[g(X)\big]
+	& = \sum_{j=1}^m y_j\,\prob\big[g(X)=y_j\big] \\
+	& = \sum_{j=1}^m y_j\sum_{x_i\in B_j} \prob(X=x_i) \\
+	& = \sum_{j=1}^m \sum_{x_i\in B_j} y_j\prob(X=x_i) \\
+	& = \sum_{j=1}^m \sum_{x_i\in B_j} g(x_i)\prob(X=x_i) \text{\quad because $y_j=g(x_i)$ whenever $x_i\in B_j$,}\\
+	& = \sum_{i=1}^n g(x_i)\prob(X=x_i),
+\end{align*}
+where the last equality follows because $\{B_1,B_2,\ldots,B_m\}$ is a partition of $\{x_1,\ldots,x_n\}$.
+\qed
+\end{proof}
+
+% example: dice
+\begin{example}
+Let $X$ be a random variable with the following PMF:
+\[\begin{array}{|c|cccc|}\hline
+x 			& -2		& -1		& 1		& 3	\\ \hline
+\prob(X=x)	& 1/4	& 1/8	& 1/4	& 3/8 \\ \hline
+\end{array}\]
+Find the expected value of $Y=X^2$.
+\end{example}
+
+\begin{solution}
+The random variable $Y=X^2$ has the following PMF:
+\[\begin{array}{|c|ccc|}\hline
+y			& 1		& 4		& 9	\\ \hline
+\prob(Y=y)	& 3/8	& 1/4	& 3/8	\\ \hline
+\end{array}\]
+The expected value of $Y$ is therefore
+\[
+\expe(Y) 
+	= \sum_{y\in\{1,4,9\}} y\,\prob(Y=y) 
+	= \left(1\times\frac{3}{8}\right) + \left(4\times\frac{1}{4}\right) + \left(9\times\frac{3}{8}\right) 
+	= \frac{19}{4}.
+\]
+Alternatively,
+\[
+\expe(X^2)
+	= \sum_{x\in\{-2,-1,1,3\}} x^2\,\prob(X=x) 
+	= \left(4\times\frac{1}{4}\right) + \left(1\times\frac{1}{8}\right) + \left(1\times\frac{1}{4}\right) + \left(9\times\frac{3}{8}\right) 
+	= \frac{19}{4}.
+\]
+\end{solution}
+
+
+%----------------------------------------------------------------------
+\section{Moments} 
+%----------------------------------------------------------------------
+
+% definition: moments
+\begin{definition}
+Let $X:\Omega\to\R$ be a random variable, and let $k\in\{0,1,2,\ldots\}$ be a non-negative integer.
+\ben
+\it $\expe(X^k)$ is called the \emph{$k$th moment of $X$ about the origin}, and denoted by $\mu'_k$.
+In particular,
+	\bit
+	\it $\mu'_0 = \expe(X^0) = 1$,
+	\it $\mu'_1 = \expe(X)$ is called the \emph{mean} of $X$. This is usually denoted by $\mu$.
+	\it $\mu'_2 = \expe(X^2)$ is called the \emph{mean-square} of $X$.
+	\eit
+\it $\expe\big[(X-\mu)^k\big]$ is called the \emph{$k$th moment of $X$ about the mean}, and denoted by $\mu_k$.
+In particular,
+	\bit
+	\it $\mu_0 = 1$,
+	\it $\mu_1 = 0$,
+	\it $\mu_2 = \expe\big[(X-\mu)^2\big]$ is called the \emph{variance} of $X$. This is usually denoted by $\sigma^2$.
+	\eit
+\een
+\end{definition}
+
+\begin{remark}
+\bit
+\it Moments about the origin are also called \emph{raw moments}. 
+\it Moments about the mean are also called \emph{central moments}. 
+%\it The positive square root of the variance is called called the \emph{standard deviation} of $X$
+%\it Standard deviation is usually denoted by $\sigma$, and the variance by $\sigma^2$.
+\eit
+\end{remark}
+
+%----------------------------------------------------------------------
+\section{Variance}
+%----------------------------------------------------------------------
+Let $X$ be a random variable with range $\{x_1,x_2,\ldots,x_n\}$, let $f(x_i) = \prob(X=x_i)$ denote its PMF.
+
+The expected value and variance of $X$ are 
+\[
+\expe(X) = \sum_{i=1}^{n}x_i f(x_i) \equiv \mu.
+\qquad\text{and}\qquad 
+\var(X) = \sum_{i=1}^{n}(x_i-\mu)^2 f(x_i) \equiv \sigma^2.
+\]
+
+\bit
+\it The expected value $\expe(X)$ represents the \emph{centre} or \emph{location} of a distribution..
+\it The variance $\var(X)$ quantifies its \emph{spread} or \emph{dispersion} around the expected value.
+\eit
+
+Expectation is a linear operator (Theorem~\ref{thm:prop_expe}): 
+\[
+\expe(aX+bY) = a\expe(X) + b\expe(Y)\quad\text{for all}\quad a,b\in\R.
+\]
+
+% theorem: properties of variance
+In contrast, variance does \emph{not} have the linearity property:
+\begin{theorem}\label{thm:properties_of_variance}
+If $a,b\in\R$, then $\var(aX+b) = a^2\var(X)$.
+\end{theorem}
+% proof
+\begin{proof}
+By the linearity of expectation, $\expe(aX+b)=a\expe(X)+b$ and
+\begin{align*}
+\var(aX+b)	& = \expe\left(\big[(aX+b) - \expe(aX+b)\big]^2\right) \\
+			& = \expe\left(\big[aX - \expe(aX)\big]^2\right) \\
+			& = \expe\left(a^2\big[X - \expe(X)\big]^2\right) \\
+			& = a^2\expe\left(\big[X - \expe(X)\big]^2\right) \\
+			& = a^2\var(X)
+\end{align*}
+\end{proof}
+
+\begin{remark}
+Note that the variance operator is \emph{translation invariant}: 
+\[
+\var(X+b)=\var(X)\quad\text{for all}\quad b\in\R.
+\]
+\end{remark}
+
+% remark: variance formula
+Central moments can be expressed in terms of raw moments. In particular, we have the following expression for variance, which is useful when performing computations.
+\begin{lemma}
+$\var(X) = \expe(X^2) - \expe(X)^2$.
+\end{lemma}
+
+\begin{proof}
+Let $\{x_1,x_2,\ldots,x_n\}$ be the range of $X$, and let $\mu=\expe(X)$. Taking $g(x) = (x-\mu)^2$ in Theorem~\ref{thm:lus},
+\begin{align*}
+\var(X) = \expe\big[(X-\mu)^2\big]
+	& = \sum_{i=1}^n (x_i-\mu)^2 f(x_i) \\
+	& = \sum_{i=1}^n (x_i^2 - 2x_i\mu + \mu^2) f(x_i) \\
+	& = \sum_{i=1}^n x_i^2 f(x_i) - 2\mu\sum_{i=1}^n x_i f(x_i) + \mu^2\sum_{i=1}^n f(x_i) \\
+	& = \expe(X^2) - \mu^2
+\end{align*}
+where the last equality follows because $\sum_{i=1}^n x_i f(x_i)=\mu$ and $\sum_{i=1}^n f(x_i) = 1$.
+\end{proof}
+
+% example
+\begin{example}
+Let $X$ be a random variable taking values in the range $\{1,2,3,4,5,6\}$, and let $f(x)$ denote its PMF. Find the variance of $X$ when
+\ben
+\it $f(x) = 1/6$ for all $x\in\{1,2,3,4,5,6\}$;
+\it $f(x) = 1/4$ for $x\in\{3,4\}$ and $f(x) = 1/8$ for $x\in\{1,2,5,6\}$.
+\een
+\end{example}
+
+\begin{solution}
+\bit
+\it $\expe(X) 	= \sum_{x=1}^6 x f(x)	= \frac{1}{6}(1+2+3+4+5+6)		= \frac{7}{2}$.
+\it $\expe(X^2) 	= \sum_{x=1}^6 x^2 f(x)	= \frac{1}{6}(1+4+9+16+25+36) 	= \frac{91}{6}$.
+\it $\var(X)		= \expe(X^2)-\expe(X)^2	= \frac{91}{6}-\frac{49}{4}		= \frac{35}{12} = 2.92$.
+\it[] 
+\it $\expe(X)	= \sum_{x=1}^6 x f(x) 	= \frac{1}{8}(1+2+5+6) + \frac{1}{4}(3+4) = \frac{7}{2}$.
+\it $\expe(X^2)	= \sum_{x=1}^6 x^2 f(x) = \frac{1}{8}(1+4+25+36) + \frac{1}{4}(9+16) = \frac{58}{4}$.
+\it $\var(X)		= \expe(X^2)-\expe(X)^2	= \frac{58}{4} - \frac{49}{4} = \frac{9}{4} = 2.25$.
+\eit
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Location, scale and shape*}
+%----------------------------------------------------------------------
+When trying to describe a distribution, it is natural to look for its \emph{location}, \emph{scale} (size), and \emph{shape}.
+
+\bigskip
+% mean and variance
+For any random variable $X:\Omega\to\R$,
+\ben
+\it the first moment of $X$ about the origin ($\mu$)  describes its location, 
+\it the second moment of $X$ about the mean ($\sigma^2$) describes its scale, and
+\it the higher moments of $X$ describe the shape of its distribution.
+\een
+
+\paragraph{Location}
+To locate $X$, we look for a point $\mu\in\R$ such that the expected squared deviation $\expe\big[(X-\mu)^2\big]$ around this point is minimum. By the linearity of expectation,
+\[
+\expe\big[(X-\mu)^2\big] = \expe(X^2 - 2\mu X + \mu^2) = \expe(X^2) - 2\mu\expe(X) + \mu^2
+\]
+To find the value of $\mu$ that minimises the expected squared deviation, we can differentiate the right-hand side with respect to $\mu$ and set the resulting expression to zero. This yields $\mu=\expe(X)$.
+\bit
+\it The location of a distribution is described by its \emph{expected value}, $\mu$.
+\eit
+
+\paragraph{Scale}
+The size of $X$ should not depend on its location. Thus we consider the \emph{centred} variable $Y=X-\mu$, which has the property that $\expe(Y)=0$. The expected squared deviation of $X$ around $\mu$ is equal to its \emph{variance}, $\sigma^2 = \expe\big[(X-\mu)^2\big]$. 
+\bit
+\it The scale of a distribution is quantified by its \emph{standard deviation}, $\sigma$.
+\eit
+
+\paragraph{Shape}
+The shape of a distribution should not depend on its location nor its scale. Thus we consider the so-called \emph{standardised} variable,
+\[
+Z = \frac{X-\mu}{\sigma}.
+\]
+\vspace*{-4ex}
+\begin{lemma}
+$\expe(Z)=0$ and $\var(Z)=1$.
+\end{lemma}
+\begin{proof}
+\bit
+\it By the linearity of expectation, $\displaystyle\expe(Z)=\expe\left(\frac{X-\mu}{\sigma}\right)=\frac{1}{\sigma}\big[\expe(X)-\mu\big] = 0$.
+\it By the properties of variance, $\displaystyle\var(Z)=\var\left(\frac{X-\mu}{\sigma}\right)=\frac{1}{\sigma^2}\var(X) = 1$.
+\eit
+\end{proof}
+%----------------------------------------------------------------------
+\section{Skewness and kurtosis$^{*}$}
+%----------------------------------------------------------------------
+Higher moments of the standardised variable $\displaystyle Z=\frac{X-\mu}{\sigma}$ quantify the \emph{shape} of a distribution.
+% definition
+\begin{definition}
+The \emph{skewness} of a random variable $X$ is 
+\[
+\gamma_1 = \expe\left[\left(\frac{X-\mu}{\sigma}\right)^3\right] = \frac{\mu_{3}}{\sigma^3}
+\]
+where $\mu_3 = \expe\big[(X-\mu)^3]$ is the third central moment of $X$. 
+\end{definition}
+
+Skewness is a measure of \emph{asymmetry}:
+\bit
+\it Negative skew ($\gamma_1 < 0$). Long tail on the left, mass concentrated on the right.
+\it Positive skew ($\gamma_1 > 0$). Long tail on the right, mass concentrated on the left.
+\eit
+
+%% example: skewness of binomial
+%\begin{example}\label{ex:highermoments}
+%The skewness of the binomial distribution with parameters $n$ and $p$ isIf $X\sim\text{Binomial}(n,p)$, the skewness of $X$ is given by
+%\[
+%\gamma_1 = \frac{1-2p}{\sqrt{np(1-p)}} = \begin{cases}
+%	< 0 	& \text{if } p > \frac{1}{2} \\
+%	= 0 	& \text{if } p = \frac{1}{2} \\
+%	> 0 	& \text{if } p < \frac{1}{2} \\
+%\end{cases}	
+%\]
+%\end{example}
+
+% definition: kurtosis
+\begin{definition}
+The \emph{kurtosis} of a random variable $X$ is 
+\[
+\gamma_2 = \expe\left[\left(\frac{X-\mu}{\sigma}\right)^4\right] = \frac{\mu_{4}}{\sigma^4}
+\]
+\end{definition}
+where $\mu_4 = \expe\big[(X-\mu)^4]$ is the fourth central moment of $X$.
+
+\bigskip
+The word \textit{kurtosis} comes from the Greek \textbf{\textit{kurtos- `bulge'}}.
+\bit
+\it Large kurtosis (leptokurtic: $\gamma_2 > 3$). Tall and narrow peak, with heavy tails.
+\it Small kurtosis (platykurtic: $\gamma_2 < 3$). Low and wide peak, with thin tails.
+\eit
+
+%\begin{remark}
+%If $X\sim N(\mu,\sigma^2)$ then
+%$\displaystyle
+%\expe\left[\left(\frac{X-\mu}{\sigma}\right)^4\right] = 3.
+%$
+%\bit
+%\it The kurtosis of the normal distribution is zero.
+%\it Kurtosis quantifies "peakiness" relative to that of the normal distribution.
+%\eit
+%\end{remark}
+%%
+
+% example (cont) 
+%\begin{examplecont}{\ref{ex:highermoments}}
+%If $X\sim\text{Binomial}(n,p)$, the kurtosis of $X$ is given by
+%\[
+%\gamma_2 = \frac{1-6p(1-p)}{np(1-p)} = \begin{cases}
+%	< 0 				& \text{if } \left|p -\frac{1}{2}\right| < \frac{1}{2\sqrt{3}} \\
+%	> 0 				& \text{if } \left|p -\frac{1}{2}\right| > \frac{1}{2\sqrt{3}} \\
+%\end{cases}
+%\]
+%\bit
+%\it The excess kurtosis is minimum at $p=\frac{1}{2}$, where it takes the value $\gamma_2 = -\frac{2}{n}$.
+%\it Note that $\gamma_2\to 0$ as $n\to\infty$, so the excess kurtosis of the binomial distribution approaches that of the normal distribution as $n\to\infty$. 
+%\it The \emph{de Moivre - Laplace theorem} shows that the binomial distribution (when scaled appropriately) converges to  the normal distribution as $n\to\infty$.
+%\eit
+%\end{examplecont}
+
+
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex10_moments}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

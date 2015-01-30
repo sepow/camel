@@ -1,0 +1,226 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+
+% EXERCISE 1: THEORY
+\begin{exercise}
+\begin{questions}
+\question % inclusion/exclusion
+Let $(\Omega,\mathcal{F},\prob)$ be a probability space, and let $A,B,C\in\mathcal{F}$. Show that
+\[
+\prob(A\cup B\cup C) 
+	= \prob(A) + \prob(B) + \prob(C) - \prob(A\cap B) - \prob(A\cap C) - \prob(B\cap C) + \prob(A\cap B\cap C)
+\]
+This is called the \emph{inclusion-exclusion principle}.
+\begin{answer}
+Set union is an associative operator: $A\cup B\cup C = (A\cup B)\cup C$, so by the addition rule,
+\begin{align*}
+\prob(A\cup B\cup C) 	
+	& = \prob\big((A\cup B)\cup C\big) \\
+	& = \prob(A\cup B) + \prob(C) - \prob\big((A\cup B)\cap C\big).
+\end{align*}
+Set intersection is distributive over set union: $(A\cup B)\cap C = (A\cap C)\cup (B\cap C)$, so by the addition rule,
+\begin{align*}	
+\prob\big((A\cup B)\cap C\big)
+	& = \prob\big((A\cap C)\cup (B\cap C)\big) \\
+	& = \prob(A\cap C) + \prob(B\cap C) - \prob\big((A\cap C)\cap (B\cap C)\big) \\
+	& = \prob(A\cap C) + \prob(B\cap C) - \prob(A\cap B\cap C).
+\end{align*}
+\end{answer}
+
+\question % subadditivity
+Let $(\Omega,\mathcal{F},\prob)$ be a probability space.
+\begin{parts}
+\part 
+Show that $\prob(A\cup B)\leq\prob(A)+\prob(B)$ for all $A,B\in\mathcal{F}$. This is called \emph{subadditivity}.
+\begin{answer}
+TODO
+\end{answer}
+\part 
+Show that for any sequence $A_1,A_2,\ldots$ of events in $\mathcal{F}$,
+\[
+\prob\left(\bigcup_{i=1}^{\infty}A_i\right)\leq \sum_{i=1}^{\infty} \prob(A_i).
+\]
+This is called \emph{countable subadditivity}.
+\begin{answer}
+TODO
+\end{answer}
+\end{parts}
+\end{questions}
+\end{exercise}
+
+
+% EXERCISE 2: APPLICATIONS
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+% GS 1.3.1
+\question
+Let $A$ and $B$ be events with probabilities $\prob(A)=3/4$ and $\prob(B)=1/3$. 
+\begin{parts}
+%--------------------
+\part Show that $\frac{1}{12}\leq\prob(A\cap B)\leq\frac{1}{3}$, and construct examples to show that both extremes are possible.
+\begin{answer}
+\bit
+\it Lower bound: $\prob(A\cup B)\leq 1$ so $\prob(A\cap B) = \prob(A)+\prob(B)-\prob(A\cup B) \geq \prob(A)+\prob(B) -1 = \frac{1}{12}$.
+\it Upper bound: $A\cap B\subseteq A$ and $A\cap B\subseteq B$, so $\prob(A\cap B) \leq \min\{\prob(A),\prob(B)\} = \frac{1}{3}$.
+\eit
+Example: let $\Omega=\{1,2,\ldots,12\}$ with each outcome equally likely, and let $A=\{1,2,\ldots,9\}$.
+\bit
+\it Let $B=\{9,10,11,12\}$. Then $\prob(A\cap B) = \prob(\{9\}) = \frac{1}{12}$.
+\it Let $B=\{1,2,3,4\}$. Then $\prob(A\cap B) = \prob(\{1,2,3,4\}) = \frac{1}{3}$.
+\eit
+\end{answer}
+%--------------------
+\part Find corresponding bounds for $\prob(A\cup B)$.
+\begin{answer}
+\bit
+\it Upper bound: $\prob(A\cup B) \leq \min\{\prob(A)+\prob(B), 1\} = 1$.
+\it Lower bound: $\prob(A\cup B) \geq \max\{\prob(A),\prob(B)\} = 3/4$.
+\eit
+These bounds are attained in the above example.
+\end{answer}
+%--------------------
+\end{parts}
+%----------------------------------------
+% roulette
+\question
+A roulette wheel consists of 37 slots of equal size. The slots are numbered from 0 to 36, with odd-numbered slots coloured red, even-numbered slots coloured black, and the slot labelled 0 coloured green. The wheel is spun in one direction and a ball is rolled in the opposite direction along a track running around the circumference of the wheel. The ball eventually falls on to the wheel and into one of the 37 slots. A player bets on the event that the ball stops in a red slot, and another player bets on the event that the ball stops in a black slot.
+\begin{parts}
+%--------------------
+\part Define a suitable sample space $\Omega$ for this random experiment, and identify the events of interest.
+\begin{answer}
+A suitable sample space for the experiment is $\Omega=\{0,1,2,\ldots,36\}$. 
+\par
+The events of interest are $G=\{0\}$, $R=\{1,3,\ldots,35\}$ and $B=\{2,4,\ldots,36\}$.
+\end{answer}
+%--------------------
+\part Find the smallest field $\mathcal{F}$ over $\Omega$ that contains the events of interest.
+\begin{answer}
+The smallest field of sets containing the events $G$, $R$ and $B$ is 
+\[
+\mathcal{F} = \{\emptyset, G, R, B, G\cup R, G\cup B, R\cup B, \Omega\}.
+\]
+$\mathcal{F}$ is indeed a field of sets, because 
+\bit
+\it $\Omega\in\mathcal{F}$, 
+\it $\mathcal{F}$ is closed under complementation, 
+\bit
+	\it $\emptyset^c = \Omega\in\mathcal{F}$ and $\Omega^c=\emptyset\in\mathcal{F}$,
+	\it $G^c = R\cup B\in\mathcal{F}$, $R^c = B\cup G\in\mathcal{F}$ and $B^c = R\cup G\in\mathcal{F}$,
+	\it $(G\cup R)^{c}=B\in\mathcal{F}$, $(G\cup B)^c=R\in\mathcal{F}$ and $(R\cup B)^c = G\in\mathcal{F}$
+\eit
+\it $\mathcal{F}$ is closed under pairwise unions, for example
+	\bit
+	\it $R\cup\emptyset = R \in\mathcal{F}$ and $R\cup \Omega = \Omega \in\mathcal{F}$,
+	\it $R\cup B \in\mathcal{F}$ and $R\cup G \in\mathcal{F}$, 
+	\it $R\cup (R\cup B) = R\cup B \in\mathcal{F}$, 
+	\it $R\cup (R\cup G) = R\cup G \in\mathcal{F}$, 
+	\it $R\cup (B\cup G) = \Omega \in\mathcal{F}$.
+	\eit
+and so on.
+\eit
+\end{answer}
+%--------------------
+\part Define a suitable probability measure $(\Omega,\mathcal{F})$ to represent the game.
+\begin{answer}
+A suitable probability measure over $(\Omega,\mathcal{F})$ is given by
+\begin{align*}
+& \prob(\emptyset)=0, \\
+& \prob(R)=18/37,\ \prob(B)=18/37,\ \prob(G)=1/37, \\
+& \prob(R\cup B)=36/37,\ \prob(R\cup G)=19/37,\ \prob(B\cup G)=19/37, \\
+& \prob(\Omega)=1.
+\end{align*}
+This is indeed a probability measure, because 
+\bit
+\it $\prob(\emptyset)=0$, 
+\it $\prob(\Omega)=1$, and 
+\it $\prob$ is additive over $\mathcal{F}$; for example,
+\bit
+	\it $\frac{36}{37} = \prob(R\cup B) = \prob(R)+\prob(B) = \frac{18}{37}+\frac{18}{37} = \frac{36}{37}$, 
+	\it $\frac{19}{37} = \prob(R\cup G) = \prob(R)+\prob(G) = \frac{18}{37}+\frac{1}{37} = \frac{19}{37}$, 
+	\it $\frac{19}{37} = \prob(B\cup G) = \prob(B)+\prob(G) = \frac{18}{37}+\frac{1}{37} = \frac{19}{37}$,
+\eit
+and so on.
+\eit
+\end{answer}
+\end{parts}
+\end{questions}
+\end{exercise}
+
+
+% EXERCISE 2: CONTINUITY
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+% GS 1.8.4(c)
+\question A biased coin has probability $p$ of showing heads. The coin is tossed repeatedly until a head occurs. Describe a suitable probability space for this experiment.
+\begin{answer}
+The sample space is the set of all finite sequences of tails followed by a head, together with the infinite sequence of tails:
+\[
+\Omega = \{T^nH:n\geq 0\} \cup \{T^{\infty}\}.
+\]
+The $\sigma$-field can be taken to be the power set of $\Omega$, and the probability measure can be defined on the elementary events by
+\begin{align*}
+\prob(T^nH) 			& = (1-p)^n p, \\
+\prob(T^{\infty})	& = \lim_{n\to\infty}(1-p)^n = 0 \text{ if } p\neq 0.
+\end{align*}
+\end{answer}
+%----------------------------------------
+% GS 1.3.2
+\question
+A fair coin is tossed repeatedly.
+\begin{parts}
+%--------------------
+\part Show that a head eventually occurs with probability one.
+\begin{answer}
+Let $A_n$ be the event that no heads occur in the first $n$ tosses, and let $A$ be the event that no heads occur at all. Then $A_1,A_2,\ldots$ is a decreasing sequence ($A_{n+1}\subset A_n$), with $A=\cap_{i=1}^{\infty} A_n$. Hence by the continuity property of probability measures,
+\[
+\prob(A) = \prob\left(\bigcap_{n=1}^{\infty}A_n\right)
+	= \lim_{n\to\infty} \prob(A_n)
+	= \lim_{n\to\infty} \left(\frac{1}{2}\right)^n = 0,
+\]
+or alternatively,
+\[
+\prob(\text{no heads})
+	= \lim_{n\to\infty} \prob(\text{no heads in the first $n$ tosses})
+	= \lim_{n\to\infty} \left(\frac{1}{2}\right)^n = 0.
+\]
+Thus we are certain of eventually observing a head.
+\end{answer}
+%--------------------
+\part Show that a sequence of 10 consecutive tails eventually occurs with probability one.
+\begin{answer}
+Let us think of the first $10n$ tosses as disjoint groups of consecutive outcomes, each group of length $10$. The probability any one of the $n$ groups consists of 10 consecutive tails is $2^{-10}$, independently of the other groups. The event that one of the groups consists of 10 consecutive tails is a subset of the event that a sequence of 10 consecutive tails appears anywhere in the first $10n$ tosses. Hence, using the continuity of probability measures,
+\begin{align*}
+\prob(\text{$10T$ eventually appears}) 
+	& = \lim_{n\to\infty} \prob(\text{$10T$ occurs somewhere in the first $10n$ tosses)} \\
+	& \geq \lim_{n\to\infty} \prob(\text{$10T$ occurs as one of the first $n$ groups of $10$}) \\
+	& = 1 - \lim_{n\to\infty} \prob(\text{$10T$ does not occur as one of the first $n$ groups of 10}) \\
+ 	& = 1 - \lim_{n\to\infty} \left(1-\frac{1}{2^{10}}\right)^n = 1.
+\end{align*}
+Thus we are certain of eventually observing sequence of 10 consecutive tails.
+\end{answer}
+%--------------------
+\part Show that any finite sequence of heads and tails eventually occurs with probability one.
+\begin{answer}
+Let $s$ be a fixed sequence of length $k$. As in the previous part, we think of the first $kn$ tosses as $n$ distinct groups of length $k$. The event that the one of these groups is exactly equal to $s$ is a subset of the event that first $kn$ tosses contains at least one instance of $s$. Hence
+\begin{align*}
+\prob(\text{$s$ eventually appears}) 
+	& = \lim_{n\to\infty} \prob(\text{$s$ occurs somewhere in the first $kn$ tosses)} \\
+	& \geq \lim_{n\to\infty} \prob(\text{$s$ occurs as one of the first $n$ groups of $k$}) \\
+	& = 1 - \lim_{n\to\infty} \prob(\text{$s$ does not occur as one of the first $n$ groups of $k$}) \\
+ 	& = 1 - \lim_{n\to\infty} \left(1-\frac{1}{2^{k}}\right)^n = 1.
+\end{align*}
+Thus we are certain of eventually observing the sequence $s$.
+\bit
+\it In an infinite sequence of coin tosses, anything that can happen, does happen!
+\eit
+\end{answer}
+\end{parts}
+
+\end{questions}
+\end{exercise}
+
+%======================================================================
+\endinput
+%======================================================================

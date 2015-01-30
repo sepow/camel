@@ -1,0 +1,261 @@
+% !TEX root = main.tex
+% ex12_joint_distributions.tex
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+\question
+A fair coin is tossed twice. Let $X$ be the number of heads, and let $Y$ be the indicator variable of the event $\{X=2\}$. Find the joint PMF of $X$ and $Y$.
+\begin{answer}
+The possible outcomes, along with the associated values taken by $X$ and $Y$, are shown in the following table:
+\[
+\begin{array}{|c|cccc|}\hline
+\omega		& TT		& TH		& HT 	& HH		\\ \hline
+X(\omega)	& 0		& 1 		& 1		& 2 		\\ 
+Y(\omega)	& 0		& 0		& 0		& 1		\\ \hline
+\end{array}
+\]
+Hence the joint PMF of $X$ and $Y$ is as follows:
+\[
+\begin{array}{|cc|ccc|} \hline
+	&		& 		& x 	& 		\\
+	& 		& 0 		& 1		& 2 		\\ \hline
+y	& 0		& 1/4	& 1/2	& 0		\\ 
+	& 1		& 0 		& 0		& 1/4	\\ \hline
+\end{array}
+\]
+\end{answer}
+
+
+%----------------------------------------
+\question % GS 2.5.2
+Let $X$ be a Bernoulli random variable with parameter $p$. %Then $\prob(X=0)=1-p$ and $\prob(X=1)=p$.
+\begin{parts}
+%--------------------
+\part Let $Y=1-X$. Find the joint PMF of $X$ and $Y$.
+\begin{answer}
+\[
+f_{X,Y}(x,y) = \left\{\begin{array}{ll}
+	p	& \text{if } (x,y) = (1,0) \\
+	1-p	& \text{if } (x,y) = (0,1) \\
+	0	& \text{otherwise.}
+\end{array}\right.
+\]
+\end{answer}
+%--------------------
+\part Let $Z=X(1-X)$. Find the joint PMF of $X$ and $Z$.
+\begin{answer}
+\[
+f_{X,Z}(x,z) = \begin{cases}
+	p	& \text{if } (x,z) = (1,0) \\
+	1-p	& \text{if } (x,z) = (0,0) \\
+	0	& \text{otherwise.}
+\end{cases}
+\]
+\end{answer}
+%--------------------
+\end{parts}
+
+%%----------------------------------------
+%\question % GS 2.7.7
+%Airlines find that each passenger who reserves a seat fails to turn up with probability $0.1$, independently of other passengers. To avoid empty seats, EasyJet always sell 10 tickets for their 9-seater aeroplane, while Ryanair always sell 20 tickets for their 18-seater aeroplane. Which of the two airlines is most often overbooked?
+%\begin{answer}
+%Let $X$ and $Y$ denote the (random) number of people on an EasyJet and Ryanair flight respectively. Then $X\sim\text{Binomial}(10,0.9)$ and $Y\sim\text{Binomial}(20,0.9)$, so
+%\begin{align*}
+%\prob(X=k)	& = \binom{10}{k}\left(\frac{9}{10}\right)^k\left(1-\frac{9}{10}\right)^{10-k} \\
+%\prob(Y=k)	& = \binom{20}{k}\left(\frac{9}{10}\right)^k\left(1-\frac{9}{10}\right)^{20-k}
+%\end{align*}
+%Thus
+%\begin{align*}
+%\prob(\text{EasyJet flight is overbooked}) 
+%	& = \prob(X=10) = \left(\frac{9}{10}\right)^{10} = 0.3487 \\
+%\prob(\text{Ryanair flight is overbooked}) 
+%	& = \prob(Y=19)+\prob(Y=20) \\
+%	& = 20\left(\frac{9}{10}\right)^{19}\left(\frac{1}{10}\right) + \left(\frac{9}{10}\right)^{20} = 0.3917
+%\end{align*}	  
+%so Ryanair is overbooked more often than EasyJet.
+%\end{answer}
+
+%%==========================================================================
+%\question
+%Let $X$ and $Y$ be two random variables with joint PMF given by the following table:
+%\[
+%\begin{array}{|cc|cccc|}\hline
+%    &       &       & \multicolumn{2}{c}{y} &   \\
+%    &       & 0     & 1     & 2     & 3     \\ \hline
+%    & 0     & 0     & 3/56  & 6/56  & 1/56  \\
+%\raisebox{-1.5ex}{$x$}   & 1     & 3/56  & 18/56 & 9/56  & 0  \\
+%    & 2     & 6/56  & 9/56  & 0     & 0  \\
+%    & 3     & 1/56  & 0     & 0     & 0  \\ \hline
+%\end{array}
+%\]
+% 
+%\begin{parts}
+%%--------------------
+%\part Find the conditional PMF of $X$ given $Y=0$.
+%\begin{answer}
+%The conditional PMF $\prob(X=x\,|\,Y=0)$ is as follows:
+%\[
+%\begin{array}{c|cccc}
+%x          		& 0     & 1     & 2     & 3     \\ \hline
+%f_{X|Y}(x|0)		& 0     & 3/10  & 6/10  & 1/10  \\
+%\end{array}
+%\]
+%\end{answer}
+%%--------------------
+%\part Find the conditional PMF of $Y$ given $X=1$.
+%\begin{answer}
+%The conditional PMF $\prob(Y=y\,|\,X=1)$ is as follows:
+%\[
+%\begin{array}{c|cccc}
+%y            	& 0     & 1     & 2     & 3     \\ \hline
+%f_{Y|X}(y|1)		& 1/10  & 6/10  & 3/10  & 0     \\
+%\end{array}
+%\]
+%\end{answer}
+%%--------------------
+%\end{parts}
+%
+
+
+%==========================================================================
+\question
+Let $X$ and $Y$ be two independent random variables with PMFs
+%\begin{center}
+%\begin{minipage}{\linewidth}
+%\begin{minipage}{0.48\linewidth}
+\[
+\begin{array}{c|cc}
+x     & 1     & 2   \\ \hline
+f_X(x)  & 1/3   & 2/3 \\
+\end{array}
+%\]
+%\end{minipage}
+\text{\qquad and \qquad}
+%\begin{minipage}{0.48\linewidth}
+%\[
+\begin{array}{c|ccc}
+y     & -1    & 0     & 1     \\ \hline
+f_Y(y)  & 1/4   & 1/2   & 1/4   \\
+\end{array}
+\text{\qquad respectively.}
+\]
+%\end{minipage}
+%\end{minipage}
+%\end{center}
+
+\begin{parts}
+%--------------------
+\part Compute the joint PMF of $X$ and $Y$.
+\begin{answer}
+Since $X$ and $Y$ are independent we have that $f_{X,Y}(x,y)=f_X(x)f_Y(y)$, which yields the following joint PMF.
+\[
+\begin{array}{|cc|ccc|c|}\hline
+    &       &       & y     &       &     \\
+    &       & -1    & 0     & 1     & f_X(x)    \\ \hline
+\raisebox{-1.0ex}{$x$}   & 1     & 1/12  & 1/6   & 1/12  & 1/3       \\
+    & 2     & 1/6   & 1/3   & 1/6   & 2/3       \\ \hline
+    & f_Y(y)& 1/4   & 1/2   & 1/4   & 1         \\ \hline
+\end{array}
+\]
+\end{answer}
+%--------------------
+\part Compute the joint PMF of the random variables $U=1/X$ and $V=Y^2$. 
+\begin{answer}
+Let $f_{U,V}(u,v)$ denote the joint PMF of $U$ and $V$. Clearly, $U$ takes the values $0.5$ and $1$, while $V$ takes the values $0$ and $1$. We compute (for example)
+\[
+f_{U,V}(0.5,1) = f_{U,V}(2,-1) + f_{U,V}(2,1) = 1/6 + 1/6 = 1/3
+\]
+to get the joint PMF $f_{U,V}$ shown in the following table:
+\[
+\begin{array}{|cc|cc|c|} \hline
+    &       & \multicolumn{2}{c|}{v} &   \\
+    &       & 0     & 1     & f_U(u)    \\ \hline
+\raisebox{-1.0ex}{$u$}   & 1/2   & 1/3   & 1/3   & 2/3       \\
+    & 2     & 1/6   & 1/6   & 1/3       \\ \hline
+    & f_V(v)& 1/2   & 1/2  & 1          \\ \hline
+\end{array}
+\]
+\end{answer}
+%--------------------
+\part Show that $U$ and $V$ are independent.
+\begin{answer}
+The marginal PMFs $f_U(u)$ and $f_V(v)$ are computed by summing the rows and columns of the joint PMF table. From here, we see that $U$ and $V$ are independent because $f_{U,V}(u,v) = f_U(u)f_V(v)$ for every pair of values $(u,v)$.
+\end{answer}
+%--------------------
+\end{parts}
+
+%==========================================================================
+\question
+The random variables $X$ and $Y$ have the joint PMF
+\[
+f(x,y) = \left\{\begin{array}{ll}
+	c|x+y| 	& \text{if}\quad x,y\in\{-2,-1,0,1,2\} \\
+	0		& \text{otherwise,}
+\end{array}\right.	
+\]
+where $c$ is a constant.
+\begin{parts}
+%--------------------
+\part 
+Find the value of $c$.
+\begin{answer}
+First we tabulate the values of $|x+y|$:
+\[
+\begin{array}{|cc|ccccc|}\hline
+	&		&		&		& y		&		&		\\
+	&		& -2		& -1		& 0		& 1		& 2 		\\ \hline
+	& -2		& 4 		& 3		& 2 		& 1		& 0		\\
+	& -1		& 3		& 2		& 1		& 0		& 1		\\
+x	& 0		& 2		& 1		& 0		& 1		& 2		\\
+	& 1		& 1		& 0		& 1		& 2		& 3		\\
+	& 2		& 0		& 1		& 2		& 3		& 4		\\ \hline
+\end{array}\]
+Because the probabilities must sum to $1$, it follows that $c=1/40$. 
+\par
+Hence the joint PMF of $X$ and $Y$, along with their marginal PMFs, are as follows:
+\[
+\begin{array}{|cc|ccccc|c|}\hline
+	&		&		&		& y		&		&		&			\\
+	&		& -2		& -1		& 0		& 1		& 2 		&			\\ \hline
+	& -2		& 4/40	& 3/40	& 2/40	& 1/40	& 0		&	10/40 	\\
+	& -1		& 3/40	& 2/40	& 1/40	& 0		& 1/40	&	 7/40 	\\
+x	& 0		& 2/40	& 1/40	& 0		& 1/40	& 2/40	&	 6/40 	\\
+	& 1		& 1/40	& 0		& 1/40	& 2/40	& 3/40	&	 7/40 	\\
+	& 2		& 0		& 1/40	& 2/40	& 3/40	& 4/40	&	10/40 	\\ \hline
+	&		& 10/40	& 7/40	& 6/40	& 7/40	& 4/40	& \\ \hline
+\end{array}
+\]
+\end{answer}
+%--------------------
+\part 
+Find $\prob(X=0,Y=-2)$.
+\begin{answer}
+$\prob(X = 0 \text{ and } Y = -2) = f(0, -2) = 2/40 = 1/20$.
+\end{answer}
+%--------------------
+\part 
+Find $\prob(X=2)$.
+\begin{answer}
+$\prob(X=2) = f_X(2) = 10/40 = 1/4$
+\end{answer}
+%--------------------
+\part 
+Find $\prob(|X-Y|\leq 1)$.
+\begin{answer}
+\begin{align*}
+\prob(|X-Y|\leq 1) 
+	& = \prob(-1\leq X-Y\leq 1) \\
+	& = \prob(X-Y = -1,0\text{ or } 1) \\
+	& = \prob\big((X = Y - 1)\,{\cup}\,(X = Y)\,{\cup}\,(X = Y + 1)\big) \\
+	& = 8/40 + 12/40 + 8/40 \\
+	& = 7/10
+\end{align*}
+\end{answer}
+%--------------------
+\end{parts}
+
+\end{questions}
+\end{exercise}
+%======================================================================
+\endinput
+%======================================================================

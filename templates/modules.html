@@ -1,3 +1,6 @@
+<!--
+camel: modules.html
+-->
 {% extends "index.html" %}
 {% load staticfiles %}
 
@@ -6,7 +9,7 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-    &nbsp;<a href="{% url 'modules' %}"> Modules</a>
+	{{ block.super }}&gt;&nbsp;<a href="{% url 'module-list' %}">Modules</a>
 {% endblock %}
 
 {% block content-main %}

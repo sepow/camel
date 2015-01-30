@@ -1,0 +1,286 @@
+% !TEX root = main.tex
+% ex16_geometric_poisson.tex
+\begin{exercise}
+\begin{questions}
+
+%--------------------
+% binomial & geometric
+% RND p125q11
+\question
+A machine produces washers which must satisfy certain size and quality constraints. It produces defective items with probability $p$. Every hour a sample of 10 washers is inspected, and if two or more washers are found to be defective, the machine is stopped and overhauled. 
+\begin{parts}
+\part % << (i)
+Write down an expression for the probability that the machine is stopped after a particular sample.
+\begin{answer}
+Let $X$ be the number of faulty items in a sample. Then $X\sim\text{Binomial}(10,p)$, so 
+\[
+\prob(X \geq 2) = 1 - \prob(X\leq 1) = 1 - (1-p)^9(1+9p).
+\]
+\end{answer}
+\part % << (ii)
+Find the expected time between successive stoppages.
+\begin{answer}
+Suppose that a stoppage occurs at time $t$, and that subsequent samples are taken at times $t+1, t+2, \ldots$. If the next stoppage occurs at time $t+Y$, then
+\[
+\prob(Y = k) = \prob(X\leq 1)^{k-1}\prob(X\geq 2) \quad\text{for $k=1,2,\ldots$}.
+\]
+Thus $Y$ has geometric distribution with `probability of success' parameter equal to $\prob(X\geq 2)$, so
+\[
+\expe(Y) = \frac{1}{\prob(X\geq 2)} = \frac{1}{1 - (1-p)^9(1+9p)}\text{ hours.}
+\]
+\end{answer}
+\end{parts}
+%----------------------------------------
+\question
+The \emph{negative binomial distribution} is the distribution of the number independent Bernoulli trials that are required to obtain a fixed number of successes. Let $X\sim\text{NegativeBinomial}(r,p)$, where $r$ is the desired number of successes, and $p$ is the probability of success on each trial. 
+\begin{parts}
+\part % << (i)
+Show that the PMF of $X$ is given by
+\[
+\prob(X=k) = \displaystyle \binom{k-1}{r-1}(1-p)^{k-r}p^{r} \qquad\text{for $k=r,r+1,r+2,\ldots$ (and zero otherwise).}
+\]
+\begin{answer}
+Let the $r$th success occur at the $k$th trial. Any sequence of length $k$ leading to this result must end in a success, and must contain exactly $r-1$ successes and $k-r$ failures in the first $k-1$ trials. There are $\binom{k-1}{r-1}$ such sequences, each occurring with probability $p^r(1-p)^{k-r}$ as there are $k$ trials and $r$ successes in total. Thus
+\[
+P(X=k) = \binom{k-1}{r-1}p^r (1-p)^{k-r} 
+\]
+At least $r$ trials are required for $r$ successes, so this holds for $k=r,r+1,\ldots$.
+\end{answer}
+\part % << (i)
+Using the fact that $X$ can be written as the sum of independent geometric random variables, show that $\expe(X)=r/p$ and $\var(X)=r(1-p)/p^2$.
+\begin{answer}
+Let $Y_1,\ldots,Y_r$ be independent with $Y_i\sim\text{Geometric}(p)$, and let $X = \sum_{i=1}^r Y_i$.
+\par
+By the linearity of expectation,
+\[
+\expe(X) = \expe(Y_1)+\expe(Y_2)+\ldots+\expe(Y_r) = \frac{r}{p}
+\]
+and because the trials are independent,
+\[
+\var(X) = \var(Y_1)+\var(Y_2)+\ldots+\var(Y_r) = \frac{r(1-p)}{p^2}
+\]
+\end{answer}
+\part % << (iii)
+Biological populations are often sampled using a technique called \emph{inverse binomial sampling}, where individuals are successively chosen and examined until the required number of individuals with a particular characteristic has been obtained. A biologist wishes to obtain a sample of $100$ fruit flies having a certain genetic trait that occurs at a rate of one in every twenty fruit files in the population. Write down an expression for the probability that the biologist has to examine at least $k$ flies?
+\begin{answer}
+Let $X$ be the number of fruit files examined. Then $X\sim\text{NegativeBinomial}(r,p)$ with $r=100$ and $p=0.05$, so
+\[
+\prob(X\geq k) = 1 - \prob(X < k) = 1 - \sum_{j=100}^{k-1} \binom{j-1}{99} (0.95)^{j-100}(0.05)^{100} 
+\]
+\end{answer}
+\part
+To encourage sales of a certain breakfast cereal, each packet contains a prize token with probability $p$. To secure a particular prize, a total of 10 tokens must be obtained. Find the PMF of the number of packets that must be purchased to obtain 10 tokens, then find the mean and variance of this number.
+\begin{answer}
+Let $X$ be the number of packets bought to obtain 10 tokens. Then $X$ has negative binomial distribution with stopping parameter $r=10$ and probability of success $p$. Thus
+\[
+P(X=k) = \binom{k-1}{9}p^{10} (1-p)^{k-10} 
+\]
+This is the negative binomial distribution with $r=10$, so $\expe(X)=\displaystyle\frac{10}{p}$ and $\var(X)=\displaystyle\frac{10(1-p)}{p^2}$.
+\end{answer}
+\end{parts}
+%%--------------------
+%% negative binomial
+%% RND p132q30
+%\question
+%To encourage sales of a certain breakfast cereal, each packet contains a prize token with probability $p$. To secure a particular prize, a total of 10 tokens must be obtained. Find the probability mass function of the number of packets that must be purchased to obtain 10 tokens, then find the mean and variance of this number.
+%\begin{answer}
+%Let $X$ be the number of packets bought to obtain 10 tokens. Then $X$ has negative binomial distribution with stopping parameter $r=10$ and probability of success $p$. Thus
+%\[
+%P(X=k) = \binom{k-1}{9}p^{10} (1-p)^{k-10} 
+%\]
+%This is the negative binomial distribution with $r=10$, so $\expe(X)=\displaystyle\frac{10}{p}$ and $\var(X)=\displaystyle\frac{10(1-p)}{p^2}$.
+%\end{answer}
+
+
+%--------------------
+% poisson
+% RND p105q7
+\question
+Let $X\sim\text{Poisson}(1)$ and define the random variable
+\[\begin{array}{cl}
+Y = X	& \quad \text{if}\ \ X\leq 3, \\
+Y = 3	& \quad \text{if}\ \ X > 3.
+\end{array}\]
+Find the PMF of $Y$, and compute its expected value.
+\begin{answer}
+$X\sim\text{Poisson}(1)$ so $\prob(X=k)=\displaystyle\frac{e^{-1}}{k!}$.
+\bit
+\it For $k\in\{0,1,2\}$, $\displaystyle\prob(Y=k) = \prob(X=k) = \frac{e^{-1}}{y!}$.
+\it For $k=3$, $\displaystyle \prob(Y=3) = \prob(X\geq 3) = 1 - \prob(X\leq 2) = 1 - e^{-1}\left(1+1+\frac{1}{2}\right) = 1-\frac{5}{2e}$.
+\eit
+Thus the PMF of $Y$ is:
+\[
+\begin{array}{|c|ccc|}\hline
+y       & 1	     & 2		& 3			\\ \hline
+p_Y(k)  	& 1/e  & 1/(2e)	& 1-5/(2e)	\\ \hline
+\end{array}
+\]
+and its expected value is
+\[
+\expe(Y) 
+	= \left(1 \times\frac{1}{e}\right) + \left(2 \times\frac{1}{2e}\right) + \left(3 \times\left(1-\frac{5}{2e}\right)\right)
+	= 3 - \frac{11}{2e}
+	= 0.9767
+\]
+\end{answer}
+
+%--------------------
+% poisson
+\question
+A commercial insecticide is advertised as being 99.9\% effective. Suppose that $4000$ insects infest a rose garden where the insecticide has been applied. Let $X$ denote the number of surviving insects.
+\begin{parts}
+\part % << (i)
+What probability distribution might be a reasonable model for this experiment?
+\begin{answer}
+A suitable model is the $\text{Binomial}(n,p)$ distribution, with $n=4000$ and $p=0.0001$. 
+\end{answer}
+\part % << (ii)
+Write down an expression for the probability that fewer than three insects survive.
+\begin{answer}
+$\prob(X < 3) = \prob(X\leq 2) = \displaystyle\sum_{k=0}^2\binom{4000}{k}(0.001)^k(0.999)^{4000-k}$.
+\end{answer}
+\part % << (iii)
+Compute an approximation to the probability that fewer than three insects survive.
+\begin{answer}
+Since $n$ is large and $p$ is small, we can apply the Poisson approximation theorem (a.k.a. the law of rare events). Hence the distribution of $X$ is approximately Poisson with mean $\lambda = np = 4$, so
+\[
+\prob(X\leq 2) \approx \sum_{k=0}^2\frac{4^k}{k!} e^{-4} = 13e^{-4} = 0.2381 \text{ (approx)}.
+\]
+\end{answer}
+\end{parts}
+
+%--------------------
+% poisson
+% RND p108q12
+\question
+Let $Y\sim\text{Poisson}(\lambda)$. 
+\begin{parts}
+\part % << (i)
+Starting with the series expansion $\displaystyle e^x = \sum_{k=0}^{\infty} \frac{x^k}{k!}$ of the exponential function, show that
+\[
+x + \frac{x^3}{3!} + \frac{x^5}{5!} + \frac{x^7}{7!} + \ldots = \frac{1}{2}(e^x - e^{-x})\qquad\text{(for every $x\in\R$).}
+\]
+\begin{answer}
+\begin{align*}
+e^x		& = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \frac{x^4}{4!} + \frac{x^5}{5!} + \frac{x^6}{6!} + \frac{x^7}{7!} + \ldots \\[2ex]
+e^{-x}	& = 1 - x + \frac{x^2}{2!} - \frac{x^3}{3!} + \frac{x^4}{4!} - \frac{x^5}{5!} + \frac{x^6}{6!} - \frac{x^7}{7!} + \ldots 
+\end{align*}
+By subtraction,
+\[
+\frac{1}{2}(e^x-e^{-x}) = x + \frac{x^3}{3!} + \frac{x^5}{5!} + \frac{x^7}{7!} \ldots
+\]
+\end{answer}
+\part % << (ii)
+Using your answer to part (a), find the probability that the value taken by $Y$ is an odd number.
+\begin{answer}
+\begin{align*}
+\prob(\text{$X$ is odd})
+	& = \prob(X=1) + \prob(X=3) + \prob(X=5) + \prob(X=7) + \ldots \\		
+	& = \lambda e^{-\lambda} + \frac{\lambda^3}{3!}e^{-\lambda} + \frac{\lambda^5}{5!}e^{-\lambda} + \frac{\lambda^7}{7!}e^{-\lambda} + \ldots \\
+	& = \left(\lambda + \frac{\lambda^3}{3!} + \frac{\lambda^5}{5!} + \frac{\lambda^7}{7!} + \ldots \right)e^{-\lambda} \\
+	& = \frac{1}{2}(e^\lambda - e^{-\lambda})\,e^{-\lambda} \\
+	& = \frac{1}{2}(1-e^{-2\lambda})
+\end{align*}
+\end{answer}
+\part % << (iii)
+Show that this probability is approximately equal to $1/2$ when $\lambda$ is large.
+\begin{answer}
+When $\lambda$ is large, $e^{-2\lambda}\approx 0$ so $	\prob(\text{$X$ is odd})\approx \frac{1}{2}$.
+\end{answer}
+\end{parts}
+
+%--------------------
+% sum of Poisson rvs
+% GS 3.11.6(a)
+\question
+Let $X$ and $Y$ be independent random variables, with $X\sim\text{Poisson}(\lambda)$ and $Y\sim\text{Poisson}(\mu)$. Show that $X+Y\sim\text{Poisson}(\lambda+\mu)$. 
+\par
+[\slshape Hint. Find the probability $\prob(X+Y=k)$ and use the binomial theorem: $(a+b)^n = \sum_{k=0}^n\binom{n}{k}a^k b^{n-k}$.\normalfont]
+\begin{answer}
+We need to show that $\displaystyle\prob(X+Y=k) = \frac{(\lambda+\mu)^k}{k!}e^{-(\lambda+\mu)}$:
+\begin{align*}
+\prob(X+Y=k)
+	& = \prob(Y=k-X) \\
+	& = \sum_{j=0}^k \prob(Y=k-j|X=j)\prob(X=j) \\
+	& = \sum_{j=0}^k \prob(Y=k-j)\prob(X=j) \qquad\text{(by independence),} \\
+	& = \sum_{j=0}^k \left(\frac{\mu^{k-j}}{(k-j)!}e^{-\mu}\right) \left(\frac{\lambda^j}{j!}e^{-\lambda}\right) \\
+	& = \frac{e^{-(\lambda+\mu)}}{k!}\sum_{j=0}^k \frac{k!}{(k-j)!j!}\lambda^{j} \mu^{k-j} \\
+	& = \frac{e^{-(\lambda+\mu)}}{k!}(\lambda+\mu)^k \qquad\text{(by the binomial theorem).}
+\end{align*}
+This is the PMF of the Poisson distribution with parameter $\lambda+\mu$.
+\end{answer}
+
+%%--------------------
+%% discrete rvs + poisson
+%% RND p134q33
+%\question
+%A newsagent buys copies of a certain newspaper every day for $a$ pence each, and sells them for $b$ pence each (where $b>a$); there is no refund on unsold newspapers. The daily demand for the newspaper is a random variable $X$, which has probability mass function $p(k)=\prob(X=k)$. 
+%\ben
+%\it If the newsagent buys $n$ copies of the newspaper each day, show that the expected daily profit is
+%\[
+%E_n = nb\sum_{k=n+1}^\infty p(k) + b\sum_{k=0}^{n} kp(k) - na
+%\]
+%\it Show that the expected daily profit satisfies the difference equation 
+%\[
+%E_n - E_{n-1} = b\sum_{k=n}^\infty p(k) - a,
+%\]
+%and explain how this can be used to find the value of $n$ that maximises the expected daily profit.
+%\it 
+%The newsagent buys copies of the newspaper for $a=30p$ per copy, and sells them for $b=40p$ per copy. If the demand has Poisson distribution with mean $10$, how many copies per day would you advise the newsagent to buy?
+%\een
+%\begin{answer}
+%Let $X$ denote the demand and $Y$ the number of copies sold. If the newsagent buys $n$ copies,
+%\[
+%Y = \begin{cases}
+%	X	& \text{if}\ \ X \leq n, \\
+%	n 	& \text{if}\ \ X > n.
+%\end{cases}
+%\]
+%\ben
+%\it % << (i)
+%Let $Z_n = bY - na$ denote the daily profit. By the linearity of expectation, the expected profit is 	
+%\begin{align*}
+%E_n = \expe(Z_n)
+%	& = b\expe(Y) - na \\
+%	& = b\left(\sum_{k=0}^n k p(k) + \sum_{k=n+1}^{\infty} n p(k)\right) - na \\
+%	& = nb\sum_{k=n+1}^\infty p(k) + b\sum_{k=0}^{n} kp(k) - na.
+%\end{align*}
+%\it	 % << (ii)
+%The expected value of $Z_n$ can be written as
+%\begin{align*}
+%E_n 
+%	& = nb\sum_{k=n+1}^\infty p(k) + b\sum_{k=0}^{n} kp(k) - na \\
+%	& = nb\sum_{k=n+1}^\infty p(k) + b\sum_{k=0}^{n-1} kp(k) + bn\,p(n) - na,
+%\end{align*}	
+%The expected value of $Z_{n-1}$ can be written as
+%\begin{align*}
+%E_{n-1}
+%	& = (n-1)b\sum_{k=n}^\infty p(k) + b\sum_{k=0}^{n-1} kp(k) - (n-1)a \\
+%	& = (n-1)bp(n) + (n-1)b\sum_{k=n+1}^\infty p(k) + b\sum_{k=0}^{n-1} kp(k) - (n-1)a.
+%\end{align*}
+%Thus we obtain the required difference equation:
+%\begin{align*}
+%E_n -E_{n-1}
+%	& = b\sum_{k=n+1}^\infty p(k) +bp(n) - a \\
+%	& = b\sum_{k=n}^\infty p(k) - a.
+%\end{align*}			
+%The difference $E_n-E_{n-1}$ is strictly positive provided that 
+%\[
+%\displaystyle\sum_{k=n}^\infty p(k) > \frac{a}{b}, \text{\quad or equivalently\quad} \displaystyle\sum_{k=0}^{n-1} p(k) < 1- \frac{a}{b}.
+%\]
+%The profit $E_n$ is maximised by the largest value of $n$ satisfying this inequality.
+%\it % << (iii)
+%When $a=30$, $b=40$ and $X\sim\text{Poisson}(10)$, we need to compute the largest value of $n$ for which
+%\[
+%\sum_{k=1}^{n-1} \frac{10^k}{k!} e^{-10} < \frac{1}{4}
+%\]
+%Using statistical tables (or otherwise by trial-and-error), we find that $n=8$ is the number of copies that maximises the expected profit.
+%\een
+%\end{answer}
+
+\end{questions}
+\end{exercise}
+
+%======================================================================
+\endinput
+%======================================================================

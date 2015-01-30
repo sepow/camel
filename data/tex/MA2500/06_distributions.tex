@@ -1,0 +1,320 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Distributions}\label{chap:distributions}
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+\section{Probability on the real line}
+%----------------------------------------------------------------------
+Let $X:\Omega\to\R$ be a random variable, and recall the probability measure on $(\R, \mathcal{B})$,  defined by
+\[
+\prob_X(B) = \prob(X\in B) = \prob\big(\big\{\omega:X(\omega)\in B\}\big),
+\]
+where $\mathcal{B}$ is the Borel $\sigma$-field over $\R$.
+
+% definition
+\begin{definition}
+\ben
+\it
+The \emph{distribution} of $X$ is the probability measure $\prob_X(B) = \prob(X\in B)$.
+\it 
+The \emph{cumulative distribution function} (CDF) of $X$ is the function $F(x) = \prob(X\leq x)$.
+\it 
+The \emph{survival function} (SF) of $X$ is the function $S(t) = \prob(X > t)$.
+\een
+\end{definition}
+
+\begin{remark}
+The survival function is also called the \emph{complementary} distribution function.
+If $X$ represents the \emph{lifetime} of some random system, then $S(t)=\prob(X>t)$ is the probability that the system survives beyond time $t$. In this context, $F(t) = 1 - S(t)$ is called the \emph{lifetime distribution function}.
+\end{remark}
+
+
+%----------------------------------------------------------------------
+\section{Cumulative distribution functions (CDFs)}
+%----------------------------------------------------------------------
+Proposition~\ref{prop:rv_alt} states that $X:\Omega\to\R$ is a random variable if and only if the sets $\{X\leq x\}$ are \emph{events} over $\Omega$:
+\[
+\{X\leq x\} = \big\{\omega:X(\omega)\leq x\big\}\in\mathcal{F} \text{\quad for all\quad} x\in\R.
+\]
+
+It can be shown that the probability measure
+\[
+\prob_X(B) = \prob(X\in B) = \prob\big(\big\{\omega:X(\omega)\in B\}\big),
+\]
+is uniquely defined by the values it takes on the events $\{X\leq x\}$ for $x\in\R$. Consequently, the distribution of a random variable is uniquely determined by its \emph{cumulative distribution function} (CDF):
+
+%$\prob_X$ is uniquely determined by the \emph{distribution function} of $X$.
+
+%\eit
+%\[
+%\{X\leq x\} = \{\omega: X(\omega)\leq x\} \text{\quad for\quad} x\in\R.
+%\]
+
+
+% definition: cdf
+\begin{definition}
+The \emph{cumulative distribution function} (CDF) of a random variable $X:\Omega\to\R$ is the function
+\[
+\begin{array}{cccl}
+F:	& \mathbb{R}	& \longrightarrow	& [0,1] \\
+	& x 			& \mapsto			& \prob(X\leq x).
+\end{array}
+\]
+\end{definition}
+
+%\bit
+%$\prob_X(B) = \prob(X\in B)$ is uniquely defined by the values it takes on the set of events 
+%$$
+%\{X\leq x\} = \{\omega: X(\omega(\leq x\} \text{\qquad} x\in\R
+%$$ 
+%\eit
+%
+%
+%\begin{corollary}
+%$\prob_X$ is uniquely determined by the \emph{distribution function} of $X$.
+%\end{corollary} 
+
+%\begin{theorem}
+%Let $X:\Omega\to\R$, be a random variable on $(\Omega,\mathcal{F},\prob)$ and define the set function
+%\[
+%\begin{array}{rccl}
+%	\prob_F:	& \mathcal{B}(\R)	& \to 		& [0,1] \\
+%				& B				& \mapsto 	& \prob(X\in B).
+%\end{array}
+%\]
+%Then $\prob_X$ is a probability measure on $(\R,\mathcal{B}(\R))$.
+%\end{theorem}
+
+%\newpage
+
+% theorem
+\begin{theorem}\label{thm:pmeas_F}
+Let $F:\R\to[0,1]$ be a CDF. Then there is a unique probability measure $\prob_F:\mathcal{B}\to[0,1]$ on the real line with the property that
+\begin{align*}
+\prob_F\big((a,b]\big) = F(b) - F(a)
+\end{align*}
+for every such half-open interval $(a,b]\in\mathcal{B}$.
+\end{theorem}
+\proofomitted
+
+\bit
+\it The triple $(\R,\mathcal{B},\prob_F)$ is sometimes called the \emph{probability space induced by $F$}.
+\eit
+
+\begin{remark}
+Compare the probability measure $\prob_F$ of the interval $(a,b]\subset\R$ to the usual measure of its \emph{length}:
+\bit
+\it Length: $\mathbb{L}\big((a,b]\big) = b - a$
+\it Probability measure:  $\prob_F\big((a,b]\big) = F(b)-F(a)$.
+\eit
+%Note that if a random variable $X:\Omega\to\R$ has distribution function $F$, then
+%\[
+%\prob_F\big((a,b]\big) = \prob\big(\big\{\omega: a < X(\omega) \leq b\big\}\big)
+%\]
+Thus $\mathbb{P}_F\big( (a,b]\big)$ quantifies the ``amount of probability'' in any given interval $(a,b]$.
+\end{remark}
+
+%----------------------------------------------------------------------
+%\newpage
+\section{Properties of CDFs}
+%----------------------------------------------------------------------
+
+% theorem: properties cdf
+\begin{theorem}\label{thm:properties_cdf}
+A cumulative distribution function $F:\R\to[0,1]$ has the following properties:
+\ben
+\it if $x < y$ then $F(x) \leq F(y)$,
+\it $F(x)\to 0$ as $x\to-\infty$,
+\it $F(x)\to 1$ as $x\to+\infty$, and
+\it $F(x+h)\to F(x)$ as $h\downarrow 0$ (right continuity).
+\een
+\end{theorem}
+
+% proof
+\begin{proof}
+\ben
+%----------------------------------------
+\it % (i): increasing
+To show that $F$ is increasing, let $x < y$ and consider the events 
+\[\begin{array}{lll}
+A	& = \{X\leq x\}	& = \{\omega: X(\omega)\leq x\}, \\
+B	& = \{X\leq y\}	& = \{\omega: X(\omega)\leq y\}.
+\end{array}\]
+By construction, $F(x)=\prob(A)$ and $F(y)=\prob(B)$ so by the monotonicity of probability measures (Theorem~\ref{thm:properties_of_probability_measures}), 
+\[
+x< y \Rightarrow A\subseteq B \Rightarrow \prob(A) \leq \prob(B) \Rightarrow F(x) \leq F(y).
+\]
+
+%----------------------------------------
+\it % (ii): F(x) -> 0 as x -> -\infty
+To show that $F(x)\to 0$ as $x\to-\infty$, let
+\[
+B_n = \{X\leq -n\} = \{\omega:X(\omega)\in (-\infty,-n]\} \text{\quad for } n=1,2,\ldots
+\]
+so that $F(-n)= \prob(X\leq -n) = \prob(B_n)$. 
+
+The sequence $B_1,B_2,\ldots$ is decreasing ($B_{n+1}\subseteq B_n$), with 
+\[
+\bigcap_{n=1}^{\infty} B_n = \emptyset,
+\]
+because for any $x$, there exists an $n$ such that $x\notin (-\infty,-n]$.
+\par
+By the continuity of probability measures (Theorem~\ref{thm:continuity_of_probability_measures}),
+\[
+\lim_{n\to\infty}F(-n) = \lim_{n\to\infty}\prob(B_n) = \prob\left(\bigcap_{n=1}^n B_n\right) = \prob(\emptyset) = 0,
+\]
+and because $F(x)$ is an increasing function,
+\[
+\lim_{n\to\infty}F(-n)=0 \text{\quad} \Leftrightarrow \text{\quad} \lim_{x\to-\infty}F(x)=0.
+\]
+%----------------------------------------
+\it % (iii): F(x) -> 1 as x -> \infty
+To show that $F(x)\to 1$ as $x\to\infty$, let
+\[
+A_n = \{X\leq n\} =  \{\omega:X(\omega)\in (-\infty,n]\}\text{\quad for } n=1,2,\ldots,
+\]
+so that $F(n)= \prob(X\leq n) = \prob(A_n)$.
+
+The sequence $A_1,A_2,\ldots$ is increasing ($A_n\subseteq A_{n+1}$), with 
+\[
+\bigcup_n A_{n=1}^{\infty} = \Omega,
+\]
+ because for any $x$, there exists an $n$ such that $x\in (-\infty,n]$. 
+ \par
+ By the continuity of probability measures,
+\[
+\lim_{n\to\infty}F(n) = \lim_{n\to\infty}\prob(A_n) = \prob\left(\bigcup_{n=1}^{\infty} A_n\right) = \prob(\Omega) = 1,
+\]
+and because $F(x)$ is an increasing function,
+\[
+\lim_{n\to\infty}F(n)=1 \text{\quad} \Leftrightarrow \text{\quad} \lim_{x\to\infty}F(x)=1.
+\]
+%----------------------------------------
+\it % (iv): right continuity
+To show that $F(x)$ is right-continuous, let
+\[
+B_n=\left\{\omega: X(\omega)\in\left(-\infty,x+\frac{1}{n}\right]\right\}
+\]
+%so that $F\left(x+\frac{1}{n}\right) = \prob\left(X\leq x+\frac{1}{n}\right) = \prob(B_n)$.
+so that $F\left(x+1/n\right) = \prob\left(X\leq x+1/n\right) = \prob(B_n)$.
+
+The sequence $B_1,B_2,\ldots$ is decreasing ($B_{n+1}\subseteq B_n$), with 
+\[
+\bigcap_{n=1}^{\infty} B_n=(-\infty,x],
+\]
+so
+\[
+\prob\left(\bigcap_{n=1}^\infty B_n\right) 
+	= \prob\big(\{\omega: X(\omega)\in (-\infty,x]\}\big) 
+	= \prob\big(\{\omega: X(\omega)\leq x\}\big) 
+	= F(x).
+\]
+By the continuity of probability measures,
+\[
+F(x) = \prob\left(\bigcap_{n=1}^{\infty} B_n\right) = \lim_{n\to\infty} \prob(B_n) = \lim_{n\to\infty}F\left(x+\frac{1}{n}\right).
+\]
+which concludes the proof.
+\een
+\end{proof}
+
+% theorem: 
+\begin{theorem}\label{thm:characterization_cdf}
+Let $F:\R\to[0,1]$ be a function with properties (i)-(iv) of Theorem~\ref{thm:properties_cdf}. Then $F$ is a cumulative distribution function.
+\end{theorem}
+\proofomitted
+
+% remark
+\begin{remark}
+The last two theorems make no explicit reference to random variables:
+\bit
+\it many different random variables can have the same distribution function;
+\it a distribution function can represent many different random variables.
+\eit
+\end{remark}
+
+
+
+
+%----------------------------------------------------------------------
+%\newpage
+\section{Discrete distributions and PMFs}
+%----------------------------------------------------------------------
+The \emph{range} of a random variable $X:\Omega\to\R$ is the set of all possible values it can take: 
+\[
+\text{Range}(X) = \{x\in\R : X(\omega)=x \text{ for some } \omega\in\Omega\}.
+\]
+
+% defn: discrete rv & pmf
+\begin{definition}
+\bit
+\it $X:\Omega\to\R$ is called a \emph{discrete random variable} if its range is a countable subset of $\R$. 
+\it A discrete random variable is described by its \emph{probability mass function} (PMF),
+\[
+\begin{array}{rccl}
+	f:	& \R		& \to 		& [0,1] \\
+		& k		& \mapsto 	& \prob (X=k),
+\end{array}
+\]
+which must have the property that $\sum_k f(k) = 1$.
+\it A probability mass function defines a \emph{discrete probability measure} on $\R$,
+\[
+\begin{array}{rccl}
+	\prob_X:	& \mathcal{B}	& \to 		& [0,1] \\
+			& B					& \mapsto 	& \displaystyle\sum_{k\in B} \prob(X=k),
+\end{array}
+\]
+\it The triple $(\R,\mathcal{B},\prob_X)$ is called a \emph{discrete probability space} over $\R$.
+\eit
+
+\end{definition}
+
+%----------------------------------------------------------------------
+\section{Continuous distributions and PDFs}
+%----------------------------------------------------------------------
+% definition: continuous distributions
+\begin{definition}\label{def:abs_cts_cdf}
+\bit
+\it
+A cumulative distribution function $F:\R\to[0,1]$ is said to be \emph{absolutely continuous} if there exists an integrable function $f:\mathbb{R}\to [0,\infty)$ such that 
+\[
+F(x) = \int_{-\infty}^x f(t)\,dt \text{\quad for all\quad} x\in\R.
+\]
+\it
+The function $f:\mathbb{R}\to [0,\infty)$ is called the \emph{probability density function} (PDF) of $F$.
+\it 
+The triple $(\R,\mathcal{B},\prob_F)$ is called a \emph{continuous probability space} over $\R$.
+\eit
+\end{definition}
+
+% definition: continuous random variables
+\begin{definition}
+A \emph{continuous random variable} is one whose distribution function is absolutely continuous.
+\end{definition}
+
+If $X:\Omega\to\R$ is a continuous random variable, then
+\bit
+\it $f(x) = F'(x)$ for all $x\in\R$.
+\it Probabilities correspond to areas under the curve $f(x)$: 
+\[
+\prob_X\big(\,(a,b]\,\big) = \prob(a< X\leq b) = F(b) - F(a) = \int_a^b f(x)\,dx.
+\]
+%\it The following heuristic interpretation is often useful:
+%\[
+%\prob\big[X\in (x,x+dx)\big] \approx f(x)\,dx,\qquad x\in\R.
+%\]
+\it Note that $\prob(X=x)=0$ for all $x\in\R$.
+\eit
+
+% remark: careful now
+\begin{remark}
+The continuity of a random variable $X:\Omega\to\R$ refers to the continuity of its distribution function, and \emph{not} to the continuity (or otherwise) of itself as a function on $\Omega$.
+\end{remark}
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex06_distributions}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

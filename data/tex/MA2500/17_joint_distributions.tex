@@ -1,0 +1,839 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Joint Distributions}\label{chap:joint}
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+\section{Joint distributions}
+%----------------------------------------------------------------------
+
+% defn: joint distributions
+\begin{definition}
+Let $X,Y:\Omega\to\R$ be random variables on the probability space $(\Omega,\mathcal{F},\prob)$.
+\ben
+\it % (i)
+The \emph{joint distribution} of $X$ and $Y$ is the function
+\[
+\begin{array}{cccc}
+\prob_{X,Y}:		& \mathcal{B}^2	& \to		& [0,1] \\
+				& (A,B)			& \mapsto	& \prob(X\in A,Y\in B).
+\end{array}
+\]
+\it The \emph{joint CDF} of $X$ and $Y$ is 
+\[
+\begin{array}{cccc}
+F_{X,Y}:		& \R^2	& \to		& [0,1] \\
+			& (x,y)	& \mapsto	& \prob(X\leq x,Y\leq y).
+\end{array}
+\]
+\it 
+The \emph{marginal CDF} of $X$ is the function
+\[
+\begin{array}{cccc}
+F_X:	& \mathbb{R} 	& \to		& [0,1] \\[1ex]
+	& x				& \mapsto	& \prob(X\leq x),
+\end{array}
+\]
+and the marginal CDF of $Y$ is
+\[
+\begin{array}{cccc}
+F_Y:	& \mathbb{R}		& \to		& [0,1] \\[1ex]
+	& y				& \mapsto	& \prob(Y\leq y).
+\end{array}
+\]
+
+%\it The \emph{marginal CDFs} of $X$ and $Y$ are the functions $F_X(x) = \prob(X\leq x)$ and $F_Y(y) = \prob(Y\leq y)$ respectively.
+%\[
+%F_X(x) = \prob(X\leq x) 
+%\text{\quad and\quad}
+%F_Y(y)	= \prob(Y\leq y)
+%\text{\quad respectively.}
+%\]
+%\begin{align*}
+%F_X(x)	& = \prob(X\leq x), \text{ and} \\
+%F_Y(y)	& = \prob(Y\leq y).
+%\end{align*}
+%respectively.
+\een
+\end{definition}
+
+
+%% defn: joint distribution function
+%\begin{definition}
+%Let $X,Y:\Omega\to\R$ be random variables on the probability space $(\Omega,\mathcal{F},\prob)$.
+%\ben
+%\it The \emph{joint cumulative distribution function} of $X$ and $Y$ is defined by
+%\[
+%\begin{array}{cccl}
+%F_{X,Y}:	& \R^2	& \longrightarrow	& [0,1] \\
+%	& (x,y) 	& \mapsto			& \prob(X\leq x, Y\leq y)
+%\end{array}
+%\]
+%i.e.
+%\[
+%F_{X,Y}(x,y) = \prob(X\leq x, Y\leq y) = \prob\big(\{\omega: X(\omega)\leq x, Y(\omega)\leq y\}\big)
+%\]
+%
+%\it The \emph{marginal distribution functions} of $X$ and $Y$ are
+%\begin{align*}
+%F_X(x)	& = \prob(X\leq x) = \prob(\{\omega\in\Omega : X(\omega)\leq x\}), \text{ and} \\
+%F_Y(y)	& = \prob(Y\leq y) = \prob(\{\omega\in\Omega : Y(\omega)\leq y\})
+%\end{align*}
+%respectively.
+%\een
+%\end{definition}
+
+%\begin{remark}
+%For clarity, we sometimes write $F_{X,Y}$ to denote the joint distribution of $X$ and $Y$.
+%\end{remark}
+
+%----------------------------------------------------------------------
+\section{Properties of Joint CDFs}
+%----------------------------------------------------------------------
+
+% theorem: properties of joint cdfs
+\begin{theorem}\label{thm:properties_jointcdf}
+Let $F:\R^2\to [0,1]$ be a joint CDF.
+\ben
+\it Limiting behaviour:
+\[\begin{array}{lll}
+\lim_{x\to-\infty}F(x,y)=0, &
+\lim_{y\to-\infty}F(x,y)=0, &
+\lim_{\substack{x\to-\infty\\y\to-\infty}}F(x,y)=0, \\
+\lim_{x\to+\infty}F(x,y)=F_Y(y), & 
+\lim_{y\to+\infty}F(x,y)=F_X(x), &
+\lim_{\substack{x\to+\infty\\y\to+\infty}} F(x,y)=1.
+\end{array}\]
+
+\it 	Monotonicity: 
+\[
+F(x,y)\leq F(x+u,y+v)\quad\text{for all $u,v\geq 0$.}
+\]
+
+\it Inclusion-exclusion:
+\[
+\prob\big(a< X\leq b,\ c < Y\leq d\big) = F(b,d) - F(a,d) - F(b,c) + F(a,c).
+\]
+
+\it 	Upper continuity: 
+\[
+F(x+u,y+v) \longrightarrow F(x,y) \text{\quad as\quad} u\downarrow 0\text{ and }v\downarrow 0,
+\]
+where $u\downarrow 0$ means that $u$ converges to zero through positive values (a.k.a. ``from above'').
+\een
+\end{theorem}
+
+\proofomitted
+
+%\begin{proof}
+%\ben
+%\it % <<<< (i)
+%Let $B_n	= \{\omega: X(\omega)\leq -n, Y(\omega)\leq y\}.$ Then $B_1,B_2,\ldots$ is a decreasing sequence of events, with 
+%\[
+%\bigcaf_{n=1}^{\infty}B_n=\emptyset.
+%\]
+%Hence by the continuity of probability measures,
+%\[
+%\lim_{n\to\infty}F(-n,y) = \lim_{n\to\infty}\prob(B_n) 
+%	= \prob\left(\bigcaf_{n=1}^{\infty} B_n\right) = \prob(\emptyset) = 0.
+%\]
+%so $F(-n,y)\to \prob(\emptyset) = 0$ as $n\to\infty$.
+%\par
+%Similarly, we can show that $F(x,-n)\to 0$ as $n\to\infty$ using an identical argument applied to the sets $B_n = \{\omega: X(\omega)\leq x, Y(\omega)\leq -n\}.$ Furthermore,
+%\[
+%\lim_{\substack{x\to-\infty\\y\to-\infty}} F(x,y)
+%	= \lim_{x\to-\infty}\left(\lim_{y\to-\infty} F(x,y)\right)
+%	= \lim_{x\to-\infty} 0
+%	= 0.
+%\]% <<< (id)
+%Let $A_n = \{\omega: X(\omega)\leq n, Y(\omega)\leq y\}.$ Then $A_1,A_2,\ldots$ is an increasing sequence of events, with 
+%\[
+%\bigcuf_{n=1}^{\infty}A_n=\{\omega:Y(\omega)\leq y\}.
+%\]
+%Hence by the continuity of probability measures,
+%\[
+%F_Y(y) = \prob(Y\leq y) = \prob\big(\cuf_{n=1}^{\infty}A_n\big) = \lim_{n\to\infty} \prob(A_n) = \lim_{n\to\infty}F(n,y).
+%\]
+%% <<<< (ie)
+%Using an identical argument applied to the sets $A_n = \{\omega: X(\omega)\leq x, Y(\omega)\leq n\},$
+%\[
+%F_X(x) = \lim_{n\to\infty}F(x,n),
+%\]
+%and moreover,
+%\[
+%\lim_{\substack{x\to\infty\\y\to\infty}} F(x,y)
+%	= \lim_{x\to\infty}\left(\lim_{y\to\infty} F(x,y)\right)
+%	= \lim_{x\to\infty} F_X(x)
+%	= 1.
+%\]
+%
+%
+%
+%\it % <<<< (iii): monotonicity
+%Monotonicity. Let $u,v>0$ and consider the sets
+%\[
+%A = \{X\leq x, Y\leq y\} \text{\quad and\quad} B = \{X\leq x+u, Y\leq y+v\}.
+%\]
+%
+%Since $A\subseteq B$, by the monotonicity property of probability measures we have
+%\[
+%F(x,y) = \prob(A) \leq \prob(B) = F(x+u,y+v).
+%\] 
+%
+%\it % <<<< (iv): inclusion-exclusion
+%Inclusion-exclusion. Let $a< b$ and $c< d$, and consider the events
+%%\begin{align*}
+%%\prob\big(a< X\leq b,\ c < Y\leq d\big)
+%%	& = \prob(X\leq b,Y\leq d) - \prob(X\leq a,Y\leq d) \\
+%%	& \text{\qquad\qquad} - \prob(X\leq b,Y\leq c) + \prob(X\leq a,Y\leq c) \\
+%%	& = F(b,d)-F(a,d)-F(b,c)+F(a,c).
+%%\end{align*}
+%\[
+%A = \{X\leq b,\ c < Y\leq d\} \text{\quad and\quad} B = \{a < X\leq b,\ Y\leq d\}.
+%\]
+%%so that $\prob(A) = F(b,d) - F(b,c)$ and $\prob(B) = F(b,d) - F(a,d)$, and
+%Then
+%\[
+%\begin{array}{rlrl}
+%\prob(A) & = F(b,d) - F(b,c),\quad  & \prob(A\cup B) & = F(b,d) - F(a,c), \\
+%\prob(B) & = F(b,d) - F(a,d), 		& 
+%\end{array}
+%\]
+%%\bit
+%%\it $\prob(A\cup B) = F(b,d)$ and 
+%%%\it $\prob(A) = F(b,d) - F(b,c)$,
+%%%\it $\prob(B) = F(b,d) - F(a,d)$, and
+%%\prob(A\cap B) = F(b,d) - F(a,c)$.
+%%\eit
+%Hence
+%\begin{align*}
+%\prob\big(a< X\leq b,\ c < Y\leq d\big)
+%	& = \prob(A\cap B) \\
+%	& = \prob(A) + \prob(B) - \prob(A\cup B) \\
+%	& = F(b,d)-F(a,d)-F(b,c)+F(a,c).
+%\end{align*}
+%% picture
+%%\picbox[Inclusion-Exclusion]{1cm}
+%\it % <<<< (iv): continuity from above
+%Continuity from above. Consider the events
+%\[
+%B_n = \left\{(X,Y)\in \left(-\infty,x+\frac{1}{n}\right]\times \left(-\infty,y+\frac{1}{n}\right] \right\}.
+%\]
+%By construction, 
+%\[
+%\prob(B_n) 
+%	= F_{X,Y}\left(x+\frac{1}{n},y+\frac{1}{n}\right)
+%	= \prob\left(X\leq x+\frac{1}{n}, Y\leq y+\frac{1}{n}\right).
+%\]
+%$B_1,B_2,\ldots$ is a decreasing sequence of events, with 
+%\[
+%\bigcaf_{n=1}^{\infty} B_n = \{X\leq x,Y\leq y\}
+%\]
+%Hence, by the continuity of probability measures,
+%\[
+%\lim_{n\to\infty}F_{X,Y}\left(x+\frac{1}{n},y+\frac{1}{n}\right)
+%	= \lim_{n\to\infty} \prob(B_n)
+%	= \prob\left(\bigcaf_{n=1}^{\infty} B_n\right)
+%	= F_{X,Y}(x,y).
+%\]
+%\een
+%\end{proof}
+
+%----------------------------------------------------------------------
+\section{Independent random variables}
+%----------------------------------------------------------------------
+Recall that two events $A$ and $B$ are called \emph{independent} if $\prob(A\cap B)=\prob(A)\prob(B)$.
+
+% definition
+\begin{definition}
+Two random variables $X,Y:\Omega\to\R$ defined on a probability space $(\Omega,\mathcal{F},\prob)$ are said to be \emph{independent} if the events 
+\begin{align*}
+\{X\leq x\} & \equiv \{\omega\,:\, X(\omega)\leq x\} \\
+\{Y\leq y\} & \equiv \{\omega\,:\, Y(\omega)\leq y\}
+\end{align*}
+are independent for all $x,y\in\R$.
+\end{definition}
+
+%Thus two random variables are independent if and only if 
+%\[
+%\prob(X\leq x, Y\leq y) = \prob(X\leq x)\prob(Y\leq y) \text{\quad for all\quad} x,y\in\R.
+%\]
+
+%
+
+% theorem: indepencence <=> joint df = product of marginal dfs
+The following lemma is easily proved.
+% theorem
+\begin{lemma}\label{lem:product_marginal_cdfs}
+Let $X$ and $Y$ be random variables with joint CDF $F_{X,Y}(x,y)$ and marginal CDFs $F_X(x)$ and $F_Y(y)$ respectively. Then $X$ and $Y$ are independent if and only if
+\[
+F_{X,Y}(x,y) = F_X(x)F_Y(y) \text{\quad for all\quad} x,y\in\R.
+\]
+\end{lemma}
+
+%----------------------------------------------------------------------
+
+\section{Identically distributed random variables}
+%----------------------------------------------------------------------
+% definition
+\begin{definition}
+Two random variables $X,Y:\Omega\to\R$ defined on a probability space $(\Omega,\mathcal{F},\prob)$ are said to be \emph{identically distributed} if $\prob_X = \prob_Y$, or equivalently $F_X = F_Y$.
+\end{definition}
+
+Thus $X$ and $Y$ are identically distributed if and only if 
+\bit
+\it $\prob_X(B) \equiv \prob(X\in B) = \prob(Y\in B) \equiv \prob_Y(B)$ for all $B\in\mathcal{B}$, or equivalently
+\it $F_X(t) \equiv \prob(X\leq t) = \prob(Y\leq t) \equiv F_Y(t)$ for all $t\in\R$.
+\eit
+
+%%----------------------------------------------------------------------
+%
+%\section{Conditional distributions}
+%%----------------------------------------------------------------------
+%Let $X,Y:\Omega\to\R$ be random variables on a probability space $(\Omega,\mathcal{F},\prob)$.
+%
+%%% defn: joint probability distribution
+%%\begin{definition}
+%%\ben
+%%\it % (i)
+%%The \emph{joint probability distribution} of $X$ and $Y$ is the set function
+%%\[
+%%\begin{array}{cccl}
+%%\prob_{X,Y}:		& \mathcal{F}^2	& \to		& [0,1] \\
+%%				& (A,B)			& \mapsto	& \prob(X\in A, Y\in B),
+%%\end{array}
+%%\]
+%%\it 
+%%The \emph{joint cumulative distribution function} of $X$ and $Y$ is the function  
+%%\[
+%%\begin{array}{cccl}
+%%F_{X,Y}:		& \R^2	& \to		& [0,1] \\
+%%			& (x,y)			& \mapsto	& \prob(X\leq x,Y\leq y).
+%%\end{array}
+%%\]
+%%\een
+%%\end{definition}
+%%
+%%
+%
+%% defn: conditional distributions
+%\begin{definition}
+%\ben
+%\it % (i)
+%The \emph{conditional distribution} of $Y$ given $X$ is the set function
+%\[
+%\begin{array}{cccl}
+%\prob_{Y|X}:		& \mathcal{B}^2	& \to		& [0,1] \\
+%				& (A,B)			& \mapsto	& \prob(Y\in B\,|\, X\in A).
+%\end{array}
+%\]
+%\it The \emph{conditional cumulative distribution function} of $Y$ given $X$ is the function
+%\[
+%\begin{array}{cccl}
+%F_{Y|X}:		& \R^2	& \to		& [0,1] \\
+%			& (x,y)	& \mapsto	& \prob(Y\leq y\,|\, X\leq x).
+%\end{array}
+%\]
+%\een
+%\end{definition}
+%
+%
+%
+%% proposition: quotient
+%\begin{proposition} 
+%The conditional CDF of $Y$ given $X$ satisfies
+%\[
+%F_{Y|X}(x,y) = \frac{F_{X,Y}(x,y)}{F_X(x)},
+%\]
+%where $F_X$ is the marginal CDF of $X$, and $F_{X,Y}$ is the joint CDF of $X$ and $Y$.
+%
+%\vspace*{2ex}
+%\begin{proof}
+%\[
+%F_{Y|X}(x,y) 
+%	= \prob(Y\leq y\,|\,X\leq x)
+%	= \frac{\prob(\{Y\leq y\}\cap\{X\leq x\})}{\prob(X\leq x)}
+%	= \frac{F_{X,Y}(x,y)}{F_X(x)}.
+%\]
+%\end{proof}
+%\end{proposition}
+%
+
+%----------------------------------------------------------------------
+
+\section{Jointly discrete distributions}
+%----------------------------------------------------------------------
+% definition: discrete random vectors
+\begin{definition}
+\ben
+\it Two random variables $X$ and $Y$ are called \emph{jointly discrete} if the random vector $(X,Y)$ only takes values in a countable subset of $\R^2$. 
+\it Two jointly discrete random variables $X$ and $Y$ are described by their \emph{joint PMF}: 
+\[
+\begin{array}{cccl}
+f_{X,Y}:		& \R^2	& \to		& [0,1] \\
+			& (x,y)	& \mapsto	& \prob(X=x,Y=y).
+\end{array}
+\]
+%\it Their \emph{marginal PMFs} are $f_X(x)=\prob(X=x)$ and $f_Y(y)=\prob(Y=y)$ respectively.
+\it The \emph{marginal PMF of $X$} is the function $f_X(x)=\prob(X=x)$.
+\it The \emph{marginal PMF of $Y$} is the function $f_Y(y)=\prob(Y=y)$.
+\een
+\end{definition}
+
+% example: dice
+\begin{example}\label{ex:joint:dice}
+A fair die is rolled once. Let $\omega$ denote the outcome, and consider the random variables
+\[
+X(\omega) = \left\{\begin{array}{cl}
+	1 & \text{ if $\omega$ is odd}, \\
+	2 & \text{ if $\omega$ is even},
+\end{array}\right. 
+\text{\quad and\quad}
+Y(\omega) = \left\{\begin{array}{cl}
+	1 & \text{ if $\omega\leq 3$}, \\
+	2 & \text{ if $\omega\geq 4$}.
+\end{array}\right.
+\]
+Find the joint PMF of $X$ and $Y$.
+\end{example}
+
+\begin{solution}
+\begin{center}
+\begin{tabular}{c|cccccc}
+$\omega$ 	& $1$ & $2$ & $3$ & $4$ & $5$ & $6$ \\ \hline
+$X(\omega)$ 	& $1$ & $2$ & $1$ & $2$ & $1$ & $2$ \\
+$Y(\omega)$ 	& $1$ & $1$ & $1$ & $2$ & $2$ & $2$
+\end{tabular}
+\end{center}
+
+The joint PMF of $X$ and $Y$ is shown in the following table
+\begin{center}
+\begin{tabular}{c|cc}
+		& Y=1 	& Y=2	\\ \hline
+X=1		& 1/3	& 1/6	\\ 
+X=2		& 1/6 	& 1/3	
+\end{tabular}
+\end{center}
+The marginal PMFs of $X$ and $Y$ are recovered by summing across the rows and columns.
+\end{solution}
+
+
+
+%% conditional CDF and PMF
+%\begin{definition}
+%Let $X$ and $Y$ be two jointly discrete random variables, and let $x$ be such that $\prob(X=x)>0$.
+%\ben
+%\it The \emph{conditional CDF} of $Y$ given $X=x$ is 
+%\[
+%F_{Y|X}(y|x) = \prob(Y\leq y\,|\,X=x).
+%\]
+%\it The \emph{conditional PMF} of $Y$ given $X=x$ is 
+%\[
+%f_{Y|X}(y|x) = \prob(Y=y\,|\,X=x).
+%\]
+%\een
+%\end{definition}
+%
+%% lemma
+%\begin{lemma}
+%The conditional PMF of $Y$ given $X=x$ satisfies
+%\[
+%f_{Y|X}(y|x) = \frac{f_{X,Y}(x,y)}{f_X(x)}.
+%\]
+%\end{lemma}
+%
+%% proof
+%\begin{proof}
+%\[
+%f_{Y|X}(y|x) 
+%	= \prob(Y=y\,|\,X=x) 
+%	= \frac{\prob(\{Y=y\}\cap\{X=x\})}{\prob(X=x)}
+%	= \frac{f_{X,Y}(x,y)}{f_X(x)}.
+%\]
+%\end{proof}
+%
+%% theorem: law of total probability
+%\begin{theorem}[The law of total probability]
+%If $X$ and $Y$ are jointly discrete random variables, then $\displaystyle f_Y(y) = \sum_x f_{Y|X}(y|x) f_X(x).$
+%\end{theorem}
+%\begin{proof}
+%\[
+%\sum_x f_{Y|X}(y|x) f_X(x) 
+%	= \sum_x \left(\frac{f_{X,Y}(x,y)}{f_X(x)}\right) f_X(x)
+%	= \sum_x f_{X,Y}(x,y)
+%	= f_Y(y).
+%\]
+%\end{proof}
+%
+
+%%----------------------------------------------------------------------
+%%
+%\subsection{Independence}
+%%----------------------------------------------------------------------
+%% lemma: independence for discrete RVs
+%\begin{lemma}[Independence]
+%Two jointly discrete random variables $X$ and $Y$ are independent if and only if 
+%\[
+%f_{Y|X}(y|x) = f_Y(y)\quad\text{for all}\quad x,y\in\R.
+%\]
+%\end{lemma}
+%
+%% proof
+%\begin{proof}
+%If $X$ and $Y$ are independent then for all $x,y\in\R$,
+%\[
+%\prob(Y=y\,|\,X=x) 
+%	= \frac{\prob(X=x,Y=y)}{\prob(X=x)} 
+%	= \frac{\prob(X=x)\prob(Y=y)}{\prob(X=x)} 
+%	= \prob(Y=y).
+%\]
+%\end{proof}
+
+%%----------------------------------------------------------------------
+%%
+%\subsection{Independence}
+%%----------------------------------------------------------------------
+%% lemma: independence for discrete RVs
+The following lemma is easily proved.
+\begin{lemma}
+Two jointly discrete random variables $X$ and $Y$ are independent if and only if 
+\[
+f_{X,Y}(x,y) =f_X(x) f_Y(y)\quad\text{for all}\quad x,y\in\R.
+\]
+\end{lemma}
+%
+%% proof
+%\begin{proof}
+%If $X$ and $Y$ are independent then for all $x,y\in\R$,
+%\[
+%\prob(Y=y\,|\,X=x) 
+%	= \frac{\prob(X=x,Y=y)}{\prob(X=x)} 
+%	= \frac{\prob(X=x)\prob(Y=y)}{\prob(X=x)} 
+%	= \prob(Y=y).
+%\]
+%\end{proof}
+
+%----------------------------------------------------------------------
+\section{Jointly continuous distributions}
+%----------------------------------------------------------------------
+\begin{definition}
+\ben
+\it
+Two random variables $X$ and $Y$ are called \emph{jointly continuous} if their joint CDF can be written as
+\[
+F(x,y) = \int_{-\infty}^x\int_{-\infty}^y f(u,v)\,du\,dv \text{\qquad} x,y\in\R
+\]
+for some integrable function $f_{X,Y}:\R^2\to[0,\infty)$ called the \emph{joint PDF} of $X$ and $Y$.
+\it
+The \emph{marginal PDFs} of $X$ and $Y$ are defined by $f_X(x)=F'_X(x)$ and $f_Y(y)=F'_Y(y)$ respectively, where $F_X(x)$ and $F_Y(y)$ are the marginal CDFs of $X$ and $Y$ respectively.
+\een
+\end{definition}
+
+% example: darts
+\begin{example}
+A dart is thrown at a circular dartboard of radius $\rho$. The point at which the dart hits the board determines a distance $R$ from the centre, and an angle $\Theta$ with (say) the upward vertical. Assume that the dart does in fact hit the board, and that regions of equal area are equally likely to be hit. Show that $R$ and $\Theta$ are jointly continuous random variables.
+\end{example}
+\begin{solution}
+\[
+\begin{array}{lll}
+\prob(R\leq r) 			& = \displaystyle \frac{\pi r^2}{\pi\rho^2} = \frac{r^2}{\rho^2} 
+						& \text{ for } 0\leq r\leq \rho. \\[2ex]
+\prob(\Theta\leq \theta)	& = \displaystyle \frac{\theta}{2\pi} 									
+						& \text{ for } 0\leq \theta\leq 2\pi.
+\end{array}
+\]
+Since regions of equal area are equally likely to be hit, the joint distribution function of $(R,\Theta)$ satisfies
+\[
+F_{R,\Theta}(r,\theta) = \prob(R\leq r,\Theta\leq\theta) = \prob(R\leq r)\prob(\Theta\leq\theta) = \frac{\theta r^2}{2\pi\rho^2}
+\]
+Thus we have
+\[
+F_{R,\Theta}(r,\theta) = \int_0^r\int_0^\theta f(u,v)\,du\,dv
+\]
+where
+\[
+f(u,v) =\frac{u}{\pi\rho^2}.
+\]
+Hence $R$ and $\Theta$ are jointly continuous random variables.
+\end{solution}
+
+
+
+% conditional CDF and PDF
+%Let $X$ and $Y$ be jointly continuous random variables.
+%\bit
+%\it Suppose we observe that $X$ takes the value $x\in\R$.
+%\it Since $\prob(X=x)=0$, we cannot condition on the event $\{X=x\}$.
+%\eit
+
+%% definition: conditional density function
+%\begin{definition}\label{def:conditional_density}
+%Let $X$ and $Y$ be jointly continuous random variables. The \emph{conditional density function} of $Y$ given $X=x$ is 
+%\[
+%f_{Y|X}(y|x) = \frac{f_{X,Y}(x,y)}{f_X(x)}
+%\]
+%\end{definition}
+%
+%%
+%
+%% theorem: LTP
+%\begin{theorem}[The law of total probability]
+%If $X$ and $Y$ are jointly continuous random variables,
+%\[
+%f_Y(y) = \int f_{Y|X}(y|x) f_X(x)\,dx
+%\]
+%\end{theorem}
+%
+%% proof
+%\begin{proof}
+%\[
+%\int f_{Y|X}(y|x) f_X(x)\,dx 
+%	= \int \left(\frac{f_{X,Y}(x,y)}{f_X(x)}\right) f_X(x)\,dx
+%	= \int f_{X,Y}(x,y) f_X(x)\,dx
+%	= f_Y(y)
+%\]
+%\end{proof}
+
+%%----------------------------------------------------------------------
+%
+%\subsection{Support}
+%%----------------------------------------------------------------------
+%% defn
+%\begin{definition}
+%\ben
+%\it % closed set
+%A set $A\subset\R$ is said to be \emph{closed} if it contains all its limit points, i.e. if $x_n\to x$ as $n\to\infty$, where each $x_n\in A$, then $x\in A$.
+%\it % support of function
+%The \emph{support} of a function $h:\R\to\R$, denoted by $\supp(h)$, is the smallest closed set for which $h(x)=0$ for all $x\notin\supp(h)$.
+%\it % support of rv
+%The \emph{support} of a random variable $X:\Omega\to\R$ is defined to be the support of its PMF (discrete case) or PDF (continuous case).
+%\it % support of pair
+%The \emph{support} of a pair of random variable $X,Y:\Omega\to\R$ is defied to be the support of their joint PMF (discrete case) or joint PDF (continuous case).
+%\een
+%\end{definition}
+%
+%% remark
+%\begin{remark}
+%When we refer to the support of a random variable, we are referring to the support of its PMF (discrete case) or PDF (continuous case), \emph{not} to the support of its CDF, not the support of itself as a function over $\Omega$.
+%\end{remark}
+
+%----------------------------------------------------------------------
+
+\subsection{Independence}
+%----------------------------------------------------------------------
+% lemma: independence for CRVs
+\begin{lemma}
+Two jointly continuous random variables $X$ and $Y$ are independent if and only if 
+\ben
+\it $f_{X,Y}(x,y) = f_X(x)f_Y(y)$ for all $x,y\in\R$, and
+\it the support of $f_{X,Y}$ is a rectangular region in $\R^2$.
+\een
+\end{lemma}
+
+% proof
+\begin{proof}
+Since $X$ and $Y$ are jointly continuous, 
+\begin{align*}
+F_{X,Y}(x,y)		& = \int_{-\infty}^x\int_{-\infty}^y f_{X,Y}(u,v)\,du\,dv \\
+F_X(x)F_Y(y)		& = \left(\int_{-\infty}^x f_X(u)\,du\right)\left(\int_{-\infty}^y f_Y(v)\,dv\right)
+\end{align*}
+\bit
+\it By independence, $F_{X,Y}(x,y)=F_X(x)F_Y(y)$, so the two integrals are equal.
+\it Differentiating both sides with respect to $x$ and $y$, we get $f_{X,Y}(x,y)=f_X(x)f_Y(y)$.
+\eit
+\end{proof}
+
+% remark: rectangles
+\begin{remark}
+If the value taken by $X$ affects the range of values taken by $Y$, then clearly $Y$ dependes on $X$. Hence if $X$ and $Y$ are independent, we need that $\supp(f_{X,Y})$ can be expressed as the Cartesian product of two sets in $\R$:
+\[
+\supp(f_{X,Y}) = \supp(f_X)\times \supp(f_Y) \text{\qquad where\quad} \supp(f_X),\supp(f_Y)\subseteq\R.
+\]
+For example:
+\bit
+\it The unit square is fine:	$\supp(f_{X,Y})=\{(x,y)\,:\, 0\leq x,y\leq 1\} = [0,1]\times[0,1]$.
+\it The unit disc is not:	$\supp(f_{X,Y})=\{(x,y)\,:\,x^2+y^2\leq 1\}$.
+\eit
+\end{remark}
+
+
+%----------------------------------------------------------------------
+
+%----------------------------------------------------------------------
+\begin{example}
+Two jointly continuous random variables $X$ and $Y$ have joint PDF
+\[
+f_{X,Y}(x,y) = 
+\left\{\begin{array}{ll}
+	c(1-x)y	& 0\leq y \leq x \leq 1, \\
+	0		& \text{otherwise.}
+\end{array}\right.
+\]
+\ben
+\it Show that $c=24$.
+\it Find the marginal PDFs of $X$ and $Y$.
+%\it Find the conditional density function of $Y$ given $X=x$. 
+\een
+\end{example}
+
+\begin{solution}
+\ben
+
+\it % << (a)
+\bit
+\it For fixed $x\in[0,1]$, we must have $y\in[0,x]$.
+\it For fixed $y\in[0,1]$, we must have $x\in[y,1]$.
+\eit
+\[
+\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dx\,dy
+	= \int_0^1\int_0^x c(1-x)y\,dydx 
+%	= c\int_0^1\left[\frac{(1-x)y^2}{2}\right]_0^x\,dx
+	= \frac{c}{2}\int_0^1 x^2-x^3\,dx
+%	= \frac{c}{2}\left[\frac{x^3}{3}-\frac{x^4}{4}\right]_0^1
+	= \frac{c}{2}\left(\frac{1}{3}-\frac{1}{4}\right)
+	= \frac{c}{24}.
+\]
+By the law of total probability this must equal $1$, so $c=24$.
+
+\it % << (b)
+The marginal density functions are:
+\begin{align*}
+f_X(x) 	
+	& = 24\int_0^x (1-x)y\,dy 
+	= 24(1-x)\left[\frac{y^2}{2}\right]_0^x
+	= \begin{cases}
+		12x^2(1-x) & 0\leq x\leq 1, \\
+		0			& \text{otherwise.}
+		\end{cases} \\
+f_Y(y) 	
+	& = 24\int_y^1 (1-x)y\,dx 
+	= 24y\left[x - \frac{x^2}{2}\right]_y^1
+	= \begin{cases}
+		12y(1-y)^2 & 0\leq y\leq 1, \\
+		0			& \text{otherwise.}
+		\end{cases}
+\end{align*}
+
+%\it % << (c)
+%The conditional density function of $Y$ given $X=x$ is
+%\[
+%f_{Y|X}(y\,|\,x) 	
+%	= \frac{f_{X,Y}(x,y)}{f_X(x)} 
+%%	= \frac{24(1-x)y}{12(1-x)x^2} 	
+%	= \left\{\begin{array}{ll} 
+%		\displaystyle\frac{24(1-x)y}{12(1-x)x^2} = \displaystyle\frac{2y}{x^2} 	& \text{if }y\leq x\leq 1, \\[2ex]
+%	 	0 							& \text{otherwise.}
+%	 \end{array}\right.
+%\]	 
+\een
+\end{solution}
+
+%----------------------------------------------------------------------
+
+%----------------------------------------------------------------------
+% example
+\begin{example}
+The continuous random variables $X$ and $Y$ have joint PDF
+\[
+f_{X,Y}(x,y) = 
+\left\{\begin{array}{ll}
+	cxy^2	& 0< x,y< 1 \\
+	0		& \text{otherwise}
+\end{array}\right.
+\]
+where $c$ is a constant.
+\ben
+\it Show that $c=6$.
+\it Find the marginal PDFs of $X$ and $Y$. Are $X$ and $Y$ independent?
+%\it Find the conditional PDF of $X$ given $Y=y$.
+%\it Find the conditional PDF of $Y$ given $X=x$.
+\it Show that $\prob(X+Y\geq 1)=9/10$.
+\een
+
+\end{example}
+\begin{solution}
+
+\ben
+\it % << (a)
+By the law of total probability, we must have that 
+\[
+\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}f_{X,Y}(x,y)\,dx\,dy = \int_0^1\int_0^1 cxy^2\,dx\,dy = 1.
+\]
+Evaluating the integral, 
+\[
+\int_0^1\int_0^1 cxy^2\,dx\,dy 
+	= c\int_0^1 \left[\frac{x^2y^2}{2}\right]_0^1\,dy
+	= c\int_0^1 \frac{y^2}{2}\,dy
+	= c\left[\frac{y^3}{6}\right]_0^1
+	= \frac{c}{6}
+\]
+Thus we have $c=6$, so $f_{X,Y}(x,y)=6xy^2$ over $0\leq x,y\leq 1$ (and zero otherwise).
+
+\it % << (b)
+The marginal densities are as follows:
+\[ 
+f_X(x) 	= \int_0^1 f_{X,Y}(x,y)\,dy = \int_0^1 6xy^2\,dy = 6x\left[\frac{y^3}{3}\right]_0^1 		
+	= \left\{\begin{array}{ll} 
+		2x	& 0< x< 1, \\ 
+		0 	& \text{otherwise.}
+	\end{array}\right.
+\]
+\[
+f_Y(y) 	= \int_0^1 f_{X,Y}(x,y)\,dx = \int_0^1 6xy^2\,dx = 6y^2\left[\frac{x^2}{2}\right]_0^1	
+	= \left\{\begin{array}{ll} 
+		3y^2		& 0< y< 1, \\ 
+		0 		& \text{otherwise.}
+	\end{array}\right.
+\]
+$X$ and $Y$ are independent because the support of $f_{X,Y}(x,y)$ is a rectangular region, and
+\[
+f_{X,Y}(x,y) = 6xy^2 = (2x)(3y^2) = f_X(x)f_Y(y) \text{\quad for all}\quad x,y\in\R.
+\]
+
+%\it % << (c)
+%The conditional density of $X$ given $Y=y$ is
+%\[
+%f_{X|Y}(x|y) = \frac{f_{X,Y}(x,y)}{f_Y(y)} = \frac{6xy^2}{3y^2} = \left\{\begin{array}{ll} 
+%	2x 	& 0< x< 1 \\ 
+%	0 	& \text{ otherwise.}
+%\end{array}\right.
+%\]
+%\it % << (c)
+%The conditional density of $Y$ given $X=x$ is
+%\[
+%f_{Y|X}(y|x) = \frac{f_{X,Y}(x,y)}{f_X(x)} = \frac{6xy^2}{2x} 	= \left\{\begin{array}{ll} 
+%	3y^2 	& 0< y< 1 \\ 
+%	0 		& \text{ otherwise.}
+%\end{array}\right.
+%\]
+
+\it % << (d)
+The event $\{X+Y\geq 1\}$ is the same as $\{X\geq 1-Y\}$. For a fixed value $Y=y$,
+\begin{align*}
+\prob(X+y\geq 1)
+	& = \prob (X\geq 1-y)  
+	= \int_{1-y}^1 f_X(x)\,dx 
+	= \int_{1-y}^1 2x\,dx 
+%	& = \left[x^2\right]_{1-y}^1 \\
+	= 1-(1-y)^2.
+\end{align*}
+Hence,
+\begin{align*}
+P(X+Y\geq 1) 
+	& = \int_0^1 \prob(X+y\geq 1)f_Y(y)\,dy \\
+	& = \int_0^1 3y^2\big(1-(1-y)^2\big)\,dy 
+	= \int_0^1 6y^3 - 3y^4\,dy 
+	= \left[\frac{6y^4}{4}-\frac{3y^5}{5}\right]_0^1 
+	= \frac{9}{10}.
+\end{align*}
+
+\een
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex17_joint_distributions}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

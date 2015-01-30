@@ -1,0 +1,63 @@
+[
+{
+    "pk": 1, 
+    "model": "camel.book", 
+    "fields": {
+        "module": 1, 
+		"number": "1", 
+		"title": "Lecture Notes"
+    }
+},
+{
+    "pk": 2, 
+    "model": "camel.chapter", 
+    "fields": {
+        "parent": 1, 
+		"number": "1", 
+		"title": "Introduction"
+    }
+},
+{
+    "pk": 3, 
+    "model": "camel.jaxblock", 
+    "fields": {
+        "parent": 2, 
+		"jax_str": "This is a jax string."
+    }
+},
+{
+	"pk": 4, 
+	"model": "camel.chapter", 
+	"fields": {
+        "parent": 1,
+        "number": "2",
+        "title": "Theorems" 
+	}
+},
+{
+	"pk": 5, 
+	"model": "camel.jaxblock", 
+	"fields": {
+        "parent": 4,
+        "jax_str": "Introductory sentence to the <b>Theorems</b> chapter." 
+	}
+},
+{
+	"pk": 6, 
+	"model": "camel.theorem", 
+	"fields": {
+        "parent": 4,
+        "number": "1",
+		"category": "THE",
+        "title": "Euler's Formula" 
+	}
+},
+{
+	"pk": 7, 
+	"model": "camel.jaxblock", 
+	"fields": {
+        "parent": 6,
+        "jax_str": "$e^{i\\pi}+1=0$" 
+	}
+}
+]	

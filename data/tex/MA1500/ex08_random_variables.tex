@@ -1,0 +1,264 @@
+% !TEX root = main.tex
+% ex08_random_variables.tex
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+%----------------------------------------
+\question
+Let $I_A$ denote the indicator function of an event $A$. Show that
+
+\begin{parts}
+%--------------------
+\part $I_{A^c} = 1 - I_A$.
+\begin{answer}
+To show that two random variables $X$ and $Y$ are equal, we must show that $X(\omega)=Y(\omega)$ for all $\omega\in\Omega$.
+\bit
+\it For all $\omega\in\Omega$, $I_{A^c}(\omega)=0$ if and only if $I_A(\omega)=1$.
+\eit
+\end{answer}
+%--------------------
+\part $I_{A\cap B} = I_A I_B$.
+\begin{answer}
+For all $\omega\in\Omega$, $I_{A\cap B}(\omega)=1$ if and only if both $I_A(\omega)=1$ and $I_B(\omega)=1$.
+\end{answer}
+%--------------------
+\part $I_{A\cup B} = I_A + I_B - I_{A\cap B}$.
+\begin{answer}
+For all $\omega\in\Omega$, 
+\[
+\begin{array}{lll}
+1 - I_{A\cup B}(\omega)
+ & = I_{(A\cup B)^{c}}(\omega)								& \text{ by (a)} \\
+ & = I_{A^{c}\cap B^{c}}(\omega)							& \text{ by De Morgan's laws} \\
+ & = I_{A^{c}}(\omega)I_{B^{c}}(\omega)						& \text{ by (b)} \\
+ & = (1 - I_A(\omega))(1 - I_B(\omega))						& \text{ by (a)} \\
+ & = 1 - I_A(\omega) - I_B(\omega) + I_A(\omega)I_B(\omega)	&			\\
+ & = 1 - I_A(\omega) - I_B(\omega) + I_{A\cap B}(\omega) 	& \text{ by (b)}
+\end{array}
+\]
+\end{answer}
+\end{parts}
+
+%----------------------------------------
+\question
+Let $\Omega$ be the sample space of some random experiment, $\mathcal{F}$ be a field of events over $\Omega$, and let $A\in\mathcal{F}$. Show that the indicator variable $I_A:\Omega\to\R$ of event $A$, defined by
+\[
+I(\omega) =
+  \begin{cases}
+   1 & \text{if } \omega\in A, \\
+   0 & \text{if } \omega\notin A,
+  \end{cases}
+\]
+is indeed a random variable on $(\Omega,\mathcal{F})$.
+\begin{answer}
+\[
+\{\omega:I_A(\omega) \leq x\} = \begin{cases}
+	\emptyset	& \text{ for } x < 0, \\
+	A^c			& \text{ for } 0 \leq x < 1, \\
+	\Omega		& \text{ for } x \geq 1.
+	\end{cases}
+\]
+Because $\mathcal{F}$ is a field of sets, $\emptyset$, $A^c$ and $\Omega$ are all elements of $\mathcal{F}$. Thus all sets of the form $\{\omega:I_A(\omega) \leq x\}$ are contained in $\mathcal{F}$, so $I_A$ is a random variable.
+
+For any $B\in\mathcal{B}$,
+\bit
+\it if $1\in B$, then $\{\omega:X(\omega)\in B\} = A$, which is contained in $\mathcal{F}$;
+\it if $1\notin B$, then $\{\omega:X(\omega)\in B\} = \emptyset$, which is also contained in $\mathcal{F}$.
+\eit
+\end{answer}
+
+%----------------------------------------
+\question
+Let $X_1$ and $X_2$ be the numbers obtained in two independent throws of a fair die. Find the PMF of each of the following random variables:
+\begin{parts}
+%--------------------
+\part $X_1$,
+\begin{answer}
+$\prob(X_1=k) = 1/6$ for $k=1,\ldots,6$.
+\end{answer}
+
+%--------------------
+\part $Y = 7 - X_1$,
+\begin{answer}
+$\prob(Y=k) = 1/6$ for $k=1,\ldots,6$.
+\end{answer}
+
+%--------------------
+\part $U = \max(X_1,X_2)$,
+\begin{answer}
+Let $U=\max\{X_1,X_2\}$. Then since $\{X_1\leq k\}$ and $\{X_2\leq k\}$ are independent events,
+\begin{align*}
+\prob(U\leq k) 
+	& = P(X_1\leq k \text{ and } X_2\leq k) \\
+    & = P(X_1\leq k)P(X_2\leq k) \\
+    & = (k/6)\cdot (k/6) = k^2/36
+\end{align*}
+Thus,
+\[
+\prob(U=k)  
+	= P(U\leq k)-P(U\leq k-1)
+    = \frac{(k^2-(k-1)^2)}{36} 
+    = \frac{(2k-1)}{36}.
+\]    
+\end{answer}
+
+%--------------------
+\part $V = X_1-X_2$.
+\begin{answer}
+The values of $V=X_1-X_2$ at each point of the sample space $\Omega=\{(i,j):1\leq i,j\leq 6\}$ are
+\[\begin{array}{|cc|cccccc|}\hline
+	& 	& & & j & & & \\
+	& 	& 1	 & 2  & 3  & 4  & 5  & 6 \\\hline
+	& 1 	& 0  & 1  & 2  & 3  & 4  & 5 \\
+	& 2 	& -1 & 0  & 1  & 2  & 3  & 4 \\
+i	& 3 	& -2 & -1 & 0  & 1  & 2  & 3 \\
+	& 4 	& -3 & -2 & -1 & 0  & 1  & 2 \\
+	& 5 	& -4 & -3 & -2 & -1 & 0  & 1 \\
+	& 6 	& -5 & -4 & -3 & -2 & -1 & 0 \\ \hline
+\end{array}\]
+The required probabilities are obtained by counting the number of outcomes that give the same value of $V=X_1-X_2$:
+\small
+\[\begin{array}{r|rrrrrrrrrrr}
+v         & -5  	& -4	 	& -3 	& -2		& -1		& 0		& 1		& 2		& 3		& 4		& 5		\\ \hline
+\prob(V=v)    & 1/36	& 2/36	& 3/36	& 4/36	& 5/36	& 6/36	& 5/36	& 4/36	& 3/36	& 2/36	& 1/36 	\\
+\end{array}\]
+\normalsize
+\end{answer}
+
+%--------------------
+\part $W = |X_1-X_2|$.
+\begin{answer}
+\[
+\begin{array}{c|cccccc}
+w			& 0		& 1		& 2 		& 3 		& 4 		& 5 		\\ \hline
+\prob(W=w)	& 6/36	& 10/36	& 8/36	& 6/36	& 4/36	& 2/36 
+\end{array}
+\]
+\end{answer}
+%--------------------
+\end{parts}
+
+%\newpage
+
+%----------------------------------------
+\question
+An urn contains 7 red balls and 3 blue balls. If 5 balls are selected at random without replacement, find the PMF of the number of red balls selected.
+\begin{answer}
+Let $X$ be the number of red balls selected. The PMF of $X$ is
+\[
+\begin{array}{c|cccc}
+x		& 2 		& 3 		& 4 		& 5 \\ \hline
+f(x)	& 1/12	& 5/12 	& 5/12 	& 1/12 
+\end{array}
+\]
+For example, 
+\[
+f(3) = \prob(X=3) = \frac{\binom{7}{3}\binom{3}{2}}{\binom{10}{5}} = \frac{5}{12}.
+\]
+This \emph{Hypergeometric distribution}: suppose $n$ objects are chosen from a collection of $N$ objects, of which exactly $K$ are of a particular kind. Choosing an object of this kind is called a \emph{success}. The probability of observing exacly $k$ such objects in $n$ draws \emph{without replacement} from the initial population of $N$ objects, is
+\[
+f(x) = \frac{\binom{K}{x}\binom{N-K}{n-x}}{\binom{N}{n}}.
+\]
+Note that $f(x)$ is non-zero only if $\max(0,n-N+K)\leq x\leq \min(K,n)$.
+\end{answer}
+
+
+%----------------------------------------
+\question
+Let $X$ be a random variable with the following PMF:
+\[\begin{array}{c|cccc}
+x		& -2 	& 0 		& 1 		& 4 \\ \hline
+f(x)	& 0.4	& 0.1 	& 0.3 	& 0.2 
+\end{array}\]
+Sketch the PMF and CDF of $X$.
+\begin{answer}
+The CDF of $X$ is as follows:
+\[
+F(x) = \left\{\begin{array}{ll}
+0  	&  x < -2, \\
+0.4	& -2 \leq x < 0, \\
+0.5	&  0 \leq x < 1, \\
+0.8	&  1 \leq x < 4, \\
+1	&  x \geq 4.
+\end{array}\right.
+\]
+\end{answer}
+
+
+%----------------------------------------
+% simple rv
+% RND p78
+\question
+Let $X$ be a random variable with PMF:
+\[
+f(x) = \begin{cases}
+	c		& \text{if}\ \ x=0, \\
+	3c		& \text{if}\ \ x=1, \\
+	6c		& \text{if}\ \ x=2, \\
+	0			& \text{otherwise.}
+\end{cases}
+\]
+where $c$ is an unknown constant.
+
+\begin{parts}
+%--------------------
+\part Find the value of $c$. 
+\begin{answer}
+%\newpage
+Since $\sum_x f(x)=1$ we see that $10c=1$, so $c=1/10$.
+\end{answer}
+%--------------------
+\part Find the probabilities $\prob(X<2)$, $\prob(X\leq 2)$ and $\prob(X>1)$.
+\begin{answer}
+\bit
+\it $\prob(X < 2) = \prob(X=0)+\prob(X=1) =  \frac{4}{10}$.
+\it $\prob(X\leq 2) = \prob(X=0)+\prob(X=1)+\prob(X=2) = 1$.
+\it $\prob(X>1) = \prob(X=2) = \frac{6}{10}$.
+\eit
+\end{answer}
+%--------------------
+\part What is the smallest value of $k$ for which $\prob(X\leq k) > 0.25$?
+\begin{answer}
+Since $\prob(X\leq 1) = \frac{4}{10}$ and $\prob(X < 1) = \frac{1}{10}$, $k=1$ is the smalest value for which $\prob(X\leq k)\geq \frac{1}{4}$.
+\end{answer}
+%--------------------
+\end{parts}
+
+
+%----------------------------------------
+% binomial (easy)
+% RND p97q5
+\question
+A pair of fair dice is rolled six times. What is the probability of getting a total of seven
+\ben
+\it twice,
+\it at least once,
+\it more than three times?
+\een
+\begin{answer}
+Let $X$ be the number of times that a total of 7 is obtained. 
+\bit
+\it Then $X\sim\text{Binomial}(n,p)$ with $n=6$ and $p=\frac{6}{36}=\frac{1}{6}$.
+\eit
+\ben
+\it $\prob(X=2) 
+	= \binom{6}{2}\left(\frac{1}{6}\right)^2 \left(\frac{5}{6}\right)^4 
+	= 0.2009$.
+\it $\prob(X\geq 1) 
+	= 1 - \prob(X=0) 
+	= 1 - \left(\frac{5}{6}\right)^6 
+	= 0.6651$.
+\it $\prob(X>3)
+	= \prob(X=4) + \prob(X=5) +\prob(X=6)
+	= 30\left(\frac{1}{6}\right)^4 \left(\frac{5}{6}\right)^2
+		+ 6\left(\frac{1}{6}\right)^5 \left(\frac{5}{6}\right) 
+		+ \left(\frac{1}{6}\right)^6 
+	= 0.0087$.
+\een
+\end{answer}
+
+\end{questions}
+\end{exercise}
+%======================================================================
+\endinput
+%======================================================================

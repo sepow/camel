@@ -2,8 +2,9 @@
 
 import os
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
-TEX_ROOT  = os.path.join(SITE_ROOT, 'tex/')
-XLS_ROOT  = os.path.join(SITE_ROOT, 'xls/')
+TEX_ROOT  = os.path.join(SITE_ROOT, 'data/tex/')
+PDF_ROOT  = os.path.join(SITE_ROOT, 'data/pdf/')
+SIMS_ROOT  = os.path.join(SITE_ROOT, 'data/sims')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'zm8*_50*9-sziwme0*@n*^zb=g&(r^wwft5#q+me-345z=377*'
@@ -26,10 +27,13 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
+    # 'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    'mptt',
 	'camel',
 )
 
@@ -100,3 +104,60 @@ TEMPLATE_LOADERS = (
 # redirect
 LOGIN_URL = '/login/'
 
+# loggin config
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+	},
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+	    'mail_admins': {
+	        'level': 'ERROR',
+	        'filters': ['require_debug_false'],
+	        'class': 'django.utils.log.AdminEmailHandler'
+	    },
+		'file': {
+			'level': 'INFO',
+			'class': 'logging.FileHandler',
+			'filename': 'camel.log',
+			'formatter': 'verbose'
+	    },
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        }
+        
+    },
+    'loggers': {
+	     'django.request': {
+	         'handlers': ['mail_admins'],
+	         'level': 'ERROR',
+	         'propagate': True,
+	     },
+	    'camel': {
+	        'handlers': ['file'],
+	        'level': 'DEBUG',
+	    },
+	    'django': {
+	        'handlers': ['null'],
+	        'level': 'INFO',
+	        'propagate': True,
+	    }
+    }
+}

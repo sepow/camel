@@ -1,0 +1,314 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Exact Tests}\label{chap:exact}
+\setcounter{page}{1}
+\startcontents[chapters]
+%----------------------------------------------------------------------
+\dictum{X}{X}{X}
+\chapcontents
+
+%====================================================================
+\section{Exact Tests}
+%====================================================================
+
+For any test of statistical hypotheses we need:
+\begin{itemize}
+\item data
+\item null hypothesis
+\item test statistic
+\item the sampling distribution of the test statistic under the null hypothesis
+\end{itemize}
+
+The last of these is a complicated structure involving the other three elements. 
+
+The probability distribution of the data induces the probability distribution of the test statistic. 
+
+The null hypothesis embodies the assumptions under which this probability distribution for the data holds. 
+
+(Under alternatives, the data and test statistic would have a different sampling distribution.)
+
+
+%====================================================================
+\section{Permutation Tests}
+%====================================================================
+\begin{itemize}
+\item 
+In most hypothesis tests, we start with the assumptions and work forward to derive the sampling distribution of the test statistic under the null hypothesis. 
+\item 
+For permutation tests we will reverse the procedure, since the sampling distribution involves the permutations which give the procedure its name and are the key theoretical issue in understanding the test.
+\end{itemize}
+
+% basic definition
+\begin{itemize}
+\item
+A \emph{permutation} of the set $\{1,2,\ldots,n\}$ is any re-ordering of its elements.
+\item
+There are $n! = n\times(n-1)\times\ldots\times 2\times 1$ possible permutations of $\{1,2,\ldots,n\}$.
+\end{itemize}
+
+The null hypothesis specifies that all permutations of the data are equally likely.
+\begin{itemize}
+\item i.e.\ under $H_0$, the data satisfy \emph{exchangeability}.
+\end{itemize}
+
+In a permutation test, the distribution of the test statistic (under $H_0$) is computed exactly, by calculating the test statistic for each permutation, and considering all permutations equally likely ($H_0$).
+
+For the Wilcoxon Rank Sum test (independent samples),
+\begin{itemize}
+\item The permutations reduce to combinations of the ranks $\{1,\ldots,n\}$.
+\item The test statistic is computed for each permutation.
+\item The fraction of these beyond the observed value is the $p$-value for an \emph{exact} test.
+\end{itemize}
+	
+For the Wilcoxon Signed Rank test (paired samples),
+\begin{itemize}
+\item The permutations reduce to \emph{subsets} of the ranks $\{1,\ldots,n\}$.
+\item A permutation corresponds to elements in a subset being marked "+", and in the complement by "-".
+\end{itemize}
+	
+%============================= 
+\subsection{Randomization}
+%=============================
+In experimental studies, participants are randomly assigned to treatment groups.
+
+The method by which participants are allocated to treatment groups in an experimental design is mirrored in the analysis of that design. 
+
+If the labels are exchangeable under the null hypothesis, then the resulting tests yield exact significance levels.
+
+\begin{definition}
+An finite sequence of random variables $X_1,\ldots,X_n$ is said to be \emph{exchangeable} if any permutation of the sequence equally likely. 
+\end{definition}
+
+If $X_1,\ldots,X_n$ is an exchangeable sequence,
+\begin{itemize}
+\item 
+for any permutation of the indices $\sigma\in\Sigma(n)$, the sample $X_{\sigma(1)}, X_{\sigma(2)},\ldots,X_{\sigma(n)}$ has the same joint probability distribution as the original sequence.
+\item
+the joint distribution function $F_{X_1,\ldots,X_n}(x_1,\ldots,x_n)$ of a finite sequence of exchangeable random variables is symmetric in its arguments $x_1,\ldots,x_n$.
+\item
+A sequence of independent and identically-distributed random variables (i.i.d.) is exchangeable.
+\item
+A sequence of random variables obtained by sampling without replacement is also exchangeable (but not independent).
+\end{itemize}
+
+%============================= 
+\subsection{Permutation Tests}
+%=============================
+Suppose we have two samples $Y_{1,1},\ldots,Y_{1,n_1}$ and $Y_{2,1},\ldots,Y_{2,n_2}$ and suppose we wish to test whether the they come from the same distribution.
+
+Let $\bar{Y}_1$ and $\bar{Y}_2$ denote the sample means.
+
+The permutation test is designed to determine whether the observed difference between the sample means is large enough to reject the null hypothesis $H_0$ that the two groups have identical probability distribution.
+
+The test proceeds as follows. 
+\begin{itemize}
+\item
+The difference between the sample means is calculated
+$$
+T = \bar{X}_1 - \bar{X}_2
+$$
+
+This is the observed value of the test statistic.
+\item , T(obs). Then the observations of groups A and B are pooled.
+\item
+Next, the difference in sample means is calculated and recorded for every possible way of dividing these pooled values into two groups of size $n_1$ and $n_2$. This set of differences is the \emph{exact} distribution of possible differences under the null hypothesis that observations are independent of the group label.
+\item
+The one-tailed $p$-value of the test is calculated as the proportion of permutations where the difference in means was greater than or equal to T(obs). The two-sided p-value of the test is calculated as the proportion of sampled permutations where the absolute difference was greater than or equal to ABS(T(obs)).
+
+If the only purpose of the test is reject or not reject the null hypothesis, we can as an alternative sort the recorded differences, and then observe if T(obs) is contained within the middle 95\% of them. If it does not, we reject the hypothesis of identical probability curves at the 5\% significant level.
+\end{itemize}
+
+% EXAMPLE: PERMUTATION TEST: MEAT OR FISH
+%--------------------
+\begin{example}
+Twelve men are recruited from among those attending a fitness clinic and asked to participate in an experiment to establish whether eating fish (but not meat) results in lower plasma cholesterol concentrations than eating meat (but not fish). The subjects are randomly allocated to the fish-eating ($m=7$) and meat-eating regimens ($m= 5$). At the end of one year their plasma cholesterol concentrations are measured. The results are
+\bit
+\it Fish eaters: 5.42, 5.86, 6.16, 6.55, 6.80, 7.00, 7.11
+\it Meat eaters: 6.51, 7.56, 7.61, 7.84, 11.50 
+\eit
+Perform a permutation test to determine whether the treatments had a differential effect on plasma cholesterol concentration. 
+\end{example}
+
+\begin{solution}
+
+There are 792 possible permutations of the data, which are set out as a frequency-histogram for the differences between group means below.
+
+%%---------------
+%\begin{minipage}{\linewidth}
+%\centering
+%\resizebox{\linewidth}{!}{\includegraphics{permtestMeatFish}}
+%\end{minipage}
+%%---------------
+
+\bit
+\it The bimodal and asymmetric shape of the permutation distribution bears no resemblance to the symmetrical $t$-distribution. 
+\it In seven of these permutations the difference between group means is equal to or exceeds in one or other direction the observed difference of 1.79. 
+\it This corresponds to a two-sided $p$-value of $7/792 = 0.0088$. 
+\eit
+
+\begin{minipage}{\linewidth}\centering
+\begin{tabular}{lc}\hline
+Test 				& $p$-value \\ \hline
+$t$-test				& 0.041 \\
+Mann-Whitney			& 0.030 \\
+Permutation test		& 0.009 \\ \hline
+\end{tabular}
+\end{minipage}
+
+\end{solution}
+
+
+%============================= 
+\subsection{Monte Carlo Simulation}
+%=============================
+\begin{itemize}
+\item
+For large samples, the number of permutations is too big ($2^n$).
+\item
+For some tests we can use approximate distributions.
+\begin{itemize}
+\item Wilcoxon: normal approximation
+\item Kruskal-Wallis: $\chi^2$-distribution
+\end{itemize}
+\item 
+For arbitrary permutation tests, there are no large sample approximate distributions in general.
+\item
+In such cases, we use \emph{Monte Carlo} simulation to investigate a random subset of all possible permutations.
+\end{itemize}
+
+%%====================================================================
+%\section{The Binomial Test}
+%%====================================================================
+%
+%One-sample test: for dichotomous data
+%$H_0:p=p_0$ against $H_1:p\neq p_0$.
+%
+%Test statistic: $\hat{p} = (no. successes)/(no. trials)$.
+%or
+%$$
+%\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i \qquad\text{where } X_i=1 (succ) else 0 (fail).
+%$$
+%
+%Previously: we have seen how to test $H_0$ for large samples
+%
+%Small samples: we can compute the distribution of the test statistic \emph{exactly} (under $H_0$).
+%
+%i.e. if $p=p_0$ then 
+%$$
+%P(S=k)=\binom{n,k}p_0^k(1-p_0)^{n-k}
+%$$
+%where $S\in\{0,\ldots,n\}$ has Binomial distribution with parameters $n$ and $p_0$.
+%
+%We can look up the tails $P(S\leq k)$ or $P(S\geq n-k)$ in statistical tables for various $(n,k,p)$.
+%
+%Then: analyse the data. Empirical value of $S$.
+%
+%Critical values:
+%\begin{itemize}
+%\item $k^{L}_{\alpha}$ where $P(S\leq k^{L}_{\alpha})=\alpha$ (lower tail),
+%\item $k^{U}_\alpha$ where $P(S\geq k^{U}_\alpha)=\alpha$ (upper tail),
+%\item $k_\alpha$ where $P(S\leq k_\alpha) + P(S\geq k_\alpha) = \alpha$ (two-tailed).
+%\end{itemize}
+%
+%Note: not symmetric if $p$ is not approximately 0.5;
+%
+%
+%%============================= 
+%\subsection{Large Sample Approximation}
+%%============================= 
+%% EXAMPLE: BINOMIAL TEST: LARGE SAMPLE
+%%--------------------
+%\begin{example}
+%In a recent study examining colour preferences in infants, 30 babies were offered a choice between a red rattle and a green rattle.  Twenty-five of the 30 selected the red rattle.  Do these data provide evidence for a significant colour preference?  Test at the 0.01 level of significance.
+%\end{example}
+%
+%Let $p$ be the (true) probability that a baby prefers the colour red.
+%
+%(1) State the null hypothesis.
+%\begin{itemize}
+%\item The null hypothesis states that the proportion of babies preferring red rattles is not different from what is expected for a population where there is no preference for rattle colour. 
+%$$
+%H_0:p=0.5
+%$$ 
+%\item The alternative hypothesis is that the proportions for the colour preferences are different from what is expected for these chance population proportions.
+%$$
+%H_1:p\neq 0.5
+%$$
+%\end{itemize}
+%
+%(2) Locate the critical region.  
+%\begin{itemize}
+%\item Because $np$ and $nq$ are both greater than 10, we can use the normal approximation to the binomial distribution.
+%\item For $\alpha=0.01$, the critical region is defined as any $z$-ratio greater than +2.3263 or less than -2.3263.
+%\end{itemize}
+%
+%(3) Calculate the test statistic.  In the sample 25 out of 30 babies prefer the red rattle, so the sample proportion is
+%Sample proportion: $\hat{p} = S/n = 25/30 = 0.83$
+%$$
+%z = \frac{\hat{p}-p}{\sqrt{pq/n}} = (0.83-0.5)/\sqrt{(0.5)(0.5)/30} = 0.330.09 = 3.66
+%$$
+%
+%The obtained z-score is in the critical region so we reject the null hypothesis.  On the basis of these data, we conclude that the proportion of babies preferring red rattles is significantly different from the proportion of babies preferring green rattles.
+% 
+%Twenty five out of 30 babies preferred red rattles.  A binomial test revealed that there is a significant preference for red rattles, z = 3.6515, p < 0.01.
+%%--------------------
+% 
+%\begin{itemize}
+%\item The $z$-ratio obtained by the binomial test is related to the $\chi^2$-statistic by $z^2 = \chi^2$.
+% \end{itemize}
+%
+%
+%The sign test is a speciall case of the binomial test when both outcomes have equal probability.
+%
+
+%====================================================================
+\section{Permutation Tests}
+%====================================================================
+
+%============================= 
+\subsection{One Sample}
+%============================= 
+
+Suppose we have a single sample with 5 observations $X_1,X_2,X_3,X_4,X_5$.
+We want to test the null hypothesis that the observations are centered at
+0 against the alternative that they are not. We again want a .10 test.
+
+$H_0:\eta = \eta_0$, $H_1:\eta\neq \eta_0$.
+
+(a)
+The parametric test for this problem is the one-sample t-test which rejects $H_0$ if
+$$
+t = \left|\frac{\bar{X}-\eta_0}{s/\sqrt{n}}\right| > t^{(4)}_{0.025} = 2.132
+$$Suppose we want to test $H_0:\eta=0$ and we observe \{-3, 1, 4, 6, 8\}.
+For this data, $\bar{X}=3.2$, $s^2 = 18.7$ so
+$$
+t = \frac{3.2}{4.32/\sqrt{5}} = \frac{3.2}{1.93} = 1.65
+$$Thus there is no evidence that the observations are not symmetric about $0$.
+(b) To use a permutation version of this test, we first take the absolute
+values of all the observations, getting 1,3,4,6,8. 
+
+Under the null hypothesis that the distribution is symmetric about 0, each of these 5 numbers is equally likely to be positive or negative. 
+
+Therefore, a rearrangement of the data is to assign each observation to be positive or negative. For example, one such rearrangement is 1,-3,4,-6,8. 
+
+We look at each of the $2^5 = 32$ rearrangements. 
+
+For each rearrangement we compute T: 
+
+If our observed T is one of the 2 largest or 2 smallest, we reject the hypothesis of symmetry about 0. 
+
+The size $\alpha$ for this $4/32 = 0.125$. 
+
+The $p$-value is the twice the rank of the observed T divided by 32. 
+
+By a similar argument to that for the two-sample problem, we can look at 
+$$
+V =\sum X_i
+$$
+instead of T:
+
+
+%======================================================================
+\stopcontents[chapters]
+\endinput
+%======================================================================

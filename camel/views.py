@@ -9,78 +9,44 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from django.views.generic import ListView, DetailView
+# from django.views.generic import ListView, DetailView
 
-from camel.models import Module, Chapter, Section
+from camel.models import Module, TreeNode
 
+
+# homepage
 def index(request):
 	context = {}
 	return render(request, 'index.html', context)
 
-def modules(request):
-	modules = Module.objects.all().order_by('code')
-	return render(request, 'modules.html', {'modules': modules})
+# list of modules
+def module_list(request):
+    modules = Module.objects.all().order_by('code')
+    return render(request, 'modules.html', {'modules': modules})
 
+# list of chapters
 def module_detail(request, module_code):
-	module = get_object_or_404(Module, code=module_code)
-	chapters = Chapter.objects.filter(module=module).order_by('number')
-	context = {'module': module, 'chapters': chapters}
-	return render(request, 'module_detail.html', context)
+    module = get_object_or_404(Module, code=module_code)
+    chapters = TreeNode.objects.filter(module=module, node_type='chapter').order_by('node_id')
+    return render(request, 'module_detail.html', {'module': module, 'chapters': chapters})
 
+# showtex
 def chapter_detail(request, module_code, chapter_number):
-	module = get_object_or_404(Module, code=module_code)
-	chapter = get_object_or_404(Chapter, module=module, number=chapter_number)
-	sections = Section.objects.filter(chapter=chapter).order_by('number')
-	print sections
-	context = {'module': module, 'chapter': chapter, 'sections': sections}
-	return render(request, 'chapter_detail.html', context)
+    module = get_object_or_404(Module, code=module_code)
+    chapter = TreeNode.objects.get(module=module, node_type='chapter', number=chapter_number)
 
-def section_detail(request, module_code, chapter_number, section_number):
-	module = get_object_or_404(Module, code=module_code)
-	chapter = get_object_or_404(Chapter, module=module, number=chapter_number)
-	section = get_object_or_404(Section, chapter=chapter, number=section_number)
-	context = {'module': module, 'chapter': chapter, 'section': section}
-	return render(request, 'section_detail.html', context)
+    # table of contents (siblings of current chapter)
+    toc = []
+    chaps = chapter.get_siblings(include_self=True)
+    for chap in chaps:
+        toc.append(chap)
+    
+    # subtree (descendants of current chapter)
+    subtree = chapter.get_descendants(include_self=True)
+    
+    return render(request, 'chapter_detail.html', {'module': module, 'toc': toc, 'chapter': chapter, 'subtree': subtree})
 
-
-#------------------------------
-class Module_ListView(ListView):
-	model = Module
-	template_name = 'module_list.html'
-	def get_success_url(self):
-		return reverse('module-list')
-	def get_context_data(self, **kwargs):
-		context = super(Module_ListView, self).get_context_data(**kwargs)
-		context['test_attr'] = 'bingo'
-		return context
-
-
-class Module_DetailView(DetailView):
-	model = Module
-	template_name = 'module_detail.html'
-	def get_success_url(self):
-		return reverse('module-list')
-	# def get_absolute_url(self):
-	# 	return reverse("module-detail", kwargs={"code": self.code})
-	def get_context_data(self, **kwargs):
-		context = super(Module_DetailView, self).get_context_data(**kwargs)
-		chapters = Chapter.objects.filter(module=self.get_object().id).order_by('node_number')
-		context['chapters']	 = chapters
-		return context
-
-#------------------------------
-class Chapter_ListView(ListView):
-	model = Chapter
-	template_name = 'chapter_list.html'
-	def get_success_url(self):
-		return reverse('module-list')
-	def get_context_data(self, **kwargs):
-		context = super(Chapter_ListView, self).get_context_data(**kwargs)
-		context['test_attr'] = 'xxxxx'
-		return context
-
-
-#------------------------------
+# login
 def login_view(request):
 	context = RequestContext(request)
 	if request.method == 'POST':

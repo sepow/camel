@@ -1,0 +1,86 @@
+% !TEX root = main.tex
+
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+% bookwork
+\question
+What does it mean to say that $\prob$ is a probability measure over $(\Omega,\mathcal{F})$?
+\begin{answer}
+Bookwork. The symbols $\Omega$ (sample space) and $\mathcal{F}$ (field of events) should be defined before giving the definition of $\prob$.
+\end{answer}
+%--------------------
+% subadditivity
+\question
+%Let $(\Omega,\mathcal{F},\prob)$ be a probability space. 
+Show that $\prob(A\cup B) \leq \prob(A)+\prob(B)$ for any two events $A$ and $B$.
+\begin{answer}
+First we express $A$, $B$ and $A\cup B$ as disjoint unions: 
+\begin{align*}
+A		& = (A\cap B^c)\cup (A\cap B) \\ 
+B		& = (B\cap A^c)\cup (A\cap B) \\ 
+A\cup B	& = (A\cap B^c)\cup (A\cap B) \cup (B\cap A^c)
+\end{align*}
+By the additivity property of probability measures,
+\begin{align*}
+\prob(A) 		& = \prob(A\cap B^c) + \prob(A\cap B) \\
+\prob(B) 		& = \prob(B\cap A^c) + \prob(A\cap B) \\
+\prob(A\cup B) 	& = \prob(A\cap B^c) + \prob(A\cap B) + \prob(B\cap A^c) \\
+\end{align*}
+From here, it follows that $\prob(A\cup B)=\prob(A)+\prob(B)-\prob(A\cap B)$, and because $\prob(A\cap B)\geq 0$ for any two events $A,B\mathcal{F}$, we see that $\prob(A\cup B) \leq \prob(A)+\prob(B)$, as required.
+\end{answer}
+%--------------------
+% numerical
+\question
+Let $A$ and $B$ be events such that $\prob(A)=0.4$, $\prob(B)=0.5$ and $\prob(A~\cup~B)=0.8$.\par
+Compute the following probabilities:
+\begin{parts}
+%----------
+\part $\prob(A\cap B)$.
+\begin{answer}
+$\prob(A\cap B) = \prob(A) + \prob(B) - \prob(A\cup B) = 0.4 + 0.5 - 0.8 = 0.1$.
+\end{answer}
+%----------
+\part $\prob(A\cup B^c)$.
+\begin{answer}
+$\prob(A\cup B^c) = 1 - \prob(B\setminus A) = 1 - \big[\prob(B)-\prob(A\cap B)\big] = 1 - 0.4 = 0.6$.
+\end{answer}
+\end{parts}
+%----------------------------------------
+% inequalities
+\question
+Let $A$ and $B$ be random events, with probabilities $\prob(A) = 1/2$ and $\prob(B) = 3/4$. 
+\begin{parts}
+%--------------------
+\part Show that $\displaystyle\frac{1}{4}\leq \prob(A\cap B)\leq\frac{1}{2}$.
+\begin{answer}
+$A\cap B\subseteq A$ and $A\cap B\subseteq B$ means that:
+\[
+\prob(A\cap B) \leq \min\big\{\prob(A),\prob(B)\big\} = \displaystyle\frac{1}{2}.
+\]
+Furthermore, $\prob(A\cup B)\leq 1$ means that:
+\[
+\prob(A\cap B) = \prob(A)+\prob(B)-\prob(A\cup B) \geq \displaystyle\frac{1}{4}.
+\]
+\end{answer}
+%--------------------
+\part Show that $\displaystyle\frac{3}{4}\leq \prob(A\cup B)\leq 1$.
+\begin{answer}
+$A\subseteq A\cup B$ and $B\subseteq A\cup B$ means that:
+\[
+\prob(A\cup B) \geq \max\big[\prob(A),\prob(B)\big] = \displaystyle\frac{3}{4}.
+\]
+Furthermore, $\prob(A\cup B)\leq 1$ means that:
+\[
+\prob(A\cup B) \leq \min\{1,\prob(A)+\prob(B)\} = 1.
+\]
+\end{answer}
+\end{parts}
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+
+%======================================================================
+\endinput
+%======================================================================

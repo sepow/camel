@@ -1,0 +1,300 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+\question
+Let $X\sim\text{Uniform}(-1,1)$. Find the CDF and PDF of $X^2$.
+
+
+\begin{answer}
+The PDF of $X$ is 
+\[
+f_X(x) = \left\{\begin{array}{ll}
+	1/2	& -1\leq x\leq 1 \\
+	0	& \text{otherwise}
+\end{array}\right.	
+\]	
+For $x\in[-1,1]$, 
+\[
+\prob(X\leq x) 
+	= \int_{-\infty}^x f_X(t)\,dt
+	= \int_{-1}^x \frac{1}{2}\,dt
+	= \left[\frac{t}{2}\right]_{-1}^x
+	= \frac{1}{2}(x+1).
+\]
+The CDF of $X$ is:
+\[
+F(x) = \left\{\begin{array}{ll}
+	0				 	& x < -1, \\
+	\frac{1}{2}(x+1) 	& -1\leq x\leq 1, \\
+	1					& x > 1.
+\end{array}\right.	
+\]
+Let $Y=X^2$. For $0\leq y\leq 1$ we have
+\begin{align*}
+\prob(Y\leq y)
+	= \prob(X^2\leq y)
+	& = \prob(-\sqrt{y}\leq X\leq\sqrt{y}) \\
+	& = \prob(X\leq\sqrt{y}) - \prob(X\leq-\sqrt{y}) \\
+	& = \sqrt{y}.
+\end{align*}
+Hence the CDF of $Y$ is
+\[
+F_Y(y) = \left\{\begin{array}{ll}
+	0		 	& y < 0, \\
+	\sqrt{y} 	& 0\leq y\leq 1, \\
+	1			& y > 1.
+\end{array}\right.	
+\]
+and the PDF of $Y$ is
+\[
+f_Y(y) = \left\{\begin{array}{ll}
+\frac{1}{2}y^{-1/2}	& 0\leq y\leq 1, \\
+0					& \text{otherwise}.
+\end{array}\right.	
+\]
+\end{answer}
+
+%----------------------------------------
+\question
+Let $X$ have exponential distribution with rate parameter $\lambda>0$. The PDF of $X$ is
+\[
+f(x) = \left\{\begin{array}{ll}
+	\lambda\exp(-\lambda x)	& \text{for } x \geq 0, \\
+	0						& \text{otherwise.}
+\end{array}\right.
+\]
+Find the PDFs of $Y=X^2$ and $Z=e^X$.
+
+\begin{answer}
+\ben
+\it % << (i)
+The transformation $g(x)=x^2$ is monotonic increasing over $[0,\infty)$; its inverse function is
+\[
+g^{-1}(y) =  \sqrt{y},\text{\quad which has first derivative \quad} \frac{d}{dy}g^{-1}(y) = \frac{1}{2\sqrt{y}}.
+\]
+
+Since $\supp(f_X)=[0,\infty)$ it follows immediately that $\supp(f_Y)=[0,\infty)$.
+\par
+For $y>0$, 
+\[
+f_Y(y) 
+	= f_X\big[g^{-1}(y)\big]\left|\frac{d}{dy}g^{-1}(y)\right| 
+	= \lambda\exp(\lambda\sqrt{y}) \left| \frac{1}{2\sqrt{y}}\right|
+	= \frac{\lambda}{2\sqrt{y}}\exp(-\lambda\sqrt{y}).
+\]
+Hence the PDF of $Y=X^2$ is given by
+\[
+f_Y(y) = \left\{\begin{array}{ll}
+	\displaystyle\frac{\lambda}{2\sqrt{y}}\exp(-\lambda\sqrt{y}) & y\geq 0, \\[2ex]
+	0 & \text{otherwise}.
+\end{array}\right.
+\]
+
+\it % << (i)
+The transformation $g(x)=e^x$ is a monotonic increasing function over $[0,\infty)$; its inverse function is
+\[
+g^{-1}(z) = \log y \text{\quad and\quad} \frac{d}{dy}g^{-1}(z) = \frac{1}{z}.
+\]
+
+Since $\supp(f_X)=[0,\infty)$ it follows immediately that $\supp(f_Z)=[1,\infty)$.
+\par
+For $z\geq 1$,
+\[
+f_Z(z) 
+	= f_X\big[g^{-1}(z)\big]\left|\frac{d}{dz}g^{-1}(z)\right|
+	= \lambda\exp(-\lambda\log z)\left|\frac{1}{z}\right| 
+	= \lambda z^{-(\lambda+1)}.
+\]
+Hence the PDF of $Z=e^X$ is given by
+\[
+f_Z(z) = \left\{\begin{array}{ll}
+	\lambda z^{-(\lambda+1)} & z\geq 1, \\
+	0 & \text{otherwise}.
+\end{array}\right.
+\]
+\een
+\end{answer}
+
+%----------------------------------------
+\question
+Let $X\sim\text{Pareto}(1,2)$. Find the PDF of $Y=1/X$.
+
+\begin{answer}
+$X\sim\text{Pareto}(1,2)$ has PDF 
+\[
+f_X(x) = \left\{\begin{array}{ll}
+	\displaystyle\frac{2}{x^3} & x>1, \\
+	0	& \text{otherwise.}
+\end{array}\right.
+\]
+Let $g(x) = 1/x$. 
+\bit
+\it $g(x)$ is monotonic decreasing over $x>1$; the inverse transformation is $g^{-1}(y) = 1/y$.
+\it $\supp(f_Y) = \{x^{-1}:x>1\} = (0,1)$.
+\eit
+Hence the PDF of $Y$ is given by
+\begin{align*}
+f_Y(y)
+	 = f_X\big[g^{-1}(y)\big]\left|\frac{d}{dy}g^{-1}(y)\right| 
+	 = f_X\left(\frac{1}{y}\right)\left|-\frac{1}{y^2}\right| 
+	 = \left\{\begin{array}{ll}
+		2y	& \text{for } 0<y<1, \\
+		0	& \text{otherwise.}
+	\end{array}\right.
+\end{align*}
+\end{answer}
+
+
+
+%----------------------------------------
+\question
+A continuous random variable $U$ has PDF
+\[
+f(u) = \left\{\begin{array}{ll}
+	12u^{2}(1-u) 	& \text{for}\quad 0 < u < 1, \\
+	0				& \text{otherwise.}
+\end{array}\right.	
+\]
+Find the PDF of $V = (1 - U)^{2}$.
+
+
+\begin{answer}
+\bit
+\it The transformation $g(u) = (1 - u)^{2}$ is monotonic decreasing over $[0,1]$.  
+\it The inverse transformation is $g^{-1}(v) = 1 - v^{1/2}$, for which $\displaystyle \frac{d}{dv}g^{-1}(v) = -\frac{1}{2v^{1/2}}$.
+\it Since $\supp(f_U)=(0,1)$ it follows that $\supp(f_V)=(0,1)$. 
+\eit
+Hence for $0<v<1$ the PDF of $V$ is 
+\begin{align*}
+f_V(v)
+	& = f_U\big[g^{-1}(v)\big]\left|\frac{d}{dv}g^{-1}(v)\right| \\
+	& = 12(1-v^{1/2})^2 v^{1/2}\left|-\frac{1}{2v^{1/2}}\right| \\
+	& = 6(1-v^{1/2})^2,
+\end{align*}
+and zero otherwise. 
+\end{answer}
+
+%----------------------------------------
+\question
+The continuous random variable $U$ has PDF
+\[
+f_U(u) = \left\{\begin{array}{ll}
+	1 + u  	& -1 < u \leq 0, \\
+	1 - u  	&  0 < u \leq 1, \\
+	0		& \text{otherwise.}
+\end{array}\right.
+\]
+Find the PDF of $V = U^2$. (Note that the transformation is not injective over $\supp(f_U)$, so you should first compute the CDF of $V$, then derive its PDF by differentiation.)
+
+
+\begin{answer}
+Let $g(u) = u^2$. This is not injective over $\supp(f_U)=(-1,1)$, and does not therefore have a unique inverse over this interval. Instead we will compute the CDF of $V$, then obtain the PDF by differentiation.
+
+For $0<v<1$,
+\begin{align*}
+F_{V}(v) 
+	= P(V\leq v)
+	& = P(U^{2} \leq v) \\
+	& = P(-\sqrt{v} \leq U \leq \sqrt{v}) \\ 
+	& = \int_{-\sqrt{v} }^{+\sqrt{v} }f_{U}(u) \,du \\
+	& = \int_{-\sqrt{v} }^{0}(1+u)\,du + \int_{0}^{+\sqrt{v} }(1-u)\,du \\
+	& = \left[u+\frac{u^{2}}{2}\right]_{-\sqrt{v} }^{0} + \left[u-\frac{u^{2}}{2}\right]_{0}^{\sqrt{v}} \\
+	& = \sqrt{v} -\frac{v}{2} + \sqrt{v} -\frac{v}{2} \\
+	& = 2\sqrt{v}-v.% \qquad\text{for}\quad 0 \leq v < 1
+\end{align*}
+
+The CDF is therefore
+\[
+F_V(u) = \left\{\begin{array}{ll}
+	0  				& v \leq 0, \\
+	2\sqrt{v}-v  	& 0 < v < 1, \\
+	1				& v \geq 1.
+\end{array}\right.
+\]
+The PDF is then found by differentiation with respect to $v$:
+\[
+f_V(u) = \left\{\begin{array}{ll}
+	v^{-1/2} - 1  	& \text{for } 0 \leq v < 1, \\
+	0				& \text{otherwise.}
+\end{array}\right.	
+\]
+\end{answer}
+
+%----------------------------------------
+\question
+Let $X$ have exponential distribution with scale parameter $\theta>0$. This has PDF
+\[
+f(x) = \left\{\begin{array}{ll}
+	\frac{1}{\theta}\exp(-x/\theta) 	& \text{for } x > 0,  \\
+	0								& \text{otherwise.}
+\end{array}\right.
+\]
+Find the PDF of $Y = X^{1/\gamma}$ where $\gamma > 0$. 
+
+
+\begin{answer}
+Let $g(x) = x^{1/\gamma}$. 
+\bit
+\it $g$ a monotonic increasing function over $\supp(f_X)=\{x:x>0\}$, so its inverse exists:
+\it The inverse transformation is $g^{-1}(y) = y^{\gamma}$, for which $\displaystyle\frac{d}{dy}g^{-1}(y) = \gamma y^{\gamma-1}$.
+\it $\supp(f_X)=\{x:x>0\}$ means that $\supp(f_Y)=\{y:y>0\}$.
+\eit
+
+Since $f_Y(y) = f_X\big[g^{-1}(y)\big]\left|\displaystyle\frac{d}{dy}g^{-1}(y)\right|$, we obtain
+\[
+f_Y(y) = \left\{\begin{array}{ll}
+	(\gamma/\theta)y^{\gamma-1}\exp(-y^{\gamma }/\theta) & \text{for }\ y>0, \\
+	0		& \text{otherwise.}
+\end{array}\right.	
+\]
+This is called the \emph{Weibull} distribution (with scale parameter $\theta$ and shape parameter $\gamma$).
+\end{answer}
+
+%----------------------------------------
+\question
+Suppose that $X$ has the \emph{Beta Type I} distribution, with parameters $\alpha,\beta>0$. This has PDF
+\[
+f_X(x) = \left\{\begin{array}{ll}
+	\displaystyle\frac{1}{B(\alpha,\beta)} x^{\alpha-1}(1-x)^{\beta-1}	& \text{for } 0\leq x\leq 1,  \\
+	0													& \text{otherwise,}
+\end{array}\right.
+\]
+where $\displaystyle B(a,b) = \int_0^1 t^{a-1}(1-t)^{b-1}\,dt$ is the so-called \emph{beta function}.
+%
+Show that the random variable $\displaystyle Y=\frac{X}{1-X}$ has the \emph{Beta Type II} distribution, which has PDF
+\[
+f_Y(y) = \left\{\begin{array}{ll}
+	\displaystyle\frac{1}{B(\alpha,\beta)}\frac{y^{\alpha-1}}{(1+y)^{\alpha+\beta}}	& \text{for } y>0, \\
+	0 & \text{otherwise.}
+\end{array}\right.	
+\]
+
+\begin{answer}
+Let $g(x) = x/(1-x)$
+\bit
+\it $g(x)$ is monotonic increasing on $\supp(f_X)=[0,1]$.
+\it The inverse transformation is $g^{-1}(y) = \displaystyle\frac{y}{1+y}$, which has derivative
+$\displaystyle\frac{d}{dy} g^{-1}(y) = \frac{1}{(1+y)^2}$.
+\it Since $\supp(f_X)=[0,1]$, we see that $\supp(f_Y)=[0,\infty)$.
+\eit
+Thus for $y>0$, the PDF of $Y$ is
+\begin{align*}
+f_Y(y)
+	&  = f_X\big[g^{-1}(y)\big]\left|\frac{d}{dy}g^{-1}(y)\right| \\
+	& = \frac{1}{B(\alpha,\beta)}\left(\frac{y}{1+y}\right)^{\alpha-1}\left(\frac{1}{1+y}\right)^{\beta-1}\left|\frac{1}{(1+y)^2}\right| \\
+	& = \frac{1}{B(\alpha,\beta)}\frac{y^{\alpha-1}}{(1+y)^{\alpha+\beta}},
+\end{align*}
+and zero otherwise.
+\end{answer}
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+%----------------------------------------------------------------------
+
+
+%======================================================================
+\endinput
+%======================================================================

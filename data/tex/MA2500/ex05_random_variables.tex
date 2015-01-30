@@ -1,0 +1,53 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+\question
+Let $\Omega$ be the sample space of some random experiment, and let $\mathcal{F}$ be a $\sigma$-field over $\Omega$.
+\begin{parts}
+%
+\part
+For any $A\in\mathcal{F}$, show that the function $X:\Omega\to\R$, defined by
+\[
+X(\omega) =
+  \begin{cases}
+   1 & \text{if } \omega\in A, \\
+   0 & \text{if } \omega\notin A,
+  \end{cases}
+\]
+is a random variable on $(\Omega,\mathcal{F})$.
+\begin{answer}
+For any $B\in\mathcal{B}$,
+\bit
+\it if $1\in B$, then $\{\omega:X(\omega)\in B\} = A$, which is contained in $\mathcal{F}$;
+\it if $1\notin B$, then $\{\omega:X(\omega)\in B\} = \emptyset$, which is also contained in $\mathcal{F}$.
+\eit
+\end{answer}
+%
+\part
+Let $A_1,A_2,\ldots,A_n\in\mathcal{F}$ be a partition of $\Omega$ and let $a_1,a_2,\ldots,a_n\in\R$. Show that the function $X:\Omega\to\R$, defined by
+\[
+X(\omega)= \sum_{i=1}^n a_i I_{A_i}(\omega) 
+\qquad\text{where}\qquad
+I_{A}(\omega) =
+  \begin{cases}
+   1 & \text{if } \omega\in A, \\
+   0 & \text{if } \omega\notin A,
+  \end{cases}
+\]
+is a random variable on $(\Omega,\mathcal{F})$.
+\begin{answer}
+For any $B\in\mathcal{B}$,
+\[
+\{\omega:X(\omega)\in B\} = \cup\{A_i:a_i\in B\} \in\mathcal{F},
+\]
+because $\mathcal{F}$ is closed under finite unions.
+\end{answer}
+\end{parts}
+\end{questions}
+\end{exercise}
+
+%======================================================================
+\endinput
+%======================================================================

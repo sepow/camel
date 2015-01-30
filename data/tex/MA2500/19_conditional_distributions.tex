@@ -1,0 +1,486 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Conditional Distributions}\label{chap:cond_dist}
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+\section{Conditional distributions}
+%----------------------------------------------------------------------
+Let $X,Y:\Omega\to\R$ be random variables on a probability space $(\Omega,\mathcal{F},\prob)$.
+
+% defn: conditional distributions
+\begin{definition}
+\ben
+\it % (i)
+The \emph{conditional distribution} of $Y$ given $X$ is the function
+\[
+\begin{array}{cccl}
+\prob_{Y|X}:		& \mathcal{B}^2	& \to		& [0,1] \\
+				& (A,B)			& \mapsto	& \prob(Y\in B\,|\, X\in A).
+\end{array}
+\]
+\it The \emph{conditional CDF} of $Y$ given $X$ is the function
+\[
+\begin{array}{cccl}
+F_{Y|X}:		& \R^2	& \to		& [0,1] \\
+			& (x,y)	& \mapsto	& \prob(Y\leq y\,|\, X\leq x).
+\end{array}
+\]
+\een
+\end{definition}
+
+The following lemma is easily proved.
+% lemma: quotient
+\begin{lemma} 
+The conditional CDF of $Y$ given $X$ satisfies
+\[
+F_{Y|X}(x,y) = \frac{F_{X,Y}(x,y)}{F_X(x)},
+\]
+where $F_{X,Y}$ is the joint CDF of $X$ and $Y$, and $F_X$ is the marginal CDF of $X$.
+\end{lemma}
+
+%\begin{proof}
+%\[
+%F_{Y|X}(x,y) 
+%	= \prob(Y\leq y\,|\,X\leq x)
+%	= \frac{\prob(\{Y\leq y\}\cap\{X\leq x\})}{\prob(X\leq x)}
+%	= \frac{F_{X,Y}(x,y)}{F_X(x)}.
+%\]
+%\end{proof}
+
+%----------------------------------------------------------------------
+\subsection{Discrete case}
+%----------------------------------------------------------------------
+% conditional CDF and PMF
+\begin{definition}
+Let $X$ and $Y$ be jointly discrete random variables, and let $x$ be such that $\prob(X=x)>0$.
+%\ben
+%\it The \emph{conditional CDF} of $Y$ given $X=x$ is 
+%\[
+%F_{Y|X}(y|x) = \prob(Y\leq y\,|\,X=x).
+%\]
+%\it 
+The \emph{conditional PMF} of $Y$ given $X=x$ is the function
+\[
+\begin{array}{cccc}
+f_{Y|X}	:	& \R		& \to		& [0,1] \\[1ex]
+			& y 		& \mapsto	& \prob(Y=y \,|\, X=x).
+\end{array}
+\]
+%\]The \emph{conditional PMF} of $Y$ given $X=x$ is 
+%\[
+%f_{Y|X}(y|x) = \prob(Y=y\,|\,X=x).
+%\]
+%\een
+\end{definition}
+
+The following lemma is easily proved.
+% lemma
+\begin{lemma}
+The conditional PMF of $Y$ given $X=x$ satisfies
+\[
+f_{Y|X}(y|x) = \frac{f_{X,Y}(x,y)}{f_X(x)}.
+\]
+\end{lemma}
+
+% theorem: law of total probability
+\begin{theorem}%[Law of total probability for discrete variables]
+If $X$ and $Y$ are jointly discrete random variables, then 
+\[
+\displaystyle f_Y(y) = \sum_x f_{Y|X}(y|x) f_X(x).
+\]
+where the sum is taken over the range of $X$.
+\end{theorem}
+\begin{proof}
+\[
+\sum_x f_{Y|X}(y|x) f_X(x) 
+	= \sum_x \left(\frac{f_{X,Y}(x,y)}{f_X(x)}\right) f_X(x)
+	= \sum_x f_{X,Y}(x,y)
+	= f_Y(y).
+\]
+\end{proof}
+
+%----------------------------------------------------------------------
+\subsection{Continuous case}
+%----------------------------------------------------------------------
+% conditional CDF and PDF
+Let $X$ and $Y$ be jointly continuous random variables.
+\bit
+\it Suppose we observe that $X$ takes the value $x$.
+\it Since $\prob(X=x)=0$, we cannot condition on the event $\{X=x\}$.
+\eit
+
+% definition: conditional density function
+\begin{definition}\label{def:conditional_density}
+Let $X$ and $Y$ be jointly continuous random variables. The \emph{conditional PDF} of $Y$ given $X=x$ is 
+\[
+f_{Y|X}(y|x) = \frac{f_{X,Y}(x,y)}{f_X(x)}
+\]
+\end{definition}
+
+%\newpage
+
+% theorem: LTP
+\begin{theorem}%[Law of total probability for continuous variables]
+If $X$ and $Y$ are jointly continuous random variables, then 
+\[
+\displaystyle f_Y(y) = \int_{-\infty}^{\infty} f_{Y|X}(y|x) f_X(x)\,dx.
+\]
+\end{theorem}
+
+% proof
+\begin{proof}
+\[
+\int f_{Y|X}(y|x) f_X(x)\,dx 
+	= \int \left(\frac{f_{X,Y}(x,y)}{f_X(x)}\right) f_X(x)\,dx
+	= \int f_{X,Y}(x,y)\,dx
+	= f_Y(y).
+\]
+\end{proof}
+
+%----------------------------------------------------------------------
+\section{Conditional expectation}
+%----------------------------------------------------------------------
+\begin{definition}
+\ben
+\it The \emph{conditional expectation of $Y$ given $X=x$} is a number,% (which depends on $x$),
+\[
+\expe(Y|X=x) \ =\  
+	\begin{cases}
+	\displaystyle\sum_y y\,f_{Y|X}(y|x)								& \text{(discrete case),} \\[4ex]
+	\displaystyle\int_{-\infty}^{\infty} y\,f_{Y|X}(y|x)\,dy\quad		& \text{(continuous case).}
+	\end{cases}
+\]
+\it The \emph{conditional expectation of $Y$ given $X$} is a random variable,
+\[\begin{array}{llll}
+\expe(Y|X):	& \Omega 	& \to 		& \R \\
+				& \omega	& \mapsto 	& \expe\big(Y|X=X(\omega)\big).
+\end{array}\]
+\een
+\end{definition}
+
+% remark
+\begin{remark}
+Let $g(x) = \expe(Y|X=x)$. The distribution of the random variable $g(X)=\expe(Y|X)$ depends only on the distribution of $X$. Its expectation is given by
+%\[
+%\expe\big[\expe(Y|X)\big] \equiv \expe\big[g(X)\big] = \left\{
+%	\begin{array}{lll}
+%	\displaystyle\sum_x g(x)f_X(x)							& \equiv \sum_x \expe(Y|X=x)f_X(x)							& \text{discrete case,} \\[4ex]
+%	\displaystyle\int_{-\infty}^{\infty} g(x)f_X(x)\,dx	& \equiv \int_{-\infty}^{\infty} \expe(Y|X=x)f_X(x)\,dx	& \text{continuous case.}
+%	\end{array}
+%	\right.
+%\]
+\[
+\expe\big[\expe(Y|X)\big] \ =\  
+	\begin{cases}
+	\displaystyle\sum_x \expe(Y|X=x)f_X(x)								& \text{(discrete case),} \\[4ex]
+	\displaystyle\int_{-\infty}^{\infty} \expe(Y|X=x)f_X(x)\,dx\quad		& \text{(continuous case).}
+	\end{cases}
+\]
+
+where $f_X$ is the marginal PMF or PDF of $X$.
+\end{remark}
+
+
+
+%For discrete and continuous distributions, we can condition on the event $\{X=x\}$ by using the conditional PMF and conditional PDF respectively:
+%\ben
+%\it % disc
+%If $X$ and $Y$ are jointly discrete random variables,
+%\[
+%\expe(Y|X=x) = \sum y\,f_{Y|X}(y|x)
+%\]
+%where $f_{Y|X}(\cdot|x)$ is the conditional PMF of $Y$ given $X=x$.
+%\it % cts
+%If $X$ and $Y$ are jointly continuous random variables,
+%\[
+%\expe(Y|X=x) = \int y\,f_{Y|X}(y|x)\,dy
+%\]
+%where $f_{Y|X}(\cdot|x)$ is the conditional PDF of $Y$ given $X=x$.
+%\een
+
+%----------------------------------------------------------------------
+\section{Law of total expectation}
+%----------------------------------------------------------------------
+
+\begin{theorem}[Law of total expectation]
+Let $X$ and $Y$ be random variables on the same probability space. Then
+\[
+\expe\big[\expe(Y|X)\big] = \expe(Y).
+\]
+\end{theorem}
+We prove the theorem for continuous random variables (the discrete case follows similarly).
+% proof
+\begin{proof}
+Let $X$ and $Y$ be jointly continuous random variables.%, and let $g(x) = \expe(Y|X=x)$. Then
+%\small
+\begin{align*}
+\expe\big[\expe(Y|X)\big] 
+%	= \int g(x) f_X(x)\,dx
+	& = \int_{-\infty}^{\infty} \expe(Y|X=x) f_X(x)\,dx \\
+	& = \int_{-\infty}^{\infty}\left(\int_{-\infty}^{\infty} y\,f_{Y|X}(y|x)\,dy\right) f_X(x)\,dx \\
+	& = \int_{-\infty}^{\infty}\left(\int_{-\infty}^{\infty} y\,\frac{f_{X,Y}(x,y)}{f_X(x)}\,dy\right) f_X(x)\,dx \\
+	& = \int_{-\infty}^{\infty}\left(\int_{-\infty}^{\infty} y f_{X,Y}(x,y)\,dy\right)\,dx \\
+	& = \int_{-\infty}^{\infty} y \left(\int_{-\infty}^{\infty} f_{X,Y}(x,y)\,dx\right)\,dy \\
+	& = \int_{-\infty}^{\infty} y f_Y(y) \,dy \\
+	& = \expe(Y).
+\end{align*}
+%\normalsize
+\end{proof}
+
+%----------------------------------------------------------------------
+\section{Law of total variance} 
+%----------------------------------------------------------------------
+\begin{theorem}[Law of total variance]
+Let $X$ and $Y$ be random variables on the same probability space. Then
+\[
+\var(Y) = \expe\big[\var(Y|X)\big] + \var\big[\expe(Y|X)\big] 
+\]
+\end{theorem}
+This is sometimes called the \emph{variance decomposition formula}.
+% proof
+\begin{proof}
+\bit
+\it By the law of total expectation,
+\begin{align*}
+\var(Y)
+	& = \expe(Y^2) - \expe(Y)^2 \\
+	& = \expe\big[\expe(Y^2|X)\big] - \expe\big[\expe(Y|X)\big]^2
+\end{align*}
+\it Because $\var(Y|X)=\expe(Y^2|X) - \expe(Y|X)^2$,
+\[
+\var(Y) = \expe\big[\var(Y|X) + \expe(Y|X)^2\big] - \expe\big[\expe(Y|X)\big]^2
+\]
+\it Hence, by the linearity of expectation,
+\begin{align*}
+\var(Y)
+	& = \expe\big[\var(Y|X)\big] + \Big(\expe\big[\expe(Y|X)^2\big] - \expe\big[\expe(Y|X)\big]^2\Big) \\
+	& = \expe\big[\var(Y|X)\big] + \var[\expe(Y|X)\big].
+\end{align*}
+\eit
+\vspace*{-2ex}
+\end{proof}
+
+%----------------------------------------------------------------------
+\subsection{Variance decomposition} 
+%----------------------------------------------------------------------
+$\expe(Y|X)$ can be thought of as a \emph{model} of $Y$ in terms of $X$.
+\bit
+\it $\var\big[\expe(Y|X)\big]$ is the variance of the model. This is called the \emph{explained variance}.
+\it $Y - \expe(Y|X)$ is called the \emph{residual}, representing that part of $Y$ not explained by the model $\expe(Y|X)$.
+\it $ \var(Y|X) = \expe\big(\,[Y-\expe(Y|X)]^2\,\big|\,X\,\big)$ is called the \emph{residual variance} at $X$.
+\it $\expe\big[\var(Y|X)\big]$ is the expected residual variance. This is called the \emph{unexplained variance}.
+\eit
+
+\vspace*{2ex}
+The law of total variance divides the variance into \emph{unexplained} and \emph{explained} components:
+\[
+\var(Y) = \expe\big[\var(Y|X)\big] + \var\big[\expe(Y|X)\big] 
+\]
+or
+\[
+\frac{\expe\big[\var(Y|X)\big]}{\var(Y)} + \frac{\var\big[\expe(Y|X)\big]}{\var(Y)} = 1.
+\]
+This idea is important in statistics.
+
+%----------------------------------------------------------------------
+\subsection{Linear models} 
+%----------------------------------------------------------------------
+Suppose we adopt a \emph{linear model} of $Y$ against $X$:
+\[
+\expe(Y|X) = a + bX.
+\]
+It can be shown that the residual variance is minimised when
+\[
+a = \expe(Y) - \left[\frac{\cov(X,Y)}{\var(X)}\right] \expe(X)
+\text{\qquad and\qquad} 
+b = \frac{\cov(X,Y)}{\var(X)}.
+\]
+The proportion of the total variance explained by the model is the square of the correlation coefficient:
+\[
+\frac{\var\big[\expe(Y|X)\big]}{\var(Y)} = \rho(X,Y)^2.
+\]
+This is known as the \emph{coefficient of determination}, usually denoted by $R^2$, which quantifies the extent to which a linear model $Y=a+bX$ captures the relationship (if any) between $X$ and $Y$.
+
+%----------------------------------------------------------------------
+\section{Example}
+%----------------------------------------------------------------------
+\begin{example}
+The jointly continuous random variables $X$ and $Y$ have following joint PDF:
+\[
+f(x,y) = 
+\begin{cases}
+	\frac{21}{4}x^2y		& \text{for } x^2<y<1 \\
+	0									& \text{otherwise}
+\end{cases}
+\]
+\ben
+\it Find the marginal PDFs of $X$ and $Y$.
+\it Find the mean and variance of $Y$.
+\it Find the conditional PDF of $X$ given $Y=y$.
+\it Find the conditional PDF of $Y$ given $X=x$. 
+\it Are $X$ and $Y$ independent? 
+\it Verify that $\expe(Y)=\expe\big[\expe(Y|X)\big]$.
+%\it Verify that $\var(Y)=\expe\big[\var(Y|X)\big] + \var\big[\expe(Y|X)\big]$.
+\een
+\end{example}
+
+\begin{solution}
+The support of the joint PDF $f(x,y)$ is the set $\{(x,y): x^2 < y < 1\}$. 
+\bit
+\it This is the region between the vertical lines $x=-1$ and $x=+1$, bounded above by the horizontal line $y=1$ and below by parabola $y=x^2$.
+\eit
+In particular,
+\bit
+\it For fixed $x\in[-1,1]$, we must have $y\in[x^2,1]$.
+\it For fixed $y\in[0,1]$, we must have $x\in[-\sqrt{y},+\sqrt{y}]$.
+\eit
+ 
+\ben
+\it % << (a)
+The marginal distributions are computed as follows:
+\begin{align*}
+f_X(x) 	
+	& = \int_{-\infty}^{\infty} f(x,y)\,dy 
+	= \int_{x^2}^1 \frac{21}{4}x^2y\,dy 
+	= \frac{21}{4}x^2\left[\frac{y^2}{2}\right]_{x^2}^1 
+	= \begin{cases} \frac{21}{8}x^2(1-x^4)	& -1<x<1, \\ 0 & \text{ otherwise.}\end{cases} \\
+f_Y(y) 	
+	& = \int_{-\infty}^{\infty} f(x,y)\,dx 
+	= \int_{-\sqrt{y}}^{\sqrt{y}} \frac{21}{4}x^2y\,dx 
+	= \frac{21}{4}y\left[\frac{x^3}{3}\right]_{-\sqrt{y}}^{\sqrt{y}}
+	= \begin{cases} \frac{7}{2}y^{5/2} & 0< y< 1, \\ 0 & \text{ otherwise.}\end{cases} \\
+\end{align*}
+
+\it % << (b)
+The expected value and variance of $Y$ are computed as follows:
+\begin{align*}
+\expe(Y)
+	& = \int_0^1 y\left(\frac{7y^{5/2}}{2}\right)\,dy = \frac{7}{9}, \\
+\expe(Y^2)
+	& = \int_0^1 y^2\left(\frac{7y^{5/2}}{2}\right)\,dy = \frac{7}{11}, \\
+\var(Y)
+	& = \expe(Y^2) - \expe(Y)^2 = \frac{7}{11} - \frac{49}{81} = \frac{28}{891}.
+\end{align*}
+
+\it % << (c)
+The conditional PDF of $X$ given that $Y=y$ is
+\[
+f_{X|Y}(x\,|\,y)
+	= \frac{f_{X,Y}(x,y)}{f_Y(y)} 
+	= \frac{(21/4)x^2y}{(7/2)y^{5/2}} 		
+	= \begin{cases} 
+		\displaystyle\frac{3}{2}x^2y^{-3/2}	& -\sqrt{y}\leq x\leq \sqrt{y}, \\
+		0 										& \text{ otherwise.}
+	\end{cases}
+\]
+
+\it % << (d)
+The conditional PDF of $Y$ given that $X=x$ is
+\[
+f_{Y|X}(y\,|\,x) 	
+	= \frac{f_{X,Y}(x,y)}{f_X(x)} 
+	= \frac{(21/4)x^2y}{(21/8)x^2(1-x^4)} 	
+	= \begin{cases} 
+		\displaystyle\frac{2y}{1-x^4} 	& x^2\leq y\leq 1, \\
+	 	0 									& \text{ otherwise}.
+	 \end{cases}
+\]	 
+
+\it % << (d)
+$X$ and $Y$ are not independent because the conditional PDF of $Y$ given $X=x$ depends on $x$.
+
+\it % << (e)
+The conditional expected value of $Y$ given that $X=x$ is
+\begin{align*}
+g(x) = \expe(Y|X=x) 
+	& = \int_{-\infty}^{\infty} y f_{Y|X}(y\,|\,x)\,dy \\
+	& = \int_{x^2}^1 y \left(\frac{2y}{1-x^4}\right)\,dy 
+	= \frac{2}{1-x^4}\left[\frac{y^3}{3}\right]_{x^2}^1
+	= \frac{2(1-x^6)}{3(1-x^4)} 
+\end{align*}	
+Hence the conditional expectation of $Y$ given $X$ is the random variable 
+\[
+\expe(Y|X)=\displaystyle\frac{2(1-X^6)}{3(1-X^4)}
+\]
+and its expected value is  
+\begin{align*}
+\expe\big[\expe(Y|X)\big] 
+	& = \int_{-\infty}^{\infty} \expe(Y|X=x)f_X(x)\,dx \\
+	& = \frac{2}{3}\int_{-1}^{1} \left(\frac{1-x^6}{1-x^4}\right)\left(\frac{21}{8}x^2(1-x^4)\right)\,dx \\
+	& = \frac{7}{4}\int_{-1}^{1} x^2(1-x^6)\,dx 
+	= \frac{7}{9}.
+\end{align*}	
+Thus $\expe\big[\expe(Y|X)\big]=\expe(Y)$ as required.
+%\it % << (f)
+%We need to show that $\var(Y) = \expe\big[\var(Y|X)\big] + \var\big[\expe(Y|X)\big]$.
+%
+%First we consider $\expe\big[\var(Y|X)\big]$. 
+%
+%Since $\var(Y|X=x) = \expe(Y^2|X=x) - \expe(Y|X=x)^2$, and
+%\begin{align*}
+%\expe(Y^2|X=x)
+%	& = \int_{-\infty}^{\infty} y^2 f_{Y|X}(y\,|\,x)\,dy \\
+%	& \int_{x^2}^1 y^2\left(\frac{2y}{1-x^4}\right)\,dy
+%	= \frac{2}{1-x^4}\left[\frac{y^4}{4}\right]_{x^2}^1
+%	= \frac{1-x^8}{2(1-x^4)}
+%	= \frac{1+x^4}{2},
+%\end{align*}
+%it follows by part (4) that
+%\begin{align*}
+%\var(Y|X=x)
+%	& = \expe(Y^2|X=x) - \expe(Y|X=x)^2 
+%	= \frac{1+x^4}{2} - \frac{4(1-x^6)^2}{9(1-x^4)^2}.
+%\end{align*}
+%Thus  the expected value of $\var(Y|X)$ is 
+%\begin{align*}
+%\expe\big[\var(Y|X)\big]
+%	& = \int_{-1}^{1} \var(Y|X=x)f_X(x)\,dx \nonumber \\
+%	& = \int_{-1}^{1} \left(\frac{1+x^4}{2}\right)\left(\frac{21}{8}x^2(1-x^4)\right)\,dx
+%		 - \int_{-1}^{1} \frac{4(1-x^6)^2}{9(1-x^4)^2}\left(\frac{21}{8}x^2(1-x^4)\right)\,dx \nonumber \\
+%	& = \frac{21}{16}\int_{-1}^{1} x^2(1-x^8)\,dx 
+%		 - \frac{82}{12}\int_{-1}^{1} \frac{x^2(1-x^6)^2}{(1-x^4)}\,dx. %\tag{*}
+%\end{align*}
+%Before evaluating these integrals, let us now consider the second term,
+%\[
+%\var\big[\expe(Y|X)\big]= \expe\big[\expe(Y|X)^2\big]-\expe\big[\expe(Y|X)\big]^2.
+%\]
+%By the law of total expectation, $\expe\big[\expe(Y|X)\big]^2 = \expe(Y)^2$, and by part (4),
+%\begin{align*}
+%\expe\big[\expe(Y|X)^2\big]
+%	& = \int_{-1}^{1} \expe(Y|X=x)^2 f_X(x)\,dx \nonumber \\ 
+%	& = \int_{-1}^{1} \frac{4(1-x^6)^2}{9(1-x^9)^2}\left(\frac{21}{8}x^2(1-x^4)\right)\,dx \\
+%	& = \frac{82}{12}\int_{-1}^{1} \frac{x^2(1-x^6)^2}{(1-x^4)}\,dx \nonumber
+%\end{align*}
+%
+%Hence the second term is
+%%\begin{align}
+%$\displaystyle\var\big[\expe(Y|X)\big] 
+%%	& = \expe\big(\expe(Y|X)^2\big)-\expe\big(\expe(Y|X)\big)^2 \nonumber\\ 
+%%	& = \int_{-1}^{1} \expe(Y|X=x)^2 f_X(x)\,dx  - \expe\big(\expe(Y|X)\big)^2 \nonumber\\ 
+%%	& = \int_{-1}^{1} \frac{4(1-x^6)^2}{9(1-x^9)^2}\left(\frac{21}{8}x^2(1-x^4)\right)\,dx -\expe\big(\expe(Y|X)\big)^2 \nonumber\\
+%	= \frac{82}{12}\int_{-1}^{1} \frac{x^2(1-x^6)^2}{(1-x^4)}\,dx - \expe(Y)^2 %\tag{**}
+%%\end{align}
+%$
+%so
+%%Finally, by (*) and (**) we have 
+%\begin{align*}
+%\expe\big[\var(Y|X)\big] + \var\big[\expe(Y|X)\big]
+%	& = 	\frac{21}{16}\int_{-1}^{1} x^2(1-x^8)\,dx  - \expe(Y)^2 \\
+%%	& = \frac{21}{16}\int_{-1}^{1} x^2-x^{10}\,dx - \frac{49}{81} \\
+%	& = \frac{21}{16}\left[\frac{x^3}{3}-\frac{x^{11}}{11}\right]_{-1}^{1} - \frac{49}{81} \\
+%%	& = \frac{7}{11} - \frac{49}{81} \\
+%	& = \frac{28}{891}
+%	= \var(Y).
+%\end{align*}
+%%as required.
+\een
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex19_conditional_distributions}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

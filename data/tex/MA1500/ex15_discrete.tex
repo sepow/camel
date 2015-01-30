@@ -1,0 +1,93 @@
+% !TEX root = main.tex
+% ex12_discrete.tex
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+\question
+Consider the function
+\[
+p(k) = \left\{\begin{array}{ll}
+	\displaystyle\frac{c}{k(k+1)} & \text{for } k=1,2,3,\ldots, \\[2ex]
+	0				& \text{otherwise}.
+\end{array}\right.	
+\]
+Find the value of $c$ for which this function is a probability mass function on the positive integers.% $k\in\{1,2,3,\ldots\}$.
+\par
+[\slshape Hint. Use partial fractions and the so-called ``method of differences".\normalfont]
+\begin{answer}
+For $p$ to be a PMF, we need that $\displaystyle\sum_{k=1}^{\infty} p(k) = 1$:
+\begin{align*}
+\sum_{k=1}^{\infty} p(k) 
+	& = c\sum_{k=1}^{\infty}\frac{1}{k(k+1)} \\
+	& = c\sum_{k=1}^{\infty}\left(\frac{1}{k}-\frac{1}{k+1}\right) \\
+	& = c\left[\left(1-\frac{1}{2}\right) + \left(\frac{1}{2}-\frac{1}{3}\right) + \left(\frac{1}{3}-\frac{1}{4}\right) + \ldots\right] \\
+	& = c.
+\end{align*}
+Thus $c=1$.
+\end{answer}
+
+%----------------------------------------
+\question
+Let $X:\Omega\to\R$ be a discrete random variable, let $\{x_1,x_2,\ldots\}$ be the range of $X$, let $f(x)$ be the PMF of $X$, and let $g:\R\to\R$ be any function.
+\begin{parts}
+\part Show that $\displaystyle \expe(X) = \sum_{i=1}^{\infty} x_i\,f(x_i)$.
+\begin{answer}
+We prove the result only for the case where $\Omega$ is a countable sample space (the uncountable case involves hard integration).
+To this end, let $p$ denote the associated probability mass function on $\Omega$, and consider the sets $A_i=\{\omega: X(\omega) = x_i\}$ for $i=1,2,\ldots$. By construction, the sets $A_1,A_2,\ldots$ form a partition of $\Omega$, and $f(x_i) = \prob(A_i)$, so
+\begin{align*}
+\expe(X)
+	= \sum_{\omega\in\Omega} X(\omega) p(\omega) 
+	& = \sum_{i=1}^{\infty}\sum_{\omega\in A_i} X(\omega) p(\omega) \\
+	& = \sum_{i=1}^{\infty}x_i \sum_{\omega\in A_i} p(\omega) \qquad\text{because $X(\omega)=x_i$ for all $\omega\in A_i$,} \\
+	& = \sum_{i=1}^{\infty}x_i \prob(A_i) 
+	= \sum_{i=1}^{\infty}x_i f(x_i).
+\end{align*}
+\end{answer}
+\part Show that $\displaystyle \expe\big[g(X)\big] = \sum_{i=1}^{\infty} g(x_i)f(x_i)$.
+\begin{answer}
+Again, we prove the result only for when $\Omega$ is countable. As in part (a),
+\begin{align*}
+\expe\big[g(X)\big]
+	= \sum_{\omega\in\Omega} g\big[X(\omega)\big] p(\omega) 
+	& = \sum_{i=1}^{\infty}\sum_{\omega\in A_i} g\big[X(\omega)\big] p(\omega) \\
+	& = \sum_{i=1}^{\infty}g(x_i) \sum_{\omega\in A_i} p(\omega) \qquad\text{because $X(\omega)=x_i$ for all $\omega\in A_i$,} \\
+	& = \sum_{i=1}^{\infty}x_i \prob(A_i)
+	= \sum_{i=1}^{\infty}x_i f(x_i). 
+\end{align*}
+\end{answer}
+\end{parts}
+%%----------------------------------------
+%\question
+%The \emph{zeta distribution} with (real-valued) parameter $s>1$ has probability mass function
+%\[
+%p(k) = \frac{1}{k^s\zeta(s)} \quad\text{for}\quad k=1,2,3,\ldots
+%\]
+%where $\zeta(\cdot)$ is the \emph{zeta function}, defined by
+%\[
+%\zeta(s) = \sum_{k=1}^{\infty} \frac{1}{k^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \ldots \qquad(s\in\R),
+%\]
+%which has the property that $\zeta(s)<\infty$ if and only if $s>1$. Let $X$ have zeta distribution with parameter $s>1$. 
+%\ben
+%\it Show that $\expe(X)$ is infinite whenever $s\leq 2$.
+%\it Show that $\var(X)$ is infinite whenever $s\leq 3$.
+%\een
+%\begin{answer}
+%\bit
+%\it The expected value of $X$ is
+%\[
+%\expe(X) = \sum_{k=0}^{\infty} k p(k) = \frac{1}{\zeta(s)}\sum_k \frac{1}{k^{s-1}} = \frac{\zeta(s-1)}{\zeta(s)}
+%\]
+%which can only be finite for $s>2$. Thus $\expe(X)$ is infinite for all $s\leq 2$.
+%\it The variance of $X$ can be written as $\var(X)=\expe(X^2)-\expe(X)^2$. The expected value $\expe(X^2)$ is given by
+%\[
+%\expe(X^2) = \sum_{k=0}^{\infty} k^2 p(k) = \frac{1}{\zeta(s)}\sum_k \frac{1}{k^{s-2}} = \frac{\zeta(s-2)}{\zeta(s)}
+%\]
+%which can only be finite for $s>3$. Thus $\var(X)$ is infinite for all $s\leq 3$.
+%\eit
+%\end{answer}
+\end{questions}
+\end{exercise}
+
+%======================================================================
+\endinput
+%======================================================================

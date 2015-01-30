@@ -1,39 +1,175 @@
-<!-- camel: chapter_detail.html -->
+<!-- 
+camel: chapter_detail.html 
+-->
 {% extends "module_detail.html" %}
 {% load staticfiles %}
 
-{% block title %}
- 	{{ module.code }} 
+{% block scripts %}
+	{{ block.super }} 
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
+	
+	<!-- showhide -->
+	<script type="text/javascript">
+    $(document).ready(function(){
+      $('.showhide').addClass("hidden");
+      $('.showhide_step').addClass("hidden");
+      $('.showhide').click(function() {
+        var $this = $(this);
+        if ($this.hasClass("hidden")) {
+          $(this).removeClass("hidden").addClass("visible");
+      } else {
+        $(this).removeClass("visible").addClass("hidden");
+        }
+      });
+      $('.showhide_step').hover(function() {
+        var $this = $(this);
+        if ($this.hasClass("hidden")) {
+          $(this).removeClass("hidden").addClass("visible");
+        } else {
+          $(this).removeClass("visible").addClass("hidden");
+        }
+      });
+    });
+	</script>
+
 {% endblock %}
 
 {% block breadcrumbs %}
-    {{ block.super }}  > <a href="{% url 'chapter-detail' module.code chapter.number %}"> {{ chapter.title }}</a>
+	{{ block.super }}&gt;&nbsp;<a href="{% url 'chapter-detail' module.code chapter.number %}"> {{ chapter.title }}</a>
 {% endblock %}
 
-
 {% block content-main %}
+
 	{% if module %}
-	   	<h1>{{ module.title }}</h2>
-		{% if chapter %}
-	   		<h2>{{ chapter.number }} {{ chapter.title }}</h2>
-			{% if sections %}
-				<table class="toc">
-					{% for sec in sections %}
-        			<tr>
-            			<td>{{ chapter.number }}.{{ sec.number }}</td>
-            			<td><a href="{% url 'section-detail' module.code chapter.number sec.number %}">{{ sec.title }}</a></td>
-        			</tr>
-    				{% endfor %}
-    			</table>
+	   	<h2 align="center"><u>{{ module.code}} {{ module.title }}</u></h2>
+	{% endif %}
+	
+	{% if chapter %}
+		<div class="macros">
+		    {% autoescape off %}
+				\( {{ module.newcommands | safe }} \)
+			{% endautoescape %}
+		</div>
+	
+		{% load mptt_tags %}
+	    {% recursetree subtree %}
+			{#{ node.node_id }} | {{node.node_type}} | {{ node.number }} | {{ node.title }} |  {{ node.htex } #} 
+            {% if not node.is_leaf_node %}
+				
+				{% if node.node_class == "division" %}
+					{% if node.node_type == "chapter" %}
+						<h1 class="chapter">{{ node.number }}. {{ node.title }}</h1>
+					{% elif node.node_type == "section" %}
+						<h1 class="section"> <u>{{ node.parent.number }}.{{ node.number }}&nbsp;{{ node.title }}</u> </h1>
+					{% endif %}
+	            	{{ children }}
+				
+				{% elif node.node_class == "list" %}
+					{% if node.node_type == "itemize" %}
+						<ul class="itemize"> {{ children }}	</ul>
+					{% elif node.node_type == "enumerate" %}
+						<ol class="enumerate"> {{ children }} </ol>
+					{% elif node.node_type == "questions" %}
+						<ol class="questions"> {{ children }} </ol>
+					{% elif node.node_type == "parts" %}
+						<ol class="parts"> {{ children }} </ol>
+					{% elif node.node_type == "subparts" %}
+						<ol class="subparts"> {{ children }} </ol>
+					{% endif %}
+				
+				{% elif node.node_class == "item" %}
+					{% if node.node_type == "item" %}
+						<li class="item"> {{ children }} </li>
+					{% elif node.node_type == "question" %}
+						<li class="question"> {{ children }} </li>
+					{% elif node.node_type == "part" %}
+						<li class="part"> {{ children }} </li>
+					{% elif node.node_type == "subpart" %}
+						<li class="subpart"> {{ children }} </li>
+					{% endif %}
+				
+				{% elif node.node_class == "theorem" %}
+					{% if node.node_type == "definition" %}				
+						<div class="definition">
+					{% elif node.node_type == "example" %}
+						<div class="example">
+					{% elif node.node_type == "remark" %}
+						<div class="remark">
+					{% else %}
+						<div class="theorem">
+					{% endif %}
+							<b>{{ node.node_type | title }} {{ chapter.number }}.{{ node.number }} {% if node.title %} [{{ node.title }}] {% endif %}</b><br/> 
+							{{ children }}
+						</div>
+				{% elif node.node_class == "exercise" %}
+					<div class="exercise">
+						<b>{{ node.node_type | title }} {{ node.parent.number }}.{{ node.number }} {% if node.title %}. {{ node.title }} {% endif %}</b><br/> 
+						{{ children }}
+					</div>
+				{% elif node.node_class == "box" %}
+					{% if node.node_type == "answer" %}
+						<p>
+							<div class="answer">
+								<div class="showhide">
+									<p class="answer_title"><b>Answer</b></p>
+									<div class="inner_solution">
+										{{ children }}
+									</div>
+								</div>
+							</div> <!-- end solution -->
+						</p>
+					{% elif node.node_type == "solution" %}
+						<p>
+							<div class="solution">
+								<div class="showhide">
+									<p class="solution_title"><b>Solution</b></p>
+									<div class="inner_solution">
+										{{ children }}
+									</div>
+								</div>
+							</div> <!-- end solution -->
+						</p>
+					{% elif node.node_type == "proof" %}
+						<div class="proof">
+							<b>Proof:</b><br/> 
+							{{ children }}
+						</div>
+					{% endif %}
+				{% else %}
+					<div class="{{ node.node_type }}"> 
+						{{ children }}
+					</div>
+				{% endif %}
 			{% else %}
-    			<p>No sections found for chapter {{ chapter.number }} of module {{ module.code }}.</p>
+				{% if node.node_type == "texnode" %}
+					<div class="tex">
+						{{ node.htex | safe }}
+					</div>
+				{% elif node.node_type == "figure" %}
+					<div class="figure">
+						FIGURE
+						<img src="{{ node.src }}", label="Figure {{ node.number }}.">
+					</div>
+				{% else %}
+					<p>NON-TEX LEAF NODE</p>
+				{% endif %}
 			{% endif %}
-		{% else %}
-	    	<p>No chapters found for module {{ module.code }}.</p>
-		{% endif %}
+	    {% endrecursetree %}
+
 	{% else %}
-	    <p>No module.</p>
+	    <p>No chapter.</p>
 	{% endif %}
 {% endblock %}
 
+{% block sidebar %}
+	{% if toc %}
+	<h3>Contents</h3>
+		{% for chap in toc %}
+			<p><a href="{% url 'chapter-detail' module.code chap.number %}"> {{ chap.number }}. {{ chap.title }}</a></p>
+		{% endfor %}
+	{% else %}
+	    <p>No toc</p>
+	{% endif %}
+
+{% endblock %}
 

@@ -1,0 +1,57 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+\question
+Let $(\Omega,\mathcal{F},\prob)$ be a probability space, and let $0\leq X_1\leq X_2 \leq \ldots$ be an increasing sequence of non-negative random variables over $(\Omega,\mathcal{F})$ such that 
+$X_n(\omega) \uparrow X(\omega)$ ans $n\to\infty$ for all $\omega\in\Omega$.
+%\[
+%X_n(\omega) \uparrow X(\omega)\quad\text{as}\quad n\to\infty\quad\text{for all}\quad\omega\in\Omega.
+%\]
+Show that $X$ is a random variable on $(\Omega,\mathcal{F})$.
+\begin{answer}
+Let $x\in\R$. Since the $X_n$ are random variables, we have (by definition) that $\{X_n \leq x\}\in\mathcal{F}$ for every $n\in\N$. Since $\mathcal{F}$ is closed under countable intersections, 
+\[
+\{X\leq x\} = \bigcap_{n=1}^{\infty} \{X_n \leq x\} \in\mathcal{F}
+\]
+so $X$ is a random variable.
+\end{answer}
+
+%----------------------------------------
+\question
+Let $X$ be an integrable random variable. Show that $|\expe(X)|\leq \expe(|X|)$.
+\begin{answer}
+Since $|X|=X^{+}+X^{-}$, by the triangle inequality
+\[
+|\expe(X)| = |\expe(X^{+})-\expe(X^{-})| \leq \expe(X^{+}) + \expe(X^{-}) = \expe(|X|),
+\]
+\it If $X\leq Y$ then $X^{+}\leq Y^{+}$ and $X^{-}\geq Y^{-}$ so
+\[
+\expe(X) = \expe(X^{+})-\expe(X^{-}) \leq \expe(Y^{+})-\expe(Y^{-}) = \expe(Y),
+\]
+\end{answer}
+
+%==========================================================================
+\question
+Let $X$ and $Y$ be integrable random variables. Show that $aX+bY$ is integrable.
+\begin{answer}
+To show that $aX+bY$ is integrable, first we have by the triangle inequality that
+\[
+|aX+bY| \leq |a||X| + |b||Y|.
+\]
+By the linearity and monotonicity of expectation for non-negative random variables,
+\[
+\expe(|aX+bY|) \leq |a|\expe(|X|) + |b|\expe(|Y|)
+\]
+and since $\expe(|X|)<\infty$ and $\expe(|Y|)<\infty$, it follows that $\expe(|aX+bY|)<\infty$, so $aX+bY$ is integrable.
+\end{answer}
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

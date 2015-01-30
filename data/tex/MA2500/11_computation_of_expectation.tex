@@ -1,0 +1,297 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{Computation of Expectation}\label{chap:comp_expe}
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+\section{Expectation with respect to CDFs}
+%----------------------------------------------------------------------
+The natural definition of expectation for indicator variables (\ref{sec:expe_indicator}) was extended to the expectation of simple random variables (\ref{sec:expe_simple}), then to non-negative variables (\ref{sec:expe_non-negative}) and finally to signed variables (\ref{sec:expe_signed}).
+
+\bigskip
+According to definition~\ref{def:expe_non-negative}, to compute the expectation of a non-negative random variable $X$, we need to find an increasing sequence $0\leq X_1\leq X_2\leq ...$ of simple random variables for which $X_n\uparrow X$ as $n\to\infty$, then compute the limit of $\expe(X_n)$ as $n\to\infty$. This is not feasible in practical applications.
+
+\bigskip
+It turns out that the expectation of a random variable can be conventiently expressed as a Riemann-Stieltjes integral with respect to its CDF:
+%However, if we know the CDF of $X$, its expectation can be conventiently expressed as a Riemann-Stieltjes integral with respect to this CDF:
+\begin{theorem}\label{thm:expe_riemann_stieltjes}
+Let $X:\Omega\to\R$ be a non-negative random variable, and let $F:\R\to[0,1]$ denote its CDF. The expectation of $X$ can be written as
+\[
+\expe(X) = \int_{0}^{\infty} x\,dF(x).
+\]
+where the right-hand side is the Riemann-Stieltjes integral of $x$ with respect to $F$.
+\end{theorem}
+\proofomitted
+
+\bigskip
+The following theorem yields a computational formula for expectation, in terms of an ordinary Riemann integral:
+\begin{theorem}\label{thm:expe_wrt_cdf_comp}
+If $X$ is non-negative,
+\[
+\expe(X) = \int_{0}^{\infty} 1 - F(x)\,dx
+\]
+\end{theorem}
+\proofomitted
+
+\bigskip
+For signed random variables, we first compute $\expe(X^{+})$ and $\expe(X^{-})$ using to this formula, and then set $\expe(X)=\expe(X^{+})-\expe(X^{-})$ as before. To do this, we must first find the CDFs of $X^{+}$ and $X^{-}$.
+%---------------------------------------------
+\newpage
+\section{Discrete distributions}
+%---------------------------------------------
+If $X$ is discrete, the Riemann-Stieltjes integral of Theorem~\ref{thm:expe_riemann_stieltjes} reduces to a sum:
+
+% theorem (disc)
+\begin{theorem}\label{thm:expe_wrt_discrete_dist}
+Let $X$ be a non-negative discrete random variable, let $\{x_1,x_2,\ldots\}$ be its range, and let $f(x)$ denote its PMF. Then
+\[
+\expe(X) = \sum_{i=1}^{\infty} x_i f(x_i), %\qquad\text{provided the sum exists.}
+\]
+provided the sum is absolutely convergent.
+\end{theorem}
+\proofomitted
+\begin{remark}
+This expression also holds for signed discrete random variables. Can you prove this?
+\end{remark}
+
+The following is a special case of Theorem~\ref{thm:expe_wrt_cdf_comp}:
+% theorem
+\begin{theorem}\label{thm:expe_disc_pos}
+Let $X$ be a discrete non-negative random variable, taking values in the range $\{0,1,2,\ldots\}$. Then
+\[
+\expe(X) = \sum_{k=0}^{\infty} \prob(X > k)
+\]
+\end{theorem}
+
+% proof
+\begin{proof}
+\begin{align*}
+\sum_{k=0}^{\infty} \prob(X > k)
+	& = \sum_{k=0}^{\infty} \sum_{j=k+1}^{\infty} \prob(X = j) \\
+	& = \sum_{j=1}^{\infty} \prob(X=j) + \sum_{j=2}^{\infty} \prob(X=j) + \sum_{j=3}^{\infty} \prob(X=j) + \ldots \\
+	& = \prob(X=1) + 2\prob(X=2) + 3\prob(X=3) + \ldots \\
+	& = \sum_{j=0}^{\infty} j P(X=j) \\
+	& = \expe(X).
+\end{align*}	
+\vspace{-4ex}
+\end{proof}
+
+% example: geometric
+\begin{example}[Geometric distribution]
+Suppose $X$ has the geometric distribution on $\{0,1,2,\ldots\}$, with probability-of-success parameter $p$. Given that the CDF of $X$ is $\prob(X\leq k) = 1 - (1-p)^{k+1}$, show that its expected value is equal to $(1-p)/p$.
+\end{example}
+\begin{solution}
+Let $q=1-p$. 
+\bit
+\it $X$ is a non-negative random variable.
+\it The CDF of $X$ is $\prob(X\leq k) = 1 - q^{k+1}$, so the complementary CDF is $\prob(X>k) = q^{k+1}$.
+\eit
+By Theorem~\ref{thm:expe_disc_pos},
+\[
+\expe(X) 
+	= \sum_{k=0}^\infty \prob(X > k)
+	= \sum_{k=0}^\infty q^{k+1}
+	= q(1 + q + q^2 + q^3 + \ldots)
+	= \frac{q}{1-q} = \frac{1-p}{p}.
+\]
+\end{solution}
+
+%---------------------------------------------
+\newpage
+\section{Continuous distributions}
+%---------------------------------------------
+If $X$ is continuous, the Riemann-Stieltjes integral of Theorem~\ref{thm:expe_riemann_stieltjes} reduces to an ordinary Riemann integral:
+
+% theorem (cts)
+\begin{theorem}\label{thm:expe_wrt_discrete_dist}
+Let $X$ be a non-negative continuous random variable, and let $f(x)$ denote its PDF. Then
+\[
+\expe(X) = \int_{0}^{\infty} x f(x)\,dx, %\qquad\text{provided the integral exists.}
+\]
+provided the integral is absolutely convergent.
+\end{theorem}
+\proofomitted
+\begin{remark}
+For signed continuous random variables, $\expe(X) = \displaystyle\int_{-\infty}^{\infty} x f(x)\,dx$ provided the integral is absolutely convergent. 
+\end{remark}
+
+%\bigskip
+% theorem: expe_continuous_positive
+\begin{theorem}\label{thm:expe_cts_pos}
+Let $X$ be a non-negative continuous random variable, and let $F$ denote its CDF. Then
+\[
+\expe(X) = \int_0^\infty 1 - F(x) \,dx
+\]
+\end{theorem}
+\proofomitted
+
+%% proof
+%\begin{proof}
+%\begin{align*}
+%\int_0^\infty \big(1 - F(x)\big) \,dx = \int_{0}^{\infty} \prob(X > x)\,dx
+%	& = \int_{0}^{\infty}\left(\int_{x}^{\infty} f(t)\,dt\right)\,dx \\
+%	& = \int_{0}^{\infty}\left(\int_{0}^{t} f(t)\,dx\right)\,dt \\
+%	& = \int_{0}^{\infty} t f(t)\,dt \\
+%	& = \expe(X)
+%\end{align*}
+%\end{proof}
+
+% example: continuous
+\begin{example}[Rayleigh distribution]
+Let $X$ be a continuous random variable having the \emph{Rayleigh} distribution with parameter $\sigma>0$. This has the following CDF:
+\[
+F(x) = \begin{cases}
+%	1 - \exp\left(-\frac{1}{2}\left(\frac{x}{\sigma}\right)^2\right)	& \text{if }\ x \geq 0, \\
+	1 - e^{-x^2/2\sigma^2}	& \text{if }\ x \geq 0, \\
+	0																& \text{otherwise.}
+\end{cases}	
+\]
+Show that $\expe(X)=\displaystyle\sigma\sqrt{\frac{\pi}{2}}$.
+\end{example}
+
+\begin{solution}
+Because $X$ is non-negative, by Theorem~\ref{thm:expe_cts_pos} we have
+\[
+\expe(X) 
+	= \int_0^\infty 1 - F(x)\,dx 
+	= \int_0^\infty e^{-x^2/2\sigma^2} \,dx.
+\]
+Changing the variable of integration by setting $t=x/(\sigma\sqrt{2})$, this becomes
+\[
+\expe(X) = \sigma\sqrt{2}\int_0^\infty e^{-t^2}\,dt.
+\]
+We recognise the integral as one-half of the famous \emph{Gaussian integral}:
+\[
+\int_{-\infty}^{\infty} e^{-t^2}\,dt = \sqrt{\pi}.
+\]
+Thus, because $e^{-t^2}$ is an even function,
+\[
+\expe(X) 
+	= \sigma\sqrt{2}\int_0^\infty e^{-t^2}\,dt.
+	= \frac{\sigma\sqrt{2}}{2}\int_{-\infty}^\infty e^{-t^2}\,dt
+	= \sigma\sqrt{\frac{\pi}{2}},
+\]
+as required.
+\end{solution}
+
+%----------------------------------------------------------------------
+\section{Transformed variables}
+%----------------------------------------------------------------------
+Let $(\Omega,\mathcal{F},\prob)$ be a probability space, let $X:\Omega\to\R$ be a random variable, let $F:\R\to[0,1]$ be its CDF, and let $g:\R\to\R$ be a measurable function.
+
+\bit
+\it By Theorem~\ref{thm:gX_is_a_rv}, the transformed variable $g(X)$ is a random variable on $(\Omega,\mathcal{F})$.
+\eit
+
+\ben
+\it If $g(X)$ is a non-negative random variable,
+\[
+\expe\big[g(X)\big] = \int_0^{\infty} g(x)\,dF(x)
+\]
+\it If $g(X)$ is an integrable random variable,
+\[
+\expe\big[g(X)\big] = \int_0^{\infty} g^{+}(x)\,dF(x) - \int_0^{\infty} g^{-}(x)\,dF(x).
+\]
+\een
+
+The latter expression reduces to
+\[
+\expe\big[g(X)\big] = \begin{cases}
+	\ \displaystyle\sum_{i=1}^{\infty} g^{+}(x_i) f(x_i) - \sum_{i=1}^{\infty} g^{-}(x_i) f(x_i)	\qquad\mbox{} & \text{when $X$ is discrete, and} \\[4ex]
+	\ \displaystyle\int_0^{\infty} g^{+}(x)f(x)\,dx - \displaystyle\int_0^{\infty} g^{-}(x)f(x)\,dx	& \text{when $X$ is continuous.}
+\end{cases}
+\]
+
+% example: transformation
+\begin{example}
+Let $X\sim\text{Uniform}[-1,1]$ be a continuous random variable. Find $\expe(1/X^2)$ and $\expe(1/X)$.
+\end{example}
+
+\begin{solution}
+Let $f(x)$ denote the PDF of $X$:
+\[
+f(x) = \begin{cases}
+	1/2 & \text{ for }\ -1\leq x\leq 1, \\
+	0	& \text{ otherwise.}
+\end{cases}	
+\]
+\ben
+\it Let $g(x) = 1/x^2$. This is a non-negative function, so
+\begin{align*}
+\expe\left(\frac{1}{X^2}\right) 
+	= \int_{0}^{\infty} g(x)f(x)\,dx 
+	= \frac{1}{2}\int_{-1}^{1} \frac{1}{x^2}\,dx
+	= \int_{0}^{1}\frac{1}{x^2}\,dx
+	= \infty.
+\end{align*}
+Thus $\expe(1/X^2)$ is infinite.
+
+\it Let $g(x) = 1/x$. This is a signed function, so we must consider its positive and negative parts:
+\[
+g^{+}(x)	= \begin{cases}  1/x & \text{ if}\quad x\geq 0, \\ 0 & \text{ if}\quad x < 0,\end{cases}
+\qquad\text{and}\qquad
+g^{-}(x)	= \begin{cases}  0 & \text{ if}\quad x\geq 0, \\ -1/x & \text{ if}\quad x < 0.\end{cases}
+\]
+The expectation of $g(X)=1/X$ is therefore given by
+\begin{align*}
+\expe\left(\frac{1}{X}\right)
+%\expe\big[g(X)\big]
+	& = \int_{0}^{\infty} g^{+}(x)f(x)\,dx - \int_{0}^{\infty} g^{-}(x) f(x)\,dx \\
+	& = \frac{1}{2}\int_0^1 \frac{1}{x}\,dx - \frac{1}{2}\int_{-1}^0 \frac{-1}{x}\,dx \\
+	& = \frac{1}{2}\int_0^1 \frac{1}{x}\,dx - \frac{1}{2}\int_{0}^{1} \frac{1}{x}\,dx \\
+	& = \infty - \infty.
+\end{align*}
+Thus $\expe(1/X)$ is undefined.
+\een
+%This is equivalent to showing that $g(x)$ is not integrable:
+%\begin{align*}
+%\int_{-\infty}^{\infty}|g(x)|f(x)\,dx 
+%	& = \frac{1}{2}\int_{-1}^0 \frac{-1}{x}\,dx + \frac{1}{2}\int_0^1 \frac{1}{x}\,dx \\
+%	& = \frac{1}{2}\int_0^1 \frac{1}{x}\,dx + \frac{1}{2}\int_0^1 \frac{1}{x}\,dx \\
+%	& = \int_0^1 \frac{1}{x}\,dx \\
+%	& = \infty.
+%\end{align*}
+%
+\end{solution}
+
+
+
+%\bigskip
+%In the case of discrete distributions, 
+%\[
+%\expe\big[g(X)\big] = \sum_{i=1}^{\infty} g(x_i) f(x_i) \qquad\text{where $f$ is the PMF corresponding to $F$.}
+%\]
+%
+%In the case of continuous distributions, 
+%\[
+%\expe\big[g(X)\big] = \int_{-\infty}^{\infty} g(x)f(x)\,dx \qquad\text{where $f$ is the PDF corresponding to $F$.}
+%\]
+
+%By Remark~\ref{rmk:g_as_rv}, we can also think of $g:\R\to\R$ as a random variable on $(\R,\mathcal{B},\prob_F)$, where $\prob_F$ is the probability measure induced by $F$ (Theorem~\ref{thm:pmeas_F}). 
+%
+%\begin{definition}\label{def:expe_wrt_cdf_transf}
+%Let $F:\R\to[0,1]$ be a CDF, and let $g:\R\to\R$ be a measurable function.
+%\ben
+%\it % << non-negative
+%If $g$ is a non-negative function, its \emph{expectation with respect to $F$} is 
+%\[
+%\expe(g) = \int g(x)\,dF(x).
+%\]
+%%where the right-hand side is the Riemann-Stieltjes integral of $g(x)$ with respect to $F$.
+%\it % << integrable
+%If $g$ is an integrable function, its expectation with respect to $F$ is
+%\[
+%\expe(g) = \int g^{+}(x)\,dF(x)  - \int g^{-}(x)\,dF(x).
+%\]
+%where $g^{+}(x)$ and $g^{-}(x)$ are respectively the positive and negative parts of $g(x)$.
+%\een
+%\end{definition}
+%
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex11_computation_of_expectation}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

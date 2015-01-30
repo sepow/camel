@@ -1,11 +1,10 @@
 .DS_Store
 *.pyc
 *.swp
-*.tmproj
-data/*
-logs/*
-media/*
-xml/*
+*.log
+backup/*
+data/pdf/*
+data/sims/*
 *.aux
 *.bbl
 *.dvi

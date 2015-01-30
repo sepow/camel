@@ -1,0 +1,420 @@
+% !TEX root = main.tex
+%======================================================================
+\chapter{Discrete Probability}\label{chap:discrete}
+%======================================================================
+
+%----------------------------------------------------------------------
+%\section{Finite probability spaces (recap)}
+%----------------------------------------------------------------------
+
+So far, we have considered random experiments that have only a finite number of outcomes.
+\bit
+\it Let $\Omega = \{\omega_1,\omega_2,\ldots,\omega_n\}$ be a finite sample space.
+%\it The power set of $\Omega$, denoted by $\mathcal{P}(\Omega)$, contains all possible events, and is also a finite set.
+\it The power set of $\Omega$, which contains all possible events, is also a finite set.
+\eit
+To define a probability measure on $\mathcal{P}(\Omega)$, we first defined a \emph{probability mass function} on $\Omega$:
+\[
+\begin{array}{rccl}
+	p :	& \Omega		& \to		& [0,1] \\
+		& \omega_k		& \mapsto	& p(\omega_k)
+\end{array}
+\]
+%with the property that $\displaystyle\sum_{\omega\in\Omega} p(\omega) = 1$. 
+with the property that $\displaystyle\sum_{k=1}^n p(\omega_k) = 1$. 
+This was extended to a probability measure on $\mathcal{P}(\Omega)$ by defining the probability of an event to be the sum of the probabilities of the outcomes it contains:
+\[
+\begin{array}{rccl}
+	\prob:	& \mathcal{P}(\Omega)	& \to		& [0,1] \\[1ex]
+			& A						& \mapsto	& \displaystyle\sum_{\omega\in A} p(\omega)
+\end{array}
+\]
+
+%The pair $(\Omega,\prob)$ was called a \emph{finite probability space}, with the implicit understanding that the underlying field of events is the power set of $\Omega$. 
+
+A theory of probability on countably infinite sample spaces can be developed in much the same way, the main difference being that finite sums are replaced by infinite sums.
+
+
+%----------------------------------------------------------------------
+\section{Cardinality}
+%----------------------------------------------------------------------
+\begin{definition}
+Let $A$ be a set, let $\N$ denote the set of natural numbers, and let $\R$ denote the set of real numbers.
+\ben
+\it If there exists a bijection $\phi:A\to\N$, we say that $A$ is \emph{countably infinite}.
+\it If there exists a bijection $\phi:A\to\R$, we say that $A$ is \emph{uncountable}.
+\een
+A set is called \emph{countable} if it is either finite or countably infinite.
+\end{definition}
+
+\begin{example}
+Consider a random experiment in which a coin is tossed repeatedly until the first head occurs. There is a countably infinite set of possible sequences:
+\[
+\Omega = \{H,TH,TTH,TTTH,TTTTH,\ldots\}
+\]
+%Let $\omega_k$ be the outcome consisting of $k-1$ tails followed by a head (so $\omega_1 \equiv H$, $\omega_2 \equiv HT$, $\omega_3 \equiv HTT$, and so on).
+
+\bit
+\it Let $\omega_k$ be the outcome consisting of $k-1$ tails followed by a head
+\it Let $0<t<1$ be the probability that the coin shows heads. 
+\eit
+
+If we assume that the trials are independent, the probability mass function for this experiment is
+\[
+p(\omega_k) = (1-t)^{k-1}t\text{\qquad for\quad} k\in\{1,2,3,\ldots\}.
+\]
+The sum of these probabilities is equal to one:
+\[
+\sum_{k=1}^{\infty} p(\omega_k) = t\sum_{k=1}^{\infty} (1-t)^{k-1}  = t\sum_{k=0}^{\infty} (1-t)^k  = \frac{t}{1-(1-t)} = 1.
+\]
+Here, we have used the formula for the sum of a geometric progression with $a = t$ and $r = (1-t)$:
+\[
+a + ar + ar^2 + \ldots = \frac{a}{1-r} \text{\qquad provided $|r|<1$},
+\]
+%with $a = p$ and $r = (1-p)$.
+
+Let $A$ be the event that the coin is tossed an even number of times: $A = \{\omega_2,\omega_4,\omega_6,\ldots \}$.
+%\[
+%A = \{\omega_2,\omega_4,\omega_6,\ldots \}.
+%\]
+%This event corresponds to the sequences $TH, TTTH, TTTTTH,\ldots$.
+%The probability that the coin is tossed an even number of times is 
+
+The probability of this event is:
+\[
+\prob(A) 
+	= \sum_{\omega\in A} p(\omega) 
+	= \sum_{j=1}^{\infty} p(\omega_{2j}) 
+	= \sum_{j=0}^{\infty} t(1-t)^{2j+1}
+	= t(1-t)\sum_{j=0}^{\infty} (1-t)^{2j}
+	= \frac{t(1-t)}{1-(1-t)^2}
+	= \frac{1-t}{2-t}.
+\]
+where we have again used the formula for the sum of a geometric progression, this time with $a = t(1-t)$ and $r = (1-t)^2$.
+%\bit
+%\it Note that if $p=1/2$ then $\prob(A) = 1/3$.
+%\eit
+\end{example}
+
+
+%----------------------------------------------------------------------
+\section{Discrete probability spaces}
+%----------------------------------------------------------------------
+
+% definition: discrete probability spaces 
+\begin{definition}
+Let $\Omega$ be a countable sample space, and let $\mathcal{P}(\Omega)$ denote its power set.
+\ben
+\it % 1
+A \emph{probability mass function} on $\Omega$ is a function
+\[
+\begin{array}{ccccc}
+p 	& :	& \Omega		& \to 		& [0,1] \\
+	&	& \omega		& \mapsto	& p(\omega),
+\end{array}
+\]
+with the property that $\displaystyle\sum_{\omega\in\Omega} p(\omega) = 1$.
+\it % 2
+A \emph{probability measure} on $\Omega$ is a function 
+\[
+\begin{array}{ccccl}
+\prob 	& :	& \mathcal{P}(\Omega)	& \to 		& [0,1] \\[1ex]
+		&	& A						& \mapsto	& \displaystyle\sum_{\omega\in A} p(\omega)
+\end{array}
+\]
+where $p(\omega)$ is a probability mass function on $\Omega$.
+\it % 3
+The pair $(\Omega,\prob)$ is called a \emph{discrete probability space} on $\Omega$.
+\een
+\end{definition}
+
+\begin{remark}
+Finite sets are countable, so finite probability spaces are also discrete probabilty spaces.
+\end{remark}
+
+%----------------------------------------------------------------------
+\section{Discrete random variables}
+%----------------------------------------------------------------------
+
+% defin: simple & discrete random variables
+\begin{definition}
+Let $(\Omega,\mathcal{F},\prob)$ be an arbitrary probability space. A random variable $X:\Omega\to\R$ is called
+\ben
+\it \emph{simple} if it takes only a finite number of distinct values, and 
+\it \emph{discrete} if it takes at most a countably infinite number of distinct values.
+\een
+\end{definition}
+
+% remark
+\begin{remark}
+\bit
+\it Finite sets are countable, so simple random variables are also discrete random variables.
+\it Any random variable on a discrete probability space must be a discrete random variable.
+\eit
+\end{remark}
+
+% defn: PMF
+\begin{definition}
+%Let $(\Omega,\prob)$ be a discrete probability space. 
+The \emph{probability mass function} (PMF) of a discrete random variable $X$ is the function
+\[
+\begin{array}{cccl}
+f:	& \mathbb{R}	& \longrightarrow	& [0,1] \\
+	& x 			& \mapsto			& \prob(X = x).
+\end{array}
+\]
+\end{definition}
+
+\begin{remark}
+\ben
+\it $f(x)=0$ for all but a countable number of values $x\in\R$.
+\it If $\{x_1,x_2,x_3,\ldots\}$ is the range of $X$, then $\sum_{k=1}^{\infty} f(x_k) = 1$. Can you prove this?
+\een
+\end{remark}
+
+
+%----------------------------------------------------------------------
+\section{Convergent Series}
+%----------------------------------------------------------------------
+Let $a_1,a_1,a_2,\ldots$ be an infinite sequence of real numbers. The associated \emph{series} is the (ordered) sum of its terms:
+\[
+\sum_{k=0}^{\infty} a_k = a_0 + a_1 + a_2 + \ldots
+\]
+
+\begin{definition}
+A series $\displaystyle\sum_{k=0}^{\infty} a_k$ is said to \emph{converge} if $\displaystyle\sum_{k=0}^{\infty} a_k < \infty$, otherwise it is said to \emph{diverge}.
+\end{definition}
+
+%% defn: convergent series
+%\begin{definition}
+%\bit
+%\it A series $\sum_{k=0}^{\infty} a_k$ is said to \emph{converge} if the sequence of partial sums $\sum_{k=0}^{n}a_k$ converges to a finite limit as $n\to\infty$. 
+%\it Otherwise the series is said to \emph{diverge}.
+%\eit
+%\end{definition}
+%
+%\begin{remark}
+%Loosely speaking, 
+%\bit
+%\it a series converges if $\sum_{k=0}^{\infty} a_k < \infty$, and %diverges  if $\sum_{k=0}^{\infty} a_k = \infty$.
+%\it a series diverges  if $\sum_{k=0}^{\infty} a_k = \infty$.
+%\eit
+%\end{remark}
+
+\begin{example}[Convergent series]\label{ex:convergent_series}
+\ben
+\it 
+$\displaystyle\sum_{k=0}^{\infty} ar^k 					\ =\ a + ar + ar^2 + ar^3 + \ldots = \frac{a}{1-r} \text{\quad provided $|r|<1$}.$
+\it
+$\displaystyle\sum_{k=1}^{\infty} \frac{1}{k^2}			\ =\ 1 + \frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \ldots = \frac{\pi^2}{6}.$
+\it
+$\displaystyle\sum_{k=1}^{\infty} \frac{1}{k^4}			\ =\ 1 + \frac{1}{2^4} + \frac{1}{3^4} + \frac{1}{4^4} + \ldots = \frac{\pi^4}{90}.$
+\it
+$\displaystyle\sum_{k=0}^{\infty} \frac{1}{2^k}			\ =\ 1 + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \ldots = 2.$
+\it
+$\displaystyle\sum_{k=0}^{\infty} \frac{1}{k!}				\ =\ 1 + 1 + \frac{1}{2} + \frac{1}{6} + \frac{1}{24} + \ldots = e.$
+\it
+$\displaystyle\sum_{k=0}^{\infty} \frac{\lambda^k}{k!} 	\ =\ 1 + \lambda + \frac{\lambda^2}{2} + \frac{\lambda^3}{6} + \frac{\lambda^4}{24} + \ldots = e^{\lambda} \text{\quad for all $\lambda\in\R$}.$
+\een
+%\normalsize
+\end{example}
+
+Not all series are convergent.
+\begin{example}[Divergent series]
+\mbox{}\vspace*{-4ex}
+\ben
+\it $\displaystyle\sum_{k=1}^{\infty} k 					\ =\ 1 + 2 + 3 + 4 + \ldots$
+\it $\displaystyle\sum_{k=1}^{\infty} \frac{1}{k} 		\ =\ 1 + \frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \ldots$ \qquad (This is called the \emph{harmonic series}.)
+%\it $\displaystyle\sum_{p\text{ prime}} \frac{1}{p} 	\ =\ \frac{1}{2} + \frac{1}{3} + \frac{1}{5} + \frac{1}{7} +  \ldots$
+\een 
+
+%\begin{align*}
+%\sum_{k=1}^{\infty} k		 		& = 1 + 2 + 3 + 4 + \ldots \\
+%\sum_{k=1}^{\infty} \frac{1}{k} 		& = 1 + \frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \ldots (\text{This is called the \emph{harmonic series}}.) \\
+%\sum_{p\text{ prime}} \frac{1}{p} 	& = \frac{1}{2} + \frac{1}{3} + \frac{1}{5} + \frac{1}{7} +  \ldots 
+%\end{align*}
+\end{example}
+
+Let $a_0,a_1,a_2,\ldots$ be an infinite sequence of non-negative real numbers. If the associated series $\sum_{k=0}^{\infty} a_k$ converges, the sequence can be used to define a PMF on the the non-negative integers $\{0,1,2,\ldots\}$ as follows:
+\[
+f(k) = \frac{a_k}{\sum_{k=0}^{\infty} a_k} \qquad\text{for $k=0,1,2,\ldots$.}
+\]
+Note that $\sum_{k=0}^{\infty} f(k) = 1$, so $f$ is indeed a PMF. For the series listed in Example~\ref{ex:convergent_series},
+\bit
+\it the first series yields the \emph{geometric distribution} (next lecture)
+\it the last series yields the \emph{Poisson distribution} (next lecture).
+\eit
+%\end{remark}
+%
+
+%----------------------------------------------------------------------
+\section{Expectation}
+%----------------------------------------------------------------------
+The expectation of a discrete random variable is computed in much the same way that the expectation of a simple random variable is computed, the only difference again being that finite sums are replaced by infinite sums.
+
+\begin{definition}
+Let $X$ be a random variable on a discrete probability space $(\Omega,\prob)$. 
+The \emph{expectation} of $X$ is defined to be
+\[
+\expe(X) = \sum_{\omega\in\Omega} X(\omega)p(\omega).
+\]
+\end{definition}
+
+We also have the following analogues of Theorem~\ref{thm:expe_pmf} and Theorem~\ref{thm:lus}, which were proved for simple random variables. The proofs for the discrete case are similar (see exercises).
+% theorem
+\begin{theorem}
+Let $X$ be a discrete random variable, let $\{x_1,x_2,\ldots\}$ be the range of $X$, and let $f(x)$ be its PMF. Then
+\[
+\expe(X) = \sum_{i=1}^{\infty} x_i\,f(x_i),
+\]
+and for any function $g:\R\to\R$,
+\[
+\expe\big[g(X)\big] = \sum_{i=1}^{\infty} g(x_i)f(x_i).
+\]
+\end{theorem}
+
+
+% proof
+%\begin{proof}
+%See Exercises.
+%To find $\prob\big(g(X)=y\big)$, we sum the probabilities $\prob(X=x)$ over all $x$ for which $g(x)=y$.
+%\begin{align*}
+%\expe\left(g(X)\right)
+%	& = \sum_y y\,\prob\left(g(X)=y\right) \\
+%	& = \sum_y y\sum_{\{x:g(x)=y\}}\prob(X=x) \\
+%	& = \sum_y \sum_{\{x:g(x)=y\}}y\,\prob(X=x) \\
+%	& = \sum_x g(x)\prob(X=x)
+%\end{align*}
+%\end{proof}
+
+%%----------------------------------------------------------------------
+%\section{Examples}
+%%----------------------------------------------------------------------
+%
+\begin{example}
+Let $X$ be a discrete random variable, taking values in the set $\{1,2,3,\ldots\}$ with probabilities
+\[
+\prob(X=k) = \frac{1}{2^k}
+\]
+Show that $\expe(X)=2$.
+\end{example}
+
+\begin{solution}
+\begin{align*}
+\expe(X) = \sum_{k=1}^{\infty} k \prob(X=k)
+	& = \sum_{k=1}^\infty k \frac{1}{2^k} \\
+	& = \sum_{j=0}^\infty (j+1)\frac{1}{2^{j+1}} 		\qquad \qquad\text{(where we have set $j=k-1$)} \\
+	\intertext{\newpage}
+	& = \frac{1}{2}\left(\sum_{j=0}^\infty j \frac{1}{2^j} + \sum_{j=0}^\infty \frac{1}{2^j}\right) \\
+	& = \frac{1}{2}\left(\sum_{j=1}^\infty j \frac{1}{2^j} + 2\right) \\
+	& = \frac{1}{2}\expe(X) + 1.
+\end{align*}
+so $\expe(X)=2$, as required.
+\end{solution}
+
+%% example
+%\begin{example}
+%A coin has probability $p > 0$ of showing heads. The coin is tossed repeatedly until the first head occurs. Let $X$ be the number of times that the coin is tossed.
+%\bit
+%\it $X$ takes values in the set $\{1,2,3,4,5,\ldots\}$.
+%\it If we assume that the trials are independent, the PMF of $X$ is
+%\[
+%\prob(X=k) = (1-p)^{k-1}p\text{\qquad for\quad} k\in\{1,2,3,\ldots\}.
+%\]
+%\it The sum of these probabilities is equal to one:
+%\[
+%\sum_{k=1}^{\infty} \prob(X=k) = p\sum_{k=1}^{\infty} (1-p)^{k-1}  = \frac{p}{1-(1-p)} = 1.
+%\]
+%where we have used the formula for the sum of a geometric progression:% with $a = p$ and $r = (1-p)$:
+%\[
+%a + ar + ar^2 + \ldots = \frac{a}{1-r} \text{\qquad provided $|r|<1$},
+%\]
+%with $a = p$ and $r = (1-p)$.
+%%\it
+%%$X$ is said to have \emph{geometric distribution} with parameter $p$.
+%
+%\eit
+%
+%\end{example}
+
+%% example
+%\begin{example}
+%Let $X$ be a discrete random variable, taking values in the set $\{1,2,\ldots\}$ with probabilities
+%\[
+%\prob(X=k) = \frac{90}{\pi^4 k^4}
+%\]
+%
+%This is indeed a PDF because 
+%%$\displaystyle\sum_{k=0}^{\infty} \prob(X=k) = \frac{90}{\pi^4}\sum_{k=1}^{\infty}\frac{1}{k^4}$
+%%and
+%$\displaystyle\sum_{k=1}^{\infty} \frac{1}{k^4} = \frac{\pi^4}{90}$.
+%
+%
+%The expected value of $X$ is
+%\begin{align*}
+%\expe(X) 
+%	= \sum_{k=1}^{\infty} k \prob(X=k)
+%	= \frac{90}{\pi^4}\sum_{k=0}^{\infty}\frac{1}{k^3} 
+%%	= \zeta(3)/\zeta(4)
+%	\approx 1.1106.
+%\end{align*}
+%
+%\bit
+%\it This is indeed a PDF on the set $\{0,1,2,\ldots\}$ because
+%\[
+%\sum_{k=0}^{\infty} \prob(X=k) = \frac{90}{\pi^4}\sum_{k=1}^{\infty}\frac{1}{k^4}
+%\text{\qquad and\qquad}
+%\sum_{k=0}^{\infty} \frac{1}{k^4} = \frac{\pi^4}{90}.
+%\]
+%\it The expected value of $X$ is
+%\begin{align*}
+%\expe(X) 
+%	= \sum_{k=0}^{\infty} k \prob(X=k)
+%	= \frac{90}{\pi^4}\sum_{k=0}^{\infty}\frac{1}{k^3} 
+%%	= \zeta(3)/\zeta(4)
+%	\approx 1.1106.
+%\end{align*}
+%\eit
+%\end{example}
+%\begin{remark}
+%The \emph{Riemann zeta function} is the function
+%$
+%\zeta(s) = \displaystyle\sum_{k=1}^{\infty}\frac{1}{k^s}
+%$
+%where $s\in\mathbb{R}$.
+%\bit
+%\it $\zeta(s)$ diverges for all $s\leq 1$
+%\it $\zeta(s)$ converges for all $s > 1$. 
+%\it In particular, $\zeta(2)=\pi^2/6$, $\zeta(3)\approx 1.2021$ and $\zeta(4)=\pi^4/90$.
+%\eit
+%\end{remark}
+%
+% example
+\begin{example}
+Let $X$ be a discrete random variable, taking values in the range $\{1,2,\ldots\}$ with PMF given by
+\[
+f(k) = \frac{6}{\pi^2 k^2}.
+\]
+Show that this is indeed a PMF, and compute the expected value of $X$.
+\end{example}
+
+\begin{solution}
+This is a PDF because $\displaystyle\sum_{k=1}^{\infty} \frac{1}{k^2} = \frac{\pi^2}{6}$.
+The expected value of $X$ is
+\begin{align*}
+\expe(X) 
+	= \sum_{k=1}^{\infty} k f(k)
+	= \frac{6}{\pi^2}\sum_{k=0}^{\infty}\frac{1}{k}.
+\end{align*}
+The series $\displaystyle \sum_{k=0}^{\infty}\frac{1}{k}$ diverges, so $X$ has infinite expectation!
+\end{solution}
+
+
+%----------------------------------------------------------------------
+\section{Exercises}
+\input{ex15_discrete}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

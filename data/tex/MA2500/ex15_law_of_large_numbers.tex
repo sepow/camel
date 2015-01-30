@@ -1,0 +1,69 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+
+%%----------------------------------------
+%\question
+%Show that $e^x \leq x + e^{x^2}$ for all $x\in\R$.
+%
+%\begin{answer} 
+%For all $k>1$, note that $2k! \leq (2k-2)! < (2k-1)! < (2k)! < (2k+1)!$ 
+%\ben
+%% case 1
+%\it For $x\in (-1,+1)$, we have $x^{2k+1}<x^{2k}$ so %use the inequality %the result follows by the inequality
+%\[
+%\frac{x^{2k}}{(2k)!} + \frac{x^{2k+1}}{(2k+1)!} \leq \frac{x^{2k}}{k!}\qquad\text{for}\quad k\geq 1.
+%\]
+%Hence,
+%\begin{align*}
+%e^x		
+%	& = 1 + x + \left(\frac{x^2}{2!} +\frac{x^3}{3!}\right) + \left(\frac{x^4}{4!} + \frac{x^5}{5!}\right) + \ldots \\
+%	& \leq 1 + x + \frac{x^2}{1!} + \frac{x^4}{2!} + \ldots \\
+%	& = x + \left(1 + x^2 + \frac{x^4}{2!} + \ldots\right) \\
+%	& = x + e^{x^2}.
+%\end{align*}
+%% case 2
+%\it For $x\notin (-1,+1)$ we have $x^{2k-2}<x^{2k-1}<x^{2k}$, so
+%\[
+%\frac{x^{2k-2}}{(2k-2)!} + \frac{x^{2k-1}}{(2k-1)!} \leq \frac{x^{2k}}{k!}\qquad\text{for}\quad k\geq 2.
+%\]
+%Hence,
+%\begin{align*}
+%e^x		
+%	& = 1 + x + \left(\frac{x^2}{2!} + \frac{x^3}{3!}\right) + \left(\frac{x^4}{4!} + \frac{x^5}{5!}\right) + \ldots \\
+%	& \leq 1 + x + \frac{x^4}{2!} + \frac{x^6}{3!} + \ldots \\
+%	& \leq x + \left(1 + x^2 + \frac{x^4}{2!} + \frac{x^6}{3!} + \ldots\right) \\
+%	& = x + e^{x^2}.
+%\end{align*}
+%as required.
+%\een
+%\end{answer}
+
+%----------------------------------------
+\question
+Let $c$ be a constant, and let $X_1,X_2,\ldots$ be a sequence of random variables with $\expe(X_n) = c$ and $\var(X_n) = 1/\sqrt{n}$ for each $n$. Show that the sequence converges to $c$ in probability as $n\to\infty$.
+\begin{answer} % <<<
+Let $\epsilon>0$. By Chebyshev's inequality,
+\[
+\prob\big(|X_n-c|\geq\epsilon\big) \leq \frac{\var(X_n)}{\epsilon^2} = \frac{1}{\epsilon^2\sqrt{n}}
+\]
+for all $n\in\N$. Thus $\displaystyle \lim_{n\to\infty} \prob\big(|X_n-c|\geq\epsilon\big) = 0$, so the sequence converges to $c$ in probability.
+\end{answer}
+
+%----------------------------------------
+\question
+A fair coin is tossed $n$ times. Does the law of large numbers ensure that the observed number of heads will not deviate from $n/2$ by more than $100$ with probability of at least $0.99$, provided that $n$ is sufficiently large?
+\begin{answer} % <<<
+Yes, because the indicator variable has finite mean and variance.
+\end{answer}
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

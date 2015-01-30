@@ -1,0 +1,425 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+%----------------------------------------
+\question
+Let $X$ be a discrete random variable, taking values in the set $\{-3, -2, -1, 0, 1, 2, 3\}$ with uniform probability, and let $M(t)$ denote the MGF of $X$.
+\ben
+\it % << (i)
+Show that $M(t) = \frac{1}{7}(e^{-3t} +e^{-2t} +e^{-t} +1 +e^{t} +e^{2t} +e^{3t})$.
+\it % << (ii)
+Use $M(t)$ to compute the mean and variance of $X$.
+\een
+
+\begin{answer}
+\ben
+\it % << (i)
+$
+M(t) 
+	= \expe(e^{Xt}) = \sum_k e^{tk} p(k)
+	= \frac{1}{7}(e^{-3t} +e^{-2t} +e^{-t} +1+e^{t} +e^{2t} +e^{3t})
+$
+\it % << (ii)
+Using the power series expansion $e^x=\displaystyle\sum_{k=0}^{\infty}\frac{x^k}{k!}$, the MGF of $X$ can be written as
+\begin{align*}
+M(t) 
+& = \frac{1}{7}\left[  \left(1 - 3t + \frac{9t^{2}}{2} +\ldots\right)
+					+ \left(1 - 2t + \frac{4t^{2}}{2} +\ldots\right)
+					+ \left(1 - t  + \frac{ t^{2}}{2} +\ldots\right)\right. \\
+& \qquad\qquad\left.		+ 1 
+					+ \left(1 + t  + \frac{ t^{2}}{2} +\ldots\right)
+					+ \left(1 + 2t + \frac{4t^{2}}{2} +\ldots\right)
+					+ \left(1 + 3t + \frac{9t^{2}}{2} +\ldots\right)\right] \\
+& = 1 + \frac{4t^{2}}{2} + \ldots
+\end{align*}
+\bit
+\it The mean is the coefficient of $t$, so $\mu = 0$.
+\it The second non-central moment is the coefficient of $\frac{1}{2}t^{2}$, so $\mu'_2 = 4$.
+\it The variance is therefore $\sigma^2 = \mu'_2 - \mu^2 = 4$.
+\eit
+A more direct method is to use the fact that $\mu = M'_X(0)$ and $\mu'_2 = M''_X(0)$. Since
+\begin{align*}
+M'(t)	& = \frac{1}{7} (-3e^{-3t} -2e^{-2t} -e^{-t} +e^{t} +2e^{2t} +3e^{3t}), \\
+M''(t)	& = \frac{1}{7} (9e^{-3t} +4e^{-2t} +e^{-t} +e^{t} +4e^{2t} +9e^{3t})
+\intertext{it follows that}
+M'(0)	& = \frac{1}{7} (-3 -2 -2 + 1 + 2 + 3) = 0, \\
+M''(0)	& = \frac{1}{7} (9 +4 +1 +1 +4 +9) = 4.
+\end{align*}
+\een
+\end{answer}
+
+
+%==========================================================================
+\question
+A continuous random variable $X$ has MGF given by $M(t)=\exp(t^2+3t)$. Find the distribution of $X$. 
+
+\begin{answer}
+\[
+M_{X}(t) = \exp(t^{2} + 3t) = \exp(3t + \frac{1}{2}2t^2)).
+\]
+The MGF is of the form $\exp(\mu t + \frac{1}{2}\sigma^2 t^2)$, which is the MGF of a normal distribution. The mean $\mu$ is 3 and the variance $\sigma^2$ is 2, so $X\sim N(3, 2)$. Note that under reasonable conditions, a random variable can be uniquely identified by its MGF: only normally distributed random variables have MGFs of the form $\exp(\mu t + \frac{1}{2}\sigma^2 t^2)$. 
+\end{answer}
+
+
+%==========================================================================
+\question
+Let $X$ be a discrete random variable with probability mass function
+\[
+\prob(X=k) = \begin{cases}
+	q^k p		& k=0,1,2,\ldots \\
+	0			& \text{otherwise},
+\end{cases}	
+\]
+where $0<p<1$ and $q=1-p$. 
+\ben
+\it % << (i)
+Show that the MGF of $X$ is given by $M(t) = \displaystyle\frac{p}{1-qe^t}$ for $t < -\log q$.
+\it % << (ii)
+Find the PGF of $X$.
+\it % << (iii)
+Use the PGF of $X$ to find the PMF of $Y = X + 1$.
+\it % << (iv)
+Use $M(t)$ to find the mean and variance of $X$.
+\een
+
+\begin{answer}
+\ben
+\it % << (i)
+The MGF of $X$ is
+\begin{align*}
+M(t) 
+	= \expe(e^{Xt}) 
+	= \sum\limits_{k=0}^{\infty }e^{kt} q^k p 
+	= p\sum\limits_{k=0}^{\infty }\big[qe^{t}\big]^k 
+	= \frac{p}{1-qe^{t}}
+\end{align*}
+provided that $|qe^{t}|<1$, or equivalently that $t<-\log q$.
+\it % << (ii)
+Since $M(t) = G(e^t)$, the PGF is
+\[
+G(t) = M(\log t) = \frac{p}{1-qt} .
+\]
+Note that $G(0)=0$ and $G(1)=1$.
+\it % << (iii)
+To derive the PMF of $Y=X+1$, we have
+\[
+G_Y(t) = \expe(t^Y) = \expe(t^{X+1}) = \expe(t^X.t) = t\expe(t^X) = t G_(t)
+\]
+so by part (i),
+\[
+G_Y(t) = \frac{pt}{1-qt} = pt(1 + qt + q^2t^2 + \ldots
+\]
+Comparing the coefficients in this expression with those of $G_Y(t)$ expressed as a power series,
+\[
+G_Y(t) = \sum_{k=0}^{\infty} \prob(Y=k) t^k = \prob(Y=0) + \prob(Y=1)t + \prob(Y=2)t^2 + \ldots
+\]
+we see that 
+\[\begin{array}{lll}
+\prob(Y = 0) & = \text{constant term} 			& = 0 \\
+\prob(Y = 1) & = \text{coefficient of $t$} 		& = p \\
+\prob(Y = 2) & = \text{coefficient of $t^2$}		& = p(1 - p) \\
+\prob(Y = 3) & = \text{coefficient of $t^3$}		& = p(1 - p)^2 \text{ etc.}
+\end{array}\]
+As we might expect, $\prob(Y = k) = \prob(X = k - 1)$ for $k = 0,1,\ldots$.
+
+\it % << (iiv)
+\[
+M'(t) = \frac{d}{dt}\left(\frac{p}{1-qe^t}\right) = \frac{pqe^t}{(1-qe^t)^2}
+\]
+so
+\[
+\mu = M'(0) = \frac{pq}{(1-q)^2} = \frac{q}{p} = \frac{1-p}{p}.
+\]
+Similarly,
+\[
+M''_{X}(t) 
+	= \frac{d}{dt}\left(\frac{pqe^t}{(1-qe^t)^2}\right) 
+	= \frac{pqe^t(1+qe^t)}{(1-qe^t)^3}
+\]
+so
+\[
+\mu'_2 = M''_{X}(0) = \frac{q(1+q)}{p^2} = \frac{(1-p)(2-p)}{p}
+\]
+and hence
+\[
+\var(X) = \mu'_2 - \mu^2 = \frac{q}{p^2} = \frac{1-p}{p^2}.
+\]
+\een
+\end{answer}
+
+
+
+%==========================================================================
+\question
+Let $M(t)$ denote the MGF of the normal distribution $\text{N}(0,\sigma^2)$. By exanding $M(t)$ as a power series in $t$, show that the moments $\mu_k$ of the $\text{N}(0,\sigma^2)$ distribution are zero if $k$ is odd, and equal to 
+\[
+\mu_{2m} = \frac{\sigma^{2m}(2m)!}{2^m m!} \qquad\text{if $k=2m$ is even.}
+\]
+
+\begin{answer}
+The MGF of the $N(\mu,\sigma^2)$ distribution is $\exp\left(\mu t + \frac{1}{2}\sigma^2 t^2 \right)$, so 
+\[
+M(t) = \exp\left(\frac{\sigma^2 t^2}{2}\right).
+\]
+Expand this as a power series in $t$:
+\[
+M(t) = 1 + \frac{\sigma^2 t^2}{2} + \frac{\sigma^4 t^4}{4\times 2!} + \frac{\sigma^6 t^6}{8\times 3!} 
+			+ \ldots + \frac{\sigma^{2m}t^{2m}}{2^m\times m} + \ldots
+\]
+The $k$th moment $\mu_k$ is the coefficient of $t^{k}/k!$ in this expansion. In particular, the skewness $\gamma_1=\mu_3/\sigma^3$ is zero, and the excess kurtosis is
+\[
+\gamma_2 = \frac{\mu_4}{\sigma^4} -3 = \frac{\sigma^4 4!}{4\times 2!}\cdot\frac{1}{\sigma^4} - 3 = 0.
+\]
+\end{answer}
+
+
+
+%==========================================================================
+\question
+Let $X\sim\text{Exponential}(\theta)$ where $\theta$ is a scale parameter.
+%Then $X$ has probability density function given by
+%\[
+%p(x) = \begin{cases}
+%\frac{1}{\theta} e^{-x/\theta} 	&  x > 0, \\
+%0  										& \text{otherwise.}
+%\end{cases}
+%\]
+%
+\ben
+\it Show that the MGF of $X$ is $M(t) = \displaystyle\frac{1}{1-\theta t}$.
+\it By expanding this expression as a power series in $t$, find the first four non-central moments of $X$.
+\it Find the skewness $\gamma_1$ and the excess kurtosis $\gamma_2$ of $X$.
+\een
+
+\begin{answer}
+\ben
+\it % (a)
+\begin{align*}
+M(t) = \expe(e^{Xt})
+	& = \int e^{xt} \frac{1}{\theta}e^{-x/\theta}\,dx \\
+	& = \frac{1}{\theta}\int_0^\infty e^{-x(1-\theta t)/\theta}\,dx \\
+	& = -\frac{1}{1-\theta t}\int_0^\infty \frac{d}{dx} e^{-x(1-\theta t)/\theta}\,dx \\
+	& = -\frac{1}{1-\theta t}\left[e^{-x(1-\theta t)/\theta}\right]_0^\infty \\
+	& = \frac{1}{1-\theta t}.
+\end{align*}
+\it % (b)
+Using the binomial expansion,
+\[
+M(t)	= (1-\theta t)^{-1}
+		= 1 + \theta t + \theta^2 t^2 + \theta ^3 t^3 + \theta ^4 t^4 + \ldots
+\]
+The non-central moment $\mu_k$ is the coefficient of $\frac{t^k}{k!}$ in this power series expansion, so $\mu = \theta$, $\mu_2 = 2\theta^2$, $\mu_3 = 6\theta^3$ and $\mu_4 = 24\theta^4$.
+\it % (c)
+The skewness and excess kurtosis are
+\begin{align*}
+\gamma_1 	& = \frac{\mu_3}{\sigma^3} = \frac{2\theta^3}{\theta^3} = 2, \quad\text{and} \\
+\gamma_2 	& = \frac{\mu_4}{\sigma^4} - 3 = \frac{9\theta^4}{\theta^4} -3 = 6,
+\end{align*}
+respectively.
+\een
+\end{answer}
+
+
+%==========================================================================
+\question
+Let $X_1,X_2,\ldots$ be independent and identically distributed random variables, with each $X_i\sim\text{N}(\mu,\sigma^2)$.
+% Let $M(t)$ denote the common MGF of the $X_i$. 
+\ben
+\it Find the MGF of the random variable $\displaystyle\bar{X}=\frac{1}{n}\sum_{i=1}^{n} X_i$.
+\it Show that $\bar{X}$ has a normal distribution, and find its mean and variance.           
+\een
+\begin{answer}
+Let $M(t)$ denote the common MGF of the random variables $X_i$:
+\[
+M(t) = \exp\left(\mu t+\frac{1}{2}\sigma^2 t^2\right)
+\]
+Moment generating functions have the following properties:
+\bit
+\it $M_{X+Y}(t)=M_X(t)M_Y(t)$
+\it If $Y=a+bX$ then $M_Y(t) = e^{at}M_X(bt)$.
+\eit
+In view of these, the MGF of $\bar{X}$ is
+\begin{align*}
+M_{\bar{X}}(t)
+	& = M_{\frac{1}{n}(X_1+X_2+\ldots+X_n)}(t) \\ 
+	& = M_{X_1+X_2+\ldots+X_n}\left(\frac{t}{n}\right) \\ 
+	& = \left[M\left(\frac{t}{n}\right)\right]^n 
+	 = \exp\left[\frac{\mu t}{n} + \frac{\sigma^2 t^2}{2n^2}\right]^n \\
+	& = \exp\left[\mu t + \frac{1}{2}\left(\frac{\sigma^2}{n}\right) t^2\right]
+\end{align*}
+which is the MGF of a normal distribution with mean $\mu$ and variance $\sigma^2/n$.
+\end{answer}
+
+
+
+%==========================================================================
+\question
+%Let $X$ be a continuous random variable having gamma distribution with shape parameter $k>0$ and scale parameter $\theta>0$, denoted by $X\sim\text{Gamma}(k,\theta)$. The probability density function of $X$ is
+% \[
+%p(x) = \begin{cases}
+%	\displaystyle\frac{1}{\theta^k\text{Gamma}ma(k)}x^{k-1}e^{-x/\theta}	& \text{for}\ \ x > 0, \\[2ex]
+%	0														& \text{otherwise,}
+%\end{cases}	
+%\]
+Let $X_1\sim\text{Gamma}(k_1,\theta)$ and $X_2\sim\text{Gamma}(k_2,\theta)$ be independent random variables. Use the MGFs of $X_1$ and $X_2$ to find the distribution of the random variable $Y=X_1+X_2$.
+
+
+\begin{answer}
+The $MGFs$ of $X_1$ and $X_2$ are:
+\[
+M_{X_1}(t) = \frac{1}{(1-\theta t)^{k_1}}
+\quad\text{and}\quad
+M_{X_2}(t) = \frac{1}{(1-\theta t)^{k_2}}.
+\]
+Since $X_1$ and $X_2$ are independent, 
+\[
+M_{X_1+X_2}(t) 
+=	M_{X_1}(t)M_{X_2}(t) 
+= \frac{1}{(1-\theta t)^{k_1+k_2}}
+\]
+This is the MGF of a $\text{Gamma}(k_1+k_2,\theta)$ random variable.
+\end{answer}
+
+% GS 5.9.3
+%==========================================================================
+\question
+A coin has probability $p$ of showing heads. The coin is tossed repeatedly until exactly $k$ heads occur. Let $N$ be the number of times the coin is tossed. Using the continuity theoram for characteristic functions, show that the distribution of the random variable $X=2pN$ converges to a gamma distribution as $p\to 0$.
+
+\begin{answer}
+Let $N=Z_1+Z_2+\ldots+Z_k$ with $Z_i\sim\text{Geometric}(p)$ independent. Let $\phi_Z(t)$ denote the common characteristic function of the $Z_i$:
+\[
+\phi_Z(t) = \expe(e^{itZ}) = \frac{pe^{it}}{1-qe^{it}} \qquad\text{where $Z\sim\text{Geometric}(p)$ and $q=1-p$.}
+\]
+By the properties of characteristic functions, the characteristic function of $N$ is
+\[
+\phi_N(t) = \big[\phi_Z(t)\big]^k = \left[\frac{pe^{it}}{1-qe^{it}}\right]^k
+\]
+and the characteristic function of $X=2pN$ is
+\begin{align*}
+\phi_X(t) = \phi_N(2pt) 
+	= \left[\frac{pe^{2pit}}{1-(1-p)e^{2pit}}\right] 
+	= \left[\frac{1 + 2pit + o(1)}{1 - 2it + o(1)}\right]
+	\rightarrow \frac{1}{1 - 2it} \qquad\text{as}\quad p\to 0,
+\end{align*}	
+where $o(1)$ respresnts a quantity that tends to zero as $p\to 0$. This is the characteristic function of the $\text{Gamma}(k,\frac{1}{2})$ distribution. The result then follows by the continuity theorem for characteristic functions.
+\end{answer}
+
+
+% GS 5.12.23(a)
+%==========================================================================
+\question
+Let $X$ and $Y$ be independent and identically distributed random variables, with means equal to $0$ and variances equal to $1$. Let $\phi(t)$ denote their common characteristic function, and suppose that the random variables $X+Y$ and $X-Y$ are independent. Show that $\phi(2t)=\phi(t)^3\phi(-t)$, and hence deduce that $X$ and $Y$ must be independent standard normal variables.
+
+\begin{answer}
+Let $U=X+Y$ and $V=X-Y$. Since $U$ and $V$ are independent, we have $\phi_{U+V}(t)=\phi_U\phi_V$, or equivalently $\phi_{2X}=\phi_{X+Y}\phi_{X-Y}$. Thus, since $\phi_{2X}(t)=\phi(2t)$,$\phi_{X+Y}=\phi(t)^2$ and $\phi{X-Y}(t) = \phi(t)\phi(-t)$, it follows that
+\[
+\phi(2t) = \phi(t)^3\phi(-t)
+\]
+To show that $X,Y\sim\text{N}(0,1)$, it is sufficient to show that $\phi(t) = e^{-\frac{1}{2}t^2}$ (by the inversion theorem).
+
+It can be shown that characteristic functions are symmetric: $\phi(t)=\phi(-t)$ for all $t$. 
+
+Thus we have $\phi(2t)=\phi(t)^4$, and hence
+\[
+\phi(t) 
+	= \phi\left(\frac{1}{2}t\right)^4 
+	= \phi\left(\frac{1}{4}t\right)^{16} 
+	= \ldots 
+	= \phi\left(\frac{1}{2^n}t\right)^{2^{2^n}} \qquad\text{for $n=0,1,2,\ldots$}.
+\]
+Hence,	
+\[
+\phi(t) 
+	= \left[1 - \frac{1}{2}\left(\frac{t}{2^n}\right)^2 + \ldots\right]^{2^{2^n}} 
+	\to e^{-\frac{1}{2}t^2} \qquad\text{as $n\to\infty$.}
+\]
+\end{answer}
+
+
+% GS 5.12.46/47
+%==========================================================================
+%\question
+%A biased coin shows heads with probability $p$. 
+%\ben
+%\it % << (i)
+%The coin is tossed repeately. Let $W_n$ be the number of tosses until the first run of $n$ consecutive heads, and let $G_n(t)=\expe(t^{W_n})$ denote its probability generating function. Show that 
+%\[
+%G_n(t) = \frac{ptG_{n-1}(t)}{1-qtG_{n-1}(t)} = \frac{(1-pt) p^n t^n}{1-t + q p^n t^{n+1}}
+%\]
+%\it % << (ii)
+%In a sequence of exactly $n$ tosses, let $L_n$ be the length of the longest run of heads. For $r\geq 1$, show that
+%\[
+%1 + \sum_{n=1}^{\infty}t^n\prob(L_n < r) = \frac{1-p^r t^r}{1 - t + q p^r t^{r+1}}.
+%\]
+%\een
+%
+%\begin{answer}
+%\ben
+%\it % << (i)
+%We have that
+%\[
+%W_n = \begin{cases}
+%	W_{n-1} + 1					& \text{with probability $p$,} \\
+%	W_{n-1} + 1	+\widetilde{W}_n & \text{with probability $q$,} \\
+%\end{cases}
+%\]
+%where $\widetilde{W}_n$ is independent of $W_{n-1}$ has the same distribution as $W_n$. Hence
+%\[
+%G_n(t) = ptG_{n-1}(t) + qtG_{n-1}(t)G_n(t).
+%\]
+%The recurrence relation can be solved by induction, using the fact that $G_0(t)=1$. 
+%\it % << (ii)
+%Let $W_r$ be the number of tosses until we first observe $r$ consecutive heads. 
+%\par
+%Then $\prob(L_n < r)=\prob(W_r > n)$, and hence
+%\[
+%1 + \sum_{n=1}^{\infty} t^n \prob(L_r < r) = \sum_{n=0}^{\infty} t^n \prob(W > n) = \frac{1-\expe(t^{W_r})}{1-t},
+%\]
+%where $\expe(t^{W_r}) = G_r(t)$ is as defined in part (i).
+%\een
+%\end{answer}
+
+
+%% GS 5.8.1 (i - iii)
+%%==========================================================================
+%\question
+%If $\phi$ is a characteristic function, show that $\bar{\phi}$, $\phi^2$ and $|\phi|^2$ are also characteristic functions.
+%\begin{answer}
+%\ben
+%\it % << (i)
+%$\overline{\phi_X}(t) = \overline{\expe(e^{itX})} = \expe(e^{-itX}) = \phi_{-X}(t)$.
+%\it % << (ii)
+%Let $X_1$ and $X_2$ are independent random variables with common characteristic function $\phi$. Then \[\phi_{X_1+X_2}(t)=\phi_{X_1}(t)\phi_{X_2}(t) = \phi(t)^2.\]
+%\it % << (iii)
+%Similarly, \[\phi_{X_1-X_2}(t)=\phi_{X_1}(t)\phi_{-X_2}(t) =\phi_{X_1}(t)\,\overline{\phi_{X_2}(t)} = |\phi(t)|^2.\]
+%\een
+%\end{answer}
+%
+%
+%% GS 5.8.8
+%%==========================================================================
+%\question
+%Let $X$ be exponentially distributed with (rate) parameter $\lambda$. Show by elementary integration that its characteristic function is $\displaystyle\phi(t)=\frac{\lambda}{\lambda-it}$.
+%\begin{answer}
+%By definition, $\expe(e^{itX}) = \expe(\cos(tX)) + i\expe(\sin(tX))$. 
+%
+%Integrating by parts, we get
+%\begin{align*}
+%\expe(\cos(tX)) & = \int_{0}^{\infty}\cos(tX)\lambda e^{-\lambda x}\,dx = \frac{\lambda^2}{\lambda^2+t^2}, \\
+%\expe(\sin(tX)) & = \int_{0}^{\infty}\sin(tX)\lambda e^{-\lambda x}\,dx = \frac{\lambda t}{\lambda^2+t^2}. \\
+%\end{align*}
+%Thus
+%\[
+%\expe(e^{itX}) = \frac{\lambda^2 + i\lambda t}{\lambda^2+t^2} = \frac{\lambda}{\lambda - it}.
+%\]
+%\end{answer}
+%----------------------------------------
+\end{questions}
+\end{exercise}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

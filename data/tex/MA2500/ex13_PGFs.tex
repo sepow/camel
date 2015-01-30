@@ -1,0 +1,181 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+%==========================================================================
+\question
+Let $X\sim\text{Binomial}(m,p)$ and $Y\sim\text{Binomial}(n,p)$. Show that $X+Y\sim\text{Binomial}(m+n,p)$,
+\begin{answer}
+The PGFs of $X$ and $Y$ are
+\[
+G_X(t) = (1-p+pt)^m
+\quad\text{and}\quad
+G_Y(t) = (1-p+pt)^n
+\]
+Using the properties of PGFs,
+\[
+G_{X+Y}(t) = G_X(t)G_Y(t) = (1-p+pt)^m (1-p+pt)^n = (1-p+pt)^{m+n},
+\]
+which we recognise as the PGF of the $\text{Binomial}(m+n,p)$ distribution.
+\end{answer}
+
+%==========================================================================
+\question
+Show that a discrete distribution on the non-negative integers is uniquely determined by its PGF, in the sense that if two such random variables $X$ and $Y$ have PGFs $G_X(t)$ and $G_Y(t)$ respectively, then $G_X(t)=G_Y(t)$ if and only if $\prob(X=k)=\prob(Y=k)$ for all $k=0,1,2,\ldots$. 
+\begin{answer}
+The PGFs of $X$ and $Y$ are
+\[
+G_X(t) = \sum_{k=1}^{\infty}\prob(X=k)t^k
+\quad\text{and}\quad
+G_Y(t) = \sum_{k=1}^{\infty}\prob(Y=k)t^k
+\]
+Clearly, if $\prob(X=k)=\prob(Y=k)$ for all $k=0,1,2,\ldots$, then $G_X(t)=G_Y(t)$. Conversely, $G_X(1)=1$ implies that its power series expansion (about the origin) is unique, and likewise for $G_Y$. Thus if $G_X=G_Y$, their power series must have identical coefficients, so $\prob(X=k)=\prob(Y=k)$ for all $k=0,1,2,\ldots$, as required
+\end{answer}
+
+%==========================================================================
+\question
+The PGF of a random variable is given by $G(t)=1/(2-t)$.
+%\[
+%G(t) = \frac{1}{2-t}.
+%\]
+What is its PMF?
+\begin{answer}
+To find the PMF, we need to express $G(t)$ as a power series:
+\[
+G_X(t) 
+	= \frac{1}{2-t} 
+	= \frac{1}{2}\left(1 - \frac{s}{2}\right)^{-1}
+	= \frac{1}{2}\left(1 + \frac{t}{2} + \left(\frac{t}{2}\right)^2 + \ldots\right)
+	- \sum_{k=0}^{\infty} \left(\frac{1}{2}\right)^{k+1} t^k
+\]
+Thus the PMF of $X$
+\[
+\prob(X=k) = \left(\frac{1}{2}\right)^{k+1} \quad\text{for } k=0,1,2,\ldots.
+\]
+
+\end{answer}
+
+%% GS 5.2.3(a)
+%%==========================================================================
+%\question
+%Let $X\sim\text{Poisson}(Y)$, where $Y\sim\text{Poisson}(\lambda)$. Show that $G_{X+Y}(t) = \exp\big[\lambda(te^{t-1}-1)\big]$.
+%
+%\begin{answer}
+%Let $Y=y$ be fixed. Then $X\sim\text{Poisson}(y)$, so $\expe(t^X) =  \expe(e^{y(t-1)})$ so
+%\[
+%\expe(t^{X+Y}|Y=y) = \expe(t^{X+y}) = t^y\expe(t^X) = t^y e^{y(t-1)}.
+%\]
+%Thus (by the law of total expectation),
+%\begin{align*}
+%G_{X+Y} = \expe(t^{X+Y}) 
+%	= \expe\big(\expe(t^{X+Y}|Y)\big) 
+%	= \expe\big(t^Y e^{Y(t-1)}\big) 
+%	= \expe\big((te^{t-1})^Y\big) 
+%	= G_Y(te^{t-1}) 
+%%	= \exp\big(\lambda(te^{t-1}-1)\big)
+%	= e^{\lambda(te^{t-1}-1)}
+%\end{align*}
+%\end{answer}
+%
+
+% GS 5.2.4
+%==========================================================================
+\question
+Let $X\sim\text{Binomial}(n,p)$. Using the PGF of $X$, show that 
+\[
+\expe\left(\frac{1}{1+X}\right) = \frac{1-(1-p)^{n+1}}{(n+1)p}.
+\]
+
+\begin{answer}
+Let $G(t)$ be the PGF of $X$. Then $G(t)=\expe(t^X) = (q+pt)^n$ where $q=1-p$. 
+
+Now
+\[
+\int_0^1 t^x\,dt = \left[\frac{t^{1+x}}{1+x}\right]_0^1 = \frac{1}{1+x},
+\]
+so
+\[
+\expe\left(\frac{1}{1+X}\right) 
+	= \expe\left(\int_0^1 t^X \,dt\right)
+	= \int_0^1 \expe(t^X)\,dt 
+	= \int_0^1 (q+pt)^n\,dt
+	= \frac{1-q^{n+1}}{(n+1)p}
+\]
+\end{answer}
+
+%% GS 5.1.6
+%%==========================================================================
+%\question
+%Let $U\sim\text{Uniform}(0,1)$ be a continuous variable, and let $X\sim\text{Binomial}(n,U)$. Use probability generating functions to show that $X$ has the discrete uniform distribution on $\{0,1,\ldots, n\}$.
+%\par [Hint. First find $\expe(t^X|U=u)$, then use the law of total expectation.]
+%
+%\begin{answer}
+%The PGF of a discrete random variable $Y$ distributed uniformly on $\{0,1,2,\ldots,n\}$ is
+%\[
+%\expe(t^Y) 
+%	= \sum_{k=0}^n t^k \prob(Y=k) = \frac{1}{n+1}\sum_{k=0}^n t^k = \frac{1}{n+1}\left(\frac{1-t^{n+1}}{1-t}\right)
+%\]
+%For $U=u$ fixed, $X\sim\text{Binomial}(n,u)$ so $\expe(t^X|U=u) = (1 - u + ut)^n$. Taking the expectation of this as $U$ varies uniformly over $(0,1)$, the PGF of $X$ is
+%\begin{align*}
+%\expe(t^X) = \expe\big[\expe(t^X|U)\big]
+%	& = \int_{0}^{1} (1 - u + ut)^n \,du \\
+%	& = \frac{1}{n+1}\int_0^1 \frac{d}{du}\left[\frac{\big(1-u(1-t)\big)^{n-1}}{1-s}\right]\,du \\
+%	& = \frac{1}{n+1}\left[\frac{\big(1-u(1-t)\big)^{n-1}}{1-t}\right]_0^1 \\
+%	& = \frac{1}{n+1}\left(\frac{1-t^{n+1}}{1-t}\right)
+%\end{align*}
+%$X$ and $Y$ have the same distribution, so $X$ is distributed uniformly on $\{0,1,\ldots, n\}$
+%\end{answer}
+
+
+% GS 5.1.2
+%%==========================================================================
+%\question
+%Let $X$ be a discrete random variable taking non-negative integer values, let $G(t)$ denote its probability generating function, and let $a_n=\prob(X>n)$ denote the so-called \emph{tail} probabilities of $X$. 
+%\ben
+%\it % << (i)
+%Show that the generating function of the sequence $\{a_0,a_1,\ldots\}$ is $H(t) = \displaystyle\frac{1-G(t)}{1-t}$.
+%\it % << (ii)
+%Show that $\expe(X)=H(1)$ and $\var(X)=2H'(1) + H(1) - H(1)^2$.
+%\een
+%
+%\begin{answer}
+%\ben
+%\it % << (i)
+%%Let $I_{\{X>n\}}$ be the indicator function of the event $\{X>n\}$. Then
+%\begin{align*}
+%H(t) = \sum_{n=0}^{\infty}t^n\prob(X>n)
+%	= \expe\left(\sum_{n=0}^{\infty}t^n I(X>n)\right) 
+%	= \expe\left(\sum_{n=0}^{X-1}t^n \right) 
+%	= \expe\left(\frac{1-t^X}{1-t}\right) 
+%	= \frac{1-G(t)}{1-t}
+%\end{align*}	
+%\it % << (ii)
+%Using L'H\^{o}pital's rule,
+%\[
+%H(1) = \lim_{t\uparrow 1} H(t)
+%= \lim_{t\uparrow 1} \left[\frac{1-G(t)}{1-t}\right]
+%= \lim_{t\uparrow 1} \left[\frac{G'(t)}{1}\right]
+%= G'(1)
+%= \expe(X)
+%\]
+%Similarly, since $\displaystyle H'(t) = \frac{1-G(t)-(1-t)G'(t)}{(1-t)^2}$ we have
+%\begin{align*}
+%H'(1) = \lim_{t\uparrow 1} H(t)
+%	& = \lim_{t\uparrow 1} \left[\frac{1-G(t)-(1-t)G'(t)}{(1-t)^2} \right] \\
+%	& = \lim_{t\uparrow 1} \left[\frac{G''(t)}{2}\right] 
+%	= \frac{1}{2}G''(t)
+%	= \frac{1}{2}\left[\var(X) - G'(1) + G'(1)^2\right]
+%\end{align*}
+%so $\var(X)=2H'(1) + H(1) - H(1)^2$.
+%\een
+%\end{answer}
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+%----------------------------------------------------------------------
+
+%======================================================================
+\endinput
+%======================================================================

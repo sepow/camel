@@ -1,0 +1,534 @@
+% !TEX root = main.tex
+%----------------------------------------------------------------------
+\chapter{The Mann-Whitney Test}\label{chap:mannwhitney}
+\setcounter{page}{1}
+\startcontents[chapters]
+%----------------------------------------------------------------------
+\dictum{X}{X}{X}
+\chapcontents
+
+%====================================================================
+\section{The Mann-Whitney test}
+%====================================================================
+The \emph{Mann-Whitney test} is a nonparametric test to detect a difference between the medians of two independent samples.
+
+\bit
+\it Let $X$ and $Y$ be two independent random variables having the same distribution, except that their medians $\eta_1$ and $\eta_2$ might be different. 
+\it We test the null hypothesis $H_0:\eta_1 = \eta_2$ against a suitable alternative.
+\eit
+
+Conditions:
+\bit
+\it The distribution is continuous and symmetric.
+\it The observations can be ranked.
+\it Oservations are independent, both within samples and across samples.
+\eit
+
+%
+%\bit
+%\it Let $X_1,\ldots,X_m$ be an i.i.d.\ random sample from the distribution of $X$.
+%\it Let $Y_1,\ldots,Y_n$ be an i.i.d.\ random sample from the distribution of $Y$.
+%\eit
+
+ % <<
+
+% definition: mw statistic
+\begin{definition}
+Let $X_1,X_2,\ldots,X_m$ be a random sample from a continuous and symmetric distribution with median $\eta_1$, and let $Y_1,Y_2,\ldots,Y_n$ be a random sample from a possibly shifted version the same distribution, with median $\eta_2$. For the null hypothesis $H_0:\eta_1=\eta_2$, the \emph{Mann-Whitney} (MW) test statistic is defined to be
+\[
+U_{m,n} = \sum_{i=1}^m \sum_{j=1}^n Z_{ij} 
+\qquad\text{where}\qquad 
+Z_{ij} = \begin{cases} 
+	1 	& X_i < Y_j, \\
+	0.5	& X_i = Y_j, \\
+	0	& X_i > Y_j.
+\end{cases}
+\]
+\end{definition}
+
+We also define the complementary statistic 
+\[
+U'_{m,n} = \displaystyle\sum_{i=1}^m \sum_{j=1}^n (1-Z_{ij}).
+\]
+
+Note that
+\[
+U_{m,n} + U'_{m,n} = \sum_{i=1}^m\sum_{j=1}^n \big[Z_{ij} + (1-Z_{ij})\big] = \sum_{i=1}^m\sum_{j=1}^n 1 = mn,
+\]
+and also that $\min(U_{m,n})=0$ and $\max(U_{m,n})=mn$.
+
+% remark
+\begin{remark}
+Values of $U$ close to $0$ or $mn$ indicate a significant deviation from the expected value under $H_0$.
+
+\vspace*{2ex}
+The direction of the alternative hypothesis determines how the test statistic should be used:
+\begin{tabbing}
+$\bullet$ $H_1:\eta_1 < \eta_2$:			\= large values of $U$ support the alternative hypothesis. \\
+$\bullet$ $H_1:\eta_1 > \eta_2$:			\> small values of $U$ support the alternative hypothesis. \\
+$\bullet$ $H_1:\eta_1 \neq \eta_2$:\qquad\qquad 	\> both large and small values of $U$ support the alternative hypothesis.
+\end{tabbing}
+\end{remark}
+
+ % <<
+
+% example
+\begin{example}
+Suppose we have the random sample $14,5,8$ from the distribution of $X$, and the random sample $7,12,18,11$ from the distribution of $Y$. Compute the Mann-Whitney test statistic for these data.
+\end{example}
+
+\begin{solution}
+\[\begin{array}{|c|cccc|}\hline
+X_i		& 14		&  5		&  8		& \\ \hline
+Y_j		&  7		& 12		& 18		& 11 \\ \hline 
+\end{array}\]
+\bit 
+\it $U$ is computed by counting the number of $X_i$ that are smaller than each $Y_j$.
+\it $U'$ is computed by counting the number of $Y_j$ that are smaller than each $X_i$.
+\eit
+\begin{align*}
+U 	& = 1 + 2 + 3 + 2 = 8 \\
+U'	& = 3 + 0 + 1 = 4
+\end{align*}
+Check: $U+U' = 8 + 4 = 12 = mn$.
+\end{solution}
+
+ % <<
+
+% example: Mann-Whitney
+\begin{example}\label{ex:mannwhitney}
+Two different models of car, with engines of a similar size, were compared for their fuel consumption. Five cars of each model were evaluated in independent tests. The observation made was the number of miles travelled using 10 litres of petrol. Use a suitable non-parametric test to assess the statistical evidence that Model~2 is more economical than Model~1.
+\[\begin{array}{|l|ccccc|}\hline
+\text{Model 1}	& 125.8	& 126.7	& 128.3	& 130.5	& 126.2 \\
+\text{Model 2}	& 127.8 & 131.4	& 129.6	& 130.2	& 128.1 \\ \hline
+\end{array}\]
+\end{example}
+
+\begin{solution}
+\bit
+\it Let $\eta_1$ be the median number of miles travelled by Model~1.
+\it Let $\eta_2$ be the median number of miless travelled by Model~2.
+\eit
+\par
+The hypothesis test is $H_0:\eta_1=\eta_2$ against $H_1:\eta_1 < \eta_2$.
+
+\bit
+\it Only large values of $U$ support the alternative hypothesis. 
+\eit
+\par 
+From tables ($m=5$, $n=5$), the critical value at significance level $\alpha=0.05$ is $U_c=21$. 
+\par
+From the data,
+\begin{align*}
+U 		& = \sum_{i=1}^5\sum_{j=1}^5 Z_{ij} = 5 + 5 + 3 + 1 + 5 = 19. \\
+U'		& = \sum_{i=1}^5\sum_{j=1}^5 (1-Z_{ij}) = 0 + 0 + 2 + 4 + 0 = 6.
+\end{align*}
+Check: $U + U' = mn = 25$. 
+\par
+Since the observed value $U=19$ is smaller than $U_c=21$, there is insufficient evidence to conclude that Model~2 is more economical than Model~1. 
+
+%Rather than use the counting method, it is often easier to first compute the rank sums:
+%\begin{center}
+%\begin{tabular}{|l|ccccc|l|}\hline
+%Model 1	& 1	& 3	& 6	& 9	& 2 & $R_X = 21$ \\
+%Model 2	& 4 & 10	& 7	& 8	& 5 & $R_Y = 34$ \\ \hline
+%\end{tabular}
+%\end{center}
+%Note that $U  = R_Y - 15 = 19$ and $U' = R_X - 15 = 6$ as before. 
+\end{solution}
+
+%============================= 
+
+\section{Mean and variance of $U_{m,n}$}
+%============================= 
+\begin{theorem}
+Let $X_1,X_2,\ldots,X_m$ be a random sample from a continuous and symmetric distribution with median $\eta_1$, and let $Y_1,Y_2,\ldots,Y_n$ be a random sample from a possibly shifted version the same distribution, with median $\eta_2$. Under the null hypothesis $H_0:\eta_1=\eta_2$, 
+\[
+\expe(U_{m,n}) = \frac{mn}{2}
+\text{\quad and\quad}
+\var(U_{m,n}) = \frac{mn}{12}(m+n+1).
+\]
+\end{theorem}
+
+\begin{proof}
+Under $H_0:\eta_1=\eta_2$ we have $\prob(X_i<Y_j) = 1/2$, so $Z_{ij}\sim\text{Bernoulli}(1/2)$. 
+
+\vspace*{2ex}
+Hence $\mathcal{E}(Z_{ij})=1/2$ and therefore
+\[
+\expe(U_{m,n}) 
+	= \mathcal{E}\left(\sum_{i=1}^m\sum_{j=1}^n Z_{ij}\right)
+	= \sum_{i=1}^m\sum_{j=1}^n \mathcal{E}(Z_{ij})
+	= \frac{mn}{2}.
+\]
+
+The calculation to find the variance of $U$ involves some tedious algebra:
+\begin{align*}
+\expe(U_{m,n}^2)
+	& = \expe\left[\left(\sum_{i=1}^m\sum_{j=1}^n Z_{ij}\right)\left(\sum_{k=1}^m\sum_{\ell=1}^n Z_{k\ell}\right)\right] \\
+	& = \sum_{i=1}^m\sum_{j=1}^n\sum_{k=1}^m\sum_{\ell=1}^n \expe(Z_{ij}Z_{k\ell}) \\
+	& = \sum_{i=1}^m\sum_{j=1}^n\expe(Z_{ij}^2) 
+			+ \sum_{i=1}^m\sum_{\substack{k=1\\k\neq i}}^m\sum_{j=1}^n\expe(Z_{ij}Z_{kj}) \\
+	& \qquad + \sum_{i=1}^m\sum_{j=1}^n\sum_{\substack{\ell=1\\\ell\neq j}}^n\expe(Z_{ij}Z_{i\ell})
+			+ \sum_{i=1}^m\sum_{j=1}^n\sum_{\substack{k=1\\k\neq i}}^m\sum_{\substack{\ell=1\\\ell\neq j}}^n\expe(Z_{ij}Z_{k\ell}) \\
+\end{align*}
+
+The four sums have $mn$, $mn(m-1)$, $mn(n-1)$ and $mn(m-1)(n-1)$ terms, respectively.
+
+
+\ben
+\it 
+If $k=i$ and $\ell=j$, the summand is $Z_{ij}Z_{k\ell}=Z_{ij}^2$, and $Z^2_{ij}=1$ only if $X_i<Y_j$. Under the null hypothesis, this occurs with probability $1/2$.
+
+
+%\[
+%\expe(Z_{ij}^2)= 0^2\times \prob(Z_{ij}=0) + 1^2\times \prob(Z_{ij}=1) = 1/2.
+%\]
+\it
+If $k\neq i$ but $\ell=j$, $Z_{ij}$ and $Z_{k\ell}$ are not independent. In this case, $Z_{ij}Z_{k\ell}=1$ if and only if both $X_i<Y_j$ and $X_k<Y_j$. There are six possible arrangements of $X_i$, $X_k$ and $Y_j$, of which two are such that $X_i<Y_j$ and $X_k<Y_j$. Under the null hypothesis, this occurs with probability $1/3$.
+\it
+If $k=i$ but $\ell\neq j$, by a similar argument we have $Z_{ij}Z_{k\ell}=1$ if and only if both $X_i<Y_j$ and $X_i<Y_{\ell}$. Under the null hypothesis, this occurs with probability $1/3$.
+\it
+If $k\neq i$ and $\ell\neq j$ then $Z_{ij}$ and $Z_{k\ell}$ are independent. The summand $Z_{ij}Z_{k\ell}=1$ if and only if both $X_i<Y_j$ and $X_k<Y_{\ell}$. Under the null hypothesis, this occurs with probability $1/2\times 1/2 = 1/4$.
+\een
+
+Hence, 
+\begin{align*}
+\expe(U_{m,n}^2)
+	& = \left[mn\times\frac{1}{2}\right] + \left[m(m-1)n\times\frac{1}{3}\right] 
+			+ \left[mn(n-1)\times\frac{1}{3}\right] + \left[m(m-1)n(n-1)\times\frac{1}{4}\right] \\
+	& = \frac{mn}{12}(1 + n + m + 3mn),
+\end{align*}
+and
+\[
+\var(U_{m,n}) = \expe(U_{m,n}^2) - \expe(U_{m,n})^2 = \frac{mn}{12}(m+n+1).
+\]
+\vspace*{-1ex}
+\end{proof}
+%============================= 
+\subsection{Normal approximation}
+%============================= 
+
+The Mann-Whitney statistic $U_{m,n}$ is a sum of random variables (namely the $Z_{ij}$). By the central limit theorem, the distribution of $U_{m,n}$ is approximately normal for $m$ and $n$ sufficiently large. 
+
+\vspace*{2ex}
+Lower-tail test:
+\[
+Z = \frac{(U_{m,n}+\frac{1}{2}) - \frac{mn}{2}}{\sqrt{\frac{mn}{12}(m+n+1)}} \sim  N(0,1)\quad\text{approx. for $m$ and $n$ sufficiently large.}
+\]
+
+Upper-tail test:
+\[
+Z = \frac{(U_{m,n}-\frac{1}{2}) - \frac{mn}{2}}{\sqrt{\frac{mn}{12}(m+n+1)}} \sim  N(0,1)\quad\text{approx. for $m$ and $n$ sufficiently large.}
+\]
+
+
+%============================= 
+
+\section{Exact distribution of $U_{m,n}$ under $H_0$}
+%============================= 
+
+%It is relatively straightforward to compute the exact PMF of $U$ for small $m$ and $n$, and a recurrence relation can be found to extend these to larger $m$ and $n$.
+
+Let $p_{m,n}(u)$ denote the probability that $U = u$ under the null hypothesis $H_0:\eta_1=\eta_2$.
+\[
+p_{m,n}(u) = \prob_{H_0}(U_{m,n}=u) \text{\qquad for $u\in\{0,1,\ldots,mn\}$.}
+\]
+
+%Then
+%\bit
+%\it $p_{m,n}(u)=0$ for $u<0$ and $u>mn$.
+%\eit
+%
+\ben
+\it
+If $m = 0$ or $n = 0$, we define $U$ to be zero. Consequently,
+\bit
+\it $p_{m,0}(0) = 1$ and $p_{0,n}(0) = 1$. 
+\it $p_{m,0}(u) = 0$ and $p_{0,n}(u) = 0$ for $u\neq 0$.
+\eit
+\it
+If $m = n = 1$, there is just one x-value and one y-value, so $U\in\{0,1\}$. There are two possible arrangements ($x<y$ or $y<x$), both equally likely under $H_0$, so
+\bit
+\it $p_{1,1}(0) = p_{1,1}(1) = \frac{1}{2}$.
+%\it If $x > y$ then $U=0$; if $x < y$ then $U=1$.
+\eit
+%Under $H_0:\eta_1=\eta_2$, these are equally likely, so $p_{1,1}(0) = p_{1,1}(1) = \frac{1}{2}$.
+\it
+If $m=1$ and $n=2$, there is one x-value and two y-values, so $U\in\{0,1,2\}$. There are six possible arrangements,
+%($x<y_1<y_2$, $x<y_2<y_1$, $y_1<x<y_2$ and so on)
+all equally likely under $H_0$, so
+\bit
+\it $p_{1,2}(0) = p_{1,2}(1) = p_{1,2}(2) = \frac{1}{3}$, and similarly
+\it $p_{2,1}(0) = p_{2,1}(1) = p_{2,1}(2) = \frac{1}{3}$.
+\eit
+
+\it \textbf{General case:} Let $m$ and $n$ be fixed. Under the null hypothesis,
+\begin{align*}
+\prob(\text{The largest observation is one of the $x$-values}) & = \frac{m}{m+n}, \\[1ex]
+\prob(\text{The largest observation is one of the $y$-values}) & = \frac{n}{m+n}.
+\end{align*}
+
+Let $U=u$ and suppose that one of the x-values is the largest observation.
+\bit
+\it The remaining $(m - 1)$ x-values and $n$ y-values constitute a random sample, with one fewer x-value, for which $U=u$.
+\eit
+
+Let $U=u$ and suppose that one of the y-values is the largest observation.
+\bit
+\it The remaining $m$ x-values and $(n - 1)$ y-values constitute a random sample, with one fewer y-value, for which $U=u-m$.
+%(The largest $y$-value adds $m$ to the value $U$ for the complete set of $m$ $x$-values and $n$ $y$-values.)
+\eit
+
+Thus we have that
+\[
+p_{m,n}(u) = \left(\frac{m}{m+n}\right)p_{m-1,n}(u) + \left(\frac{n}{m+n}\right)p_{m,n-1}(u-m)
+\]
+
+This recurrence relation can be used to find the PMF of $U$ for any $m$ and $n$.
+\een
+
+
+%It is relatively straightforward to compute the exact  PMF of $U$ for small $m$ and $n$, and a recurrence relation can be found to extend these to larger $m$ and $n$.
+%
+%Let $p(u;m,n)$ denote the probability that $U = u$ for fixed $m$ and $n$. Then
+%\bit
+%\it $p(u;m,n)=0$ for $u<0$ and $u>mn$.
+%\eit
+%
+%If $m = 0$ or $n = 0$, we define $u$ to be zero:
+%\bit
+%\it $p(0;m,0) = p(0;0,n) = 1$ 
+%\it $p(u;m,0) = p(u;0,n) = 0$ for $u\neq 0$
+%\eit
+%
+%If $m = n = 1$, there is just one $x$-value and one $y$-value. Either $x < y$ or $x > 
+%y$, which are both equally likely (under the null hypothesis). In the first case, $U = 1$; in 
+%the second case, $U = 0$.
+%\bit
+%\it $p(0;1,1) = p(1;1,1) = 1/2$.
+%\eit
+%
+%If $m=1$ and $n=2$, there is one $x$-value and two $y$-values. $U$ can take the values $0$, $1$, or $2$. There 
+%are 6 possible arrangements of the $x$-value and the two $y$-values, each equally likely, so
+%\bit
+%\it $p(0;1,2) = p(1;1,2) = p(2;1,2) = 1/3$
+%\eit
+%
+%\textbf{General case:} Under the null hypothesis,
+%\begin{align*}
+%\prob(\text{The largest observation is one of the $x$-values}) & = \frac{m}{m+n} \\
+%\prob(\text{The largest observation is one of the $y$-values}) & = \frac{n}{m+n}
+%\end{align*}
+%
+%
+%Suppose for some particular values of $m$ and $n$, we have $U=u$ and that one of the $x$-values is the largest observation.
+%\bit
+%\it The remaining $(m - 1)$ $x$-values and $n$ $y$-values constitute a random sample, with one fewer $x$-value and with $U=u$.
+%\eit
+%
+%Suppose instead that $U=u$ but that one of the $y$-values is the largest observation.
+%\bit
+%\it The remaining m $x$-values and $(n - 1)$ $y$-values constitute a random sample, with one fewer $y$-value and with $U=u-m$.
+%\eit
+%[The largest $y$-value adds $m$ to the value $U$ for the complete set of $m$ $x$-values and $n$ $y$-values.]
+%
+%Thus we have that
+%\[
+%p(u;m,n) = \frac{m}{m+n}p(u;m-1,n) + \frac{n}{m+n}p(u-m;m,n-1)
+%\]
+%
+%This recurrence relation can be used to construct the probability mass function of $U$ for any $m$ and $n$.
+
+%
+%============================= 
+
+\section{The Wilcoxon rank sum test}
+%============================= 
+The Mann-Whitney test is equivalent to the \emph{Wilcoxon rank sum test}: 
+\bit
+\it We rank the $X_i$ and $Y_j$ together, then sum the ranks associated with the $Y_i$ 
+\it If the sum is large, this suggests that the median of $Y$ is greater than the median of $X$.
+\it Let $R_j$ denote the rank of $Y_j$ in the pooled sample, and let $T_Y$ denote the sum of these ranks:
+\[
+T_Y = \sum_{j=1}^n R_j
+\]
+\it The rank sum $T_X$ associated with the $X_i$ could also be computed. However, since the sum of the $(m+n)$ ranks is equal to $\frac{1}{2}(m+n)(m+n+1)$ it follows that
+\[
+T_X + T_Y = \frac{1}{2}(m+n)(m+n+1)
+\]
+\eit
+
+
+
+The rank sums $T_X$ and $T_Y$ are directly related to $U$ and $U'$.
+
+\vspace*{1ex}
+\bit
+\it Recall that $Z_{ij}=1$ if $X_i<Y_j$ and zero otherwise.
+\it Let $q_j$ be the number of $Y_k$ smaller than $Y_j$.
+\eit
+\vspace*{2ex}
+The rank of $Y_j$ in the pooled sample is given by
+\vspace*{-1ex}
+\[
+R_j	
+	= \text{(Number of $X_i$ less than $Y_j$)} + \text{(Number of $Y_k$ less than $Y_j$)} + 1
+	= \sum_{i=1}^m Z_{ij} + q_j + 1.
+\]
+%\begin{align*}
+%R_j	
+%	& = \text{(Number of $X_i$ less than $Y_j$)} + \text{(Number of $Y_k$ less than $Y_j$)} + 1 \\
+%	& = \sum_{i=1}^m Z_{ij} + q_j + 1
+%\end{align*}
+Hence
+\[
+T_Y
+	= \sum_{i=1}^m\sum_{j=1}^n Z_{ij} + \sum_{j=1}^n q_j + \sum_{j=1}^n 1 
+	= U + \frac{1}{2}n(n+1).
+\]
+Here, we have used the fact that the second term is simply a summation of the numbers $0,1,\ldots, n-1$ in some order (because there are no $Y_k$ smaller than the smallest $Y_j$, exactly one $Y_k$ smaller than the next smallest $Y_j$, and so on). 
+
+Thus
+\[
+U = T_Y - \frac{1}{2}n(n+1) \qquad\text{and}\qquad U' = T_X - \frac{1}{2}m(m+1).
+\]
+
+%Statistical tables for the distribution of the rank sums (under the null hypothesis that the medians of the two samples are equal) are available, which allow us to perform the significance test using the rank sums directly.
+%
+%\fbox{\fbox{\begin{minipage}{\linewidth}
+%\textbf{NOTE}: the RND book of statistical tables provided in the exam contains tables of critical values for the Mann-Whitney statistic, but \textbf{not} for the Wilcoxon rank sum statistic. If you wish to use rank sums instead than the counting method, you will have to convert from $T_X$ and $T_Y$ to $U$ and $U'$ using the above expressions.
+%\end{minipage}}}
+%
+%% examplecont: Mann-Whitney
+%\begin{examplecont}{\ref{ex:mannwhitney}}
+%\[\begin{array}{|l|ccccc|}\hline
+%\text{Model 1}	& 125.8	& 126.7	& 128.3	& 130.5	& 126.2 \\
+%\text{Model 2}	& 127.8 & 131.4	& 129.6	& 130.2	& 128.1 \\ \hline
+%\end{array}\]
+%Use the Wilcoxon rank sum test to assess whether or not Model~2 is more economical than Model~1.
+%\end{examplecont}
+%
+%\begin{solution}
+%\[\begin{array}{|l|ccccc|c|}\hline
+%\text{Model 1}	& 125.8 & 126.7 & 128.3 & 130.5 & 126.2 	&  \\
+%\text{Rank} 		& 1	    & 3     & 6	   & 9     & 2     	& R_X = 21 \\ \hline
+%\text{Model 2}	& 127.8 & 131.4	& 129.6	& 130.2	& 128.1	& \\ 
+%\text{Rank}		& 4     & 10     & 7     & 8	   & 5     	& R_Y = 34 \\ \hline
+%\end{array}\]
+%
+%To use the RND tables, we must convert from rank sums to $U$-statistics:
+%\bit
+%\it $U  = T_Y - 15 = 19$ and $U' = T_X - 15 = 6$ as before. 
+%\eit
+%\end{solution}
+
+
+
+\begin{example}
+In an experiment on the effects of exposure to ozone, 10 rats were exposed to the gas for a period. A control group of 10 rats were kept in an ozone-free atmosphere, but otherwise in similar conditions. The lung volumes in millilitres for the two groups of rats after the conclusion of the experiment are tabulated below. Perform a test of size $\alpha=0.05$ to determine whether there is a statistically significant difference in the average lung volumes of the two groups of rats. 
+\[\begin{array}{|l|cccccccccc|} \hline
+\text{Exposed } (X)		& 9.2    & 8.4    & 8.6    & 9.2    & 9.5    & 9.1    & 9.9    & 9.6    & 9.0    & 9.6 \\
+\text{Not Exposed } (Y)	& 8.8    & 8.6    & 8.7    & 8.4    & 9.1    & 9.2    & 8.3    & 8.5    & 8.8    & 8.2 \\ \hline
+\end{array}\]
+\end{example}
+
+\begin{solution}
+We test the null hypothesis $H_0:\eta_1=\eta_2$ against the alternative $H_1:\eta_1\neq\eta_2$.
+
+%The counting method for $U$ yields
+%\begin{align*}
+%U  & = 2 + 1.5 + 2 + 0.5 + 3.5 + 5 + 0 + 1 + 2 + 0 = 17.5. \\
+%U' & = 100-17.5 = 82.5.
+%\end{align*}
+%
+%
+
+To compute the rank sums, it helps to order the data first:
+\[\begin{array}{|l|cccccccccc|c|}\hline
+\text{Exposed } (X)		& 8.4   	& 8.6	& 9.0	& 9.1	& 9.2	& 9.2	& 9.5	& 9.6	& 9.6	& 9.9	& 	\\
+\text{Rank} 				& 3.5	& 6.5  	& 11  	& 12.5  	& 15   	& 15		& 17		& 18		& 19   	& 20		& T_X = 137.5 \\ \hline
+\text{Not Exposed } (Y)	& 8.2   	& 8.3   & 8.4  	& 8.5 	& 8.6	& 8.7	& 8.8	& 8.8	& 9.1	& 9.2 	& \\ 
+\text{Rank} 				& 1		& 2		& 3.5	& 5		& 6.5	& 8		& 9.5	& 9.5	& 12.5	& 15 	& T_Y = 72.5 \\ \hline
+\end{array}\]
+
+To use the RND tables, we must convert from rank sums to $U$-statistics:
+\begin{align*}
+U  		& =  T_Y - \frac{1}{2}n(n + 1) =  72.5 - \frac{1}{2}(10\times 11) = 17.5. \\
+U' 		& =  T_X - \frac{1}{2}m(m + 1) = 137.5 - \frac{1}{2}(10\times 11) =  82.5.
+\end{align*}
+
+We can check these values using the counting method:
+\begin{align*}
+U  & = 2 + 1.5 + 2 + 0.5 + 3.5 + 5 + 0 + 1 + 2 + 0 = 17.5. \\
+U' & = 100-17.5 = 82.5.
+\end{align*}
+
+%
+
+\bit
+\it From tables, the critical value for a two-tailed test is $81$ at $\alpha=0.02$, and $84$ at $\alpha=0.01$.
+\eit
+
+The $p$-value is therefore between $0.01$ and $0.02$ , so $H_0$ is rejected at $\alpha=0.05$ level.
+\end{solution}
+
+
+
+%%==========================================================================
+%\begin{example}
+%The data below are a random sample from a symmetric continuous random variable  with mean equal to $\mu$.
+%\begin{center}
+%\begin{tabular}{ccccccccccccc}
+% 97.9	& 111.4	&  97.7	& 112.6	&  98.8	& 114.0	&  98.7	& 101.4	&  98.9	& 115.2	&  97.4	& 117.9 & 118.6 \\
+% 113.0	&  97.0	&  97.8	&  97.6	&  97.5	& 110.9	& 110.7	& 112.5	&  97.3	&  97.2	& 110.8	& 102.9	&
+%\end{tabular}
+%\end{center}
+%Use both the sign test and the Wilcoxon signed rank test to perform the hypothesis test
+%\begin{align*}
+%H_0: & \mu = 100 \\
+%H_1: & \mu\neq 100
+%\end{align*}
+%In each case calculate the $p$-value, or estimate it as closely as you can with the tables available. Comment on which test you would recommend for these data, and on whether a single sample $t$-test would be reliable. 
+%\end{example}
+%
+%\begin{solution}
+%The sign test is based on $S$, the number of observations $\geq 100$; in this example, $S = 13$. Under $H_0:\mu = 100$, the number of observations $\geq 100$ is a random variable having a $\text{Binomial}(25,0.5)$ distribution. The alternative hypothesis is not directed, so a 2-tailed test is indicated. First find $P(S\geq 13) = P(S>12)$. From tables of the Binomial distribution with  $n=25$ and $p=0.5$,  this is equal to $1-0.5 = 0.5$. However, this is a 2-tailed test so 'as extreme or more so' also includes the probability for the left hand tail. This is $P(S \leq 12)$, and from tables this is equal to $0.5$. Thus the $p$-value is $0.5 + 0.5 = 1.0$. Notice that in this case, since the distribution under the null hypothesis is symmetric, the $p$-value for a 2-tailed test is exactly twice the $p$-value for a 1-tailed test. Notice also that this is the maximum $p$-value possible, so non-rejection of the null hypothesis is statistically compulsory.
+%
+%To achieve a significance level $\leq 5\%$ for a 2-tailed test, tables of the Binomial distribution give a critical region $\{S \leq 7 \text{ or } S \geq 18\}$. The significance level is then $2{\times}0.02164 = 0.04328$. (If the critical region $\{S \leq 8 \text{ or } S \geq 17\}$ is chosen, the significance level becomes $2{\times}0.05378 = 0.10756$, which is greater than the required 5\%.) The observed value of S is not in the critical region, so the null hypothesis is not rejected.
+%
+%To perform the Wilcoxon signed rank test, first we calculate the differences from the median specified by the null hypothesis ($100$). These are as follows.
+%\begin{center}
+%\begin{tabular}{ccccccccccccc}
+%-2.1		&   11.4		& -2.3	&   12.6		&   -1.2		& 14.0	& -1.3	&  1.4	& -1.1	& 15.2	& -2.6	&  17.9	& 18.6 \\
+%13.0		&   -3.0  	& -2.2  &	-2.4    	&	-2.5		& 10.9	& 10.7	& 12.5 	& -2.7	&  2.8	& 10.8	&   2.9
+%\end{tabular}
+%\end{center}
+%The signed ranks of the absolute deviations are:
+%\begin{center}
+%\begin{tabular}{ccccccccccccc}
+%-5	&  18	&   -7	&  20	&  -2	&  22	&  -3	&   4	&   -1	&   23	& -10	&  24	&  25 \\
+%21	& -14	&   -6	&  -8	&  -9	&  17	&  15	&  19	&  -11	&  -12 	&  16	&  13	&
+%\end{tabular}
+%\end{center}
+%Thus
+%\[
+%W^{-} = 88 \quad\text{and}\quad W^{+} = 237
+%\]
+%From tables, and using a 2-tailed test with a significance level of 5\%, the critical value is $235$, so the null hypothesis is (just) rejected. The $p$-value for a 2-tailed test is between $0.02$ and $0.05$ (but closer to $0.05$) because the observed value of $W$ is between the $97.5\ssth$ percentile (235) and the $99\ssth$ percentile (248). $P(W^{+} \geq 237)$ is between $0.01$ and $0.025$, and the $p$-value is obtained (for a 2-tailed test) by doubling these probabilities.
+%
+%The Wilcoxon test uses more information than does the sign test. It ranks absolute deviations from the median under $H_0$, then adds the sum of the ranks associated with observations $\geq 100$. The sign test, on the other hand simply counts the number of observations $\geq 100$, without taking into account the ranks. In this example, the observations bigger than $100$ are substantially bigger than 100, hence the different conclusions from the tests. Note the big jump in magnitude between rank 14 (-3.0) and 15 (10.7), and that all subsequent ranks have a positive sign attached. This is because the data are very skewed, and a $t$-test is not very robust for skewed data. Of the three tests, the Wilcoxon signed rank test is the best for this data.
+%\end{solution}
+
+%%==================================================================================================
+%
+%\section{Exercises} 
+%\input{ma2500ex09_nonparametric}
+%\endinput
+%%==================================================================================================
+
+
+%======================================================================
+\stopcontents[chapters]
+\endinput
+%======================================================================

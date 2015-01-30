@@ -1,0 +1,62 @@
+\begin{Answer}{(a)}
+$\mathcal{F}$ is closed under complementation, and $\emptyset = \Omega^c$ where $\Omega\in\mathcal{F}$, so $\emptyset = \Omega^c$.
+\end{Answer}
+\begin{Answer}{(b)}
+Let $A,B\in\mathcal{F}$. Then $A\setminus B = A\cap B^c = (A^c\cup B)^c$ (De Morgan's laws). Hence $A\setminus B\in\mathcal{F}$ because $\mathcal{F}$ is closed under complementation and pairwise unions.
+\end{Answer}
+\begin{Answer}{(c)}
+Let $A,B\in\mathcal{F}$. Then $A\cap B = (A^c\cup B^c)^c$ (De Morgan's laws). Hence $A\cap B\in\mathcal{F}$ because $\mathcal{F}$ is closed under complementation and pairwise unions.
+\end{Answer}
+\begin{Answer}{(d)}
+Proof by induction. Suppose that $\mathcal{F}$ is closed under unions of $n$ sets (where $n\geq 2$). Let $A_1,A_2,\ldots,A_{n+1}\in\mathcal{F}$. By the inductive hypothesis, $\cup_{i=1}^n\in\mathcal{F}$, so $\cup_{i=1}^{n+1} A_i = \big[\cup_{i=1}^{n} A_i\big] \cup A_{n+1} \in\mathcal{F}$ because $\mathcal{F}$ is closed under pairwise unions.
+\end{Answer}
+\begin{Answer}{(e)}
+Let $A_1,A_2,\ldots,A_n\in\mathcal{F}$. Then $\cap_{i=1}^n A_i = \big[\cup_{i=1}^n A_i^c\big]^c$ (De Morgan's laws). Hence $\cap_{i=1}^n A_i\in\mathcal{F}$ because $\mathcal{F}$ is closed under complementation and finite unions.
+\end{Answer}
+\begin{Answer}{(a)}
+Let $A_1,A_2,\ldots,A_n\in\mathcal{F}$. Since $\mathcal{F}$ is closed under countable unions and $\emptyset\in\mathcal{F}$,
+\[
+\cup_{i=1}^n A_i = A_1\cup A_2\cup\ldots\cup A_n\cup\emptyset\cup\emptyset\ldots \in\mathcal{F}.
+\]
+\end{Answer}
+\begin{Answer}{(b)}
+Let $A_1,A_2,\ldots,A_n\in\mathcal{F}$. Since $\mathcal{F}$ is closed under complementation and finite unions,
+\[
+\cap_{i=1}^n A_i = A_1\cap\ldots\cap A_n = (A^c_1\cup\ldots\cup A^c_n)^c \in\mathcal{F}.
+\]
+\end{Answer}
+\begin{Answer}{(c)}
+Let $A_1,A_2,\ldots\in\mathcal{F}$. Since $\mathcal{F}$ is closed under complementation and countable unions,
+\[
+\bigcap_{n=1}^{\infty} A_n = \left(\bigcup_{n=1}^{\infty} A^c_n\right)^c \in\mathcal{F}.
+\]
+\end{Answer}
+\begin{Answer}{(a)}
+A $\sigma$-field must contain $\emptyset$ and $\Omega$, and be closed under complementation and countable unions.
+\par
+The smallest $\sigma$-field containing $A=\{1,2\}$ is therefore
+\[
+\mathcal{F} = \{\emptyset, \{1,2\}, \{3,4,5,6\}, \Omega\}
+\]
+\end{Answer}
+\begin{Answer}{(b)}
+\[
+\mathcal{F} = \{\emptyset, \{1,2\}, \{3,4\}, \{5,6\}, \{1,2,3,4\}, \{1,2,5,6\}, \{3,4,5,6\}, \Omega\}
+\]
+\end{Answer}
+\begin{Answer}{(a)}
+$\mathcal{H}$ is a $\sigma$-field because:
+\bit
+\it $\emptyset\in\mathcal{F}$ and $\emptyset\in\mathcal{G}$ so $\emptyset\in\mathcal{H}$;
+\it if $A$ belongs to both $\mathcal{F}$ and $\mathcal{G}$, then $A^c$ belongs to both $\mathcal{F}$ and $\mathcal{G}$, so $\mathcal{H}$ is closed under complementation;
+\it if $A_1,A_2,\ldots$ all belong to both $\mathcal{F}$ and $\mathcal{G}$, then their union also lies in both $\mathcal{F}$ and $\mathcal{G}$, so $\mathcal{H}$ is closed under countable unions.
+\eit
+ 
+\end{Answer}
+\begin{Answer}{(b)}
+Let $\Omega=\{a,b,c\}$, $\mathcal{G}=\big\{\emptyset,\{a\},\{b,c\},\Omega\big\}$ and $\mathcal{G}=\big\{\emptyset,\{a,b\},\{c\},\Omega\big\}$. Then
+\[
+\mathcal{H} = \mathcal{F}\cup\mathcal{G} = \big\{\emptyset,\{a\},\{c\},\{a,b\},\{b,c\},\Omega\big\}.
+\]
+Hence $\{a\}\in\mathcal{H}$ and $\{c\}\in\mathcal{H}$, but $\{a,c\}\notin\mathcal{H}$ so $\mathcal{H}$ is not a $\sigma$-field.
+\end{Answer}
