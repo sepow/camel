@@ -2,14 +2,13 @@
 
 '''
 refresh.py (camel/management)
-
-steps:
-1. create doctree: parse main.py
-2. traverse doctree: populate database
-
+    1. create doctree: parse main.py
+    2. traverse doctree: populate database
 '''
 
 import os, re, time, shutil, logging, subprocess
+
+from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -25,12 +24,19 @@ out = logging.getLogger(__name__)
 class Command(BaseCommand):
     args = 'module_code (, module_code, ...)'
     help = 'Update database for specified module codes'
-    
+
+    option_list = BaseCommand.option_list + (
+        make_option('--text', action="store_true", dest="text", default=False, help="print tree to stdout"),
+        make_option('--xml', action="store_true", dest="xml", default=False, help="print xml tree to stdout"),
+        make_option('--db', action="store_true", dest="db", default=False, help="test write to database"),
+        make_option('--commit', action="store_true", dest="commit", default=False, help="write to database"),
+    )
+
     def handle(self, *args, **options):
         
         # process argument (module code)
         if not args:
-            print 'Usage: python manage.py refresh MAXXXX'
+            print 'Usage: python manage.py refresh <module_code> --option'
             return
         
         # info
@@ -39,6 +45,7 @@ class Command(BaseCommand):
         out.info('SITE_ROOT = %s' % SITE_ROOT)
         out.info('TEX_ROOT  = %s' % TEX_ROOT)
         
+        # iterate over modules
         for module_code in args:
             out.info('BEGIN processing %s', module_code)
             
@@ -46,43 +53,62 @@ class Command(BaseCommand):
             main_tex = os.path.join(TEX_ROOT, module_code, 'main.tex')
                         
             # create book tree
-            book = Book(main_tex)
+            p = TexParser()
+            preamble = p.parse_preamble( main_tex )
+            book = p.parse_main( main_tex )
+            book.title = preamble['book_title']
             
-            # hack to set newcommands
-            nc = ''
-            nc += r'\newcommand{\N}{\mathbb{N}}'
-            nc += r'\newcommand{\R}{\mathbb{R}}'
-            nc += r'\newcommand{\prob}{\mathbb{P}}'
-            nc += r'\newcommand{\expe}{\mathbb{E}}'
-            nc += r'\newcommand{\var}{\text{Var}}'
-            nc += r'\newcommand{\cov}{\text{Cov}}'
-            nc += r'\newcommand{\supp}{\text{supp}}'
+            # xml output
+            if options['xml']:
+                xml = book.prettyprint_xml()
+                self.stdout.write( xml )
+            
+            # database 
+            elif options['db'] or options['commit']:
 
-            # extract module information (from main.tex preamble)
-            minfo = extract_module_info( main_tex )
-            
-            # set commit flag
-            commit = True
-    
-            # check whether this module already exists in the database
-            modules = camel.models.Module.objects.filter(year=minfo['year'], code=minfo['code'])
-            if not modules:
-                print 'Module does NOT exist in the database...creating it'
-                mo = camel.models.Module(year=minfo['year'], code=minfo['code'], title=minfo['title'])
+                # hack to set user-defined latex macros
+                nc = ''
+                nc += r'\newcommand{\N}{\mathbb{N}}'
+                nc += r'\newcommand{\Z}{\mathbb{Z}}'
+                nc += r'\newcommand{\R}{\mathbb{R}}'
+                nc += r'\newcommand{\C}{\mathbb{C}}'
+                nc += r'\newcommand{\prob}{\mathbb{P}}'
+                nc += r'\newcommand{\expe}{\mathbb{E}}'
+                nc += r'\newcommand{\var}{\text{Var}}'
+                nc += r'\newcommand{\cov}{\text{Cov}}'
+                nc += r'\newcommand{\supp}{\text{supp}}'
+
+                # check whether this module already exists in the database
+                code = preamble['module_code']
+                year = preamble['academic_year']
+                modules = camel.models.Module.objects.filter(code=code, year=year)
+                if not modules:
+                    out.info( 'Creating new module %s/%s' % (code, year) )
+                    mo = camel.models.Module(code=code, year=year, title=preamble['module_title'])
+                    mo.save()
+                elif len(modules) == 1:
+                    out.info( 'Updating existing module %s/%s (existing doctree will be deleted)' % (code, year) )
+                    mo = modules[0]
+                    for bo in camel.models.TreeNode.objects.filter(module=mo):
+                        bo.delete()
+                else:
+                    out.error('The database contains more than one module with code %s and year %s ... SORT IT OUT!' % (code, year) )
+                    continue
+
+                # set module newcommands (hack)
+                mo.newcommands = nc
                 mo.save()
-            elif len(modules) > 1:
-                print 'More than one module with this year and code exists in the database...PROBLEM!'
-                commit = False
+        
+                # write to database
+                if options['commit']:
+                    book.camel_tree(module=mo, commit=True)
+                else:
+                    book.camel_tree(module=mo, commit=False)
+
+            # default: text output
             else:
-                print 'Module DOES exist in the database...book will be hooked on'
-                mo = modules[0]
+                print book
+        
+        # end iterate over modules
 
-            # set module newcommands (hack)
-            mo.newcommands = nc
-            mo.save()
-            
-            # output tree to database
-            book.camel_tree(module=mo, commit=commit)
-
-            # TODO sort out labels/references/citations
 

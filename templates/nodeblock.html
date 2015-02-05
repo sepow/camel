@@ -1,75 +1,5 @@
-<!-- 
-camel: chapter_detail.html 
--->
-{% extends "module_detail.html" %}
-{% load staticfiles %}
-
-{% block scripts %}
-	{{ block.super }} 
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
-	
-	<!-- showhide -->
-	<!--script type="text/javascript">
-    $(document).ready(function(){
-      $('.showhide').addClass("hidden");
-      $('.showhide_step').addClass("hidden");
-      $('.showhide').click(function() {
-        var $this = $(this);
-        if ($this.hasClass("hidden")) {
-          $(this).removeClass("hidden").addClass("visible");
-      } else {
-        $(this).removeClass("visible").addClass("hidden");
-        }
-      });
-      $('.showhide_step').hover(function() {
-        var $this = $(this);
-        if ($this.hasClass("hidden")) {
-          $(this).removeClass("hidden").addClass("visible");
-        } else {
-          $(this).removeClass("visible").addClass("hidden");
-        }
-      });
-    });
-	</script-->
-
-{% endblock %}
-
-{% block breadcrumbs %}
-	{{ block.super }}&gt;<a href="{% url 'chapter-detail' module.code chapter.number %}"> {{ chapter.title }}</a>
-{% endblock %}
-
-{% block content-main %}
-{% spaceless %}
-
-	{% if module %}
-	   	<h2 align="center"><u>{{ module.code}} {{ module.title }}</u></h2>
-	{% endif %}
-	
-	{% if chapter %}
-		<div class="macros">
-		    {% autoescape off %}
-				\( {{ module.newcommands | safe }} \)
-			{% endautoescape %}
-		</div>
-	
-		{% load mptt_tags %}
-	    {% recursetree subtree %}
-
 			{% if node.node_type == "texnode" %}
-				<!--span class="tex"-->
 					{{ node.htex | safe }}
-					<!--/span-->
-			
-			{% elif node.node_type == "reference" %}
-				<a href="{% url 'chapter-detail' module.code chapter.number %}#{{ node.htex | safe }}">
-				{% if refs %} 
-					{% for ref in refs %}
-						{% if ref.label and ref.label == node.htex %}
-								{{chapter.number}}.{{ ref.number }} 
-							{% endif %}
-					{% endfor %}
-				{% endif %}</a>
-				<br />
 			
 			{% elif node.node_class == "division" %}
 				{% if node.node_type == "chapter" %}
@@ -78,6 +8,13 @@ camel: chapter_detail.html
 					<h1 class="section"> {{ node.parent.number }}.{{ node.number }}&nbsp;{{ node.title }}</h1>
 				{% endif %}
             	{{ children }}
+			
+			{% elif node.node_class == "exercise" %}
+				<div class="exercise">
+					<b>{{ node.node_type | title }} {{ node.parent.number }}.{{ node.number }}</b>
+					{% if node.title %} ({{ node.title }}) {% endif %}<br/> 
+					{{ children }}
+				</div>
 			
 			{% elif node.node_class == "list" %}
 				{% if node.node_type == "itemize" %}
@@ -91,7 +28,7 @@ camel: chapter_detail.html
 				{% elif node.node_type == "subparts" %}
 					<ol class="subparts"> {{ children }} </ol>
 				{% elif node.node_type == "choices" %}
-					<ul class="choices"> {{ children }} </ul>
+					<ol class="choices"> {{ children }} </ol>
 				{% endif %}
 			
 			{% elif node.node_class == "item" %}
@@ -125,23 +62,16 @@ camel: chapter_detail.html
 						{{ children }}
 					</div>
 			
-			{% elif node.node_class == "exercise" %}
-				<div class="exercise">
-					<b>{{ node.node_type | title }} {{ node.parent.number }}.{{ node.number }}</b>
-					{% if node.title %} ({{ node.title }}) {% endif %}<br/> 
-					{{ children }}
-				</div>
-			
 			{% elif node.node_class == "box" %}
 				{% if node.node_type == "answer" %}
-					<div class="answer">
+					<!--div class="answer">
 						<div class="showhide">
 							<p class="solution_title"><b>Answer</b></p>
 							<div class="inner_solution">
 								{{ children }}
 							</div>
 						</div>
-					</div> <!-- end answer -->
+					</div--> <!-- end answer -->
 				{% elif node.node_type == "solution" %}
 					<div class="solution">
 						<div class="showhide">
@@ -193,25 +123,3 @@ camel: chapter_detail.html
 					{{ children }}
 				</div>
 			{% endif %}
-
-	    {% endrecursetree %}
-
-	{% else %}
-	    <p>No chapter.</p>
-	{% endif %}
-
-{% endspaceless %}
-{% endblock %}
-
-{% block sidebar %}
-	{% if toc %}
-	<h3>Chapters</h3>
-		{% for chap in toc %}
-			<p><a href="{% url 'chapter-detail' module.code chap.number %}"> {{ chap.number }}. {{ chap.title }}</a></p>
-		{% endfor %}
-	{% else %}
-	    <p>No toc</p>
-	{% endif %}
-
-{% endblock %}
-

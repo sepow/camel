@@ -1,0 +1,40 @@
+{% extends "rhestr_modiwlau.html" %}
+
+{% block title %} 
+	{{ object.llinyn }}
+{% endblock %}
+
+{% block breadcrumbs %}
+	{{ block.super }}&gt;&nbsp;<a href="{% url 'manylion-modiwl' module.pk %}">{{ module.code }}</a>
+{% endblock %}
+
+{% block content-main %}
+
+<br>
+<h1 align="center">{{ object.code }} {{ object.title }}</h1>
+<br>
+
+{% if chapters %}
+	<table class="chapters">
+		{% for chapter in chapters %}
+			<tr>
+				<td>{{ chapter.mpath }}</td>
+				<td>&nbsp;</td>
+				<td><a href="{% url 'treenode-detail' chapter.pk %}">{{ chapter.number }}. {{ chapter.title }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% else %}
+	<p>No chapters!</p>
+{% endif %}
+
+<br/>
+<br/>
+<a href="{% url "rhestr-modiwlau" %}">&larr; Back to module list</a>
+
+{% endblock %}
+
+{% block browse-horizontal %}
+<p class="left">{% if prev %}<a href="{{ prev.get_absolute_url }}">&larr; {{ prev.number }}</a>{% endif %}</p>
+<p class="right">{% if next %}<a href="{{ next.get_absolute_url }}">{{ next.number }} &rarr;</a>{% endif %}</p>
+{% endblock %}

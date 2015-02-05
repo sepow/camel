@@ -22,6 +22,29 @@
 	  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 	</script>
 
+	<!-- showhide -->
+	<script type="text/javascript">
+    $(document).ready(function(){
+      $('.showhide').addClass("hidden");
+      $('.showhide_step').addClass("hidden");
+      $('.showhide').click(function() {
+        var $this = $(this);
+        if ($this.hasClass("hidden")) {
+          $(this).removeClass("hidden").addClass("visible");
+      } else {
+        $(this).removeClass("visible").addClass("hidden");
+        }
+      });
+      $('.showhide_step').hover(function() {
+        var $this = $(this);
+        if ($this.hasClass("hidden")) {
+          $(this).removeClass("hidden").addClass("visible");
+        } else {
+          $(this).removeClass("visible").addClass("hidden");
+        }
+      });
+    });
+	</script>
 
 
 {% endblock %}

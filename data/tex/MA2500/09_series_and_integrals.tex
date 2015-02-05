@@ -13,172 +13,172 @@
 %
 
 
-% discrete random variables
-\subsection*{Discrete random variables}
-A discrete random variable can be represented by a sequence of real numbers. 
-\bit
-\it Let $X$ take values in the set $\N = \{1,2,3,\ldots\}$, and let $p_k = \prob(X=k)$.
-\it The PMF of $X$ is the sequence $p_1,p_2,\ldots$.
-\it The only constraints on the sequence are that its terms $p_k$ are all non-negative, and $\displaystyle\sum_{k=1}^{\infty} p_k = 1$.
-\it The expectation of $X$ is given by the series $\expe(X)=\displaystyle\sum_{k=1}^{\infty} k p_k.$
-	\bit
-	\it This series does not necessarily converge (to a finite value).
-	\it It may not even be well-defined.
-	\eit
-\eit
-
-% cts random variables
-\subsection*{Continuous random variables}
-A continuous random variables can be represented by a function $f:\R\to\R$. 
-\bit
-\it Let $X$ be a continuous random variable, and let $F(x) = \prob(X\leq x)$ be its CDF.
-\it The PDF of $X$ is the function $f(x) = F'(x)$.
-\it The only constraints on $f$ are that $f(x)\geq 0$ for all $x\in\R$, and $\displaystyle\int_{-\infty}^{\infty} f(x)\,dx = 1$.
-\it The expectation of $X$ is given by the integral $\displaystyle\int_{-\infty}^{\infty} x\,f(x)\,dx$.
-	\bit
-	\it This integral does not necessarily converge (to a finite value).
-	\it It may not even be well-defined.
-	\eit
-\eit
-
-
-%----------------------------------------------------------------------
-\section{Series}
-%----------------------------------------------------------------------
-
-%----------------------------------------------------------------------
-\subsection{Convergent sequences}
-%----------------------------------------------------------------------
-% definition: convergent sequences
-\begin{definition}
-An infinite sequence of real numbers $a_1,a_2,\ldots$ is said to \emph{converge} if there exists some $a\in\R$ such that for all $\epsilon>0$, there exists some $N\in\N$ with
-\[
-|a_n - a| < \epsilon \quad\text{for all}\quad n > N.
-\]
-\end{definition}
-
-% remarks
-\begin{remark}
-\ben
-\it The number $a$ is called the \emph{limit} of the sequence, written as $a = \lim_{n\to\infty}a_n $. 
-%\it Using the triangle inequality, we can show that a convergent sequence has a unique limit.
-\it A sequence that is not convergent is said to be \emph{divergent}.
-\een
-\end{remark}
-
-%----------------------------------------------------------------------
-\subsection{Convergent series}
-%----------------------------------------------------------------------
-
-% definition: convergent series
-\begin{definition}
-Let $a_1,a_2,\ldots$ be a sequence of real numbers. The infinite series $\sum_{n=1}^{\infty} a_n$ is said to be
-\ben
-\it
-\emph{convergent} if the sequence of partial sums $\sum_{n=1}^m a_n$ converges as $m\to\infty$,
-\it
-\emph{absolutely convergent} if $\sum_{n=1}^{\infty} |a_n|$ is convergent, 
-\it
-\emph{conditionally convergent} if it is convergent, but is not absolutely convergent,
-\it
-\emph{divergent} if the sequence of partial sums $\sum_{n=1}^m a_n$ diverges as $m\to\infty$.
-\een
-\end{definition}
-
-%\begin{remark}
+%% discrete random variables
+%\subsection*{Discrete random variables}
+%A discrete random variable can be represented by a sequence of real numbers. 
 %\bit
-%\it Convergent series of non-negative terms are always absolutely convergent.
-%\it Not all convergent series are absolutely convergent.
+%\it Let $X$ take values in the set $\N = \{1,2,3,\ldots\}$, and let $p_k = \prob(X=k)$.
+%\it The PMF of $X$ is the sequence $p_1,p_2,\ldots$.
+%\it The only constraints on the sequence are that its terms $p_k$ are all non-negative, and $\displaystyle\sum_{k=1}^{\infty} p_k = 1$.
+%\it The expectation of $X$ is given by the series $\expe(X)=\displaystyle\sum_{k=1}^{\infty} k p_k.$
+%	\bit
+%	\it This series does not necessarily converge (to a finite value).
+%	\it It may not even be well-defined.
+%	\eit
 %\eit
+%
+%% cts random variables
+%\subsection*{Continuous random variables}
+%A continuous random variables can be represented by a function $f:\R\to\R$. 
+%\bit
+%\it Let $X$ be a continuous random variable, and let $F(x) = \prob(X\leq x)$ be its CDF.
+%\it The PDF of $X$ is the function $f(x) = F'(x)$.
+%\it The only constraints on $f$ are that $f(x)\geq 0$ for all $x\in\R$, and $\displaystyle\int_{-\infty}^{\infty} f(x)\,dx = 1$.
+%\it The expectation of $X$ is given by the integral $\displaystyle\int_{-\infty}^{\infty} x\,f(x)\,dx$.
+%	\bit
+%	\it This integral does not necessarily converge (to a finite value).
+%	\it It may not even be well-defined.
+%	\eit
+%\eit
+%
+%
+%%----------------------------------------------------------------------
+%\section{Series}
+%%----------------------------------------------------------------------
+%
+%%----------------------------------------------------------------------
+%\subsection{Convergent sequences}
+%%----------------------------------------------------------------------
+%% definition: convergent sequences
+%\begin{definition}
+%An infinite sequence of real numbers $a_1,a_2,\ldots$ is said to \emph{converge} if there exists some $a\in\R$ such that for all $\epsilon>0$, there exists some $N\in\N$ with
+%\[
+%|a_n - a| < \epsilon \quad\text{for all}\quad n > N.
+%\]
+%\end{definition}
+%
+%% remarks
+%\begin{remark}
+%\ben
+%\it The number $a$ is called the \emph{limit} of the sequence, written as $a = \lim_{n\to\infty}a_n $. 
+%%\it Using the triangle inequality, we can show that a convergent sequence has a unique limit.
+%\it A sequence that is not convergent is said to be \emph{divergent}.
+%\een
 %\end{remark}
-
-
-\begin{example}
-\mbox{}\vspace*{-2ex}
-\bit
-\it $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}$ converges.
-\it $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n}$ diverges. (This is the \emph{harmonic series}.)
-\it $\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n} = \log 2$ is converges conditionally. (This is the \emph{alternating harmonic series}.)
-\eit
-\end{example}
-
-The alternating harmonic series is convergent,
-\[
-\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n} = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \ldots = \log 2,
-\]
-but not absolutely convergent, because
-\[
-\sum_{n=1}^{\infty} \left|\frac{(-1)^{n+1}}{n}\right| = \sum_{n=1}^{\infty}\frac{1}{n}.
-\]
-
-%----------------------------------------------------------------------
-\subsection{Positive and negative parts}
-%----------------------------------------------------------------------
-
-% positive and negative parts
-If a series $\sum_n a_n$ has both positive and negative terms, we can write it as the difference of two series of non-negative terms:
-\[
-\sum_{n=1}^{\infty} a_n = \sum_{n=1}^{\infty} a_n^{+} - \sum_{n=1}^{\infty} a_n^{-},
-\]
-where
-\[\begin{array}{lll}
-a^{+}_n		& = \max\{a_n,0\}	& = \begin{cases}  a_n & \text{ if } a_n \geq 0, \\ 0 & \text{otherwise.}\end{cases} \\
-a^{-}_n		& = \max\{-a_n,0\} 	& = \begin{cases} -a_n & \text{ if } a_n <    0, \\ 0 & \text{otherwise.}\end{cases}
-\end{array}\]
-
-\bit
-\it $\displaystyle\sum_{n=1}^{\infty} a_n^{+}$ is called the \emph{positive part} of the series.
-\it $\displaystyle\sum_{n=1}^{\infty} a_n^{-}$ is called the \emph{negative part} of the series.
-\eit
-
-Since 
-\[
-\sum_{n=1}^{\infty} |a_n| = \sum_{n=1}^{\infty} a_n^{+} + \sum_{n=1}^{\infty} a_n^{-},
-\]
-we see that
-\ben
-\it If $\sum_n a_n$ is absolutely convergent, its positive and negative parts both converge.
-\it If $\sum_n a_n$ is conditionally convergent, its positive and negative parts both diverge.
-\een
-
-% cancellation
-Consider the alternating harmonic series:
-\[
-\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n} = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \ldots = \log 2,
-\]
-\bit
-\it The positive and negative parts of the alternating harmonic series both diverge.
-\it There is sufficient cancellation between its terms to ensure that the series itself converges.
-\eit
-%\end{remark}
-
-%----------------------------------------------------------------------
-\subsection{The Riemann rearrangement theorem}
-%----------------------------------------------------------------------
-% rearrangements
-\begin{definition}
-\ben
-\it A bijection $\phi:\N\to\N$ is called a \emph{permutation} of the labels $\{1,2,\ldots\}$. 
-\it The \emph{rearrangement} of the series $\sum_n a_n$ by the permutation $\phi$ is the series $\sum_n a_{\phi(n)}$. 
-\een
-\end{definition}
-
-% theorem: RRT
-\begin{theorem}[The Riemann rearrangement theorem]\label{thm:rrt}
-Let $\sum_n a_n$ be a convergent series.
-\ben
-\it If $\sum_n a_n$ is absolutely convergent, then every rearrangement $\sum_n a_{\phi(n)}$ is absolutely convergent to the same limit.
-\it If $\sum_n a_n$ is conditionally convergent, then for every $a\in\R\,\cup\,\{\pm\infty\}$ there exists a permutation $\phi:\N\to\N$ such that $\sum_n a_{\phi(n)}=a$.
-\een
-\end{theorem}
-\proofomitted
-
-\bit
-\it The limit of conditionally convergent series depends on the \emph{order} in which the terms of the series are added together. 
-\it In probability theory, we cannot deal with sums that are conditionally convergent.
-\it Expectation is only defined if the series $\sum_{i=1}^{\infty} k p_k$ is absolutely convergent.
-\eit
-
+%
+%%----------------------------------------------------------------------
+%\subsection{Convergent series}
+%%----------------------------------------------------------------------
+%
+%% definition: convergent series
+%\begin{definition}
+%Let $a_1,a_2,\ldots$ be a sequence of real numbers. The infinite series $\sum_{n=1}^{\infty} a_n$ is said to be
+%\ben
+%\it
+%\emph{convergent} if the sequence of partial sums $\sum_{n=1}^m a_n$ converges as $m\to\infty$,
+%\it
+%\emph{absolutely convergent} if $\sum_{n=1}^{\infty} |a_n|$ is convergent, 
+%\it
+%\emph{conditionally convergent} if it is convergent, but is not absolutely convergent,
+%\it
+%\emph{divergent} if the sequence of partial sums $\sum_{n=1}^m a_n$ diverges as $m\to\infty$.
+%\een
+%\end{definition}
+%
+%%\begin{remark}
+%%\bit
+%%\it Convergent series of non-negative terms are always absolutely convergent.
+%%\it Not all convergent series are absolutely convergent.
+%%\eit
+%%\end{remark}
+%
+%
+%\begin{example}
+%\mbox{}\vspace*{-2ex}
+%\bit
+%\it $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}$ converges.
+%\it $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n}$ diverges. (This is the \emph{harmonic series}.)
+%\it $\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n} = \log 2$ is converges conditionally. (This is the \emph{alternating harmonic series}.)
+%\eit
+%\end{example}
+%
+%The alternating harmonic series is convergent,
+%\[
+%\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n} = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \ldots = \log 2,
+%\]
+%but not absolutely convergent, because
+%\[
+%\sum_{n=1}^{\infty} \left|\frac{(-1)^{n+1}}{n}\right| = \sum_{n=1}^{\infty}\frac{1}{n}.
+%\]
+%
+%%----------------------------------------------------------------------
+%\subsection{Positive and negative parts}
+%%----------------------------------------------------------------------
+%
+%% positive and negative parts
+%If a series $\sum_n a_n$ has both positive and negative terms, we can write it as the difference of two series of non-negative terms:
+%\[
+%\sum_{n=1}^{\infty} a_n = \sum_{n=1}^{\infty} a_n^{+} - \sum_{n=1}^{\infty} a_n^{-},
+%\]
+%where
+%\[\begin{array}{lll}
+%a^{+}_n		& = \max\{a_n,0\}	& = \begin{cases}  a_n & \text{ if } a_n \geq 0, \\ 0 & \text{otherwise.}\end{cases} \\
+%a^{-}_n		& = \max\{-a_n,0\} 	& = \begin{cases} -a_n & \text{ if } a_n <    0, \\ 0 & \text{otherwise.}\end{cases}
+%\end{array}\]
+%
+%\bit
+%\it $\displaystyle\sum_{n=1}^{\infty} a_n^{+}$ is called the \emph{positive part} of the series.
+%\it $\displaystyle\sum_{n=1}^{\infty} a_n^{-}$ is called the \emph{negative part} of the series.
+%\eit
+%
+%Since 
+%\[
+%\sum_{n=1}^{\infty} |a_n| = \sum_{n=1}^{\infty} a_n^{+} + \sum_{n=1}^{\infty} a_n^{-},
+%\]
+%we see that
+%\ben
+%\it If $\sum_n a_n$ is absolutely convergent, its positive and negative parts both converge.
+%\it If $\sum_n a_n$ is conditionally convergent, its positive and negative parts both diverge.
+%\een
+%
+%% cancellation
+%Consider the alternating harmonic series:
+%\[
+%\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n} = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \ldots = \log 2,
+%\]
+%\bit
+%\it The positive and negative parts of the alternating harmonic series both diverge.
+%\it There is sufficient cancellation between its terms to ensure that the series itself converges.
+%\eit
+%%\end{remark}
+%
+%%----------------------------------------------------------------------
+%\subsection{The Riemann rearrangement theorem}
+%%----------------------------------------------------------------------
+%% rearrangements
+%\begin{definition}
+%\ben
+%\it A bijection $\phi:\N\to\N$ is called a \emph{permutation} of the labels $\{1,2,\ldots\}$. 
+%\it The \emph{rearrangement} of the series $\sum_n a_n$ by the permutation $\phi$ is the series $\sum_n a_{\phi(n)}$. 
+%\een
+%\end{definition}
+%
+%% theorem: RRT
+%\begin{theorem}[The Riemann rearrangement theorem]\label{thm:rrt}
+%Let $\sum_n a_n$ be a convergent series.
+%\ben
+%\it If $\sum_n a_n$ is absolutely convergent, then every rearrangement $\sum_n a_{\phi(n)}$ is absolutely convergent to the same limit.
+%\it If $\sum_n a_n$ is conditionally convergent, then for every $a\in\R\,\cup\,\{\pm\infty\}$ there exists a permutation $\phi:\N\to\N$ such that $\sum_n a_{\phi(n)}=a$.
+%\een
+%\end{theorem}
+%\proofomitted
+%
+%\bit
+%\it The limit of conditionally convergent series depends on the \emph{order} in which the terms of the series are added together. 
+%\it In probability theory, we cannot deal with sums that are conditionally convergent.
+%\it Expectation is only defined if the series $\sum_{i=1}^{\infty} k p_k$ is absolutely convergent.
+%\eit
+%
 
 
 %==================================================================================================
@@ -204,7 +204,7 @@ L(\mathcal{P},g) 	& = & \displaystyle\sum_{i=1}^n m_i\Delta_i	& \text{where } & 
 \]
 where $\Delta_i = x_i- x_{i-1}$ is the length of the interval $[x_{i-1},x_i]$.
 
-\bigskip
+%\bigskip
 %\bit
 %\it For any given partition $\mathcal{P}$, $L(\mathcal{P},g) \leq U(\mathcal{P},g)$.
 %\it For any \emph{refinement} $\mathcal{P}'$ of $\mathcal{P}$, $L(\mathcal{P},g) \leq U(\mathcal{P}',g)$ and $U(\mathcal{P}',g) \leq U(\mathcal{P},g)$.
@@ -263,103 +263,104 @@ Let $g:\R\to\R$ be an integrable function. The \emph{integral} of $g$ is the dif
 \int_{-\infty}^{\infty} g(x)\,dx = \int_{-\infty}^{\infty} g^{+}(x)\,dx  - \int_{-\infty}^{\infty} g^{-}(x)\,dx,
 \]
 where $g^{+}$ and $g^{-}$ are respectively the \emph{positive part} and \emph{negative part} of $g$: 
-\[\begin{array}{lll}
-g^{+}(x)	& = \max\{ g(x),0\} & = \begin{cases}  g(x) & \text{ if } g(x)\geq 0, \\ 0 & \text{otherwise.}\end{cases} \\[3ex]
-g^{-}(x)	& = \max\{-g(x),0\} & = \begin{cases} -g(x) & \text{ if } g(x)<0, \\ 0 & \text{otherwise.}\end{cases}
-\end{array}\]
 
-Note that:
-\bit
-\it $g^{+}(x)\geq 0$ and $g^{-}(x)\geq 0$ for all $x\in\R$ (i.e. both are non-negative functions).
-\it $g(x)	= g^{+}(x) - g^{-}(x)$ for all $x\in\R$.
-\it $|g(x)|	= g^{+}(x) + g^{-}(x)$ for all $x\in\R$.
-\eit
-
-If $g$ is integrable, then $\displaystyle\int g^{+}(x)\,dx$ and $\displaystyle\int g^{-}(x)\,dx$ are both finite:
-\[
-\int g^{+}(x)\,dx + \int g^{-}(x)\,dx =\int g^{+}(x) + g^{-}(x)\,dx = \int |g(x)|\,dx < \infty.
-\]
-If $g$ is not integrable, one or both of $\displaystyle\int g^{+}(x)\,dx$ and $\displaystyle\int g^{-}(x)\,dx$ must be infinite:
-\bit
-\it if $\displaystyle\int g^{+}(x)\,dx =\infty$ and $\displaystyle\int g^{-}(x)\,dx <\infty$, then $\displaystyle\int g(x)\,dx = +\infty$,
-\it if $\displaystyle\int g^{+}(x)\,dx <\infty$ and $\displaystyle\int g^{-}(x)\,dx =\infty$, then $\displaystyle\int g(x)\,dx = -\infty$,
-\it if $\displaystyle\int g^{+}(x)\,dx =\infty$ and $\displaystyle\int g^{-}(x)\,dx =\infty$, we say that $\displaystyle\int g(x)\,dx$ is \emph{undefined}.
-\eit
-
-% example
-\begin{example}\label{ex:integration}
-Let $g:\R\to\R$ be the function
-$
-g(x) = \begin{cases}
-	\sin x & \text{if }\ 0\leq x\leq 2\pi \\
-	0 	& \text{otherwise.} \\
-\end{cases}
-$
-\bit
-\it Positive part: $g^{+}(x) = \begin{cases} \sin x 	& \text{if } 0\leq x \leq \pi,		\\ 0 & \text{otherwise.}\end{cases}$. 
-\it Negative part: $g^{-}(x) = \begin{cases} -\sin x 	& \text{if } \pi\leq x \leq 2\pi,	\\ 0 & \text{otherwise.}\end{cases}$.
-\eit
-The area above and below the horizontal axis are respectively
 \begin{align*}
-A^{+}	& = \int_{-\infty}^{\infty} g^{+}(x)\,dx = \int_{0}^{\pi} \sin x\,dx = \big[-\cos x\big]_0^\pi = 2, \\
-A^{-}	& = \int_{-\infty}^{\infty} g^{-}(x)\,dx = \int_{\pi}^{2\pi} (-\sin x)\,dx = \big[\cos x\big]_{\pi}^{2\pi} = 2. 
+g^{+}(x)	= \max\{ g(x),0\} & = \begin{cases}  g(x) & \text{ if } g(x)\geq 0, \\ 0 & \text{otherwise.}\end{cases} \\
+g^{-}(x)	= \max\{-g(x),0\} & = \begin{cases} -g(x) & \text{ if } g(x)<0, \\ 0 & \text{otherwise.}\end{cases}
 \end{align*}
-Hence the integral of $g$ over $\R$ is
-\[
-\int_{-\infty}^{\infty} g(x)\,dx = \int_{-\infty}^{\infty} g^{+}(x)\,dx - \int_{-\infty}^{\infty} g^{-}(x)\,dx =  A^{+} - A^{-} = 0.
-\]
-\end{example}
 
-%==========================================================================
-\subsection{The Riemann-Stieltjes integral}
-%==========================================================================
-Let $g:[a,b]\to\R$ be a bounded function, let $\mathcal{P}$ be a partition of $[a,b]$ and let $F:\R\to[0,1]$ be a CDF.
-
-\bigskip
-The upper and lower \emph{Riemann-Stieltjes sums} of $g$ with respect to $\mathcal{P}$ and $F$ are, respectively,
+%Note that:
+%\bit
+%\it $g^{+}(x)\geq 0$ and $g^{-}(x)\geq 0$ for all $x\in\R$ (i.e. both are non-negative functions).
+%\it $g(x)	= g^{+}(x) - g^{-}(x)$ for all $x\in\R$.
+%\it $|g(x)|	= g^{+}(x) + g^{-}(x)$ for all $x\in\R$.
+%\eit
+%
+%If $g$ is integrable, then $\displaystyle\int g^{+}(x)\,dx$ and $\displaystyle\int g^{-}(x)\,dx$ are both finite:
 %\[
-%\begin{array}{lll}
-%U(\mathcal{P},g,F)		& = \sum_{i=1}^n M_i\Delta_i 	& \text{where } M_i = \sup_{x\in [x_{i-1},x_i]} g(x), \text{and} \\
-%L(\mathcal{P},g,F) 	& = \sum_{i=1}^n m_i\Delta_i		& \text{where } m_i = \inf_{x\in [x_{i-1},x_i]} g(x),
+%\int g^{+}(x)\,dx + \int g^{-}(x)\,dx =\int g^{+}(x) + g^{-}(x)\,dx = \int |g(x)|\,dx < \infty.
+%\]
+%If $g$ is not integrable, one or both of $\displaystyle\int g^{+}(x)\,dx$ and $\displaystyle\int g^{-}(x)\,dx$ must be infinite:
+%\bit
+%\it if $\displaystyle\int g^{+}(x)\,dx =\infty$ and $\displaystyle\int g^{-}(x)\,dx <\infty$, then $\displaystyle\int g(x)\,dx = +\infty$,
+%\it if $\displaystyle\int g^{+}(x)\,dx <\infty$ and $\displaystyle\int g^{-}(x)\,dx =\infty$, then $\displaystyle\int g(x)\,dx = -\infty$,
+%\it if $\displaystyle\int g^{+}(x)\,dx =\infty$ and $\displaystyle\int g^{-}(x)\,dx =\infty$, we say that $\displaystyle\int g(x)\,dx$ is \emph{undefined}.
+%\eit
+%
+%% example
+%\begin{example}\label{ex:integration}
+%Let $g:\R\to\R$ be the function
+%$
+%g(x) = \begin{cases}
+%	\sin x & \text{if }\ 0\leq x\leq 2\pi \\
+%	0 	& \text{otherwise.} \\
+%\end{cases}
+%$
+%\bit
+%\it Positive part: $g^{+}(x) = \begin{cases} \sin x 	& \text{if } 0\leq x \leq \pi,		\\ 0 & \text{otherwise.}\end{cases}$. 
+%\it Negative part: $g^{-}(x) = \begin{cases} -\sin x 	& \text{if } \pi\leq x \leq 2\pi,	\\ 0 & \text{otherwise.}\end{cases}$.
+%\eit
+%The area above and below the horizontal axis are respectively
+%\begin{align*}
+%A^{+}	& = \int_{-\infty}^{\infty} g^{+}(x)\,dx = \int_{0}^{\pi} \sin x\,dx = \big[-\cos x\big]_0^\pi = 2, \\
+%A^{-}	& = \int_{-\infty}^{\infty} g^{-}(x)\,dx = \int_{\pi}^{2\pi} (-\sin x)\,dx = \big[\cos x\big]_{\pi}^{2\pi} = 2. 
+%\end{align*}
+%Hence the integral of $g$ over $\R$ is
+%\[
+%\int_{-\infty}^{\infty} g(x)\,dx = \int_{-\infty}^{\infty} g^{+}(x)\,dx - \int_{-\infty}^{\infty} g^{-}(x)\,dx =  A^{+} - A^{-} = 0.
+%\]
+%\end{example}
+%
+%%==========================================================================
+%\subsection{The Riemann-Stieltjes integral}
+%%==========================================================================
+%Let $g:[a,b]\to\R$ be a bounded function, let $\mathcal{P}$ be a partition of $[a,b]$ and let $F:\R\to[0,1]$ be a CDF.
+%
+%\bigskip
+%The upper and lower \emph{Riemann-Stieltjes sums} of $g$ with respect to $\mathcal{P}$ and $F$ are, respectively,
+%%\[
+%%\begin{array}{lll}
+%%U(\mathcal{P},g,F)		& = \sum_{i=1}^n M_i\Delta_i 	& \text{where } M_i = \sup_{x\in [x_{i-1},x_i]} g(x), \text{and} \\
+%%L(\mathcal{P},g,F) 	& = \sum_{i=1}^n m_i\Delta_i		& \text{where } m_i = \inf_{x\in [x_{i-1},x_i]} g(x),
+%%\end{array}
+%%\]
+%\[
+%\begin{array}{lclcl}
+%U(\mathcal{P},g,F)	& = & \displaystyle\sum_{i=1}^n M_i\Delta_i 	& \text{where } & M_i = \sup\{g(x): x\in [x_{i-1}, x_i]\}, \\
+%L(\mathcal{P},g,F) 	& = & \displaystyle\sum_{i=1}^n m_i\Delta_i	& \text{where } & m_i = \inf\{g(x): x\in [x_{i-1}, x_i]\},
 %\end{array}
 %\]
-\[
-\begin{array}{lclcl}
-U(\mathcal{P},g,F)	& = & \displaystyle\sum_{i=1}^n M_i\Delta_i 	& \text{where } & M_i = \sup\{g(x): x\in [x_{i-1}, x_i]\}, \\
-L(\mathcal{P},g,F) 	& = & \displaystyle\sum_{i=1}^n m_i\Delta_i	& \text{where } & m_i = \inf\{g(x): x\in [x_{i-1}, x_i]\},
-\end{array}
-\]
-where $\Delta_i = F(x_i)- F(x_{i-1})$ is the probability measure induced by $F$ of the interval $[x_{i-1},x_i]$.
-
-\bigskip
-The upper and lower \emph{Riemann-Stieltjes integrals} of $g$ on $[a,b]$ are, respectively,
-\[
-\underline{\int_a^b} g(x)\,dF(x) = \sup_{\mathcal{P}} L(\mathcal{P},g,F)
-\quad\text{and}\quad
-\overline{\int_a^b} g(x)\,dF(x)  = \inf_{\mathcal{P}} U(\mathcal{P},g,F).
-\]
-where the supremum and infimum are taken over all possible partitions of $[a,b]$.
-
-\bit
-\it If the upper and lower Riemann-Stieltjes integrals coincide, we say that $g$ is \emph{Riemann-Stieltjes integrable}.
-\it In this case, their common value is called the \emph{Riemann-Stieltjes integral} of $g$, denoted by
-\[
-\displaystyle\int_a^b g(x)\,dF(x).
-\]
-\eit
-
-
-\begin{remark}
-Let $F$ be the CDF of the \emph{uniform} distribution on $[a,b]$:
-\[
-F(x) = \begin{cases}
-	0 								& x < a, \\
-	\displaystyle\frac{x-a}{b-a}	& a\leq x\leq b, \\
-	1								& x > b.
-\end{cases}
-\]
-In this case, for any interval $[x_{i-1}, x_i] \subseteq [a,b]$ the probability measure induced by $F$ is equal to its length, and the Riemann-Stieltjes integral reduces to the ordinary Riemann integral.
-\end{remark}
+%where $\Delta_i = F(x_i)- F(x_{i-1})$ is the probability measure induced by $F$ of the interval $[x_{i-1},x_i]$.
+%
+%\bigskip
+%The upper and lower \emph{Riemann-Stieltjes integrals} of $g$ on $[a,b]$ are, respectively,
+%\[
+%\underline{\int_a^b} g(x)\,dF(x) = \sup_{\mathcal{P}} L(\mathcal{P},g,F)
+%\quad\text{and}\quad
+%\overline{\int_a^b} g(x)\,dF(x)  = \inf_{\mathcal{P}} U(\mathcal{P},g,F).
+%\]
+%where the supremum and infimum are taken over all possible partitions of $[a,b]$.
+%
+%\bit
+%\it If the upper and lower Riemann-Stieltjes integrals coincide, we say that $g$ is \emph{Riemann-Stieltjes integrable}.
+%\it In this case, their common value is called the \emph{Riemann-Stieltjes integral} of $g$, denoted by
+%\[
+%\displaystyle\int_a^b g(x)\,dF(x).
+%\]
+%\eit
+%
+%
+%\begin{remark}
+%Let $F$ be the CDF of the \emph{uniform} distribution on $[a,b]$:
+%\[
+%F(x) = \begin{cases}
+%	0 								& x < a, \\
+%	\displaystyle\frac{x-a}{b-a}	& a\leq x\leq b, \\
+%	1								& x > b.
+%\end{cases}
+%\]
+%In this case, for any interval $[x_{i-1}, x_i] \subseteq [a,b]$ the probability measure induced by $F$ is equal to its length, and the Riemann-Stieltjes integral reduces to the ordinary Riemann integral.
+%\end{remark}
 
 
 %======================================================================

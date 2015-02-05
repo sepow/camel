@@ -1,0 +1,89 @@
+{% extends "manylion_modiwl.html" %}
+
+{% block title %} 
+	{{ object.title }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+	{{ block.super }}&gt;<a href="{% url 'exercise-detail' object.pk %}"> Exercise {{ chapter.number }}.{{ object.number }}</a>
+{% endblock %}
+
+{% block content-main %}
+{% spaceless %}
+
+	<div class="macros">
+	    {% autoescape off %}
+			\( {{ module.newcommands | safe }} \)
+		{% endautoescape %}
+	</div>
+
+
+<h2>{{ module.code }}: Exercise {{ chapter.number }} {{ object.number }} </h1>
+
+{% if subtree %}
+
+	{% load mptt_tags %}
+    {% recursetree subtree %}
+
+			{% if node.node_type == "texnode" %}
+					{{ node.htex | safe }}
+			
+			{% elif node.node_class == "exercise" %}
+				<div class="exercise">
+					<b>{{ node.node_type | title }} {{ node.parent.number }}.{{ node.number }}</b>
+					{% if node.title %} ({{ node.title }}) {% endif %}<br/> 
+					{{ children }}
+				</div>
+			
+			{% elif node.node_class == "list" %}
+				{% if node.node_type == "itemize" %}
+					<ul class="itemize"> {{ children }}	</ul>
+				{% elif node.node_type == "enumerate" %}
+					<ol class="enumerate"> {{ children }} </ol>
+				{% elif node.node_type == "questions" %}
+					<ol class="questions"> {{ children }} </ol>
+				{% elif node.node_type == "parts" %}
+					<ol class="parts"> {{ children }} </ol>
+				{% elif node.node_type == "subparts" %}
+					<ol class="subparts"> {{ children }} </ol>
+				{% elif node.node_type == "choices" %}
+					<ul class="choices"> {{ children }} </ul>
+				{% endif %}
+			
+			{% elif node.node_class == "item" %}
+				{% if node.node_type == "item" %}
+					<li class="item"> {{ children }} </li>
+				{% elif node.node_type == "question" %}
+					<li class="question"> {{ children }} </li>
+				{% elif node.node_type == "part" %}
+					<li class="part"> {{ children }} </li>
+				{% elif node.node_type == "subpart" %}
+					<li class="subpart"> {{ children }} </li>
+				{% elif node.node_type == "choice" or node.node_type == "correctchoice"%}
+					<li class="choice"> {{ children }} </li>
+				{% endif %}
+			{% endif %}
+    {% endrecursetree %}
+
+
+	<div class="exerciseform">
+	<form action="{% url 'decision' %}" method="POST"> {% csrf_token %}
+		{{ exercise_form.answer }}
+		{{ exercise_form.answer }} 
+		<p align="right"><input id="dyrfarniad" type="submit" value="Submit" /></p>
+	 </form>
+	</div>
+
+
+
+{% else %}
+	<p>No exercise</p>
+{% endif %}
+
+{% endspaceless %}
+{% endblock %}
+
+{% block sidebar %}
+	&nbsp;
+{% endblock %}

@@ -38,8 +38,6 @@ If $\prob(B)>0$, the \emph{conditional probability of $A$ given $B$} is defined 
 \eit
 \end{remark}
 
-\break
-
 % example
 \begin{example}
 Let $A$ and $B$ be two events, with probabilities $\prob(A)=0.3$, $\prob(B)=0.8$ and $\prob(A\cap B)=0.2$.\par
@@ -92,9 +90,6 @@ If $\{A_1,A_2,\ldots\}$ is a partition of $B$, then
 \[
 \prob(B) = \sum_{i=1}^{\infty} \prob(B\cap A_i) = \sum_{i=1}^{\infty} \prob(B|A_i)\prob(A_i)
 \]
-\end{theorem}
-
-\break
 % proof
 \begin{proof}
 First we write $B$ as a disjoint union
@@ -109,28 +104,26 @@ By the countable additivity of probability measures,
 	& = \sum_{i=1}^{\infty} \prob(B|A_i)\prob(A_i).
 \end{align*}
 \end{proof}
+\end{theorem}
 
 %----------------------------------------------------------------------
-\newpage
 \section{Bayes' theorem}
 %----------------------------------------------------------------------
 
+% lemma: simple bayes
 \begin{lemma}\label{lem:bayes}
 For any two events $A$ and $B$ such that $\prob(B)>0$,
 \[
 \prob(A|B) = \frac{\prob(B|A)\prob(A)}{\prob(B)}.
 \]
-\end{lemma}
-
+% proof
 \begin{proof}
 Set intersection is a commutative operation, so
 \[
 \prob(A|B) = \frac{\prob(A\cap B)}{\prob(B)} = \frac{\prob(B\cap A)}{\prob(B)} = \frac{\prob(B|A)\prob(A)}{\prob(B)}.
 \]
-\qed
 \end{proof}
-
-\break
+\end{lemma}
 
 % theorem: Bayes' theorem
 \begin{theorem}[Bayes' Theorem]\label{thm:bayes}
@@ -138,8 +131,6 @@ Let $\{A_1,A_2,\ldots\}$ be a partition of an event $B$ and suppose that $\prob(
 \[
 \prob(A_i|B) = \frac{\prob(B|A_i)\prob(A_i)}{\sum_{j=1}^{\infty} \prob(B|A_j)\prob(A_j)}
 \]
-\end{theorem}
-
 % proof
 \begin{proof}
 By Lemma~\ref{lem:bayes},
@@ -148,16 +139,13 @@ By Lemma~\ref{lem:bayes},
 	= \frac{\prob(B|A_i)\prob(A_i)}{\prob(B)}
 	= \frac{\prob(B|A_i)\prob(A_i)}{\sum_{j=1}^{\infty} \prob(B|A_j)\prob(A_j)}
 \]
-where the last equality follows by the partition theorem.\qed
-\vfill
+where the last equality follows by the partition theorem.
 \end{proof}
+\end{theorem}
 
-\break
 % example
 \begin{example}
 Bob tries to buy a newspaper every day. He tries in the morning with probability $1/3$, in the evening with probability $1/2$ and forgets completely with probability $1/6$. The probability of successfully buying a newspaper in the morning is $9/10$ (plenty of copies left), and in the evening is $2/10$ (often sold out). If Bob buys a newspaper, what is the probability that he bought it in the morning?
-\end{example}
-
 % solution
 \begin{solution}
 Let $M$ be the event that Bob tries to buy a newspaper in the morning, $E$ the event that he tries in the evening, and $F$ the event that he forgets completely. Then
@@ -177,6 +165,7 @@ By Bayes' Theorem,
 \end{align*}
 If Bob buys a newspaper, the probability that he bought it in the morning is $0.75$.
 \end{solution}
+\end{example}
 
 
 

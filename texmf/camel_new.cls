@@ -1,27 +1,29 @@
 %!TEX encoding = UTF-8 Unicode filename: camel.cls
-% author: scmde
-% date: 28/08/2014
+%
+% 
+
+% basic
 \NeedsTeXFormat{LaTeX2e}
-\def\fileversion{1.0}
-\def\filedate{2014/08/28}
+\def\fileversion{1.1}
+\def\filedate{2015/02/25}
 \ProvidesClass{camel}[\filedate \space v\fileversion \space (scmde)]
 \ProvidesFile{camel.cls}[\filedate \space v\fileversion \space (scmde)]
 
-% options
+% booleans
 \newif\if@cymraeg\@cymraegfalse
 \newif\if@screen\@screenfalse
 \newif\if@blanks\@blanksfalse
 \newif\if@answers\@answersfalse
 \newif\if@answersatend\@answersatendfalse
 
-% shortcuts (to set options in preamble, rather than passing to class)
+% shortcuts for setting options in preamble (instead of passing to class)
 \def\printcymraeg{\@cymraegtrue} 
 \def\printscreen{\@screentrue} 
 \def\printblanks{\@blankstrue} 
 \def\printanswers{\@answerstrue\@answersatendfalse} 
 \def\printanswersatend{\@answersatendtrue\@answersfalse}
 
-% command line options
+% command line options (used by $python manage.py makepdf)
 \ifnum\interactionmode = 2
 	\def\optionYes{Y}
 	\def\optionNo{N}
@@ -37,7 +39,7 @@
 	\ifx\answersatend\optionYes\@answersatendtrue\@answersfalse\fi
 \fi
 
-% class options
+% class options (with messages)
 \DeclareOption{cymraeg}{\ifx\cymraeg\undefined\@cymraegtrue\else\message{^^J'cymraeg' option has no effect^^J}\fi}
 \DeclareOption{screen}{\ifx\screen\undefined\@screentrue\else\message{^^J'screen' option has no effect^^J}\fi}
 \DeclareOption{blanks}{\ifx\blanks\undefined\@blankstrue\else\message{^^J'blanks' option has no effect^^J}\fi}
@@ -47,7 +49,7 @@
 \ProcessOptions
 \relax
 
-% message
+% option summary message
 \message{>>>>> OPTIONS:}
 \if@cymraeg\message{ CYMRAEG}\fi
 \if@screen\message{ SCREEN}\fi
@@ -63,16 +65,10 @@
 \RequirePackage{amsmath,amsfonts}
 \RequirePackage[a4paper,margin=20mm]{geometry}
 
-% load hyperref (always load last)
+% hyperref setup (always load last)
 %\RequirePackage{hyperref}
 %\hypersetup{pdfborder = {0 0 0}}
 
-
-% default fonts (for pdf)
-%\renewcommand{\rmdefault}{ptm}
-%\renewcommand{\sfdefault}{phv}
-%\renewcommand{\ttdefault}{pcr}
-%\renewcommand{\familydefault}{\rmdefault}
 
 % GB date format
 \def\today{\number\day/\number\month/\number\year}
@@ -99,16 +95,12 @@
 \setlength{\parskip}{0.5ex}
 
 
-\renewcommand{\chaptername}{Lecture}
-
 \usepackage[pagestyles]{titlesec}
 \usepackage{titletoc}
 \setcounter{tocdepth}{1}
 
-\titleformat{\chapter}
-	{\bfseries\huge}{\chaptername~\thechapter}{1em}{}
-\titleformat{\section}
-	{\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\chapter}{\bfseries\huge}{\chaptername~\thechapter}{1em}{}
+\titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}
 
 \newcommand\chaptocrule{\noindent\rule[1pt]{\textwidth}{0.5pt}}
 \newcommand\chapcontents{%
@@ -186,8 +178,8 @@
 	\renewcommand{\instructionsname}{Cyfarwyddiadau}
 	\renewcommand{\exercisesname}{Ymarferion}
 	\renewcommand{\exercisename}{Ymarfer}
-    \newcommand{\questionsname}{Cwestiynnau}
-    \newcommand{\questionname}{Cwestiwn}
+    \renewcommand{\questionsname}{Cwestiynnau}
+    \renewcommand{\questionname}{Cwestiwn}
 	\renewcommand{\answersname}{Atebion}
 	\renewcommand{\answername}{Ateb}
 	\renewcommand{\solutionname}{Datrysiad}
@@ -231,7 +223,7 @@
 % common settings (paper version)
 %-------------------------------------------------
 
-\newcommand{\spar}{\if@screen\par\fi}
+%\newcommand{\spar}{\if@screen\par\fi}
 
 % dummy commands
 \renewcommand{\break}{}
@@ -273,9 +265,10 @@
 
 %-------------------------------------------------
 % boxes
-%\RequirePackage[framemethod=TikZ]{mdframed}
-\RequirePackage{mdframed}
+%-------------------------------------------------
 \RequirePackage{xcolor}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{breakable}
 
 % set show/hide colours
 \newcommand{\de@ShowColour}{black}
@@ -288,15 +281,11 @@
 	\renewcommand{\de@HideColour}{white}
 \fi
 
-\RequirePackage{tcolorbox}
-\tcbuselibrary{breakable}
-
 % proof
 \newcommand{\prooftitle}{\noindent\textbf{\proofname:}\enspace}
 \newenvironment{proof}{%
 	\vspace{\parskip}
 	\begin{tcolorbox}[breakable,notitle,boxrule=0.5pt,colback=white,coltext=\de@HideColour]
-%	\begin{mdframed}%[linecolor=red]
 	\textcolor{\de@ShowColour}{\prooftitle}
 	\begingroup
 	\hideon
@@ -304,7 +293,6 @@
 	\hideoff
 	\endgroup	
     \end{tcolorbox}
-%	\end{mdframed} 
 }
 
 % solution
@@ -312,26 +300,19 @@
 \newenvironment{solution}{%
 	\vspace{\parskip}
 	\begin{tcolorbox}[breakable,notitle,boxrule=0.5pt,colback=white,coltext=\de@HideColour]
-%	\begin{mdframed}%[linecolor=red]
 	\textcolor{\de@ShowColour}{\solutiontitle}
 	\hideon
 }{%
 	\hideoff	
     \end{tcolorbox}
-%	\end{mdframed} 
 }
-%\surroundwithmdframed[linewidth=2pt]{proof}
-%\newmdenv[linecolor=red,frametitle=Proof:]{proof}
-
 
 % hidebox
 \newenvironment{hidebox}{%
 	\begin{tcolorbox}[breakable,notitle,boxrule=0.5pt,colback=white,coltext=\de@HideColour]
-%	\begin{mdframed}
 	\hideon
 }{%
 	\hideoff
-%	\end{mdframed}
     \end{tcolorbox}
 }
 

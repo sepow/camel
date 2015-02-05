@@ -1,0 +1,64 @@
+{% extends "manylion_modiwl.html" %}
+
+{% block title %} 
+	{{ object.title }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+	{{ block.super }}&gt;<a href="{% url 'treenode-detail' object.pk %}"> {{ object.title }}</a>
+{% endblock %}
+
+{% block content-main %}
+{% spaceless %}
+
+	<div class="macros">
+	    {% autoescape off %}
+			\( {{ module.newcommands | safe }} \)
+		{% endautoescape %}
+	</div>
+
+<br>
+<u><h1 align="center">{{ module.code }} {{ module.title }} {{ module.year }} </h1></u>
+<br>
+
+{% if subtree %}
+
+	{% load mptt_tags %}
+    {% recursetree subtree %}
+
+		{% if node.node_type == "reference" %}
+			<a href="{% url 'treenode-detail' object.pk %}#{{ node.htex | safe }}">
+				{% if refs %} 
+					{% for ref in refs %}
+						{% if ref.label and ref.label == node.htex %}
+							{{ chapter.number }}.{{ ref.number }} 
+							{% endif %}
+					{% endfor %}
+				{% endif %}
+			</a>
+		<br />
+		{% else %}
+			{% include "nodeblock.html" %}
+		{% endif %}
+    {% endrecursetree %}
+
+{% else %}
+	<p>No subtree!</p>
+{% endif %}
+
+{% endspaceless %}
+{% endblock %}
+
+{% block sidebar %}
+	{% if toc %}
+	<h3>Chapters</h3>
+		{% for chap in toc %}
+			<p><a href="{% url 'treenode-detail' chap.pk %}"> {{ chap.number }}. {{ chap.title }}</a></p>
+		{% endfor %}
+	{% else %}
+	    <p>No toc</p>
+	{% endif %}
+
+{% endblock %}
+

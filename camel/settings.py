@@ -4,7 +4,7 @@ import os
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
 TEX_ROOT  = os.path.join(SITE_ROOT, 'data/tex/')
 PDF_ROOT  = os.path.join(SITE_ROOT, 'data/pdf/')
-SIMS_ROOT  = os.path.join(SITE_ROOT, 'data/sims')
+SIMS_ROOT  = os.path.join(SITE_ROOT, 'data/sims/')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'zm8*_50*9-sziwme0*@n*^zb=g&(r^wwft5#q+me-345z=377*'

@@ -1,7 +1,9 @@
 /*
 base.css for camel project
 
-style, scripts
+Layout is as follows:
+styles
+scripts
 title
 container
 	header
@@ -9,17 +11,32 @@ container
 	breadcrumbs
 	columnwrap
 		content-main
-			
-			browse-horizontal
-			content-secondary
-		sidebar
+		browse-horizontal
+		content-secondary
+	sidebar
 	footer
 
 
 
 */
 
-/* show/hide */
+/* question/part/subpart numbering style and spacing */
+
+ol.questions {
+	list-style-type:decimal;
+}
+ol.parts {
+	list-style-type:lower-latin;
+}
+ol.subparts {
+	list-style-type:lower-roman;
+}
+ol.choices {
+	list-style-type:upper-latin;
+    margin-top: 10px;
+}
+
+/* answers */
 div.answer, div.solution {
     display: hidden;
 	cursor: pointer;
@@ -65,6 +82,24 @@ p.answer_title, p.solution_title {
   display: none
 }
 
+div.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table.tabular {
+    border-collapse: collapse; 
+	border:2px solid #000;
+    background:lightgray;
+}
+
+table.tabular  td {
+	border-width:1px;
+    border-style: solid; 
+	padding:5px 25px 5px 25px;
+}
+
 #maintitle {
     border:1px solid #000;
   	font-size:175%;
@@ -101,11 +136,14 @@ h1.section {
 }
 
 /* styles for latex blocks */
-div.theorem, div.proof, div.remark, div.definition, div.example, div.exercise, div.solution, div.answer {
+div.flotable, div.theorem, div.proof, div.remark, div.definition, div.example, div.exercise, div.solution, div.answer {
     border:1px solid #000;
 	padding:3px;
 }
 
+div.flotable {
+	background:AliceBlue;
+}
 div.theorem {
 	background:MistyRose;
 }
@@ -460,7 +498,7 @@ a:link, a:visited {
 }
 #content-main a:link, #content-main a:visited {
     color:#a60514;
-    text-decoration:underline;
+    text-decoration:none;
 }
 #content-secondary a:link, #content-secondary a:visited {
     color:#a60514;

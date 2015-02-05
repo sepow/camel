@@ -1,0 +1,29 @@
+{% extends "treenode_detail.html" %}
+
+{% block title %} 
+	Quiz
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }} > <a href="{% url 'camel.views.quiz' %}">Quiz</a>
+{% endblock %}
+
+{% block content-main %}
+
+<h2><u>Quiz</u></h2>
+
+{% if question %}
+	<div class="question">{{ question }}</span></div>
+	<form action="{% url 'decision' %}" method="POST"> {% csrf_token %}
+		<p>{{ answer_form.question }}</p>
+		<p>{{ answer_form.answer }} </p>
+		<p><input id="decision" type="submit" value="Decision" /></p>
+	 </form>
+	</div>
+{% else %}
+	<p>No question.</p>
+{% endif %}
+
+{% endblock %}
+
+

@@ -54,8 +54,24 @@ class Module(models.Model):
     def __unicode__(self):
         return self.code
         
+    # def get_absolute_url(self):
+    #     return reverse('module-detail', kwargs={'module_code': self.code})
+        
     def get_absolute_url(self):
-        return reverse('module-detail', kwargs={'module_code': self.code})
+        return reverse('manylion-modiwl', kwargs={'pk': self.id})
+
+    def get_next(self):
+        nesaf = Module.objects.filter(id__gt=self.code)
+        if nesaf:
+            return nesaf[0]
+        return False
+        
+    def get_prev(self):
+        prev = Module.objects.filter(id__lt=self.code).order_by('-code')
+        if prev:
+            return prev[0]
+        return False
+    
 
     # this allows us to run doctree.py in a django shell
     class Meta:
@@ -89,6 +105,10 @@ class TreeNode(MPTTModel):
     
     # misc. 
     is_correct_choice = models.BooleanField(default=False)    # hack
+
+
+    def get_absolute_url(self):
+        return reverse('treenode-detail', kwargs={'pk': self.pk})
     
     class MPTTMeta:
         order_insertion_by = ['node_id']
@@ -102,7 +122,7 @@ class TreeNode(MPTTModel):
         return s
 
 #------------------------------------------------
-# Label
+# Label (probably not needed - use mpaths instead)
 class Label(models.Model):
     module = models.ForeignKey(Module)
     tex_label = models.CharField(max_length=100)
@@ -115,10 +135,27 @@ class Label(models.Model):
         return reverse('book-detail', kwargs={'module': self.module})
 
 #------------------------------------------------
-# Submission
+# Interactive
 class Submission(models.Model):
     student = models.ForeignKey(User)
     exercise = models.ForeignKey(TreeNode)
+
+class Answer(models.Model):
+    student = models.ForeignKey(User)
+    question = models.ForeignKey(TreeNode)
+    answer = models.TextField()
+    submission = models.ForeignKey(Submission, null=True)
+    def __unicode__(self):
+        return unicode( answer )
+
+class MultipleChoiceAnswer(models.Model):
+    student = models.ForeignKey(User)
+    question = models.ForeignKey(TreeNode)
+    choice = models.CharField(max_length=1)
+    submission = models.ForeignKey(Submission, null=True)
+    def __unicode__(self):
+        return unicode( choice )
+
 
 # class MultipleChoiceAnswer(models.Model):
 #     option = models.ForeignKey(Submission)

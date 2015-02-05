@@ -20,28 +20,29 @@ Two events $A$ and $B$ are said to be \emph{independent} if $\prob(A\cap B) = \p
 % lemma
 \begin{lemma}
 If $A$ and $B$ are independent, then $A$ and $B^c$ are also independent.
-\end{lemma}
 % proof
 \begin{proof}
 \[\begin{array}{ll}
 \prob(A\cap B^c) 
-%	= \prob(A\setminus B)
 	= \prob(A) - \prob(A\cap B)
 	& = \prob(A) - \prob(A)\prob(B) \quad\text{by independence,} \\
 	& = \prob(A)(1-\prob(B))
 	= \prob(A)\prob(B^c).
 \end{array}\]
 \end{proof}
+\end{lemma}
 
+% example
 \begin{example}
 A fair die is rolled once. Let $A$ be the event that the outcome is an even number, and let $B$ be the event that the outcome is divisible by $3$. Are $A$ and $B$ independent?
-\end{example}
+% solution
 \begin{solution}
 \bit
 \it $\prob(A) = \prob(\{2,4,6\}) = 1/2$, $\prob(B) = \prob(\{3,6\}) = 1/3$, $\prob(A\cap B) = \prob(\{6\}) = 1/6$.
 \it Thus we see that $\prob(A\cap B) = \prob(A)\prob(B)$, so $A$ and $B$ are independent.
 \eit
 \end{solution}
+\end{example}
 
 %----------------------------------------------------------------------
 \section{Pairwise independence and total indepencence}
@@ -77,10 +78,9 @@ $\prob\left(\bigcap_{j=1}^m B_j\right) = \prod_{j=1}^m \prob(B_j).$
 % problem: de Mere's paradox
 \begin{example}[de M\'{e}r\'{e}'s Paradox]
 Show that you are more likely to obtain a six in 4 rolls of a single fair die, than to obtain a double-six in 24 rolls of two fair dice.
-\end{example}
+% solution
 \begin{solution}
 Assume that the rolls are totally independent of each other.
-%\begin{align*}
 \[\begin{array}{ll}
 \prob(\text{at least one six in 4 rolls of a single die)}
 	& = 1- \prob(\text{no sixes obtained in 4 rolls}) \\
@@ -89,16 +89,13 @@ Assume that the rolls are totally independent of each other.
 	& = 1- \prob(\text{no double-sixes in 24 rolls}) \\
 	& = 1 - (35/36)^{24}  = 0.4914. 
 \end{array}\]
-%\end{align*}
 \end{solution}
+\end{example}
 
-
-%\newpage % <<
 
 % example
 \begin{example}
 Consider a sample space $\Omega=\{1,2,3,4\}$ where each outcome is equally likely. Let $A=\{1,2\}$, $B=\{1,3\}$ and $C=\{1,4\}$. Show that $\{A,B,C\}$ is pairwise independent, but not totally independent.
-\end{example}
 % solution
 \begin{solution}
 \bit
@@ -115,8 +112,9 @@ Thus the set $\{A,B,C\}$ is pairwise independent.
 \eit
 Thus the set $\{A,B,C\}$ is not totally independent.
 \end{solution}
+\end{example}
 
-%----------------------------------------------------------------------
+ %----------------------------------------------------------------------
 \section{Exercises}
 \input{ex05_independence}
 %----------------------------------------------------------------------

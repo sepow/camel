@@ -1,0 +1,83 @@
+<!--
+template: dyfarniad.html
+-->
+{% extends "cwis.html" %}
+{% load staticfiles %}
+
+{% block title %}
+	Dyfarniad
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }} > <a href="{% url 'ebrydydd.views.dyfarniad' %}">Dyfarniad</a>
+{% endblock %}
+
+{% block styles %}
+	{{ block.super }}
+	<style type='text/css' media="all">
+		table.atebion {
+			border:0px solid #000;
+			/*padding:2px 10px 2px 10px;*/
+			text-align:left;
+		}
+		td {
+			padding: 4px;
+		}
+
+	</style>
+{% endblock %}
+
+{% block content-main %}
+
+{{dadansoddiad_form.as_p }}
+
+
+{% if llinyn %}
+	<h1><u>Cwis</u></h1>
+	<h1 align="center"> {{ llinyn }}</h2>
+{% endif %}	
+
+<br/>
+<table class="atebion">
+{% if dad_defnyddiwr %}
+<tr>
+	<td><u>Ateb a roddwyd:</u>:</td>
+	<td>{{ dad_defnyddiwr.cynghanedd }}</td>
+	<!--td>{{ dad_defnyddiwr.aceniad }}<td>
+	<td>{{ dad_defnyddiwr.bai }}</td>
+	<td></td>
+	<td>({{ dad_defnyddiwr.sylwadau }})</td-->
+</tr>
+{% endif %}
+{% if dad_peiriant %}
+<tr>
+	<td><u>Dadansoddiad y peiriant:</u>:&nbsp;</td>
+	<td>{{ dad_peiriant.cynghanedd }}</td>
+	<!--td>{{ dad_peiriant.aceniad }}</td>
+	<td>{{ dad_peiriant.bai }}</td>
+	<td></td>
+	<td>({{ dad_peiriant.sylwadau }})</td-->
+</tr>
+{% endif %}
+</table>
+
+{% if dyfarniad %}
+<h3>Dyfarniad: <span style="color:red">{{ dyfarniad }}</span></h3>
+{% endif %}
+
+{% if html_strings %}
+	<br>
+	{% include "bloc_dadansoddiad.html" %}
+{% endif %}
+
+<br>
+<a href="{% url "cwis" %}">&larr; Cynnig arall?</a>
+
+{% if neges %}
+	<p>{{ neges }}</p>
+{% endif %}
+
+{% endblock %}
+
+
+

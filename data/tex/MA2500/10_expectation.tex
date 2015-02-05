@@ -332,20 +332,18 @@ A random variable $X$ is said to be \emph{integrable} if $\expe(|X|) < \infty$.
 \begin{definition}[The positive and negative parts]
 %Let $X:\Omega\to\R$ be a random variable.
 The positive and negative parts of a random variable $X$, denoted by $X^{+}$ and $X^{-}$ respectively, are defined to be
-\[\begin{array}{lll}
-X^{+}(\omega) 
-	& = \max\{0,X(\omega)\}	
+\begin{align*}
+X^{+}(\omega) = \max\{0,X(\omega)\}	
 	& = \begin{cases} 
 			X(\omega)	& \text{if } X(\omega)\geq 0, \\
 	   		0 		 	& \text{if } X(\omega) < 0;
 	\end{cases} \\
-X^{-}(\omega)	
-	& = \max\{0,-X(\omega)\} 
+X^{-}(\omega) = \max\{0,-X(\omega)\} 
 	& = \begin{cases} 
 			-X(\omega)	& \text{if } X(\omega)\leq 0, \\
 			0 		 	& \text{if } X(\omega) > 0.
 		\end{cases}
-\end{array}\]
+\end{align*}
 \end{definition}
 Note that $X^{+}$ and $X^{-}$ are both non-negative random variables, with $X = X^{+} - X^{-}$.
 

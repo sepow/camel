@@ -20,10 +20,21 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-	# modules
+	# content
+    url(r'modiwlau/$', camel.views.Module_ListView.as_view(), name='rhestr-modiwlau'),
+    url(r'modiwlau/(?P<pk>\d+)/$', camel.views.Module_DetailView.as_view(), name="manylion-modiwl"),
+    url(r'treenode/(?P<pk>\d+)/$', camel.views.TreeNode_DetailView.as_view(), name="treenode-detail"),
 	url(r'^modules/$', camel.views.module_list, name="module-list"),
-	url(r'^(?P<module_code>\w+)/$', camel.views.module_detail, name="module-detail"),
-	url(r'^(?P<module_code>\w+)/(?P<chapter_number>\w+)/$', camel.views.chapter_detail, name="chapter-detail"),
+    url(r'^(?P<module_code>\w+)/$', camel.views.module_detail, name="module-detail"),
+    url(r'^(?P<module_code>\w+)/(?P<chapter_number>\w+)/$', camel.views.chapter_detail, name="chapter-detail"),
+
+
+    # exercises
+    url(r'exercise/(?P<pk>\d+)/$', camel.views.Exercise_DetailView.as_view(), name="exercise-detail"),
+    url(r'test/$', camel.views.test, name='test'),
+    url(r'quiz/$', camel.views.quiz, name='quiz'),
+    url(r'decision/$', camel.views.decision, name='decision'),
+
     
 	# students
 	#url(r'^(?P<username>\w+)/$', camel.views.account, name="account"),

@@ -15,8 +15,8 @@ class ModuleAdmin(admin.ModelAdmin):
 	ordering = ('code', 'year',)
 
 class TreeNodeAdmin(admin.ModelAdmin):
-	list_display = ('node_id','parent','mpath','label','node_type','number','title','htex')
-	ordering = ('node_id',)
+	list_display = ('pk','mpath','label','node_type','number','title','htex')
+	ordering = ('mpath',)
 
 admin.site.register(Module, ModuleAdmin)
 admin.site.register(TreeNode, TreeNodeAdmin)
