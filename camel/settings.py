@@ -6,21 +6,24 @@ TEX_ROOT  = os.path.join(SITE_ROOT, 'data/tex/')
 PDF_ROOT  = os.path.join(SITE_ROOT, 'data/pdf/')
 SIMS_ROOT  = os.path.join(SITE_ROOT, 'data/sims/')
 
+import socket
+if socket.gethostname().startswith('morlais'):
+    LIVEHOST = True
+else:
+    LIVEHOST = False
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'zm8*_50*9-sziwme0*@n*^zb=g&(r^wwft5#q+me-345z=377*'
 
-# settings for development server
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-ALLOWED_HOSTS = []
-# end settings for development server
-
-# settings for production server 
-# should also set log-level to INFO or ERROR
-# DEBUG = False
-# TEMPLATE_DEBUG = DEBUG
-# ALLOWED_HOSTS = [camel.maths.cf.ac.uk]
-# end settings for development server
+# settings for development or productoin  server
+if LIVEHOST:
+    DEBUG = False
+    TEMPLATE_DEBUG = DEBUG
+    ALLOWED_HOSTS = [camel.maths.cf.ac.uk]
+else:
+    DEBUG = True
+    TEMPLATE_DEBUG = DEBUG
+    ALLOWED_HOSTS = []
 
 # Application definition
 
