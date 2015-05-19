@@ -4,7 +4,7 @@ import os
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
 TEX_ROOT  = os.path.join(SITE_ROOT, 'data/tex/')
 PDF_ROOT  = os.path.join(SITE_ROOT, 'data/pdf/')
-SIMS_ROOT  = os.path.join(SITE_ROOT, 'data/sims/')
+CSV_ROOT  = os.path.join(SITE_ROOT, 'data/csv/')
 
 import socket
 if socket.gethostname().startswith('morlais'):
@@ -15,7 +15,7 @@ else:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'zm8*_50*9-sziwme0*@n*^zb=g&(r^wwft5#q+me-345z=377*'
 
-# settings for development or productoin  server
+# basic settings for development/production server
 if LIVEHOST:
     DEBUG = False
     TEMPLATE_DEBUG = DEBUG
@@ -25,8 +25,27 @@ else:
     TEMPLATE_DEBUG = DEBUG
     ALLOWED_HOSTS = []
 
-# Application definition
+# basic settings for development/production server
+if LIVEHOST:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'camel',
+            'USER': 'humpty',
+            'PASSWORD': '12345',
+	        'HOST': 'localhost',
+	        'PORT': '',
+        }
+    }
+else:
+    DATABASES = {
+	    'default': {
+    	    'ENGINE': 'django.db.backends.sqlite3', 
+    	    'NAME': os.path.join(SITE_ROOT, 'data') + '/camel.db',
+	    }		
+    }   
 
+# Application definition
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,29 +72,15 @@ ROOT_URLCONF = 'camel.urls'
 WSGI_APPLICATION = 'camel.wsgi.application'
 
 
-# database: development
-DATABASES = {
-	'default': {
-    	'ENGINE': 'django.db.backends.sqlite3', 
-    	'NAME': os.path.join(SITE_ROOT, 'data') + '/camel.db',
-	}		
-}
-
-# database: production
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'camel',
-#	'USER': 'humpty',
-#	'PASSWORD': '12345',
-#	'HOST': 'localhost',
-#	'PORT': '',
-#    }
-#}
 
 # location
 TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-gb'
+LANGUAGES = (
+    ('en', 'English'),
+    ('cy', 'Cymraeg'),
+)
+
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
