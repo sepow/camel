@@ -1,0 +1,584 @@
+/*
+base.css for camel project
+
+Layout is as follows:
+styles
+scripts
+title
+container
+	header
+		logo, banner, global-nav
+	breadcrumbs
+	columnwrap
+		content-main
+		browse-horizontal
+		content-secondary
+	sidebar
+	footer
+
+
+
+*/
+
+/* question/part/subpart numbering style and spacing */
+
+ol.questions {
+	list-style-type:decimal;
+}
+ol.parts {
+	list-style-type:lower-latin;
+}
+ol.subparts {
+	list-style-type:lower-roman;
+}
+ol.choices {
+	list-style-type:upper-latin;
+    margin-top: 10px;
+}
+
+/* answers */
+div.answer, div.solution {
+    display: hidden;
+	cursor: pointer;
+	background:lightyellow;
+    border:1px solid #000;
+	padding:3px;
+}
+
+/*
+div.inner_solution {
+    background-color:#FFFFE0;
+    display: hidden;
+	padding: 5px;
+}
+*/
+div.step {
+    display: hidden;
+	cursor: pointer;
+}
+
+div.inner_step {
+    background-color:#E9F9ED;
+	border-style:solid;
+	border-width:1px; 
+    display: hidden;
+	padding: 5px;
+}
+
+p.answer_title, p.solution_title {
+	text-align: right;
+  	font-size: 75%;
+	margin-right:3px;
+	margin-top:0px;
+    margin-bottom:0px;
+    
+} 
+
+.visible > div {
+  display: block;
+}
+
+.hidden > div {
+  display: none
+}
+
+div.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table.tabular {
+    border-collapse: collapse; 
+	border:2px solid #000;
+    background:lightgray;
+}
+
+table.tabular  td {
+	border-width:1px;
+    border-style: solid; 
+	padding:5px 25px 5px 25px;
+}
+
+#maintitle {
+    border:1px solid #000;
+  	font-size:175%;
+	text-align:center;
+    margin:0;
+    padding-top:10px;
+    padding-bottom:10px;
+}
+
+/* spacing between blocks */
+p + p, li + li, div + div { 
+    margin-top: 10px;
+}
+
+/* prevent macros from flashing up at the start */
+div.macros {
+	display: none;
+}
+
+/* chapter and section headers */
+h1.section {
+	padding:0px;
+  	font-size:150%;
+}
+/* monospace font (for code blocks) */
+.mono {
+	text-align:		left;
+  	font-family: 	monospace;
+  	white-space: 	pre;
+  	font-size: 		125%;
+	letter-spacing:	2px;
+	visibility: 	visible;
+    position: 		absolute;
+}
+
+/* styles for latex blocks */
+div.flotable, div.theorem, div.proof, div.remark, div.definition, div.example, div.exercise, div.solution, div.answer {
+    border:1px solid #000;
+	padding:3px;
+}
+
+div.flotable {
+	background:AliceBlue;
+}
+div.theorem {
+	background:MistyRose;
+}
+div.proof {
+	background:lightyellow;
+}
+div.remark {
+	background:lavenderblush;
+}
+div.definition {
+	background:lavender;
+}
+div.example {
+	background:powderblue;
+}
+div.exercise {
+	background:lightblue;
+}
+div.solution {
+	background:antiquewhite;
+}
+div.answer {
+	background:antiquewhite;
+}
+
+/* figures */
+div.figure {
+    border:1px solid #000;
+	padding:3px;
+}
+/*
+div.solution {
+	background:lightyellow;
+    border:1px solid #000;
+	padding:3px;
+}
+*/
+
+/* exercises
+.formative {
+	color:blue;
+}
+.summative {
+	color:red;
+}
+
+/* colours for the different types of exercise */
+.diagnostic {
+	color:green;
+}
+.formative {
+	color:blue;
+}
+.summative {
+	color:red;
+}
+
+/* bibliography */
+ul.citation {
+    list-style-type: none;
+}
+li.title {
+	font-style: italic;
+}
+li.author {
+	text-decoration: underline;
+}
+
+/* body */
+body {
+    margin:0;
+    padding:0;
+}
+body, th, td {
+    font:12px/1.4em Verdana,sans-serif;
+}
+
+/** BLOCKS ***/
+
+/* container */
+#container {
+	margin-left: auto;
+    margin-right: auto;
+    position:relative;
+    /* min-width:55em;
+    max-width:100em; */
+	min-width:768px;
+	max-width:1024px;
+}
+
+/* header */
+#header {
+    position:relative;
+    height:6.5em;
+}
+#header h1#logo {
+    margin:0;
+    width:111px;
+    height:41px;
+    position:absolute;
+    bottom:20px;
+    left:25px;
+}
+#header h1#banner {
+    margin:10;
+    position:absolute;
+    bottom:10px;
+    left:100px;
+}
+
+/* global navigation */
+#nav-global {
+    position:absolute;
+    margin:0;
+    bottom:0;
+    right:0;
+    font-family:"Trebuchet MS",sans-serif;
+    white-space:nowrap;
+}
+#nav-global li {
+    display:block;
+    float:left;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+#nav-global a {
+    display:block;
+    float:left;
+    padding:5em 16px 10px 16px;
+	background:d7d9f7;
+}
+
+/* breadcrumbs */
+#breadcrumbs {
+	font:italic 90%/1.2em "Trebuchet MS",sans-serif;
+    height: 20px;
+    line-height:20px;
+    border-top:1px solid #000;
+    border-bottom:1px solid #000;
+}
+
+/* columnwrap: contains main-column and sidebar */
+#columnwrap {
+    background:#4c50cb;
+    padding-bottom:10px;
+    display: block;
+    /* border:1px solid #000; */
+    /* border-right:1px solid #000; */
+    border-bottom:1px solid #000;
+}
+#columnwrap:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+/* content-main */
+#content-main {
+    width:80%;
+    float:left;
+    padding-bottom:10px;
+    border-bottom:1px solid #000;
+}
+#content-main * {
+    margin-left:22px;
+    margin-right:24px;
+}
+#content-main * * {
+    margin-left:0;
+    margin-right:0;
+}
+
+/* sidebar */
+.sidebar {
+    width:20%;
+    float:right;
+    font-size:92%;
+}
+.sidebar * {
+    margin-left:14px;
+    margin-right:14px;
+}
+.sidebar * * {
+    margin-left:0;
+    margin-right:0;
+}
+
+/* content-secondary */
+#content-secondary {
+    clear:both;
+    margin-left:0;
+    margin-right:0;
+    margin-bottom:-10px;
+    padding:10px 24px;
+    /* border-right:1px solid #000; */
+    border-top:1px solid #000;
+
+}
+
+/* horizontal browse */
+#browse-horizontal {
+    margin:1.5em 0 0 0;
+    padding:0em 10px 1em 10px;
+    overflow:hidden;
+	font:italic 90%/1.2em "Trebuchet MS",sans-serif;
+    height: 20px;
+    line-height:20px;
+    border-top:1px solid #000;
+	float: bottom;
+}
+#browse-horizontal .left {
+	float:left;
+}
+#browse-horizontal .middle {
+	float: right;
+	position: relative;
+ 	right: 50%;
+ 	text-align: left;
+}
+#browse-horizontal .right {
+    float:right;
+}
+
+/* footer */
+#footer {
+    clear:both;
+    padding:10px 20px;
+    font-size:90%;
+}
+
+/*** STYLES ***/
+
+/* headings */
+h1,h2,h3,h4 {
+    margin-top:.8em;
+    font-family:"Trebuchet MS",sans-serif;
+    font-weight:normal;
+}
+h1 {
+    font-size:200%;
+    margin-top:1.0em;
+    margin-bottom:.6em;
+    line-height:1.1em;
+}
+h2 {
+    font-size:175%;
+    margin-top:1em;
+    margin-bottom:.2em;
+    line-height:1.2em;
+}
+h3 {
+    font-size:125%;
+    font-weight:bold;
+    margin-bottom:.2em;
+}
+h4 {
+    font-size:110%;
+    font-weight:bold;
+    margin-bottom:-2px;
+    margin-top:1.2em;
+}
+h5 {
+    font-size:1em;
+    font-weight:bold;
+    margin-top:1.5em;
+    margin-bottom:3px;
+}
+p, ul, dl {
+    margin-top:.6em;
+    margin-bottom:.8em;
+}
+hr {
+	color:black;
+    height:2px;
+    border:1;
+}
+ul {
+    padding-left:2em;
+}
+ol {
+    padding-left:30px;
+}
+
+/* blockquotes in sidebar */
+.sidebar blockquote {
+    margin-top:1.5em;
+    margin-bottom:1.5em;
+}
+.sidebar blockquote p {
+    font:italic 175%/1.2em "Trebuchet MS",sans-serif;
+}
+.sidebar blockquote cite {
+    display:block;
+    font-style:normal;
+    line-height:1.2em;
+    margin-top:-.8em;
+}
+
+/**************************************************
+CU COLOURS
+
+#A60514     red
+#D7D9F7     lilac
+#4C50CB     puce
+
+#E9F9ED		palegreen
+#FFFFE0		paleyellow
+#E6EDF5		palemauve
+
+#6AA7EA     nice blue
+
+***************************************************/
+
+/* content blocks */
+body {
+	/*background:#FFFFE0;*/
+	background:beige;
+}
+#breadcrumbs {
+    background:#D7D9F7;
+}
+#columnwrap {
+    background:#e9f9ed;
+}
+#content-main {
+	background:white; 
+    color:black;
+}
+.sidebar {
+    background-color:#e9f9ed;
+	color:black;
+}
+#content-secondary {
+    background:#D7D9F7;
+    color:black;
+}
+#browse-horizontal {
+    background:#e9f9ed;
+    color:black;
+}
+
+/* links */
+a:link, a:visited { 
+    color:#a60514; 
+    text-decoration: none;
+}
+#nav-global a {
+    background:beige; /* same as header background */
+}
+#content-main a:link, #content-main a:visited {
+    color:#a60514;
+    text-decoration:none;
+}
+#content-secondary a:link, #content-secondary a:visited {
+    color:#a60514;
+    text-decoration:none;
+}
+#browse-horizontal a:link, #browse-horizontal a:visited, #content-related a:link, #content-related a:visited {
+    color:#a60514;
+    text-decoration:none;
+}
+
+/* hover */
+a:hover {
+    color:#4c50cb; 
+    text-decoration: none;
+}
+#nav-global a:hover {
+    color:#4c50cb;
+}
+#content-main a:hover {
+    background-color:#4c50cb;
+    color:#eee;
+    text-decoration:none;
+}
+#content-secondary a:hover {
+    background:none;
+    color:#4c50cb;
+}
+#content-related a:hover, #browse-horizontal a:hover {
+    background:none;
+    color:#4c50cb;
+}
+#footer a:hover {
+    color:#4c50cb;
+    text-decorationtion:none;
+}
+
+/* commaon  */
+h1,h2,h3,h4 {
+    color:black;
+}
+hr {
+	color:black;
+    height:2px;
+    border:0;
+}
+
+/* content-main */
+#content-main h3 {
+/*	background:#E6EDF5F5; /* palemauve */
+    color:black;
+}
+#content-main h2 {
+/*	background:#E9F9ED; /* palegreen */
+    color:black;
+}
+#content-main h1 {
+/*	background:#FFFFE0; /* paleyellow */
+    color:black;
+}
+
+/* content-secondary */
+#content-secondary h2, #content-secondary h3 {
+    color:black;
+}
+
+/* sidebar */
+.sidebar h2, .sidebar h3 {
+    color:black;
+}
+.sidebar blockquote p {
+    color:#94da3a;
+}
+.sidebar blockquote cite {
+    color:#94da3a;
+}
+
+/* footer */
+#footer {
+    color:#487858;
+}
+
+
+

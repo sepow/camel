@@ -6,11 +6,6 @@
 %----------------------------------------------------------------------
 \section{Conditional probability}
 %----------------------------------------------------------------------
-%What is the probability that an event $A$ occurs, given that another event $B$ occurs?
-%\bit
-%\it For example, what is the probability that the bus will be late, given that it's raining?
-%\eit
-
 
 % modern
 Let $(\Omega,\mathcal{F},\prob)$ be a probability space, and let $A,B\in\mathcal{F}$ be any two events.
@@ -52,8 +47,6 @@ Find the probabilities $\prob(A\cup B)$, $\prob(A\cap B^c)$, $\prob(A|B)$ and $\
 \end{solution}
 \end{example}
 
-\newpage
-\break
 \begin{example}[The Second Child Paradox]
 If we know that a man has two children, and that one of them is a boy, what is the probability that he has two boys?
 \begin{solution}
@@ -90,6 +83,8 @@ If $\{A_1,A_2,\ldots\}$ is a partition of $B$, then
 \[
 \prob(B) = \sum_{i=1}^{\infty} \prob(B\cap A_i) = \sum_{i=1}^{\infty} \prob(B|A_i)\prob(A_i)
 \]
+\end{theorem}
+
 % proof
 \begin{proof}
 First we write $B$ as a disjoint union
@@ -104,26 +99,24 @@ By the countable additivity of probability measures,
 	& = \sum_{i=1}^{\infty} \prob(B|A_i)\prob(A_i).
 \end{align*}
 \end{proof}
-\end{theorem}
 
 %----------------------------------------------------------------------
 \section{Bayes' theorem}
 %----------------------------------------------------------------------
 
-% lemma: simple bayes
 \begin{lemma}\label{lem:bayes}
 For any two events $A$ and $B$ such that $\prob(B)>0$,
 \[
 \prob(A|B) = \frac{\prob(B|A)\prob(A)}{\prob(B)}.
 \]
-% proof
+\end{lemma}
+
 \begin{proof}
 Set intersection is a commutative operation, so
 \[
 \prob(A|B) = \frac{\prob(A\cap B)}{\prob(B)} = \frac{\prob(B\cap A)}{\prob(B)} = \frac{\prob(B|A)\prob(A)}{\prob(B)}.
 \]
 \end{proof}
-\end{lemma}
 
 % theorem: Bayes' theorem
 \begin{theorem}[Bayes' Theorem]\label{thm:bayes}
@@ -131,6 +124,8 @@ Let $\{A_1,A_2,\ldots\}$ be a partition of an event $B$ and suppose that $\prob(
 \[
 \prob(A_i|B) = \frac{\prob(B|A_i)\prob(A_i)}{\sum_{j=1}^{\infty} \prob(B|A_j)\prob(A_j)}
 \]
+\end{theorem}
+
 % proof
 \begin{proof}
 By Lemma~\ref{lem:bayes},
@@ -141,11 +136,12 @@ By Lemma~\ref{lem:bayes},
 \]
 where the last equality follows by the partition theorem.
 \end{proof}
-\end{theorem}
 
 % example
 \begin{example}
 Bob tries to buy a newspaper every day. He tries in the morning with probability $1/3$, in the evening with probability $1/2$ and forgets completely with probability $1/6$. The probability of successfully buying a newspaper in the morning is $9/10$ (plenty of copies left), and in the evening is $2/10$ (often sold out). If Bob buys a newspaper, what is the probability that he bought it in the morning?
+\end{example}
+
 % solution
 \begin{solution}
 Let $M$ be the event that Bob tries to buy a newspaper in the morning, $E$ the event that he tries in the evening, and $F$ the event that he forgets completely. Then
@@ -165,14 +161,188 @@ By Bayes' Theorem,
 \end{align*}
 If Bob buys a newspaper, the probability that he bought it in the morning is $0.75$.
 \end{solution}
-\end{example}
-
 
 
 %----------------------------------------------------------------------
 \section{Exercises}
-\input{ex04_conditional}
 %----------------------------------------------------------------------
+
+%----------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+
+% conditional prob
+\question
+Let $A$ and $B$ be events such that $\prob(A)=0.4$, $\prob(B)=0.5$ and $\prob(A\cup B)=0.8$.
+Compute the following probabilities:
+\begin{parts}
+\part $\prob(A\cap B)$
+\begin{answer}
+$\prob(A\cap B) = \prob(A) + \prob(B) - \prob(A\cup B) = 0.4 + 0.5 - 0.8 = 0.1$.
+\end{answer}
+\part $\prob(A\cup B^c)$
+\begin{answer}
+$\prob(A\cup B^c) = 1 - \prob(B\setminus A) = 1 - \big[\prob(B)-\prob(A\cap B)\big] = 1 - 0.4 = 0.6$.
+\end{answer}
+\part $\prob(A\,|\,B)$
+\begin{answer}
+$\prob(A|B) = \prob(A\cap B)/\prob(B) = 0.1/0.5 = 0.2$.
+\end{answer}
+\part $\prob(A\,|\,A\cup B)$
+\begin{answer}
+$\prob(A|A\cup B) 	= \prob(A)/\prob(A\cup B) = 0.4/0.8 = 0.5$.
+\end{answer}
+\end{parts}
+
+%----------------------------------------
+% cond
+\question
+A student has three opportunities to pass an exam. The probability of failing the first attempt is 0.6; the probability of failing the second attempt, given that they have failed the first is 0.75, and the probability of failing the third attempt, given that they have failed the first and second is 0.4.
+\begin{parts}
+\part What is the probability that the student eventually passes the exam.
+\begin{answer}
+Let $F_i$ denote the event that the student fails at the $i$th
+attempt, so that 
+\[
+\prob(F_1)=0.6,\quad \prob(F_2|F_1)=0.75\quad\mbox{and}\quad \prob(F_3|F_1\cap F_2)=0.4
+\]
+The probability that the student fails all three attempts is
+\[
+\prob(F_1\cap F_2\cap F_3) = \prob(F_1)\prob(F_2|F_1)\prob(F_3|F_1\cap F_2) = 0.6\times 0.75\times 0.4 = 0.18
+\]
+Hence, the probability that the student eventually passes is $1 - 0.18 = 0.82$.
+%\paragraph{The chain rule:} The probability that events $A$ and $B$ both occur is $\prob(A\cap B) = \prob(B|A)\prob(A)$: this is sometimes called the \emph{chain rule}. For three events $A$, $B$ and $C$, the probability that all three occur is
+%\begin{align*}
+%\prob(A\cap B\cap C)
+%	& = \prob\big((A\cap B)\cap C\big) \\
+%	& = \prob(C|A\cap B)\prob(A\cap B) \\
+%	& = \prob(C|A\cap B)\prob(B|A)\prob(A) \\
+%\end{align*}
+%Similarly, the probability that $A$, $B$, $C$ and $D$ all occur is
+%\begin{align*}
+%\prob(A\cap B\cap C\cap D) 
+%	& = \prob\big((A\cap B\cap C)\cap D\big)	\\
+%	& = \prob(D|A\cap B\cap C)\prob(A\cap B\cap C) \\
+%	& = \prob(D|A\cap B\cap C)\prob(C|A\cap B)\prob(B|A)\prob(A) \\
+%\end{align*}
+%and so on.
+\end{answer}
+\part What are the respective probabilities of passing at the first, second and third attempts.
+\begin{answer}
+The probability that the student passes on the first attempt is $1-\prob(F_1) = 1-0.6 = 0.4$.
+\par
+The probability that the student takes a second test is $\prob(F_1)=0.6$. If the second test is taken, the (conditional) probability that the student passes it is $1-\prob(F_2|F_1) = 1-0.75 =
+0.25$. Hence, the probability that the student passes on the second attempt is $0.6\times 0.25 = 0.15$.
+\par
+Similarly, the probability that the student takes the third test is $\prob(F_1\cap F_2) = \prob(F_1)\prob(F_2|F_1) = 0.6\times 0.75 = 0.45$. If the third test is taken, the (conditional) probability that the student passes it is $1-\prob(F_3|F_1\cap F_2)= 1-0.4 = 0.6$. Hence, the probability that the student passes on the third attempt is $0.45\times 0.6 = 0.27$. (The probability of eventually passing is $0.4 + 0.15 + 0.27 = 0.82$, which agrees with the answer to part (a).)
+\end{answer}
+\end{parts}
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+%----------------------------------------
+
+%----------------------------------------------------------------------
+\section{Assessment}
+%----------------------------------------------------------------------
+
+%----------------------------------------
+\begin{exercise}
+\begin{questions}
+%----------------------------------------
+% conditional prob
+\question
+Let $A$, $B$ and $C$ be events such that $\prob(A)=0.7$, $\prob(B)=0.6$, $\prob(C)=0.5$, $\prob(A\cap B)=0.4$, $\prob(A\cap C)=0.3$, $\prob(B\cap C)=0.2$ and $\prob(A\cap B\cap C)=0.1$.
+Compute the following probabilities:
+\begin{parts}
+%--------------------
+\part $\prob(A\cup B)$
+\begin{answer}
+$\prob(A\cup B) 
+	= \prob(A) + \prob(B) - \prob(A\cap B) 
+	= 0.7 + 0.6 - 0.4 
+	= 0.9$.
+\end{answer}
+%----------
+\part $\prob(A|B)$
+\begin{answer}
+$\displaystyle\prob(A|B) 
+	= \frac{\prob(A\cap B)}{\prob(B)} 
+	= \frac{0.4}{0.6} 
+	= \frac{2}{3}$.
+\end{answer}
+%----------
+\part $\prob(A\,|\,A\cup B)$
+\begin{answer}
+$\prob(A|A\cup B) 
+	= \displaystyle\frac{\prob[A\cap (A\cup B)]}{\prob(A\cup B)} 
+	= \displaystyle\frac{\prob(A)}{\prob(A\cup B)} 
+	= \frac{0.7}{0.9} 
+	= \frac{7}{9}$.
+\end{answer}
+%--------------------
+\part $\prob(A\cup B\cup C)$
+\begin{answer}
+By the inclusion-exclusion principle,
+\begin{align*}
+\prob(A\cup B\cup C)
+	& = [\prob(A) + \prob(B) + \prob(C)] - [\prob(A\cap B) + \prob(A\cap C) + \prob(B\cap C)] + \prob(A\cap B\cap C) \\
+	& = (0.7 + 0.6 + 0.5) - (0.4 + 0.3 + 0.2) + 0.1 = 1.
+\end{align*}
+\end{answer}
+%----------
+\part $\prob(A^{c}\cap B^{c}\cap C)$
+\begin{answer}
+Because $A^{c}\cap B^{c}\cap C = (A\cup B)^{c}\cap C$, the sets $A\cup B$ and $A^{c}\cap B^{c}\cap C$ form a partition of $A\cup B\cup C$. Hence $\prob(A^{c}\cap B^{c}\cap C) = \prob(A\cup B\cup C) - \prob(A\cup B) = 1.0 - 0.9 = 0.1$
+\end{answer}
+%----------
+\part $\prob(A^{c}\cap B^{c}\cap C|A\cup B)$.
+\begin{answer}
+Because $A^{c}$ and $A$ are disjoint, $\prob(A^{c}\cap B^{c}\cap C|A\cup B) = 0$.
+\end{answer}
+\end{parts}
+
+%----------------------------------------
+% bayes (insurance company)
+\question
+An insurance company divides its customers into three categories: $60$\% of customers are classed as low-risk, $30$\% as moderate-risk and $10$\% as high-risk. The probabilities that low-risk customers, moderate-risk customers and high-risk customers make a claim in any given year are $0.01$, $0.1$ and $0.5$ respectively. Given that a customer makes a claim this year, what is the probability that the customer is in the high-risk category?
+
+\begin{answer}
+Let $L$ denote the event that the customer is low-risk, $M$ the event that the customer is moderate-risk, and $H$ the event that the customer is high-risk:
+\[
+\prob(L) = 0.6,\quad \prob(M) = 0.3,\quad \prob(H) = 0.1.
+\]
+Let $C$ be the event that the customer makes a claim this year:
+\[
+\prob(C\,|\,L) = 0.01,\quad \prob(C\,|\,M) = 0.1,\quad \prob(C\,|\,H) = 0.5.
+\]
+We need to find $\prob(H\,|\,C)$:
+\[
+\prob(H\,|\,C) = \frac{\prob(H\cap C)}{\prob(C)} = \frac{\prob(C\,|\,H)\prob(H)}{\prob(C)}.
+\]
+The events $\{L,M,H\}$ form a partition of sample space (the set of all customers), so by the law of total probability,
+\[
+\prob(C) = \prob(C\,|\,L)\prob(L) + \prob(C\,|\,M)\prob(M) + \prob(C\,|\,H)\prob(H),
+\]
+and hence
+\[
+\prob(H\,|\,C) = \frac{\prob(C\,|\,H)\prob(H)}{\prob(C\,|\,L)\prob(L) + \prob(C\,|\,M)\prob(M) + \prob(C\,|\,H)\prob(H)},
+\]
+which is Bayes' theorem. The probability that a customer is in the high-risk category, given that the customer makes a claim this year, is 
+\[
+\prob(H\,|\,C) 
+	= \frac{(0.5\times 0.1)}{(0.01\times 0.6) + (0.1\times 0.3) + (0.5\times 0.1)}
+	= 0.5814\quad\text{(approx.).}
+\]
+\end{answer}
+
+
+%----------------------------------------
+\end{questions}
+\end{exercise}
+%----------------------------------------
 
 %======================================================================
 \endinput

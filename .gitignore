@@ -4,7 +4,8 @@
 *.log
 backup/*
 data/pdf/*
-data/sims/*
+data/csv/*
+data/xml/*
 *.aux
 *.bbl
 *.dvi

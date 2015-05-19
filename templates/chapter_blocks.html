@@ -1,0 +1,113 @@
+{% extends "chapter_detail.html" %}
+
+{% block title %} 
+	{{ module.code }} Theorems
+{% endblock %}
+
+{% block breadcrumbs %}
+	{{ block.super }}&gt;&nbsp;<a href="{% url 'chapter-list' module.pk %}">{{ blocktype | title }}s</a>
+{% endblock %}
+
+{% block content-main %}
+<div class="macros">
+    {% autoescape off %}
+		\( {{ module.newcommands | safe }} \)
+	{% endautoescape %}
+</div>
+
+<div>
+<span style="float:left">
+<a href="{% url 'chapter-detail' module.pk %}">{{ chapter.title }}</a>
+</span>
+<span style="float:right">
+<a href="{% url 'chapter-theorems' chapter.pk %}">Theorems</a>
+|
+<a href="{% url 'chapter-examples' chapter.pk %}">Examples</a>
+|
+<a href="{% url 'chapter-exercises' chapter.pk %}">Exercises</a>
+|
+<a href="{% url 'exercise' chapter.pk %}">Assessment</a>
+</span>
+</div>
+<!--div>
+<span style="float:left">
+<a href="{% url 'chapter-detail' chapter.pk %}"><button>Back to Chapter</button></a>
+</span>
+<span style="float:right">
+<a href="{% url 'chapter-theorems' chapter.pk %}"><button>Theorems</button></a>
+&nbsp;
+<a href="{% url 'chapter-examples' chapter.pk %}"><button>Examples</button></a>
+&nbsp;
+<a href="{% url 'chapter-exercises' chapter.pk %}"><button>Exercises</button></a>
+&nbsp;
+<a href="{% url 'exercise' chapter.pk %}"><button>Assessment</button></a>
+</span>
+</div-->
+<br>
+
+
+
+<h1>{{ module.code }} Chapter {{ chapter.number }}. {{ blocktype | title }}s</h1>
+<br>
+{% if blocks %}
+	<ul>
+	{% load mptt_tags %}
+	{% for block in blocks %}
+		{% with block.get_descendants_inc_self as subtree %}
+				{% include "block.html" %}
+		{% endwith %}
+	{% endfor %}
+	</ul>
+{% else %}
+	<p>No blocks!</p>
+{% endif %}
+{% endblock %}
+
+
+{% block browse-horizontal %}
+{% if prev %}
+	<span class="left">
+		{% if blocktype == "theorem" %}
+			<a href="{% url 'chapter-theorems' prev.pk %}">&lt; Chapter {{ prev.number }}. {{ blocktype | title }}s</a>
+		{% elif blocktype == "example" %}
+			<a href="{% url 'chapter-examples' prev.pk %}">&lt; Chapter {{ prev.number }}. {{ blocktype | title }}s</a>
+		{% elif blocktype == "exercise" %}
+			<a href="{% url 'chapter-exercises' prev.pk %}">&lt; Chapter {{ prev.number }}. {{ blocktype | title }}s</a>
+		{% endif %}
+	</span>
+{% endif %}
+{% if next %}
+	<span class="right">
+		{% if blocktype == "theorem" %}
+			<a href="{% url 'chapter-theorems' next.pk %}">Chapter {{ next.number }}. {{ blocktype | title }}s &gt;</a>
+		{% elif blocktype == "example" %}
+			<a href="{% url 'chapter-examples' next.pk %}">Chapter {{ next.number }}. {{ blocktype | title }}s &gt;</a>
+		{% elif blocktype == "exercise" %}
+			<a href="{% url 'chapter-exercises' next.pk %}">Chapter {{ next.number }}. {{ blocktype | title }}s &gt;</a>
+		{% endif %}
+	</span>
+{% endif %}
+{% endblock %}
+
+{% block sidebar %}
+	{% if toc %}
+	<h3>{{ blocktype | title }}s</h3>
+		{% for chap in toc %}
+			{% if chap.pk != chapter.pk %}
+				{% if blocktype == "theorem" %}
+					<p><a href="{% url 'chapter-theorems' chap.pk %}">{{ chap.number }}. {{ chap.title }}</a></p>
+				{% elif blocktype == "example" %}
+					<p><a href="{% url 'chapter-examples' chap.pk %}">{{ chap.number }}. {{ chap.title }}</a></p>
+				{% elif blocktype == "exercise" %}
+					<p><a href="{% url 'chapter-exercises' chap.pk %}">{{ chap.number }}. {{ chap.title }}</a></p>
+				{% endif %}
+			{% else %}
+				<p>{{ chap.number }}. {{ chap.title }}</p>
+			{% endif %}
+		{% endfor %}
+	{% else %}
+	    <p>No toc</p>
+	{% endif %}
+
+
+{% endblock %}

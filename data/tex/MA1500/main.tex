@@ -1,68 +1,74 @@
 %------------------------------------------------
-% main.tex - MA1500 2014-15
-%
-% student copy: blanks=True, answers=False
-% instructor copy: blanks=False, answers=True
-%
+% main.tex - MA1500 2015-16
 %------------------------------------------------
-\documentclass[answers, blanks]{camel}
-\usepackage{camel}
+\documentclass[
+%	blanks,
+%	screen,
+%	answers,
+%	booklet,
+%	cymraeg,
+]{camel}
 
-\academicyear{2014-15}
+% module information
+\academicyear{2015-16}
 \modulecode{MA1500}
 \moduletitle{Introduction to Probability Theory}
-\booktitle{Reading Material}
+\booktitle{Lecture Notes}
 
+% figures
+\RequirePackage{graphicx}
+\graphicspath{{./figures/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.gif}
 \usepackage{caption}
 \usepackage{subcaption}
 \captionsetup[subfigure]{labelformat=empty}
 \captionsetup[figure]{skip=2ex}
-\RequirePackage{graphicx}
-\graphicspath{{./figures/}}
-\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.gif}
 
+% naughty
 \def\it{\item}
 \def\bit{\begin{itemize}}
 \def\eit{\end{itemize}} 
 \def\ben{\begin{enumerate}}
 \def\een{\end{enumerate}}
 
-\newcommand{\N}{\mathbb{N}}
+% macros
 \newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\C}{\mathbb{C}}
+\newcommand{\supp}{\text{supp}}
 \newcommand{\prob}{\mathbb{P}}
 \newcommand{\expe}{\mathbb{E}}
 \newcommand{\var}{\text{Var}}
 \newcommand{\cov}{\text{Cov}}
+\newcommand{\mode}{\text{Mode}}
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+
+%\usepackage{hyperref}
+
+\usepackage{array}
+
+\newcommand{\bias}{\text{Bias}}
+\newcommand{\mse}{\text{MSE}}
+
+\newcommand{\stackss}[2]{\textstyle\genfrac{}{}{0pt}{}{{#1}}{{#2}}}
+
+\newcommand{\boldx}{\mathbf{x}}
+\newcommand{\boldX}{\mathbf{X}}
+\newcommand{\Xbar}{\bar{X}}
 
 %------------------------------------------------
 \begin{document}
 \makefrontmatter
-%\input{00_index_of_notation}
-%\input{00_intro}
-\input{01_sets}
+%------------------------------------------------
+%\input{01_sets}
 \input{02_events}
 \input{03_probability}
 \input{04_conditional}
-\input{05_independence}
-%\input{06_classical}
-%\input{07_frequentist}
-%\input{08_random_variables}
-%\input{09_expectation}
-%\input{10_moments}
-%\input{11_uniform_bernoulli_binomial}
-%\input{12_joint_distributions}
-%\input{13_covariance}
-%\input{14_conditional_distributions}
-%\input{15_discrete}
-%\input{16_geometric_poisson}
-%\input{17_continuous}
-%\input{18_uniform_exponential_normal}
-%\input{19_quantiles}
-%\input{20_normal_approximation}
-
+%\input{05_independence}
 %------------------------------------------------
 \end{document}
 %------------------------------------------------

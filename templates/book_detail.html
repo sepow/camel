@@ -1,0 +1,38 @@
+{% extends "chapter_list.html" %}
+
+{% block title %} 
+	{{ object.title }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+	{{ block.super }}&gt;<a href="{% url 'book-detail' object.pk %}"> {{ object.title }}</a>
+{% endblock %}
+
+{% block content-main %}{% spaceless %}
+	<div class="macros">
+	    {% autoescape off %}
+			\( {{ module.newcommands | safe }} \)
+		{% endautoescape %}
+	</div>
+
+{% if module %}
+	<h3>{{ module.code }}</h3>
+{% endif %}
+{% if chapters %}
+		{% for chap in chapters %}
+			<p><a href="{% url 'chapter-detail' chap.pk %}"> {{ chap.number }}. {{ chap.title }}</a></p>
+		{% endfor %}
+	{% else %}
+	    <p>No chapters</p>
+	{% endif %}
+{% endblock %}
+
+{% block browse-horizontal %}
+<p class="left">{% if prev %}<a href="{{ prev.get_absolute_url }}">&larr; {{ prev.number }}. {{ prev.title }}</a>{% endif %}</p>
+<p class="right">{% if next %}<a href="{{ next.get_absolute_url }}">{{ next.number }}. {{ next.title }} &rarr;</a>{% endif %}</p>
+{% endblock %}
+
+
+
+

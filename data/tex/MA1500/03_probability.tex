@@ -30,8 +30,6 @@ The triple $(\Omega,\mathcal{F},\prob)$ is called a \emph{probability space}.
 \eit
 \end{remark}
 
-\break
-
 % example: die
 \begin{example}
 Consider a random experiment in which a fair six-sided die is rolled once.
@@ -46,17 +44,17 @@ Consider a random experiment in which a fair six-sided die is rolled once.
 \end{array}\] 
 \eit
 
-\begin{tabular}{lll}
-									& Event	& Probability \\
-The outcome is the number $1$.		& $A = \{1\}$ & $\prob(A) = 1/6$ \\
-The outcome is an even number.		& $A = \{2,4,6\}$  & $\prob(A) = 3/6$ \\
-The outcome is even but does not exceed $3$.	& $A = \{2,4,6\}\cap\{1,2,3\}$ & $\prob(A) = 1/6$ \\
-The outcome is not even				& $A = \Omega\setminus\{2,4,6\}$ & $\prob(A) = 3/6$ \\
-\end{tabular}
+\begin{tabbing}
+\underline{Event}\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad
+	\=\underline{Event}\qquad\qquad\qquad\qquad\qquad
+	\=\underline{Probability} \\
+The outcome is the number $1$.	\> $A = \{1\}$ \> $\prob(A) = 1/6$\\
+The outcome is an even number.	\> $A = \{2,4,6\}$  \> $\prob(A) = 3/6$\\
+The outcome is even but does not exceed $3$.	\> $A = \{2,4,6\}\cap\{1,2,3\}$  \> $\prob(A) = 1/6$\\
+The outcome is not even			\> $A = \Omega\setminus\{2,4,6\}$ \> $\prob(A) = 3/6$
+\end{tabbing}
 \end{example}
 
-\newpage
-\break
 % example
 \begin{example}
 A fair six-sided die is rolled once. If we are only interested in whether the outcome is an odd or even number, we can take
@@ -82,8 +80,6 @@ Let $(\Omega,\mathcal{F},\prob)$ be a probability space, and let $A,B\in\mathcal
 \een
 \end{theorem}
 
-\break
-
 % proof
 \begin{proof}
 \ben
@@ -106,8 +102,6 @@ Since $A$ and $B\setminus A$ are disjoint sets, it follows by additivity that
 \]
 Hence, because $\prob(B\setminus A)\geq 0$, it follows that $\prob(B) \geq \prob(A)$.
 
-\break
-
 \it % addition rule
 Let us write:
 \bit
@@ -128,8 +122,93 @@ Hence $\prob(A\cup B) = \prob(A) + \prob(B) - \prob(A\cap B)$, as required.
 
 %----------------------------------------------------------------------
 \section{Exercises}
-\input{ex03_probability}
 %----------------------------------------------------------------------
+
+\begin{exercise}
+\begin{questions}
+\question % bookwork
+What does it mean to say that $\prob$ is a probability measure over $(\Omega,\mathcal{F})$?
+\begin{answer}
+Bookwork. The symbols $\Omega$ (sample space) and $\mathcal{F}$ (field of events) should be defined before giving the definition of $\prob$.
+\end{answer}
+\question % subadditivity
+Show that $\prob(A\cup B) \leq \prob(A)+\prob(B)$ for any two events $A$ and $B$.
+\begin{answer}
+First we express $A$, $B$ and $A\cup B$ as disjoint unions: 
+\begin{align*}
+A		& = (A\cap B^c)\cup (A\cap B) \\ 
+B		& = (B\cap A^c)\cup (A\cap B) \\ 
+A\cup B	& = (A\cap B^c)\cup (A\cap B) \cup (B\cap A^c)
+\end{align*}
+By the additivity property of probability measures,
+\begin{align*}
+\prob(A) 		& = \prob(A\cap B^c) + \prob(A\cap B) \\
+\prob(B) 		& = \prob(B\cap A^c) + \prob(A\cap B) \\
+\prob(A\cup B) 	& = \prob(A\cap B^c) + \prob(A\cap B) + \prob(B\cap A^c) \\
+\end{align*}
+From here, it follows that $\prob(A\cup B)=\prob(A)+\prob(B)-\prob(A\cap B)$, and because $\prob(A\cap B)\geq 0$ for any two events $A,B\mathcal{F}$, we see that $\prob(A\cup B) \leq \prob(A)+\prob(B)$, as required.
+\end{answer}
+\question % numerical
+Let $A$ and $B$ be events such that $\prob(A)=0.4$, $\prob(B)=0.5$ and $\prob(A~\cup~B)=0.8$.\par
+Compute the following probabilities:
+\begin{parts}
+\part 
+$\prob(A\cap B)$.
+\begin{answer}
+$\prob(A\cap B) = \prob(A) + \prob(B) - \prob(A\cup B) = 0.4 + 0.5 - 0.8 = 0.1$.
+\end{answer}
+\part 
+$\prob(A\cup B^c)$.
+\begin{answer}
+$\prob(A\cup B^c) = 1 - \prob(B\setminus A) = 1 - \big[\prob(B)-\prob(A\cap B)\big] = 1 - 0.4 = 0.6$.
+\end{answer}
+\end{parts}
+\end{questions}
+\end{exercise}
+
+%----------------------------------------------------------------------
+\section{Assessment}
+%----------------------------------------------------------------------
+
+\begin{assessment}
+To be submitted by yesterday!
+\begin{questions}
+\question
+Let $A$ and $B$ be random events, with probabilities $\prob(A) = 1/2$ and $\prob(B) = 3/4$. 
+\begin{parts}
+\part 
+Show that $\displaystyle\frac{1}{4}\leq \prob(A\cap B)\leq\frac{1}{2}$.
+\begin{answer}
+$A\cap B\subseteq A$ and $A\cap B\subseteq B$ means that:
+\[
+\prob(A\cap B) \leq \min\big\{\prob(A),\prob(B)\big\} = \displaystyle\frac{1}{2}.
+\]
+Furthermore, $\prob(A\cup B)\leq 1$ means that:
+\[
+\prob(A\cap B) = \prob(A)+\prob(B)-\prob(A\cup B) \geq \displaystyle\frac{1}{4}.
+\]
+\end{answer}
+\part 
+Show that $\displaystyle\frac{3}{4}\leq \prob(A\cup B)\leq 1$.
+\begin{answer}
+$A\subseteq A\cup B$ and $B\subseteq A\cup B$ means that:
+\[
+\prob(A\cup B) \geq \max\big[\prob(A),\prob(B)\big] = \displaystyle\frac{3}{4}.
+\]
+Furthermore, $\prob(A\cup B)\leq 1$ means that:
+\[
+\prob(A\cup B) \leq \min\{1,\prob(A)+\prob(B)\} = 1.
+\]
+\end{answer}
+\end{parts}
+\end{questions}
+\end{assessment}
+
+\begin{diagnostic}
+Are you OK? YES/NO
+\end{diagnostic}
+%----------------------------------------
+
 
 %======================================================================
 \endinput

@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+
+{% block title %} 
+	Modules 
+{% endblock %}
+
+{% block breadcrumbs %}
+	{{ block.super }}&gt;&nbsp;<a href="{% url 'module-list' %}">modules</a>
+{% endblock %}
+
+{% block content-main %}
+<h2><u>Modules</u></h2>
+<br>
+
+{% if module_list %}
+	<table cellpadding=2>
+	  {% for module in module_list %}
+		<tr class="module">
+			<td><a href="{{ module.get_absolute_url }}">{{ module.code }} {{ module.title }}</a></td>
+		</tr>
+	  {% endfor %}
+	</table>
+{% else %}
+    <p>No modules in the database.</p>
+{% endif %}
+
+{% endblock %}
+
+
+

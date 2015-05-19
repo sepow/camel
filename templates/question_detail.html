@@ -1,0 +1,174 @@
+{% extends "exercise_detail.html" %}
+{% load staticfiles %}
+
+{% block title %} 
+	Question {{ object.number }}
+{% endblock %}
+
+{% block scripts %}
+	{{ block.super }} 
+    <!--link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"-->
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="{% static 'main.js' %}" type"text/javascript"></script>
+	<script src="{% static 'simple-expand.js' %}"></script>  
+	<script type="text/javascript">
+	    $(function () {
+	        $('.expander').simpleexpand();
+	    });
+	</script>
+	<script type="text/javascript">
+		$(function() {
+			$( "#dialog-message" ).dialog({
+			  modal: true,
+			  buttons: {
+			    Ok: function() {
+			      $( this ).dialog( "close" );
+			    }
+			  }
+			});
+		});
+		$(function(){
+		   $('#result span').text($('#handler').val());
+		});
+		function preview() {
+			var s = document.getElementById("answer-text").value
+			alert(s);
+		};
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("button").click(function(){
+				$("#test").hide();
+			});
+			$('#post-form').on('submit', function(event){
+			    event.preventDefault();
+			    console.log("form submitted!")  // sanity check
+			    create_post();
+			});
+		});
+	</script>
+		
+{% endblock %}
+
+	
+{% block breadcrumbs %}
+	{{ block.super }}&gt;<a href="{% url 'question-detail' object.pk %}"> Question {{ object.number }}</a>
+{% endblock %}
+
+{% block content-main %}
+{% spaceless %}
+
+	<div class="macros">
+	    {% autoescape off %}
+			\( {{ module.newcommands | safe }} \)
+		{% endautoescape %}
+	</div>
+
+<hr>
+
+<!--<p id="test">
+	aeiouwy
+<p>
+<button>Click me</button>
+
+<form action="/create_post/" method="POST" id="post-form">
+    {% csrf_token %}
+    <div class="fieldWrapper">
+        {{ form.text }}
+    </div>
+    <input type="submit" value="Post" class="tiny button">
+</form> -->
+
+<!-- <div id="dialog-message" title="PREVIEW">
+  <p>
+    HERE IS THE PREVIEW
+
+	--  --
+  </p>
+</div>
+
+ <input type='hidden' id='handler' name='handler' value='5534882394' />
+
+ <div id='result'>
+     <span></span>
+ </div> -->
+ 
+ 
+<!-- <form action="save_answer" method="POST" id="answer-form">
+	<p>{{ answer_form.text }}</p-->
+	<!-- <input name="safio"  type="button" value="Safio" onClick="save_answer()"/> -->
+	<!--p class="answerbuttons">
+		<input id="preview-answer" type="submit" value="Preview" />
+		<input id="submit-answer" type="submit" value="Submit" />
+	</p>
+</form--> 
+
+<!-- <input type="textarea" label="{{ answer_form.field.question.id }}" value="{{ answer_form.field.text }}"/> -->
+
+<!-- <hr>
+<button onclick="save_answer()">Save it</button>
+<hr>
+
+<hr>
+<button onclick="preview()">Preview</button>
+<hr> -->
+
+<h2>{{ module.code }} Exercise {{ chapter.number }}.{{ exercise.number }}</h2>
+<!--h2>Chapter {{ chapter.number }}{% if chapter.title %}: {{ chapter.title }}{% endif %}</h2-->
+
+
+{% if question %}
+
+	<h4>Question {{object.number }}</h4>
+	<br/>
+
+	<!-- output question -->
+	{% include "question_block.html" %}
+
+	{{ answer_form.question }}
+
+	<!-- output answer box -->
+	<div class="answerbox">
+		<!--a class="expander" href="#" data-expander-target="div.answerform"-->
+			<p class="answerbox_title"><b>Your answer:</b></p>
+			<!--/a-->			
+		<div class="answerform">
+			<form action="/save-answer/" method="POST" id=answer-form> {% csrf_token %}
+				<p>{{ answer_form.question }}</p>
+				<p>{{ answer_form.user }}</p>
+				<p>{{ answer_form.text }}</p>
+				<!--p id="answer-text">{{ answer_form.text }}</p-->
+				<!--p>Submitted: {{ answer_form.submitted}}</p-->
+				<!--p class="answerbuttons">
+					<button onclick="confirm('Are you sure?')">Submit</button>			
+					<!--input id="preview-answer" type="submit" value="Preview" /-->
+					<!--input id="save-answer" type="submit" value="Save" /-->
+					<!--input id="submit-answer" type="submit" value="Submit" /-->
+				</p-->
+			</form>
+			<button onclick="save_answer()">Save</button>
+			<button onclick="preview()">Preview</button>			
+			<input id="submit-answer" type="submit" value="Submit"/>
+				
+		</div>
+	</div> <!-- end answerbox -->
+
+{% else %}
+	<p>No question!</p>
+{% endif %}
+
+{% endspaceless %}
+{% endblock %}
+
+{% block browse-horizontal %}
+<p class="left">{% if prev %}<a href={% url 'question-detail' prev.pk %}>&lt; Question {{ prev.number }}</a>{% endif %}</p>
+<p class="right">{% if next %}<a href={% url 'question-detail' next.pk %}>Question {{ next.number }} &gt;</a>{% endif %}</p>
+{% endblock %}
+
+
+{% block sidebar %}
+
+{% endblock %}
+
+<script src="{% static 'main.js' %}" type"text/javascript"></script>

@@ -1,0 +1,193 @@
+{% extends "chapter_list.html" %}
+{% load staticfiles %}
+
+{% block title %} 
+	{{ module.code }} Exercise {{ chapter.number }}.{{ exercise.number }}
+{% endblock %}
+
+{% block scripts %}
+	{{ block.super }} 
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="{% static 'main.js' %}" type"text/javascript"></script>
+	<script src="{% static 'simple-expand.js' %}"></script>  
+	<script type="text/javascript">
+	    $(function () {
+	        $('.youranswer').show();
+	    });
+	</script>
+	
+	<script type="text/javascript">
+	<!--
+		function toggle_visibility(id) {
+			var e = document.getElementById(id);
+			if(e.style.display == 'block')
+				e.style.display = 'none';
+			else
+				e.style.display = 'block';
+		}
+		function toggle_answerboxes() {
+			var elements = document.getElementsByClassName('youranswer');
+			n = elements.length;
+			for (var i = 0; i < n; i++) {
+				var e = elements[i];
+				if(e.style.display == 'block') {
+					e.style.display = 'none';
+				}
+				else {
+					e.style.display = 'block';
+				}
+			}
+		}
+		function hide_youranswers() {
+			var elements = document.getElementsByClassName('youranswer');
+			n = elements.length;
+			for (var i = 0; i < n; i++) {
+				var e = elements[i];
+				e.style.display = 'none';
+			}
+			e = document.getElementById('hide');
+			e.style.display = 'none'
+			e = document.getElementById('show');
+			e.style.display = 'block'
+		}
+		function show_youranswers() {
+			var elements = document.getElementsByClassName('youranswer');
+			n = elements.length;
+			for (var i = 0; i < n; i++) {
+				var e = elements[i];
+				e.style.display = 'block';
+			}
+			e = document.getElementById('hide');
+			e.style.display = 'block'
+			e = document.getElementById('show');
+			e.style.display = 'none'
+		}
+		
+	//-->
+	</script>
+{% endblock %}
+
+{% block breadcrumbs %}
+	{{ block.super }}
+	&gt;<a href="{% url 'exercise' exercise.pk %}"> Exercise {{ chapter.number }}.{{ exercise.number }}</a>
+{% endblock %}
+
+{% block content-main %}
+{% spaceless %}
+
+<div class="macros">
+    {% autoescape off %}
+		\( {{ module.newcommands | safe }} \)
+	{% endautoescape %}
+</div>
+
+<div>
+<span style="float:left">
+<a href="{% url 'chapter-detail' module.pk %}">{{ chapter.title }}</a>
+</span>
+<span style="float:right">
+	<span id="hide">
+		<a href="#" onclick="hide_youranswers()">Hide answers</a>
+	</span>
+	<span id="show" style="display:none">
+		<a href="#" onclick="show_youranswers()">Show answers</a>
+	</span>
+</span>
+</div>
+<br>
+
+<!--div style="display:block">
+<span style="float:left">
+	<a href="{% url 'chapter-detail' chapter.pk %}"><button>Back to Chapter</button></a>
+</span>
+<span style="float:right">
+	<span id="hide">
+		<a href="#" onclick="hide_youranswers()"><button>Hide answers</button></a>
+	</span>
+	<span id="show" style="display:none">
+		<a href="#" onclick="show_youranswers()"><button>Expand answers</button></a>
+	</span>
+</span>
+</div>
+<br-->
+
+<h2>{{ module.code }} Assessment {{ chapter.number }}.{{ exercise.number }}</h2>
+
+	
+{% if pairs %}
+	{% for question, answer in pairs %}
+	<div class="question-block">
+		<b>Question {{ question.number }}</b><br>
+		<div class="question">
+			{% with question.get_descendants as subtree %}
+					{% include "question_block.html" %}
+			{% endwith %}
+			<div class="answerbox">
+				<a onclick="toggle_visibility('answer{{ question.number }}')">
+					<p class="answerbox_title"><b>Your answer</b></p>
+				</a>
+				<div class="youranswer" style="display:hide;" id="answer{{ question.number }}">
+					{% if answer.text %} 
+						<div class="previewbox"> 
+							{{ answer.text | linebreaks }}
+						</div>
+					{% endif %} 
+					<small>
+					{% if not answer.readonly %}	
+						<!--input name="edit-answer-{{ q.number }}" type="submit" value="Edit"/-->
+						{% if answer %}
+							<p>
+								<a href="{% url "edit-answer" question.pk %}"><button>Edit</button></a>
+								&nbsp;<i>(last saved {{ answer.updated }})</i>
+							</p>
+						{% else %}
+							<p><a href="{% url "edit-answer" question.pk %}"><button>Start</button></a></p>
+						{% endif %}
+					{% else %}
+						<p><i>Submitted on {{ answer.updated }}</i></p>
+					{% endif %}	
+					</small>
+				</div>
+			</div> <!-- end answerbox -->
+		</div> <!-- end question -->
+		
+	</div>
+	{% endfor %}
+<!--form action="/exercise/submit/" method="POST"> {% csrf_token %}
+	<p> {{ form.user }}</p>
+	<p> {{ form.fields.answers }}</p>
+	<p> {{ form.declaration }}</p>
+	<p><input name="submit" type="submit" value="Submit Assessment"/></p>
+</form-->
+	
+<form action="" method="POST"> {% csrf_token %}
+	{{ form.user }}
+	{{ form.assessment }}
+	<p align="right"><input name="submit-exercise" type="submit" value="Submit Assessment"/></p>
+</form-->
+{% endif %}
+
+{% endspaceless %}
+{% endblock %}
+
+
+{% block browse-horizontal %}
+<span class="left">{% if prev %}<a href="{% url 'exercise' prev.pk %}">&lt; Assessment {{ prev.get_parent_chapter.number }}.{{ prev.number }}</a>{% endif %}</span>
+<span class="right">{% if next %}<a href="{% url 'exercise' next.pk %}">Assessment {{ next.get_parent_chapter.number }}.{{ next.number }} &gt;</a>{% endif %}</span>
+{% endblock %}
+
+
+{% block sidebar %}
+	{% if toc %}
+	<h4>{{ module.code }} Assessments</h4>
+		<ul>
+		{% for ex in toc %}
+			<li><a href="{% url 'exercise' ex.pk %}"> Assessment {{ ex.get_parent_chapter.number }}.{{ ex.number }}</a></li>
+		{% endfor %}
+	</ul>
+	{% else %}
+	    <p>No toc</p>
+	{% endif %}
+
+{% endblock %}

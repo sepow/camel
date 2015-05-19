@@ -1,5 +1,0 @@
-Let $\Omega=\{a,b,c\}$, $\mathcal{G}=\big\{\emptyset,\{a\},\{b,c\},\Omega\big\}$ and $\mathcal{G}=\big\{\emptyset,\{a,b\},\{c\},\Omega\big\}$. Then
-\[
-\mathcal{H} = \mathcal{F}\cup\mathcal{G} = \big\{\emptyset,\{a\},\{c\},\{a,b\},\{b,c\},\Omega\big\}.
-\]
-Hence $\{a\}\in\mathcal{H}$ and $\{c\}\in\mathcal{H}$, but $\{a,c\}\notin\mathcal{H}$ so $\mathcal{H}$ is not a $\sigma$-field.

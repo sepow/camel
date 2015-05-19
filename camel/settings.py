@@ -79,7 +79,7 @@ USE_TZ = True
 
 # media (user uploaded)
 MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # static files (css, js, png)
 STATIC_URL = '/static/'

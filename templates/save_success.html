@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+
+{% block title %}
+	Success
+{% endblock %}
+
+
+{% block content-main %}
+
+<h2>Save success!</h2>
+
+<a href="{% url 'question' question.pk %}">&larr; Back to question</a>
+{% endblock %}
+
+
+

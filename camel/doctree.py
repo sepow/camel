@@ -218,7 +218,9 @@ class Block(Node):
             self.label = label
 
 #-----------------------
-# Division (abstract)
+# Division
+# title
+# label
 # set and reset counters here
 class Division(Block):
     def __init__(self, title=None, label=None):
@@ -233,6 +235,8 @@ class Chapter(Division):
         Section.counter = 0
         Subsection.counter = 0
         Theorem.counter = 0
+        Exercise.counter = 0
+        Questions.counter = 0
         Figure.counter = 0
         Table.counter = 0
         List.counter = 0
@@ -254,7 +258,6 @@ class Subsection(Division):
     
 #-----------------------------
 # Theorems
-# single counter, reset by Chapter
 #-----------------------------
 class Theorem(Block):
     counter = 0
@@ -284,7 +287,6 @@ class Example(Theorem):
         Theorem.__init__(self, title, label)
 #-----------------------------
 # Exercise
-# single counter, reset by Chapter
 #-----------------------------
 class Exercise(Block):
     counter = 0
@@ -310,8 +312,7 @@ class Summative(Exercise):
         Exercise.__init__(self, title, label)
 
 #-----------------------------
-# Lists 
-# when mpaths properly implemented, we can probably get rid of the List counter
+# Lists (abstract)
 #-----------------------------
 class List(Node):
     counter = 0
@@ -401,8 +402,7 @@ class Step(Item):
 
 #-----------------------------
 # Boxes 
-# Proof box should be "attached" to a Theorem object (using mpaths)
-# Answer box should be "attached" to a Question/Part/Subpart object
+# proof is "attached" to a theorem (etc.) by nesting boxes
 #-----------------------------
 class Box(Block):
     def __init__(self, title=None, label=None):
@@ -423,6 +423,7 @@ class Solution(Box):
 class Hint(Box):
     def __init__(self, title=None, label=None):
         Box.__init__(self)
+
 class Center(Box):
     def __init__(self, title=None, label=None):
         Box.__init__(self)
@@ -468,7 +469,7 @@ class TexNode(Node):
     def __init__(self, s = None):
         Node.__init__(self)
         
-        # check for all whitespace (in which case set content to empty string)
+        # check for nothing-but-whitespace (in which case set content to empty string)
         # we test for empty tex nodes later, and delete them.
         if not s or not re.compile(r'\S+',re.DOTALL).search(s):
             self.htex = ''
@@ -494,7 +495,7 @@ class TexNode(Node):
         # kill label commands (picked up in parse_block )
         s = re.sub(r'\\label\{([^\}]*)\}', r'',s)
         # s = re.sub(r'\\ref\{([^\}]*)\}', r'<a href="#\1">\1</a>',s)
-        s = re.sub(r'\\cite\{([^\}]*)\}', r'<a href="bib:\1">here</a>',s)
+        s = re.sub(r'\\cite\{([^\}]*)\}', r'<a href="bib:\1">\1</a>',s)
 
         # font styles
         s = re.sub(r'\\emph\{([^\}]*)\}',r'<i>\1</i>',s)
@@ -517,7 +518,7 @@ class TexNode(Node):
 
         # tricky
         s = re.sub(r'\\percent', r'&#37;',s)
-        s = re.sub(r'~', r' ',s)
+        s = re.sub(r'~', r'&nbsp;',s)
         
         # kill
         s = re.sub(r'\\maketitle',      r'',s)
@@ -617,7 +618,7 @@ doctree_class = {
         'answer':       Answer,
         'solution':     Solution,
         'hint':         Hint,
-        'center':         Center,
+        'center':       Center,
     },
     'ignored': {
         'equation':     None,
@@ -729,7 +730,7 @@ class TexParser(object):
         return s
         
     
-    # parse main.tex
+    # parse main file (main.tex)
     def parse_main(self, main_file):
 
         # check preamble
@@ -1200,6 +1201,7 @@ class TexParser(object):
         return item_list
 
 
+
 #------------------------------------------------
 # main
 #------------------------------------------------
@@ -1225,6 +1227,13 @@ def main(args=None):
     preamble = p.parse_preamble( args[0] )
     book = p.parse_main( main_tex )
     book.title = preamble['book_title']
+    
+    # book2 = Book()
+    # book2.title = 'Empty Book'
+    # b = camel.models.Book(node_id=self.node_id, mpath=self.mpath)
+    # if commit:
+    #     t.save()
+    
 
     # text output
     if options.text:

@@ -26,7 +26,7 @@ class Command(BaseCommand):
     help = 'Update database for specified module codes'
 
     option_list = BaseCommand.option_list + (
-        make_option('--text', action="store_true", dest="text", default=False, help="print tree to stdout"),
+        make_option('--text', action="store_true", dest="text", default=False, help="print document tree to stdout"),
         make_option('--xml', action="store_true", dest="xml", default=False, help="print xml tree to stdout"),
         make_option('--db', action="store_true", dest="db", default=False, help="test write to database"),
         make_option('--commit', action="store_true", dest="commit", default=False, help="write to database"),
@@ -84,7 +84,7 @@ class Command(BaseCommand):
                 modules = camel.models.Module.objects.filter(code=code, year=year)
                 if not modules:
                     out.info( 'Creating new module %s/%s' % (code, year) )
-                    mo = camel.models.Module(code=code, year=year, title=preamble['module_title'])
+                    mo = camel.models.Module(code=code, year=year, title=preamble['module_title'], newcommands=nc)
                     mo.save()
                 elif len(modules) == 1:
                     out.info( 'Updating existing module %s/%s (existing doctree will be deleted)' % (code, year) )

@@ -1,6 +1,3 @@
-<!--
-camel: index.html
--->
 {% extends "base.html" %}
 {% load staticfiles %}
 
@@ -10,7 +7,9 @@ camel: index.html
 
 
 {% block breadcrumbs %}
-	&nbsp;<a href="{% url 'camel.views.index' %}">Home</a>
+	&nbsp;
+	{% if user.is_authenticated %}{{ user.username }}{% endif %}
+	<!--a href="{% url 'camel.views.index' %}">home</a-->
 {% endblock %}
 
 
@@ -19,6 +18,9 @@ camel: index.html
 	<p>Logged in as <b>{{ user.username }}</b></p>
 {% endif %}
 
+{% if debug %}
+	<p>Debug: <b>{{ debug }}</b></p>
+{% endif %}
 <ul>
 	<li><a href="/modules/">Modules</a></li>
 </ul>
@@ -27,18 +29,17 @@ camel: index.html
 {% endblock %}
 
 {% block sidebar %}
-    <br/>
-    <h3>Useful links</h3>
+    <h3>Links</h3>
     <ul>
-        <li><a href="http://www.mathcentre.com">Mathcentre</a></li>
-		<li><a href="https://www.khanacademy.org">Khan Acacemy</a></li>
+        <li><a href="http://www.cardiff.ac.uk/maths">Cardiff School of Mathematics</a></li>
+		<li><a href="http://www.github.com/dimbyd/camel">Camel on GitHub</a></li>
     </ul>
 {% endblock %}
 
 {% block content-secondary %}
     <h3>Contacts</h3>
     <ul>
-        <li>email: evansd8@cf.ac.uk</li>
+        <li>email: camel@caerdydd.ac.uk</li>
     </ul>
 {% endblock %}
 

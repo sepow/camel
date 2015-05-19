@@ -1,4 +1,4 @@
-{% extends "manylion_modiwl.html" %}
+{% extends "chapter_list.html" %}
 
 {% block title %} 
 	{{ object.title }}
@@ -9,24 +9,29 @@
 	{{ block.super }}&gt;<a href="{% url 'treenode-detail' object.pk %}"> {{ object.title }}</a>
 {% endblock %}
 
-{% block content-main %}
-{% spaceless %}
-
+{% block content-main %}{% spaceless %}
 	<div class="macros">
 	    {% autoescape off %}
 			\( {{ module.newcommands | safe }} \)
 		{% endautoescape %}
 	</div>
 
-<br>
-<u><h1 align="center">{{ module.code }} {{ module.title }} {{ module.year }} </h1></u>
-<br>
+<!--h2>
+	<u>{{ module.code }} {{ module.title }}</u>
+	<br />
+	<br />
+	{{ subtree.0.node_type.title }} 
+	{% if subtree.0.number %} 
+		{{ chapter.number }}.{{ subtree.0.number }}
+	{% endif %} 
+	{% if subtree.0.title %} 
+		:&nbsp;{{ subtree.0.title }}
+	{% endif %} 
+</h2-->
 
 {% if subtree %}
-
 	{% load mptt_tags %}
     {% recursetree subtree %}
-
 		{% if node.node_type == "reference" %}
 			<a href="{% url 'treenode-detail' object.pk %}#{{ node.htex | safe }}">
 				{% if refs %} 
@@ -42,23 +47,26 @@
 			{% include "nodeblock.html" %}
 		{% endif %}
     {% endrecursetree %}
-
 {% else %}
 	<p>No subtree!</p>
 {% endif %}
+{% endspaceless %}{% endblock %}
 
-{% endspaceless %}
+{% block browse-horizontal %}
+<p class="left">{% if prev %}<a href="{{ prev.get_absolute_url }}">&larr; {{ prev.number }}. {{ prev.title }}</a>{% endif %}</p>
+<p class="right">{% if next %}<a href="{{ next.get_absolute_url }}">{{ next.number }}. {{ next.title }} &rarr;</a>{% endif %}</p>
 {% endblock %}
 
 {% block sidebar %}
 	{% if toc %}
-	<h3>Chapters</h3>
+	<h3>{{ module.code }}</h3>
 		{% for chap in toc %}
 			<p><a href="{% url 'treenode-detail' chap.pk %}"> {{ chap.number }}. {{ chap.title }}</a></p>
 		{% endfor %}
 	{% else %}
 	    <p>No toc</p>
 	{% endif %}
-
 {% endblock %}
+
+
 

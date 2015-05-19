@@ -22,7 +22,6 @@ Algebra is the study of \emph{operations} and \emph{relations}.
 \eit
 
 %----------------------------------------------------------------------
-\break
 \subsection{Set relations}
 %----------------------------------------------------------------------
 
@@ -53,7 +52,6 @@ Let $A=\{a,b\}$, $B=\{a,b\}$ and $C=\{a,b,c\}$.
 \end{example}
 
 %----------------------------------------------------------------------
-\break
 \subsection{Set operations}
 %----------------------------------------------------------------------
 \begin{definition}
@@ -82,11 +80,10 @@ Then
 $A\cup B = \{a,b,c\}$, $A\cap B = \{b\}$ and $A^c = \{c,d\}$.
 \end{example}
 
-\break % <<
-
 % figure: basic set operations
-\begin{figure}[htb]
+\begin{figure}
 \centering
+\caption{The basic set operations.}
 \begin{tabular}{ccc}
 	\begin{subfigure}{.25\textwidth}
 	\resizebox{\linewidth}{!}{\includegraphics{AcupB}}
@@ -105,16 +102,16 @@ $A\cup B = \{a,b,c\}$, $A\cap B = \{b\}$ and $A^c = \{c,d\}$.
 \end{tabular}
 \end{figure}
 
-\begin{center}
+\begin{table}
+\centering
+\caption{Correspondence with logical operators.}
 \begin{tabular}{|c|c||c|c|c|} \hline
 Set Theory 		& 			& Logic			&		& \\ \hline
 Union			& $A\cup B$	& Disjunction 	& OR 	& $\lor$	\\
 Intersection		& $A\cap B$	& Conjunction	& AND 	& $\land$\\
 Complement		& $A^c$		& Negation		& NOT 	& $\lnot$	\\ \hline
 \end{tabular}
-\end{center}
-
-\break % <<
+\end{table}
 
 %----------------------------------------------------------------------
 \subsection{Set algebra}
@@ -200,16 +197,13 @@ Let $A=\{a,b\}$ and $B=\{b,c\}$. Then
 \eit
 \end{example}
 
-\break % <<
-
-
 %----------------------------------------------------------------------
 %\section*{Appendix: Set operations}
 %----------------------------------------------------------------------
 % figure
-\begin{figure}[htb]
+\begin{figure}
 \centering
-
+\caption{Set Operations ($A$ on the left, $B$ on the right).\label{fig:set-operations}}
 \begin{tabular}{cccc}	
 \begin{subfigure}{.15\textwidth}
 \resizebox{\linewidth}{!}{\includegraphics{emptyset}}
@@ -297,13 +291,21 @@ Let $A=\{a,b\}$ and $B=\{b,c\}$. Then
 \caption{$\emptyset^c$}
 \end{subfigure}
 \end{tabular}
-\caption{Set Operations ($A$ on the left, $B$ on the right).\label{fig:set-operations}}
 \end{figure}
 
 %----------------------------------------------------------------------
-\section{Exercises}
-\input{ex01_sets}
+\section{Assessment}
 %----------------------------------------------------------------------
+
+\begin{assessment}
+\begin{questions}
+\question
+Illustrate the basic set operations using Venn diagrams.%, as shown in Figure~\ref{fig:set-operations}.
+\question
+State and prove De Morgan's laws.
+\end{questions}
+\end{assessment}
+
 %======================================================================
 \endinput
 %======================================================================

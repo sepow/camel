@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+
+{% block title %}
+	Submit Exercise
+{% endblock %}
+
+
+{% block content-main %}
+
+<h2>Submit Exercise</h2>
+Are you sure?
+
+{% if pairs %}
+	{% for q, a in pairs %}
+	<div class="question-block">
+		<b>Question {{ q.number }}</b><br>
+		<div class="question">
+			{% with q.get_descendants as subtree %}
+					{% include "question_block.html" %}
+			{% endwith %}
+			<div class="previewbox"> 
+				{% if a.text %} 
+					{{ a.text | linebreaks }}
+				{% endif %} 
+			</div>
+		</div> <!-- end question -->
+	</div>
+	{% endfor %}
+{% endif %}
+
+{% endblock %}
+
+
+

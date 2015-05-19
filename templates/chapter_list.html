@@ -1,0 +1,61 @@
+{% extends "module_list.html" %}
+
+{% block title %} 
+	{{ module.code }}
+{% endblock %}
+
+{% block breadcrumbs %}
+	{{ block.super }}
+	&gt;&nbsp;<a href="{% url 'chapter-list' module.pk %}">{{ module.code }}</a>
+{% endblock %}
+
+{% block content-main %}
+
+{% if module %}
+   	<h2 align="center"><u>{{ module.code}} {{ module.title }}</u></h2>
+{% endif %}
+<h3>Chapters</h3>
+
+{% if chapters %}
+	<table class="chapters">
+		{% for chapter in chapters %}
+			<tr>
+				<td><a href="{% url 'chapter-detail' chapter.pk %}">{{ chapter.number }}. {{ chapter.title }}</a></td>
+				<td><a href="{% url 'chapter-examples' chapter.pk %}">examples</a></td>
+				<td><a href="{% url 'chapter-theorems' chapter.pk %}">theorems</a></td>
+				<td><a href="{% url 'chapter-exercises' chapter.pk %}">exercises</a></td>
+				<td><a href="{% url 'exercise' chapter.pk %}">assessments</a></td>
+			</tr>
+		{% endfor %}
+	</table>
+{% else %}
+	<p>No chapters!</p>
+{% endif %}
+<br/>
+<h3><a href="{% url 'exercise-list' module.pk %}">Exercises</a></h3>
+<br/>
+<!--a href="{% url "module-list" %}">&larr; Back to module list</a-->
+{% endblock %}
+
+
+{% block sidebar %}
+	{% if toc %}
+	<h3>Modules</h3>
+	<ul class='toc'>
+		<ul>
+		{% for module in toc %}
+			<li><a href="{% url 'chapter-list' module.pk %}"> {{ module.code }}</a></li>
+		{% endfor %}
+		</ul>
+	{% else %}
+	    <p>No toc</p>
+	{% endif %}
+
+{% endblock %}
+
+
+{% block browse-horizontal %}
+<span class="left">{% if prev %}<a href="{{ prev.get_absolute_url }}">&lt; {{ prev.code }}</a>{% endif %}</span>
+<span class="right">{% if next %}<a href="{{ next.get_absolute_url }}">{{ next.code }} &gt;</a>{% endif %}</span>
+{% endblock %}
+
