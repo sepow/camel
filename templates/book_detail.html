@@ -1,4 +1,4 @@
-{% extends "chapter_list.html" %}
+{% extends "module_detail.html" %}
 
 {% block title %} 
 	{{ object.title }}
@@ -6,26 +6,39 @@
 
 
 {% block breadcrumbs %}
-	{{ block.super }}&gt;<a href="{% url 'book-detail' object.pk %}"> {{ object.title }}</a>
+	{{ block.super }}&gt;<a href="{% url 'book-detail' book.pk %}"> {{ book.title }}</a>
 {% endblock %}
 
-{% block content-main %}{% spaceless %}
-	<div class="macros">
-	    {% autoescape off %}
-			\( {{ module.newcommands | safe }} \)
-		{% endautoescape %}
-	</div>
+{% block content-main %}
+{% spaceless %}
+<div class="macros">
+    {% autoescape off %}
+		\( {{ book.new_commands | safe }} \)
+	{% endautoescape %}
+</div>
+
+<div>
+	<span style="float:left">
+		&larr; <a href="{% url 'module-detail' module.pk %}"> {{ module.code }}</a>
+	</span>
+</div>
+
+<br>
+	
 
 {% if module %}
-	<h3>{{ module.code }}</h3>
+	<h1>Book {{ book.number }}. {{ book.title }}</h1>
 {% endif %}
+
 {% if chapters %}
+	<h3>Chapters</h3>
 		{% for chap in chapters %}
 			<p><a href="{% url 'chapter-detail' chap.pk %}"> {{ chap.number }}. {{ chap.title }}</a></p>
 		{% endfor %}
 	{% else %}
 	    <p>No chapters</p>
 	{% endif %}
+{% endspaceless %}
 {% endblock %}
 
 {% block browse-horizontal %}
@@ -33,6 +46,21 @@
 <p class="right">{% if next %}<a href="{{ next.get_absolute_url }}">{{ next.number }}. {{ next.title }} &rarr;</a>{% endif %}</p>
 {% endblock %}
 
+{% block sidebar %}
+	{% if toc %}
+	<h3>Books</h3>
+		{% for book in toc %}
+			{% if book.pk != book.pk %}
+				<p><a href="{% url 'book-detail' book.pk %}"> {{ book.number }}. {{ book.title }}</a></p>
+			{% else %}
+				<p>{{ book.number }}. {{ book.title }}</p>
+			{% endif %}
+		{% endfor %}
+	{% else %}
+	    <p>No toc</p>
+	{% endif %}
+
+{% endblock %}
 
 
 

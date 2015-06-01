@@ -1,6 +1,7 @@
 /*
 base.css for camel project
 
+Layout is as follows
 style, scripts
 title
 container
@@ -19,7 +20,30 @@ container
 
 */
 
+/* for CaMeL logo - rips off LaTeX */
+.textlogo {
+  font-family: Times, "Times New Roman", serif;	
+  letter-spacing: 1.5px;
+}
 
+.textlogo sup {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.75em;
+  vertical-align: 0.25em;
+  margin-left: -0.32em;
+  margin-right: -0.19em;
+}
+
+.textlogo sub {
+  text-transform: uppercase;
+  vertical-align: -0.5ex;
+  margin-left: -0.15em;
+  margin-right: -0.15em;
+  font-size: 1em;
+}
+
+/* blocks and boxes */
 div.blocktitle {
   	font-size: 90%;
 	text-align: left;
@@ -50,6 +74,25 @@ p.answer_title, p.hidebox_title {
     margin-bottom:0px;
     
 } 
+
+div.choicesbox, div.incorrect_choicesbox, div.correct_choicesbox {
+	background:WhiteSmoke;
+    border:1px solid #000;
+	padding:0px
+}
+
+div.incorrect_choicesbox {
+	background:tomato;
+}
+
+div.correct_choicesbox {
+	background:lightgreen;
+}
+
+div.choicebox, div.incorrect_choicebox, div.correct_choicebox {
+    border:1px solid #000;
+	padding:0px
+}
 
 div.answerbox {
     display: hidden;
@@ -180,11 +223,18 @@ table.exercises {
     border:1px solid #000;
 }
 /* styles for latex blocks */
-div.theorem, div.lemma, div.proof, div.remark, div.definition, div.example, div.exercise, div.question, div.question-block, div.answerbox {
+div.theorem, div.lemma, div.proof, div.remark, div.definition, div.homework, div.multiplechoice, div.example, div.exercise, div.question, div.question-block, div.answerbox {
     border:1px solid #000;
 	padding:3px;
 	
 }
+
+div.latextable {
+    border:1px solid #000;
+	padding:3px;
+	background:WhiteSmoke;
+}
+
 
 /* styles for hideboxes */
 div.proof, div.answer, div.solution {
@@ -199,6 +249,14 @@ ol.questions {
 
 ol.parts {
 	list-style-type:lower-alpha;
+}
+
+ol.subparts {
+	list-style-type:lower-roman;
+}
+
+ol.choices {
+	list-style-type:upper-alpha;
 }
 
 li.question {
@@ -224,6 +282,14 @@ div.definition {
 div.example {
 	background:WhiteSmoke;
 }
+div.homework {
+	background:pink;
+	padding:5px;
+}
+div.multiplechoice {
+	background:lightblue;
+	padding:5px;
+}
 div.solution {
 	background:antiquewhite;
 }
@@ -248,6 +314,7 @@ div.answerbox {
 div.figure {
     border:1px solid #000;
 	padding:3px;
+	background:WhiteSmoke;
 }
 /*
 div.solution {
@@ -256,25 +323,6 @@ div.solution {
 	padding:3px;
 }
 */
-
-/* exercises
-.formative {
-	color:blue;
-}
-.summative {
-	color:red;
-}
-
-/* colours for the different types of exercise */
-.diagnostic {
-	color:green;
-}
-.formative {
-	color:blue;
-}
-.summative {
-	color:red;
-}
 
 /* bibliography */
 ul.citation {
@@ -301,6 +349,7 @@ body, th, td {
 
 /* container */
 #container {
+	margin-top: 0;
 	margin-left: auto;
     margin-right: auto;
     position:relative;
@@ -309,29 +358,31 @@ body, th, td {
 	min-width:768px;
 	max-width:1024px;
 	/* background:rgba(78,180,247,1.00); */
-	background:#fff;
+	float:top;
 }
 
 /* header */
 #header {
     position:relative;
-    height:60px;
+    height:55px;
 	background:#D7D9F7;
-	border:1px solid #000;
+	border-left:1px solid #000;
+	border-right:1px solid #000;
+	border-bottom:1px solid #000;
 }
 #header h1#logo {
     margin:0;
-    width:111px;
-    height:41px;
+    width:100px;
+    height:40px;
     position:absolute;
     bottom:20px;
-    left:25px;
+    left:10px;
 }
 #header h1#banner {
-    margin:10;
+    margin:5;
     position:absolute;
-    bottom:10px;
-    left:100px;
+    bottom:2px;
+    left:70px;
 }
 
 /* global navigation */
@@ -361,8 +412,7 @@ body, th, td {
 /* breadcrumbs */
 #breadcrumbs {
 	font:italic 90%/1.2em "Trebuchet MS",sans-serif;
-    height: 20px;
-    line-height:20px;
+    line-height:15px;
     border:1px solid #000;
 }
 
@@ -435,11 +485,10 @@ body, th, td {
 /* horizontal browse */
 #browse-horizontal {
     margin:1.5em 0 0 0;
-    padding:0.5em 1em 0.5em 1em;
+    padding:0.25em 1em 0.25em 1em; 
     overflow:hidden;
 	font:italic 90%/1.2em "Trebuchet MS",sans-serif;
-    height: 1.0em;
-    line-height:1.0em;
+    line-height:10px;
 	display:block;
     border-top:1px solid #000;
     border-right:1px solid #000;
@@ -560,6 +609,9 @@ CU COLOURS
 ***************************************************/
 
 /* content blocks */
+#container {
+	background-color:#e9f9ed;
+}
 body {
 	/*background:#FFFFE0;*/
 	background:#e9f9ed;

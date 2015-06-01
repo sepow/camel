@@ -5,39 +5,24 @@ from django.contrib.auth.models import User
 
 from mptt.models import MPTTModel, TreeForeignKey
 
-# import camel.doctree as dt
-# from camel.doctree import Book as dBook
-import camel.doctree as dt
+# import camel.book as bt
 
+# these should be moved to settings.py
 ACADEMIC_YEARS = (
-    ('201415', '2014-15'),
-    ('201516', '2015-16'),
-    ('201617', '2016-17'),
+    ('2014-15', '2014-15'),
+    ('2015-16', '2015-16'),
+    ('2016-17', '2016-17'),
 )
 MODULE_CODES = (
     ('MA0000','MA0000'),
+    ('MA0003','MA0003'),
     ('MA1234','MA1234'),
-    ('MA1500','MA1500'),
     ('MA1501','MA1501'),
-    ('MA2500','MA2500'),
 )
 USER_TYPES = (
     ('STU','Student'),
     ('STA','Staff'),
 )
-
-
-# #------------------------------------------------
-# # test class
-# class Genre(MPTTModel):
-#     name = models.CharField(max_length=50, unique=True)
-#     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
-#
-#     def get_absolute_url(self):
-#         return reverse('genre_detail', kwargs={'pk': self.pk, })
-#
-#     class MPTTMeta:
-#         order_insertion_by = ['name']
 
 #------------------------------------------------
 # Module 
@@ -49,12 +34,11 @@ class Module(models.Model):
     title = models.CharField(max_length=100, null=True, blank=True)
     
     # users
-    teacher = models.ForeignKey(User, null=True, blank=True, related_name="teacher")
-    students = models.ManyToManyField(User, null=True, blank=True, related_name="students")
+    teacher = models.ForeignKey(User, null=True, blank=True, related_name="module-teacher")
+    students = models.ManyToManyField(User, null=True, blank=True, related_name="module-students")
 
     # misc
-    newcommands = models.CharField(max_length=1024, null=True, blank=True)
-    twitter_widget_id = models.CharField(max_length=100, null=True, blank=True)
+    twitter_widget_id = models.CharField(max_length=1024, null=True, blank=True)
 
     def __unicode__(self):
         return self.code
@@ -77,118 +61,37 @@ class Module(models.Model):
             return prev[0]
         return None
     
-
+    
     # this allows us to run doctree.py in a django shell
     class Meta:
         app_label = 'camel'
-        
-#------------------------------------------------
-# TreeNode
-class DocumentNode(MPTTModel):
-
-    # keys
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
-
-    # basic attributes
-    node_id = models.PositiveSmallIntegerField()        # serial number (set by doctree.py)
-    is_readonly = models.BooleanField(default=False)    # set by schedule.py
-    mpath = models.CharField(max_length=100, null=True) # materialized path (set by doctree.py)
-    label = models.CharField(max_length=100, null=True, blank=False) # latex label (set by latex source)
-
-    def get_absolute_url(self):
-        return reverse('book-detail', kwargs={'pk': self.pk})
-
-    def get_next(self):
-        nesaf = self.get_next_sibling()
-        if nesaf:
-            return nesaf
-        return False
-        
-    def get_prev(self):
-        prev = self.get_previous_sibling()
-        if prev:
-            return prev
-        return False
-    
-#------------------------------------------------
-# book
-class Book(DocumentNode, dt.Book):
-    
-    # attributes
-    module = models.ForeignKey(Module)
-    title = models.CharField(max_length=100, null=True)
-    author = models.CharField(max_length=100, null=True)
-
-    def __unicode__(self):
-        s = '%8d: %s' % (self.node_id, self.mpath)
-        if self.title: s = s + ': '+ self.title
-        if self.author: s = s + ' ['+ self.author + ']'
-        return s
 
 #------------------------------------------------
-# chap
-class Chap(DocumentNode, dt.Chapter):
-    
-    # attributes
-    title = models.CharField(max_length=100, null=True)
-    number = models.PositiveSmallIntegerField(null=True) # latex number (chapter, figure etc)
-
-    def get_absolute_url(self):
-        return reverse('chapter-detail', kwargs={'pk': self.pk})
-
-    def __unicode__(self):
-        s = '%8d: %s' % (self.node_id, self.mpath)
-        if self.number: s = s + unicode(self.number) + '. '
-        if self.title: s = s + self.title
-        return s
-
-#------------------------------------------------
-# chap
-class Figure(DocumentNode, dt.Figure):
-    
-    # attributes
-    caption = models.CharField( max_length=100, null=True )
-    number = models.PositiveSmallIntegerField( null=True )
-    image = models.ImageField(upload_to='figure_images', null=True, blank=False)
-
-    def __unicode__(self):
-        s = '%8d: %s' % (self.node_id, self.mpath)
-        if self.number: s = s + unicode(self.number) + '. '
-        if self.title: s = s + self.title
-        return s
-
-#------------------------------------------------
-# TreeNode
-class TreeNode(MPTTModel):
+# BookNode
+class BookNode(MPTTModel):
     
     # keys
-    module = models.ForeignKey(Module)
+    # module = models.ForeignKey(Module)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
-
-    # read-only flag
-    is_readonly = models.BooleanField(default=False)    # set by schedule.py
-
-    # labels
-    node_id = models.PositiveSmallIntegerField() # serial number (set by doctree.py)
-    mpath = models.CharField(max_length=100, null=True) # materialized path
-    label = models.CharField(max_length=100, null=True, blank=False) # latex label
 
     # attributes
     node_class = models.CharField(max_length=10)
     node_type = models.CharField(max_length=10)
     number = models.PositiveSmallIntegerField(null=True) # latex number (chapter, figure etc)
     title = models.CharField(max_length=100, null=True, blank=False) # title or caption
+    is_readonly = models.BooleanField(default=False)    # set by schedule.py (todo)
     
     # content
-    htex = models.TextField(null=True)
+    text = models.TextField(null=True)
     image = models.ImageField(upload_to='figure_images', null=True, blank=False)
     
-    # misc. 
-    is_correct_choice = models.BooleanField(default=False)    # hack
-
+    # labels
+    node_id = models.PositiveSmallIntegerField() # serial number (from booktree.py)
+    mpath = models.CharField(max_length=100, null=True) # materialized path (from booktree.py)
+    label = models.CharField(max_length=100, null=True, blank=False) #
 
     def get_absolute_url(self):
-        return reverse('treenode-detail', kwargs={'pk': self.pk})
+        return reverse('booknode-detail', kwargs={'pk': self.pk})
     
     def get_next(self):
         nesaf = self.get_next_sibling()
@@ -208,15 +111,32 @@ class TreeNode(MPTTModel):
             pa = pa.parent
         return pa
 
+    def get_parent_book(self):
+        pa = self
+        while pa.node_type != 'book':
+            pa = pa.parent
+        return pa
+
     def get_parent_chapter(self):
         pa = self
         while pa.node_type != 'chapter':
             pa = pa.parent
         return pa
 
-    def get_parent_exercise(self):
+    # def get_parent_homework(self):
+    #     pa = self
+    #     while pa.node_class != 'homework':
+    #         pa = pa.parent
+    #     return pa
+    def get_parent_assignment(self):
         pa = self
-        while pa.node_type != 'exercise':
+        while pa.node_class != 'assignment':
+            pa = pa.parent
+        return pa
+
+    def get_root_node(self):
+        pa = self
+        while pa.node_type != 'book':
             pa = pa.parent
         return pa
 
@@ -228,69 +148,112 @@ class TreeNode(MPTTModel):
 
     def __unicode__(self):
         return self.mpath
-        # s = '%4d: %10s' % (self.node_id, self.node_type)
-        # if self.number: s = s + ': '+ str(self.number)
-        # if self.title: s = s + ': '+ self.title
-        # if self.label: s = s + '['+ self.label +']'
-        # if self.htex: s = s + '  >>>>>'+ self.htex +'<<<<<'
-        # return s
 
-class Test(TreeNode):
-    pass
-    
 #------------------------------------------------
-# Label (probably not needed - use mpaths instead)
-class Label(models.Model):
-    module = models.ForeignKey(Module)
-    tex_label = models.CharField(max_length=100)
-    mpath = models.CharField(max_length=100)
+# Module 
+class Book(models.Model):
+    
+    # attributes
+    module = models.ForeignKey(Module, null=True, blank=True, related_name="book-module")
+    number = models.PositiveSmallIntegerField(null=True)
+    title = models.CharField(max_length=100, null=True, blank=True)
+    author = models.CharField(max_length=100, null=True, blank=True)
+    version = models.CharField(max_length=100, null=True, blank=True)
+    new_commands = models.CharField(max_length=5000, null=True, blank=True)
+    tree = models.ForeignKey(BookNode, related_name="book-tree", null=True)
 
     def __unicode__(self):
-        return self.module.__unicode__() + u':' + unicode(self.tex_label) + u':' + unicode(self.mpath)
-
+        s = ''
+        if self.module:
+            s += self.module.code
+        if self.number:
+            s += ' | book ' + str(self.number)
+        if self.title:
+            s += ' | ' + self.title
+        # if self.new_commands:
+        #     s += '\n' + self.new_commands
+        return unicode(s)
+        
     def get_absolute_url(self):
-        return reverse('book-detail', kwargs={'module': self.module})
+        return reverse('book-detail', kwargs={'pk': self.id})
+
+    def get_next(self):
+        nesaf = Book.objects.filter(module=self.module, number__gt=self.number)
+        return nesaf[0] if nesaf else None
+        
+    def get_prev(self):
+        prev = Book.objects.filter(module=self.module, number__lt=self.number).order_by('-number')
+        return prev[0] if prev else None
+    
 
 #------------------------------------------------
-# Interactive
+# Label
+class Label(models.Model):
+    book = models.ForeignKey(Book)
+    text = models.CharField(max_length=100)
+    mpath = models.CharField(max_length=1000)
+
+    def __unicode__(self):
+        return unicode(self.text) + u' -> ' + unicode(self.mpath)
+
+#------------------------------------------------
+# Answer
 class Answer(models.Model):
     
-    question = models.ForeignKey(TreeNode)
     user = models.ForeignKey(User)
+    question = models.ForeignKey(BookNode)
     text = models.TextField()
-    readonly = models.BooleanField(default=False)
+    is_readonly = models.BooleanField(default=False)
     
     created = models.DateTimeField(auto_now_add=True)    
     updated = models.DateTimeField(auto_now=True)
     
-    class Meta:
-        ordering = ['created']
-
     def __unicode__(self):
         s = unicode( self.question.mpath )
         s = s + unicode('|' + self.user.username )
         s = s + unicode('|' + self.text )
+        s = s + unicode('|' + str(self.is_readonly) )
         return s
+
+class MultipleChoiceAnswer(models.Model):
+    user = models.ForeignKey(User)
+    question = models.ForeignKey(BookNode)
+    choice = models.ForeignKey(BookNode, related_name='mcanswer_choice')
+    is_readonly = models.BooleanField(default=False)
+
+    created = models.DateTimeField(auto_now_add=True)    
+    updated = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        s = self.question.mpath
+        s = s + '|' + self.user.username
+        s = s + '|' + str(self.choice)
+        s = s + '|' + str(self.is_readonly) + '\n'
+        return unicode(s)
+
 #------------------------------------------------
+# Assessment
 class Submission(models.Model):
     
     user = models.ForeignKey(User)
-    assessment = models.ForeignKey(TreeNode, null=True)
-    created = models.DateTimeField(auto_now_add=True)    
-    declaration = models.BooleanField(default=False)
+    assignment = models.ForeignKey(BookNode)
+    is_readonly = models.BooleanField(default=True)
     
+    created = models.DateTimeField(auto_now_add=True)    
+
     class Meta:
         ordering = ['created']
 
-#------------------------------------------------
-class MultipleChoiceAnswer(models.Model):
-    question = models.ForeignKey(TreeNode)
-    user = models.ForeignKey(User, null=True, blank=True)
-    choice = models.CharField(max_length=1)
-    readonly = models.BooleanField(default=False)
-    def __unicode__(self):
-        return unicode( choice )
 
     
-
-
+# class Teacher(models.Model):
+#     user = models.OneToOneField(User)
+#
+#     def __unicode__(self):
+#         return self.user.username
+#
+# class Student(models.Model):
+#     user = models.OneToOneField(User)
+#
+#     def __unicode__(self):
+#         return self.user.username

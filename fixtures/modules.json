@@ -1,26 +1,50 @@
 [
-{
-	"pk": 1, 
-	"model": "camel.module", 
-	"fields": {
-		"year": "201415", 
-		"code": "MA0000", 
-		"title": "Test Module", 
-		"students": [3,4], 
-		"teacher": 1, 
-		"twitter_widget_id": ""
+	{
+		"model": "camel.module", 
+		"pk": 1, 
+		"fields": {
+			"year": "2015-16", 
+			"code": "MA0000", 
+			"title": "The Camel System", 
+			"teacher": 11, 
+			"students": [101,102,103,104,105,106], 
+			"twitter_widget_id": ""
+		}
+	},
+	{
+		"pk": 2, 
+		"model": "camel.module", 
+		"fields": {
+			"year": "2015-16", 
+			"code": "MA1234", 
+			"title": "Probability Theory",
+			"teacher": 11, 
+			"students": [101,102,103,104,105,106], 
+			"twitter_widget_id": ""
+		}
+	},
+	{
+		"pk": 3, 
+		"model": "camel.module", 
+		"fields": {
+			"year": "2015-16", 
+			"code": "MA1501", 
+			"title": "Statistical Inference",
+			"teacher": 13, 
+			"students": [101,102,103,104,105,106], 
+			"twitter_widget_id": ""
+		}
+	},
+	{
+		"pk": 4, 
+		"model": "camel.module", 
+		"fields": {
+			"year": "2015-16", 
+			"code": "MA0003", 
+			"title": "Preliminary Mathematics I",
+			"teacher": 14, 
+			"students": [101,102,103,104,105,106], 
+			"twitter_widget_id": ""
+		}
 	}
-},
-{
-	"pk": 2, 
-	"model": "camel.module", 
-	"fields": {
-		"year": "201415", 
-		"code": "MA2500", 
-		"title": "Foundations of Probability and Statistics",
-		"students": [3,4], 
-		"teacher": 1, 
-		"twitter_widget_id": ""
-	}
-}
 ]		

@@ -10,11 +10,11 @@
 
 <div class="macros">
     {% autoescape off %}
-		\( {{ question.module.newcommands | safe }} \)
+		\( {{ book.new_commands | safe }} \)
 	{% endautoescape %}
 </div>
 
-<h2>{{ module.code }} Exercise {{ chapter.number }}.{{ exercise.number }}</h2>
+<h2>{{ module.code }} Exercise {{ chapter.number }}.{{ assessment.number }}</h2>
 
 {% if question %}
 	<div class="question-block">
@@ -22,7 +22,7 @@
 		<h5>Question {{ question.number }}</h5>
 		<div class="question">
 			{% with question.get_descendants as subtree %}
-				{% include "question_block.html" %}
+				{% include "block.html" %}
 			{% endwith %}
 
 			<div class="answerbox">
@@ -56,7 +56,7 @@
 {% endif %}
 
 {% if question.get_parent_exercise %}
-	<a href="{% url "exercise" pk=question.get_parent_exercise.id %}">&larr; Back to Exercise</a>
+	<a href="{% url 'assessment' pk=question.get_parent_assessment.id %}">&larr; Back to Assessment</a>
 {% endif %}
 
 {% endblock %}

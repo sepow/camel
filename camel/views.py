@@ -3,357 +3,209 @@
 camel: views.py
 '''
 
+# for quizzes etc.
 import random
 
+# forms
 from django import forms
-# from django.forms.models import modelformset_factory
+from django.forms.models import formset_factory, modelformset_factory
 
+# http
 from django.http import HttpResponseRedirect, HttpResponse
-
-
 from django.shortcuts import render, render_to_response, get_object_or_404
-from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.template import RequestContext
 
+# auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
-# from django.views.generic import ListView, DetailView
-
 from django.contrib.auth.models import User
-from camel.models import Module, TreeNode, Book, Answer
-from camel.forms import AnswerForm, MultipleChoiceAnswerForm, UserForm, AnswerFormSet, SubmitExerciseForm
 
-# import camel.marker as marker
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-
-
+# model-based views
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 
-from django.core.urlresolvers import reverse, reverse_lazy
+# misc
+from django.utils.decorators import method_decorator
 
-# module list
+# camel
+from camel.models import Module, Book, BookNode, Label, Answer, MultipleChoiceAnswer, Submission
+from camel.forms import AnswerForm, UserForm, SubmissionForm
+# from camel.forms import MultipleChoiceAnswerForm
+
+#--------------------
+# basic
+#--------------------
+# site homepage
+def index(request):
+    return render(request, 'index.html', {})
+
+
+#--------------------
+# model-based views
+#--------------------
 class Module_ListView(ListView):
     model = Module
     context_object_name="module_list"
     template_name = 'module_list.html'
-    # queryset = Module.objects.order_by('code')
-    # paginate_by = 10
-    # success_url = reverse_lazy('module-list')
-    # def get_success_url(self):
-    #     return reverse(OrderView.plain_view)
-    # def get_context_data(self, **kwargs):
-    #     context = super(Module_ListView, self).get_context_data(**kwargs)
-    #     context['modules'] = Module.objects.order_by('code')
-    #     return context
+    queryset = Module.objects.order_by('year','code')
 
-# module detail
 class Module_DetailView(DetailView):
     model = Module
-    # context_object_name="module"
-    template_name = 'chapter_list.html'
-    # def get_success_url(self):
-    #     return reverse('module-list')
+    template_name = 'module_detail.html'
     def get_context_data(self, **kwargs):
         context = super(Module_DetailView, self).get_context_data(**kwargs)
         module = self.get_object()
         context['module'] = module
-        context['chapters'] = TreeNode.objects.filter(module=module.id, node_type='chapter').order_by('mpath')
+        context['books'] = Book.objects.filter(module=module.id).order_by('number')
         context['next'] = module.get_next()
         context['prev'] = module.get_prev()
         context['toc'] = Module.objects.all().order_by('code')
         return context
 
-# book and its chapters
 class Book_DetailView(DetailView):
     model = Book
     template_name = 'book_detail.html'
     def get_context_data(self, **kwargs):
         context = super(Book_DetailView, self).get_context_data(**kwargs)
-        context['module']  = self.get_object.module
-        context['title']  = self.get_object.title
-        context['author']  = self.get_object.author
-        context['chapters']  = self.get_object().get_children()
-        context['next'] = self.get_object().get_next()
-        context['prev'] = self.get_object().get_prev()
+        book = self.get_object()
+        context['book'] = book
+        context['module'] = book.module
+        context['chapters'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=book.tree.mpath )
+        context['next'] = book.get_next()
+        context['prev'] = book.get_prev()
+        context['toc'] = Book.objects.filter(module=book.module.id).order_by('number')
         return context
 
-
-# document node and all children
-class TreeNode_DetailView(DetailView):
-    model = TreeNode
-    template_name = 'treenode_detail.html'
-    # def get_success_url(self):
-    #     return reverse('chapter-list')
-    def get_context_data(self, **kwargs):
-        context = super(TreeNode_DetailView, self).get_context_data(**kwargs)
-        subtree = self.get_object().get_descendants(include_self=True)
-        mcode = self.get_object().mpath[:6]
-        module = get_object_or_404(Module, code=mcode)
-        context['module']  = module
-        context['subtree']  = subtree
-        chapter = self.get_object()
-        while chapter.node_type != 'chapter':
-            chapter = chapter.parent
-        context['chapter']  = chapter
-        context['toc'] = chapter.get_siblings(include_self=True)
-        context['next'] = self.get_object().get_next()
-        context['prev'] = self.get_object().get_prev()
-        return context
-
-# chapter (and all descendants)
 class Chapter_DetailView(DetailView):
-    model = TreeNode
+    model = BookNode
     template_name = 'chapter_detail.html'
     def get_context_data(self, **kwargs):
         context = super(Chapter_DetailView, self).get_context_data(**kwargs)
         chapter = self.get_object()
-        context['chapter'] = chapter
         context['module']  = Module.objects.get( code=chapter.mpath[:6] )
+        context['book']  = Book.objects.get( tree=chapter.get_root_node() )
+        context['chapter'] = chapter
         context['subtree'] = chapter.get_descendants(include_self=True)
         context['toc'] = chapter.get_siblings(include_self=True)
         context['next'] = chapter.get_next()
         context['prev'] = chapter.get_prev()
         return context
 
-# list of chapters
-class Chapter_ListView(ListView):
-    model = TreeNode
-    template_name = 'chapter_list.html'
+class BookNode_DetailView(DetailView):
+    model = BookNode
+    template_name = 'booknode_detail.html'
+    # def get_success_url(self):
+    #     return reverse('chapter-list')
     def get_context_data(self, **kwargs):
-        context = super(Chapter_ListView, self).get_context_data(**kwargs)
-
-        module = Module.objects.get( pk=self.kwargs['pk'] )
+        context = super(BookNode_DetailView, self).get_context_data(**kwargs)
+        subtree = self.get_object().get_descendants(include_self=True)
+        mcode = self.get_object().mpath[:6]
+        module = get_object_or_404(Module, code=mcode)
         context['module']  = module
-        context['chapters'] = TreeNode.objects.filter( node_type="chapter", mpath__startswith=module.code )
-        context['toc'] = Module.objects.all().order_by('code')
-        
-        return context
-
-# list of exercises (below a certain node)
-class Exercise_ListView(ListView):
-    model = TreeNode
-    template_name = 'exercise_list.html'
-    def get_context_data(self, **kwargs):
-        context = super(Exercise_ListView, self).get_context_data(**kwargs)
-        
-        treenode = TreeNode.objects.get( pk=self.kwargs['pk'] )
-        chapter = TreeNode.objects.get( mpath=treenode.mpath[:12] )
-        context['module']  = chapter.module
+        context['subtree']  = subtree
+        chapter = self.get_parent_chapter()
         context['chapter']  = chapter
-        context['exercises'] = TreeNode.objects.filter( node_type="exercise", mpath__startswith=chapter.mpath ).order_by('mpath')
-
-        # navigation
-        context['next'] = chapter.get_next()
-        context['prev'] = chapter.get_prev()
-        context['toc'] = Module.objects.all().order_by('code')
+        context['toc']  = Book.objects.filter( module=module )
+        context['next'] = self.get_object().get_next()
+        context['prev'] = self.get_object().get_prev()
         return context
 
-# exercise (and all descendants)
-class Exercise_DetailView(DetailView):
-    model = TreeNode
-    template_name = 'exercise_detail.html'
-
-    def get_success_url(self):
-        return reverse('exercise-list')
-
-    def get_context_data(self, **kwargs):
-        context = super(Exercise_DetailView, self).get_context_data(**kwargs)
-
-        exercise = self.get_object()
-        context['exercise'] = exercise
-        context['module']  = get_object_or_404( Module, code=exercise.mpath[:6] )
-        context['chapter'] = get_object_or_404( TreeNode, mpath=exercise.mpath[:12] )
-        context['subtree'] = exercise.get_descendants(include_self=True)
-
-        # navigation
-        module = context['module']
-        exercises = TreeNode.objects.filter( node_type="exercise", mpath__startswith=module.code ).order_by('mpath')
-        next = exercises.filter( mpath__gt=exercise.mpath )
-        prev = exercises.filter( mpath__lt=exercise.mpath ).order_by('-pk')
-        context['toc'] = exercises
-        context['next'] = next[0] if next else None
-        context['prev'] = prev[0] if prev else None
-
-        return context
-
-class Question_DetailView(DetailView):
-    model = TreeNode
-    template_name = 'question_detail.html'
-    def get_success_url(self):
-        return reverse('exercise-detail')
-    def get_context_data(self, **kwargs):
-        context = super(Question_DetailView, self).get_context_data(**kwargs)
-        question = self.get_object()
-        print '>>>>>>>>>> ' + question.mpath
-        context['module']  = get_object_or_404( Module, code=question.mpath[:6] )
-        context['book']    = get_object_or_404( TreeNode, mpath=question.mpath[:9] )
-        context['chapter'] = question.get_parent_by_type('chapter')
-        context['exercise'] = question.get_parent_by_type('exercise')
-        context['question'] = question
-        context['subtree'] = question.get_descendants(include_self=True)
-
-        # navigation
-        exercise = context["exercise"]
-        questions = TreeNode.objects.filter( node_type="question", mpath__startswith=exercise.mpath ).order_by('mpath')
-        next = questions.filter( mpath__gt=exercise.mpath )
-        prev = questions.filter( mpath__lt=exercise.mpath ).order_by('-pk')
-        context['toc'] = questions
-        context['next'] = next[0] if next else None
-        context['prev'] = prev[0] if prev else None
-        
-    	# answer form
-        form = AnswerForm()
-        form.fields['question'] = self.get_object()
-        context['answer_form'] = form
-        
-        print context
-        return context
-
+# the following should be implemented with javascript on the client
 def theorems(request, pk):
     context = RequestContext(request)
-    treenode = TreeNode.objects.get( pk=pk )
-    chapter = TreeNode.objects.get( mpath=treenode.mpath[:12] )
-    context['module']  = chapter.module
+    booknode = BookNode.objects.get( pk=pk )
+    module  = Module.objects.get( code=booknode.mpath[:6] )
+    chapter = BookNode.objects.get( mpath=booknode.mpath[:12] )
+    context['module']  = module
+    context['book']  = Book.objects.get( tree=chapter.get_root_node() )
     context['chapter']  = chapter
-    
-    qset = TreeNode.objects.filter(node_class="theorem", mpath__startswith=chapter.mpath ).order_by('mpath')
-    qset = qset.exclude(node_type="example")
+    qset = BookNode.objects.filter(node_class="theorem", mpath__startswith=chapter.mpath ).order_by('mpath')
+    qset = qset.exclude(node_type="example").exclude(node_type="exercise")
     context['blocks'] = qset
     context['blocktype'] = 'theorem'
 
     # navigation
     context['next'] = chapter.get_next()
     context['prev'] = chapter.get_prev()
-    context['toc'] = TreeNode.objects.filter( node_type="chapter", module=chapter.module).order_by('mpath')
+    context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
     
     return render(request, 'chapter_blocks.html', context)
 
 def examples(request, pk):
     context = RequestContext(request)
-    treenode = TreeNode.objects.get( pk=pk )
-    chapter = TreeNode.objects.get( mpath=treenode.mpath[:12] )
-    context['module']  = chapter.module
+    booknode = BookNode.objects.get( pk=pk )
+    module  = Module.objects.get( code=booknode.mpath[:6] )
+    chapter = BookNode.objects.get( mpath=booknode.mpath[:12] )
+    context['module']  = module
     context['chapter']  = chapter
-    qset = TreeNode.objects.filter(node_type="example", mpath__startswith=chapter.mpath ).order_by('mpath')
+    context['book']  = Book.objects.get( tree=chapter.get_root_node() )
+    qset = BookNode.objects.filter(node_type="example", mpath__startswith=chapter.mpath ).order_by('mpath')
     context['blocks'] = qset
     context['blocktype'] = 'example'
 
     # navigation
     context['next'] = chapter.get_next()
     context['prev'] = chapter.get_prev()
-    context['toc'] = TreeNode.objects.filter( node_type="chapter", module=chapter.module).order_by('mpath')
+    context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
     
     return render(request, 'chapter_blocks.html', context)
 
 def exercises(request, pk):
     context = RequestContext(request)
-    treenode = TreeNode.objects.get( pk=pk )
-    chapter = TreeNode.objects.get( mpath=treenode.mpath[:12] )
-    context['module']  = chapter.module
+    booknode = BookNode.objects.get( pk=pk )
+    module  = Module.objects.get( code=booknode.mpath[:6] )
+    chapter = BookNode.objects.get( mpath=booknode.mpath[:12] )
+    context['module']  = module
     context['chapter']  = chapter
-    qset = TreeNode.objects.filter(node_type="exercise", mpath__startswith=chapter.mpath ).order_by('mpath')
+    context['book']  = Book.objects.get( tree=chapter.get_root_node() )
+    qset = BookNode.objects.filter(node_type="exercise", mpath__startswith=chapter.mpath ).order_by('mpath')
     context['blocks'] = qset
     context['blocktype'] = 'exercise'
 
     # navigation
     context['next'] = chapter.get_next()
     context['prev'] = chapter.get_prev()
-    context['toc'] = TreeNode.objects.filter( node_type="chapter", module=chapter.module).order_by('mpath')
+    context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
+    
+    return render(request, 'chapter_blocks.html', context)
+
+def assignments(request, pk):
+    context = RequestContext(request)
+    booknode = BookNode.objects.get( pk=pk )
+    module  = Module.objects.get( code=booknode.mpath[:6] )
+    chapter = BookNode.objects.get( mpath=booknode.mpath[:12] )
+    context['module']  = module
+    context['chapter']  = chapter
+    context['book']  = Book.objects.get( tree=chapter.get_root_node() )
+    qset = BookNode.objects.filter(node_class="assignment", mpath__startswith=chapter.mpath ).order_by('mpath')
+    context['blocks'] = qset
+    context['blocktype'] = 'assignment'
+
+    # navigation
+    context['next'] = chapter.get_next()
+    context['prev'] = chapter.get_prev()
+    context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
     
     return render(request, 'chapter_blocks.html', context)
 
 
-# class Answer_ListView(ListView):
-#     model = Answer
-#     template_name = 'answers.html'
-#     queryset = Answer.objects.order_by('user')
-#     paginate_by = 10
-#     success_url = reverse_lazy('answer-list')
-#     def get_success_url(self):
-#         return reverse(OrderView.plain_view)
-#
-# class Answer_CreateView(CreateView):
-#     model = Answer
-#     template_name = 'edit_answer.html'
-#     def get_success_url(self):
-#         return reverse('exercise-detail')
-#     def get_context_data(self, **kwargs):
-#         context = super(Answer_CreateView, self).get_context_data(**kwargs)
-#         context['action'] = reverse('new-answer')
-#         return context
-#
-#     @method_decorator(login_required)
-#     def dispatch(self, *args, **kwargs):
-#         return super(Answer_EditView, self).dispatch(*args, **kwargs)
-#
-# class Answer_UpdateView(UpdateView):
-#     model = Answer
-#     # form_class = AnswerForm
-#     template_name = 'edit_answer.html'
-#     def get_success_url(self):
-#         return reverse('exercise-detail')
-#     def get_context_data(self, **kwargs):
-#         context = super(Answer_UpdateView, self).get_context_data(**kwargs)
-#         context['action'] = reverse('edit-answer', kwargs={'pk': self.get_object().id})
-#         return context
-#
-# class Answer_EditView(UpdateView):
-#     model = Answer
-#     template_name = 'edit_answer.html'
-#
-#     def get_success_url(self):
-#         return reverse('edit-answer', kwargs={'pk': self.get_object().id})
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(Answer_EditView, self).get_context_data(**kwargs)
-#         context['action'] = reverse('edit-answer', kwargs={'pk': self.get_object().id})
-#         return context
-#
-#     @method_decorator(login_required)
-#     def dispatch(self, *args, **kwargs):
-#         return super(Answer_EditView, self).dispatch(*args, **kwargs)
-#
-#     def form_valid(self, form):
-#         obj = form.save(commit=False)
-#         obj.created_by = self.request.user
-#         obj.save()
-#         return http.HttpResponseRedirect(self.get_success_url())
-
-    # def get(self, request, *args, **kwargs):
-    #     form = self.form_class(initial=self.initial)
-    #     return render(request, self.template_name, {'form': form})
-    #
-    # def post(self, request, *args, **kwargs):
-    #     form = self.form_class(request.POST)
-    #     if form.is_valid():
-    #         # <process form cleaned data>
-    #         print 'Hello<<<'
-    #         return HttpResponseRedirect('/success/')
-    #
-    #     return render(request, self.template_name, {'form': form})
-
-# class Answer_DeleteView(DeleteView):
-#     model = Answer
-#     template_name = 'delete_answer.html'
-#     def get_success_url(self):
-#         return reverse('exercise-detail')
-
-
+# edit answer form
+@login_required
 def edit_answer(request, pk):
     context = RequestContext(request)
-    qu = TreeNode.objects.get(pk=pk)
+    qu = BookNode.objects.get(pk=pk)
     context['module']  = get_object_or_404( Module, code=qu.mpath[:6] )
+    context['book']  = Book.objects.get( tree=qu.get_root_node() )
     context['question'] = qu
     context['subtree'] = qu.get_descendants(include_self=True)
-    context['chapter'] = qu.get_parent_by_type('chapter')
-    context['exercise'] = qu.get_parent_by_type('exercise')
+    context['chapter'] = qu.get_parent_chapter()
+    context['assignment'] = qu.get_parent_assignment()
     context['toc'] = qu.get_siblings(include_self=True)
 
     # navigation
-    questions = TreeNode.objects.filter( node_type="question", mpath__startswith=qu.mpath[:12] ).order_by('mpath')
+    questions = BookNode.objects.filter( node_type="question", mpath__startswith=qu.mpath[:12] ).order_by('mpath')
     next = questions.filter( mpath__gt=qu.mpath )
     prev = questions.filter( mpath__lt=qu.mpath ).order_by('-pk')
     context['next'] = next[0] if next else None
@@ -373,23 +225,33 @@ def edit_answer(request, pk):
         if form.is_valid():
             ques = form.cleaned_data['question']
             user = form.cleaned_data['user']
+            
+            # search for saved answer
             answer = Answer.objects.filter(question=ques, user=user).first()
+            
+            # create new answer if required
             if not answer:
                 answer = form.save(commit=False)
                 answer.save()
+                
+            # switch on button pressed
             if 'save-answer' in request.POST:
                 answer.text = form.cleaned_data['text']
-                answer.readonly = form.cleaned_data['readonly']
+                answer.is_readonly = form.cleaned_data['is_readonly']
                 answer.save()
+
             elif 'save-and-exit' in request.POST:
                 answer.text = form.cleaned_data['text']
-                answer.readonly = form.cleaned_data['readonly']
+                answer.is_readonly = form.cleaned_data['is_readonly']
                 answer.save()
-                return HttpResponseRedirect( reverse('exercise', kwargs={'pk': ques.get_parent_exercise().id}) )
+                return HttpResponseRedirect( reverse('homework', kwargs={'pk': ques.get_parent_assignment().id}) )
+
             elif 'exit' in request.POST:
-                return HttpResponseRedirect( reverse('exercise', kwargs={'pk': ques.get_parent_exercise().id}) )
+                return HttpResponseRedirect( reverse('homework', kwargs={'pk': ques.get_parent_assignment().id}) )
+
             else:
-                print "ANFFODUS"
+                print "BAD LUCK"
+
         else:
             print "FORM INVALID"
             context['debug'] = form.errors
@@ -397,113 +259,157 @@ def edit_answer(request, pk):
     context['form'] = form
     return render(request, 'edit_answer.html', context)
 
+# single choice test
 @login_required
-def exercise(request, pk):
+def sctest(request, pk):
     context = RequestContext(request)
-    ex = TreeNode.objects.get(pk=pk)
-    context['module']  = get_object_or_404( Module, code=ex.mpath[:6] )
-    context['exercise'] = ex
-    # context['subtree'] = ex.get_descendants(include_self=True)
-    context['chapter'] = ex.get_parent_chapter()
-    context['toc'] = TreeNode.objects.filter( node_type="exercise", mpath__startswith=ex.mpath[:6] ).order_by('mpath')
+    test = BookNode.objects.get(pk=pk)
+    chapter = test.get_parent_chapter()
+    questions = BookNode.objects.filter(node_type='question', mpath__startswith=test.mpath).order_by('mpath')
+
+    context['module']  = get_object_or_404( Module, code=test.mpath[:6] )
+    context['test'] = test
+    context['chapter'] = chapter
+    context['questions'] = questions
+    context['book']  = Book.objects.get( tree=chapter.get_root_node() )
+    context['toc'] = BookNode.objects.filter( node_type="homework", mpath__startswith=test.mpath[:9] ).order_by('mpath')
 
     # navigation
-    module = context['module']
-    exercises = TreeNode.objects.filter( node_type="exercise", mpath__startswith=module.code ).order_by('mpath')
-    next = exercises.filter( mpath__gt=ex.mpath )
-    prev = exercises.filter( mpath__lt=ex.mpath ).order_by('-pk')
+    tests = BookNode.objects.filter( node_type="multiplechoice", mpath__startswith=test.mpath[:9] ).order_by('mpath')
+    next = tests.filter( mpath__gt=test.mpath )
+    prev = tests.filter( mpath__lt=test.mpath ).order_by('-mpath')
     context['next'] = next[0] if next else None
     context['prev'] = prev[0] if prev else None
 
-    questions = TreeNode.objects.filter(node_type='question', mpath__startswith=ex.mpath).order_by('pk')
+    triplets = []
+
+    # create question-choices-answer triplets (answer=None is not yet attempted)
+    for qu in questions:
+        choices = BookNode.objects.filter( node_type__in=['choice','correctchoice'], mpath__startswith=qu.mpath)
+        answer = MultipleChoiceAnswer.objects.filter(user=request.user, question=qu).first() # returns none if not yet attempted
+        triplets.append([ qu, choices, answer])
+
+    context['triplets'] = triplets
+
+    # check whether this homework has already been attempted
+    submission = Submission.objects.filter(user=request.user, assignment=test).first()
+    if submission:
+        context['submission'] = submission
+
+    # form: hitch on hidden fields here
+    form = SubmissionForm( initial={'user': request.user, 'assignment':test.pk} )
+    context['form'] = form
+
+    if request.method == 'POST':
+        # deal with form (submit)
+        # print request.POST
+        form = SubmissionForm(request.POST)
+        if form.is_valid():
+
+            # extract chosen answers through raw post data (oops!)
+            pairs = dict([ [int(k.split('_')[1]),int(v.split('_')[1])] for k,v in form.data.items() if k[:9] == 'question_'])
+            for trip in triplets:
+                qu = trip[0]
+                ch = trip[1]
+                an = trip[2]
+                if qu.number in pairs:
+                    chno = pairs[qu.number]
+                    cho = ch[chno-1]
+                    if an:
+                        an.delete()
+                    an = MultipleChoiceAnswer(user=request.user, question=qu, choice=cho)
+                    an.save
+                    trip[2] = an
+                    
+            context["triplets"] = triplets
+            form = SubmissionForm( initial={'user': request.user, 'assignment':test.pk} )
+            context['form'] = form
+            
+            if 'submit-test' in request.POST:
+                
+                # update submission
+                submission = form.save(commit=False)
+                submission.save()
+                # we need to update the answers too
+                for answer in form.cleaned_data['answers']:
+                    if answer:
+                        answer.submission = submission
+                        answer.save()
+            return render_to_response('sctest.html', context)
+            
+        else:
+            context['debug'] = form.errors
+            return render_to_response('index.html', context)
+    else: # not POST
+        return render_to_response('sctest.html', context)
+    
+# homework (question set)
+@login_required
+def homework(request, pk):
+    context = RequestContext(request)
+    hwk = BookNode.objects.get(pk=pk)
+    context['module']  = get_object_or_404( Module, code=hwk.mpath[:6] )
+    context['homework'] = hwk
+    # context['subtree'] = ex.get_descendants(include_self=True)
+    chapter = hwk.get_parent_chapter()
+    context['chapter'] = chapter
+    context['book']  = Book.objects.get( tree=chapter.get_root_node() )
+    context['toc'] = BookNode.objects.filter( node_type="homework", mpath__startswith=hwk.mpath[:9] ).order_by('mpath')
+
+    # navigation
+    module = context['module']
+    homeworks = BookNode.objects.filter( node_type="homework", mpath__startswith=hwk.mpath[:9] ).order_by('mpath')
+    next = homeworks.filter( mpath__gt=hwk.mpath )
+    prev = homeworks.filter( mpath__lt=hwk.mpath ).order_by('-mpath')
+    context['next'] = next[0] if next else None
+    context['prev'] = prev[0] if prev else None
+
+    questions = BookNode.objects.filter(node_type='question', mpath__startswith=hwk.mpath).order_by('mpath')
     context['questions'] = questions
     answers = []
+    
+    # create question-answer pairs (answer=None is not yet attempted/saved)
     for qu in questions:
         answers.append( Answer.objects.filter(user=request.user, question=qu).first() )
     context['answers'] = answers
-    print answers
     pairs = zip(questions,answers)
     context['pairs'] = pairs
 
+    # check whether this homework has already been submitted
+    sub = Submission.objects.filter(user=request.user, assignment=hwk).first()
+    if sub:
+        context['submission'] = sub
+
     # submit form: hitch on hidden fields here
-    print '----------------------------------->>>'
-    ex = context['exercise']
-    print ex
-    print ex.node_type
-    print ex.id
-    print ex.pk
-    print '----------------------------------->>>'
-    form = SubmitExerciseForm( initial={'user': request.user, 'assessment':ex.pk, 'declaraion': False} )
+    form = SubmissionForm( initial={'user': request.user, 'assignment':hwk.pk, 'declaraion': False} )
     form.fields['answers'] = answers
-    # form.fields['answers'].widget = forms.HiddenInput()
     context['form'] = form
     
     if request.method == 'POST':
-        print 'HELLO-1'
         # deal with form (submit)
-        form = SubmitExerciseForm(request.POST)
-        # form.fields['answers'] = answers
-        # form.fields['answers'].widget = forms.HiddenInput()
-        # form.fields['user'] = request.user
-        # form.fields['user'].widget = forms.HiddenInput()
-        print '-----------------------------------'
-        print request.POST
-        print '-----------------------------------**'
-        print answers
-        print '-----------------------------------'
+        form = SubmissionForm(request.POST)
         if form.is_valid():
             print form.cleaned_data
-            if 'submit-exercise' in request.POST:
+            if 'submit-homework' in request.POST:
                 submission = form.save(commit=False)
                 submission.save()
                 # for answer in form.cleaned_data['answers']:
                 for answer in answers:
-                    print '>>>>>>>>>>'
-                    print answer
-                    print '>>>>>>>>>>'
                     if answer:
                         answer.submission = submission
-                        answer.readonly = True
+                        answer.is_readonly = True
                         answer.save()
-                print 'XXXXXXXXXXXXXXXXXX'
-            return HttpResponseRedirect( reverse('exercise', kwargs={'pk': ex.id}) )
-        else:
-            print '00000000000000000000000000'
-            context['debug'] = form.errors
-            return render_to_response('index.html', context)
-    else: # not POST
-        return render_to_response('exercise.html', context)
-    
-    return render(request, 'exercise.html', context)
-
-def submit_exercise(request):
-    context = RequestContext(request)
-    print 'BING-1'
-    if request.method == 'POST':
-        print 'BING-2'
-        # deal with form (submit)
-        form = SubmitExerciseForm(request.POST)
-        print '-----------------------------------'
-        print form.fields
-        print '-----------------------------------'
-        if form.is_valid():
-            print form.cleaned_data
-            answers = form.cleaned_data['answers']
-            
-            # do something.
-            print 'XXXXXXXXXXXXXXXXXX'
+            return HttpResponseRedirect( reverse('homework', kwargs={'pk': hwk.id}) )
         else:
             context['debug'] = form.errors
             return render_to_response('index.html', context)
     else: # not POST
-        return render_to_response('index.html', context)
+        return render_to_response('homework.html', context)
     
-    print 'BING-C'
-    return render(request, 'exercise_submit.html', context)
 
 def question(request, pk):
     context = RequestContext(request)
-    qu = TreeNode.objects.get(pk=pk)
+    qu = BookNode.objects.get(pk=pk)
     context['module']  = get_object_or_404( Module, code=qu.mpath[:6] )
     context['question'] = qu
     context['subtree'] = qu.get_descendants(include_self=True)
@@ -512,7 +418,7 @@ def question(request, pk):
     context['toc'] = qu.get_siblings(include_self=True)
 
     # navigation
-    questions = TreeNode.objects.filter( node_type="question", mpath__startswith=qu.mpath[:12] ).order_by('mpath')
+    questions = BookNode.objects.filter( node_type="question", mpath__startswith=qu.mpath[:12] ).order_by('mpath')
     next = questions.filter( mpath__gt=qu.mpath )
     prev = questions.filter( mpath__lt=qu.mpath ).order_by('-pk')
     context['next'] = next[0] if next else None
@@ -535,7 +441,7 @@ def question(request, pk):
             current_answer = Answer.objects.filter(question=ques, user=user).first()
             if current_answer:
                 current_answer.text = form.cleaned_data['text']
-                current_answer.readonly = form.cleaned_data['readonly']
+                current_answer.is_readonly = form.cleaned_data['is_readonly']
                 current_answer.save()
             else:
                 answer = form.save(commit=False)
@@ -551,36 +457,36 @@ def question(request, pk):
     context['form'] = form
     return render(request, 'question.html', context)
 
-# ANSWERS
-def saveanswer(request):
-    context = RequestContext(request)
-    print 'BING-A'
-    if request.method == 'POST':
-        form = AnswerForm(request.POST)
-        if form.is_valid():
-            ques = form.cleaned_data['question']
-            user = form.cleaned_data['user']
-            current_answer = Answer.objects.filter(question=ques, user=user).first()
-            if current_answer:
-                current_answer.text = form.cleaned_data['text']
-                current_answer.readonly = form.cleaned_data['readonly']
-                current_answer.save()
-            else:
-                answer = form.save(commit=False)
-                answer.save()
-            # return HTTPResponseRedirect( reverse('question') )
-            context['question'] = ques
-            context['module']  = Module.objects.get( code=ques.mpath[:6] )
-            return render_to_response('save_success.html', context)
-        else:
-            context['debug'] = form.errors
-            # form = ContactForm(data=request.POST, files=request.FILES)
-            return render_to_response('question.html', context)
-    else: # not POST
-        return render_to_response('question.html', context)
-    
-    print 'BING-C'
-    return render(request, 'question.html', context)
+# # ANSWERS
+# def saveanswer(request):
+#     context = RequestContext(request)
+#     print 'BING-A'
+#     if request.method == 'POST':
+#         form = AnswerForm(request.POST)
+#         if form.is_valid():
+#             ques = form.cleaned_data['question']
+#             user = form.cleaned_data['user']
+#             current_answer = Answer.objects.filter(question=ques, user=user).first()
+#             if current_answer:
+#                 current_answer.text = form.cleaned_data['text']
+#                 current_answer.is_readonly = form.cleaned_data['is_readonly']
+#                 current_answer.save()
+#             else:
+#                 answer = form.save(commit=False)
+#                 answer.save()
+#             # return HTTPResponseRedirect( reverse('question') )
+#             context['question'] = ques
+#             context['module']  = Module.objects.get( code=ques.mpath[:6] )
+#             return render_to_response('save_success.html', context)
+#         else:
+#             context['debug'] = form.errors
+#             # form = ContactForm(data=request.POST, files=request.FILES)
+#             return render_to_response('question.html', context)
+#     else: # not POST
+#         return render_to_response('question.html', context)
+#
+#     print 'BING-C'
+#     return render(request, 'question.html', context)
 
 # SEARCH
 def search_form(request):
@@ -589,127 +495,125 @@ def search_form(request):
 def search(request):
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
-        results = TreeNode.objects.filter(node_type='chapter', title__icontains=q)
+        results = BookNode.objects.filter(node_type='chapter', title__icontains=q)
         return render(request, 'search_results.html',
             {'results': results, 'query': q})
     else:
         return HttpResponse('Please submit a search term.')
     
 
-def test(request):
-    context = RequestContext(request)
-    return render(request, 'quiz.html', context)
+# def test(request):
+#     context = RequestContext(request)
+#     return render(request, 'quiz.html', context)
+#
+# def module_quiz(request, module):
+#     context = RequestContext(request)
+#     return render(request, 'index.html', context)
+#
+# def quiz(request):
+#     context = {'uname': 'mrurdd'}
+#     questions = BookNode.objects.filter(node_type='question')
+#     question = random.choice( questions )
+#     context['chapter'] = question.get_parent_by_type('chapter')
+#     context['exercise'] = question.get_parent_by_type('exercise')
+#     context['question'] = question
+#     context['question_tree'] = question.get_descendants(include_self=True)
+#     form = AnswerForm()
+#     form.fields['question'] = question
+#     form.fields['question'].widget = forms.HiddenInput()
+#     current_user = request.user
+#     print current_user.username
+#     if current_user.is_authenticated():
+#         print current_user.username
+#         form.fields['user'] = current_user
+#     print form.fields
+#     context['answer_form'] = form
+#     return render(request, 'quiz.html', context)
+#
+#
+# def decision(request):
+#     if request.method == 'POST':
+#         context = {}
+#         form = AnswerForm(request.POST)
+#
+#         print form.data
+#         if form.is_valid():
+#             question = form.cleaned_data['question']
+#             if question:
+#
+#                 # student answer
+#                 user_answer = Answer(
+#                     student = None,  # get user name
+#                     question = question,
+#                     answer  = form.cleaned_data['answer'],
+#                     )
+#                 context['user_answer'] = user_answer
+#
+#                 #  camel answer
+#                 camel_answer = Answer(
+#                     student = None,
+#                     question = question,
+#                     answer  = None # get from database
+#                     )
+#                 context['camel_answer'] = camel_answer
+#
+#
+#                 # decide whether the user is correct
+#                 if user_answer == camel_answer:
+#                     context['decision'] = 'Correct'
+#                 else:
+#                     context['decision'] = 'Incorrect'
+#
+#                 # retrieve all answers to this question (posts)
+#                 context['all_answers'] = Answers.objects.filter(question=question).order_by('pk')
+#             else:
+#                 context['message'] = form.data # for debugging
+#         else:
+#             context['message'] = form.errors
+#         print context
+#         return render(request, 'decision.html', context)
+#     else:
+#         form = AnswerForm()
+#         return render(request, 'quiz.html', { 'form': form })
+#
+#
+#
+# # list of modules
+# def module_list(request):
+#     modules = Module.objects.all().order_by('code')
+#     return render(request, 'modules.html', {'modules': modules})
+#
+# # list of chapters
+# def module_detail(request, module_code):
+#     module = get_object_or_404(Module, code=module_code)
+#     chapters = BookNode.objects.filter(module=module, node_type='chapter').order_by('node_id')
+#     return render(request, 'module_detail.html', {'module': module, 'chapters': chapters})
+#
+# # showtex
+# def chapter_detail(request, module_code, chapter_number):
+#     module = get_object_or_404(Module, code=module_code)
+#     chapter = BookNode.objects.get(module=module, node_type='chapter', number=chapter_number)
+#
+#     # table of contents (siblings of current chapter)
+#     toc = []
+#     chaps = chapter.get_siblings(include_self=True)
+#     for chap in chaps:
+#         toc.append(chap)
+#
+#     # subtree (descendants of current chapter)
+#     subtree = chapter.get_descendants(include_self=True)
+#
+#     # search subtree for references
+#     labs= [ref.htex for ref in subtree.filter(node_type='reference')]
+#     refs = [ BookNode.objects.filter(label=lab)[0] for lab in labs ]
+#     print refs
+#
+#
+#     return render(request, 'chapter_detail.html', {'module': module, 'refs': refs, 'toc': toc, 'chapter': chapter, 'subtree': subtree})
 
-def module_quiz(request, module):
-    context = RequestContext(request)
-    return render(request, 'index.html', context)
-
-def quiz(request):
-    context = {'uname': 'mrurdd'}
-    questions = TreeNode.objects.filter(node_type='question')
-    question = random.choice( questions )
-    context['chapter'] = question.get_parent_by_type('chapter')
-    context['exercise'] = question.get_parent_by_type('exercise')
-    context['question'] = question
-    context['question_tree'] = question.get_descendants(include_self=True)
-    form = AnswerForm()
-    form.fields['question'] = question
-    form.fields['question'].widget = forms.HiddenInput()
-    current_user = request.user
-    print current_user.username
-    if current_user.is_authenticated():
-        print current_user.username
-        form.fields['user'] = current_user
-    print form.fields
-    context['answer_form'] = form
-    return render(request, 'quiz.html', context)
-
-
-def decision(request):
-    if request.method == 'POST':
-        context = {}
-        form = AnswerForm(request.POST)
-        
-        print form.data
-        if form.is_valid():
-            question = form.cleaned_data['question']
-            if question:
-                                
-                # student answer
-                user_answer = Answer(
-                    student = None,  # get user name
-                    question = question,
-                    answer  = form.cleaned_data['answer'],
-                    )
-                context['user_answer'] = user_answer
-            
-                #  camel answer
-                camel_answer = Answer(
-                    student = None,
-                    question = question,
-                    answer  = None # get from database
-                    )
-                context['camel_answer'] = camel_answer
-
-
-                # decide whether the user is correct
-                if user_answer == camel_answer:
-                    context['decision'] = 'Correct'
-                else:
-                    context['decision'] = 'Incorrect'
-                    
-                # retrieve all answers to this question (posts)
-                context['all_answers'] = Answers.objects.filter(question=question).order_by('pk')
-            else:
-                context['message'] = form.data # for debugging
-        else:
-            context['message'] = form.errors
-        print context
-        return render(request, 'decision.html', context)
-    else:
-        form = AnswerForm() 
-        return render(request, 'quiz.html', { 'form': form })
-
-
-
-# homepage
-def index(request):
-    context = {}
-    return render(request, 'index.html', context)
-
-
-# list of modules
-def module_list(request):
-    modules = Module.objects.all().order_by('code')
-    return render(request, 'modules.html', {'modules': modules})
-
-# list of chapters
-def module_detail(request, module_code):
-    module = get_object_or_404(Module, code=module_code)
-    chapters = TreeNode.objects.filter(module=module, node_type='chapter').order_by('node_id')
-    return render(request, 'module_detail.html', {'module': module, 'chapters': chapters})
-
-# showtex
-def chapter_detail(request, module_code, chapter_number):
-    module = get_object_or_404(Module, code=module_code)
-    chapter = TreeNode.objects.get(module=module, node_type='chapter', number=chapter_number)
-
-    # table of contents (siblings of current chapter)
-    toc = []
-    chaps = chapter.get_siblings(include_self=True)
-    for chap in chaps:
-        toc.append(chap)
-    
-    # subtree (descendants of current chapter)
-    subtree = chapter.get_descendants(include_self=True)
-    
-    # search subtree for references
-    labs= [ref.htex for ref in subtree.filter(node_type='reference')]
-    refs = [ TreeNode.objects.filter(label=lab)[0] for lab in labs ]
-    print refs
-    
-    
-    return render(request, 'chapter_detail.html', {'module': module, 'refs': refs, 'toc': toc, 'chapter': chapter, 'subtree': subtree})
+#--------------------
+# users
+#--------------------
 
 # login
 def login_view(request):
@@ -721,6 +625,8 @@ def login_view(request):
         if user:
             if user.is_active:
                 login(request, user)
+                return render(request, 'userhome.html', {'pk': user.pk})
+                
                 return HttpResponseRedirect('/')
             else:
                 return HttpResponse("Account is inactive.")
@@ -730,7 +636,11 @@ def login_view(request):
     else:
         return render_to_response('login.html', {}, context)
 
-#------------------------------
+# @login_required
+def userhome(request, pk):
+    return render(request, 'userhome.html', {})
+
+
 @login_required
 def logout_view(request):
     logout(request)

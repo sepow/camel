@@ -1,0 +1,87 @@
+{% extends "chapter_detail.html" %}
+{% load staticfiles %}
+
+{% block title %} 
+	{{ module.code }} {{ assignment.node_type | title }} {{ chapter.number }}.{{ assignment.number }}
+{% endblock %}
+
+<!-- {% block scripts %}
+	{{ block.super }}
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="{% static 'main.js' %}" type"text/javascript"></script>
+	<script src="{% static 'simple-expand.js' %}"></script>
+{% endblock %} -->
+
+{% block breadcrumbs %}
+	{{ block.super }}
+{% endblock %}
+
+{% block content-main %}
+{% spaceless %}
+
+<div class="macros">
+    {% autoescape off %}
+		\( {{ book.new_commands | safe }} \)
+	{% endautoescape %}
+</div>
+
+
+<h2>Test {{ chapter.number }}.{{ test.number }}</h2>
+<form action="", method="POST"> {% csrf_token %}
+	{% for hidden in form.hidden_fields %}
+		{{ hidden }}
+	{% endfor %}
+	{% if triplets %}
+		<div class="sctest">
+		{% for question, choices, answer in triplets %}
+		<div class="question-block">
+			<b>Question {{ question.number }}</b><br>
+			<div class="question">
+				{% with question.get_descendants as subtree %}
+						{% include "question_only_block.html" %}
+				{% endwith %}
+
+				{% if answer %}
+					{% if answer.choice.node_type = "correctchoice" %}
+						<div class="correct_choicesbox">
+					{% else %}
+						<div class="incorrect_choicesbox">
+					{% endif %}
+				{% else %}
+					<div class="choicesbox">
+				{% endif %}
+
+					{% for choice in choices %}
+						<p>
+							<input type="radio" name="question_{{question.number}}" value="choice_{{ choice.number }}" {% if answer.choice == choice %}checked{% endif %}>
+							{% with choice.get_descendants as subtree %}
+									{% include "block.html" %}
+							{% endwith %}
+						{% comment %}
+						{% if choice.node_type == "correctchoice" %}
+							<p>This one is correct!</p>
+						{% endif %}
+						{% if answer.choice == choice %}
+							<p>This one is chosen!</p>
+						{% endif %}
+						{% endcomment %}
+					</p>
+					{% endfor %}
+				</div> <!-- end choicesbox -->
+			</div> <!-- end question -->
+		</div>
+		{% endfor %}
+		<p align="right"><input name="submit-sctest" type="submit" value="Submit"/></p>
+		</div> <!-- end sctest -->
+
+		{% if submission %}
+			<p align="right"><i>First submitted on {{ submission.created }}</i></p>
+		{% endif %}
+	{% endif %}
+</form>
+
+{% endspaceless %}
+{% endblock %}
+
+

@@ -16,7 +16,9 @@
 	<table cellpadding=2>
 	  {% for module in module_list %}
 		<tr class="module">
-			<td><a href="{{ module.get_absolute_url }}">{{ module.code }} {{ module.title }}</a></td>
+			<td> {{ module.year }} </td>
+			<td> {{ module.code }} </td>
+			<td><a href="{{ module.get_absolute_url }}"> {{ module.title }} </a></td>
 		</tr>
 	  {% endfor %}
 	</table>

@@ -1,4 +1,4 @@
-{% extends "chapter_list.html" %}
+{% extends "book_detail.html" %}
 {% load staticfiles %}
 
 {% block scripts %}
@@ -15,14 +15,14 @@
 {% spaceless %}
 <div class="macros">
     {% autoescape off %}
-		\( {{ module.newcommands | safe }} \)
+		\( {{ book.new_commands | safe }} \)
 	{% endautoescape %}
 </div>
 
 {% if chapter %}
 	<div>
 	<span style="float:left">
-	<a href="{% url 'module-detail' module.pk %}"> {{ module.code }}</a>
+	 &larr; <a href="{% url 'book-detail' book.pk %}">Book {{ book.number }}. {{ book.title }}</a>
 	</span>
 	<span style="float:right">
 	<a href="{% url 'chapter-theorems' chapter.pk %}">Theorems</a>
@@ -31,31 +31,17 @@
 	|
 	<a href="{% url 'chapter-exercises' chapter.pk %}">Exercises</a>
 	|
-	<a href="{% url 'exercise' chapter.pk %}">Assessment</a>
+	<a href="{% url 'chapter-assignments' chapter.pk %}">Assignments</a>
 	</span>
 	</div>
-	<!--div>
-	<span style="float:left">
-	<a href="{% url 'module-detail' module.pk %}"><button>Back to Module</button></a>
-	</span>
-	<span style="float:right">
-	<a href="{% url 'chapter-theorems' chapter.pk %}"><button>Theorems</button></a>
-	&nbsp;
-	<a href="{% url 'chapter-examples' chapter.pk %}"><button>Examples</button></a>
-	&nbsp;
-	<a href="{% url 'chapter-exercises' chapter.pk %}"><button>Exercises</button></a>
-	&nbsp;
-	<a href="{% url 'exercise' chapter.pk %}"><button>Assessment</button></a>
-	</span>
-	</div-->
+
 	<br>
 
-	<h2>{{ module.code }} Chapter {{ chapter.number }}</h2>
 	{% load mptt_tags %}
 	{% include "block.html" %}
 
 {% else %}
-    <p>No chapter.</p>
+    <p>No chapters in the database.</p>
 {% endif %}
 
 {% endspaceless %}
@@ -72,10 +58,12 @@
 	{% if toc %}
 	<h3>Chapters</h3>
 		{% for chap in toc %}
-			{% if chap.pk != chapter.pk %}
-				<p><a href="{% url 'chapter-detail' chap.pk %}"> {{ chap.number }}. {{ chap.title }}</a></p>
-			{% else %}
-				<p>{{ chap.number }}. {{ chap.title }}</p>
+			{% if chap.node_type == "chapter" %}
+				{% if chap.pk != chapter.pk %}
+					<p><a href="{% url 'chapter-detail' chap.pk %}"> {{ chap.number }}. {{ chap.title }}</a></p>
+				{% else %}
+					<p>{{ chap.number }}. {{ chap.title }}</p>
+				{% endif %}
 			{% endif %}
 		{% endfor %}
 	{% else %}

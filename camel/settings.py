@@ -5,10 +5,11 @@ SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
 TEX_ROOT  = os.path.join(SITE_ROOT, 'data/tex/')
 PDF_ROOT  = os.path.join(SITE_ROOT, 'data/pdf/')
 CSV_ROOT  = os.path.join(SITE_ROOT, 'data/csv/')
+XML_ROOT  = os.path.join(SITE_ROOT, 'data/xml/')
 
 import socket
 if socket.gethostname().startswith('morlais'):
-    LIVEHOST = True
+    LIVEHOST = False
 else:
     LIVEHOST = False
 
@@ -71,8 +72,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'camel.urls'
 WSGI_APPLICATION = 'camel.wsgi.application'
 
-
-
 # location
 TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-gb'
@@ -90,8 +89,8 @@ MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
 MEDIA_URL = '/media/'
 
 # static files (css, js, png)
-STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(SITE_ROOT, 'staticfiles')
+STATIC_URL = '/static/'
 STATICFILES_DIRS = (
 	os.path.join(SITE_ROOT, 'static'),
 )
@@ -112,7 +111,7 @@ TEMPLATE_LOADERS = (
 # redirect
 LOGIN_URL = '/login/'
 
-# loggin config
+# logging config
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
