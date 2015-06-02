@@ -9,7 +9,7 @@ XML_ROOT  = os.path.join(SITE_ROOT, 'data/xml/')
 
 import socket
 if socket.gethostname().startswith('morlais'):
-    LIVEHOST = False
+    LIVEHOST = True
 else:
     LIVEHOST = False
 
@@ -20,7 +20,7 @@ SECRET_KEY = 'zm8*_50*9-sziwme0*@n*^zb=g&(r^wwft5#q+me-345z=377*'
 if LIVEHOST:
     DEBUG = False
     TEMPLATE_DEBUG = DEBUG
-    ALLOWED_HOSTS = [camel.maths.cf.ac.uk]
+    ALLOWED_HOSTS = ['camel.maths.cf.ac.uk']
 else:
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
