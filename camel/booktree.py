@@ -105,7 +105,7 @@ doctree.py: build book tree from latex file (camel.cls)
     tabular: (tabular)
     translate to <table> ... </table>    
 
-    assignment: (homework|multiplechoice)
+    assignment: (homework|singlechoice|multiplechoice)
     translate to <div class="homeworkc" number="2.2" label="hw:setheory"> ... </div>
 
     theorem: (definition|proposition|lemma|theorem|corollary)
@@ -114,7 +114,7 @@ doctree.py: build book tree from latex file (camel.cls)
     box: (proof|solution|hint|hidebox|verbatim)
     translate to <div class="proof"> ... </div>
 
-    source: (jax|image|ref|cite)
+    content: (mathjax|image|ref|cite)
 
 '''
 
@@ -138,14 +138,14 @@ out = logging.getLogger(__name__)
 # assign node_types to node_classes
 # used to find the set of node_types belonging to a given node_class 
 node_types = {
-    'assignment': ('homework', 'multiplechoice'),
+    'assignment': ('homework', 'singlechoice', 'multiplechoice'),
     'box': ('proof', 'solution', 'answer', 'hint', 'verbatim', 'center'),
     'content': ('image', 'jax', 'reference', 'citation', 'tabular'),
     'level': ('book', 'chapter', 'section', 'subsection'),
     'float': ('table', 'figure', 'subfigure'),
     'mathmode': ('equation', 'eqnarray', 'array', 'align', 'cases'),
     'item': ('item', 'part', 'question', 'subpart', 'choice', 'correctchoice'),
-    'list': ('itemize', 'enumerate',  'questions', 'parts', 'subparts', 'choices'),
+    'list': ('itemize', 'enumerate',  'questions', 'parts', 'subparts', 'choices', 'checkboxes'),
     'theorem': ('definition', 'theorem', 'lemma',  'corollary',  'remark', 'example', 'exercise')
 }
 
@@ -160,6 +160,7 @@ item_dict = {
     'parts':        'part',
     'subparts':     'subpart',
     'choices':      'choice|correctchoice',
+    'checkboxes':   'choice|correctchoice',
 }
 
 #------------------------------------------------
@@ -411,12 +412,20 @@ class Homework(Assignment):
         Homework.counter += 1
         self.number = Homework.counter
 
-class Multiplechoice(Assignment):
+class Test(Assignment):
     counter = 0
     def __init__(self, title=None, label=None, parent=None):
         Assignment.__init__(self, title=title, label=label, parent=parent)
-        Multiplechoice.counter += 1
-        self.number = Multiplechoice.counter
+        Test.counter += 1
+        self.number = Test.counter
+
+class Singlechoice(Test):
+    def __init__(self, title=None, label=None, parent=None):
+        Test.__init__(self, title=title, label=label, parent=parent)
+
+class Multiplechoice(Test):
+    def __init__(self, title=None, label=None, parent=None):
+        Test.__init__(self, title=title, label=label, parent=parent)
 
 # class Diagnostic(Homework):
 #     def __init__(self, title=None, label=None, parent=None):
@@ -452,7 +461,6 @@ class Enumerate(List):
 class Questions(List):
     def __init__(self, label=None, parent=None):
         List.__init__(self, label=label, parent=parent)
-
         Question.counter = 0
         Part.counter = 0
         Subpart.counter = 0
@@ -461,7 +469,6 @@ class Questions(List):
 class Parts(List):
     def __init__(self, label=None, parent=None):
         List.__init__(self, label=label, parent=parent)
-
         Part.counter = 0
         Subpart.counter = 0
         Choice.counter = 0
@@ -469,14 +476,17 @@ class Parts(List):
 class Subparts(List):
     def __init__(self, label=None, parent=None):
         List.__init__(self, label=label, parent=parent)
-
         Subpart.counter = 0
         Choice.counter = 0
 
 class Choices(List):
     def __init__(self, label=None, parent=None):
         List.__init__(self, label=label, parent=parent)
+        Choice.counter = 0
 
+class Checkboxes(List):
+    def __init__(self, label=None, parent=None):
+        List.__init__(self, label=label, parent=parent)
         Choice.counter = 0
 
 #-----------------------------

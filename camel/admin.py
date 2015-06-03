@@ -4,7 +4,7 @@ camel: admin.py
 from django.contrib import admin
 
 from django.contrib.auth.models import User
-from camel.models import Module, Book, BookNode, Label, Answer, MultipleChoiceAnswer, Submission
+from camel.models import Module, Book, BookNode, Label, Answer, SingleChoiceAnswer, Submission
 
 class UserAdmin(admin.ModelAdmin):
 	list_display = ('username', 'last_name', 'first_name','email')
@@ -30,7 +30,7 @@ class AnswerAdmin(admin.ModelAdmin):
 	list_display = ('pk', 'question', 'user', 'text', 'is_readonly', 'created', 'updated')
 	ordering = ('question', 'user')
 
-class MultipleChoiceAnswerAdmin(admin.ModelAdmin):
+class SingleChoiceAnswerAdmin(admin.ModelAdmin):
 	list_display = ('pk', 'question', 'user', 'choice', 'is_readonly', 'created', 'updated')
 	ordering = ('question', 'user')
 
@@ -43,5 +43,5 @@ admin.site.register(Book, BookAdmin)
 admin.site.register(BookNode, BookNodeAdmin)
 admin.site.register(Label, LabelAdmin)
 admin.site.register(Answer, AnswerAdmin)
-admin.site.register(MultipleChoiceAnswer, MultipleChoiceAnswerAdmin)
+admin.site.register(SingleChoiceAnswer, SingleChoiceAnswerAdmin)
 admin.site.register(Submission, SubmissionAdmin)

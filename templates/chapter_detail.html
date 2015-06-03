@@ -19,27 +19,12 @@
 	{% endautoescape %}
 </div>
 
+{% include "chapter_navigation_block.html" %}
+
 {% if chapter %}
-	<div>
-	<span style="float:left">
-	 &larr; <a href="{% url 'book-detail' book.pk %}">Book {{ book.number }}. {{ book.title }}</a>
-	</span>
-	<span style="float:right">
-	<a href="{% url 'chapter-theorems' chapter.pk %}">Theorems</a>
-	|
-	<a href="{% url 'chapter-examples' chapter.pk %}">Examples</a>
-	|
-	<a href="{% url 'chapter-exercises' chapter.pk %}">Exercises</a>
-	|
-	<a href="{% url 'chapter-assignments' chapter.pk %}">Assignments</a>
-	</span>
-	</div>
-
-	<br>
-
-	{% load mptt_tags %}
-	{% include "block.html" %}
-
+	{% with chapter.get_descendants_inc_self as subtree %}
+		{% include "booknode.html" %}
+	{% endwith %}
 {% else %}
     <p>No chapters in the database.</p>
 {% endif %}
@@ -48,8 +33,6 @@
 {% endblock %}
 
 {% block browse-horizontal %}
-<!--span class="left">{% if prev %}<a href="{{ prev.get_absolute_url }}">&lt; {{ prev.number }}. {{ prev.title }}</a>{% endif %}</span>
-<span class="right">{% if next %}<a href="{{ next.get_absolute_url }}">{{ next.number }}. {{ next.title }} &gt;</a>{% endif %}</span-->
 <span class="left">{% if prev %}<a href="{% url 'chapter-detail' prev.pk %}">&lt; {{ prev.number }}. {{ prev.title }}</a>{% endif %}</span>
 <span class="right">{% if next %}<a href="{% url 'chapter-detail' next.pk %}">{{ next.number }}. {{ next.title }} &gt;</a>{% endif %}</span>
 {% endblock %}

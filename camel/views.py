@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-'''
-camel: views.py
-'''
 
 # for quizzes etc.
 import random
 
 # forms
 from django import forms
-from django.forms.models import formset_factory, modelformset_factory
 
 # http
 from django.http import HttpResponseRedirect, HttpResponse
@@ -27,12 +23,12 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 
 # misc
-from django.utils.decorators import method_decorator
+# from django.utils.decorators import method_decorator
 
 # camel
-from camel.models import Module, Book, BookNode, Label, Answer, MultipleChoiceAnswer, Submission
-from camel.forms import AnswerForm, UserForm, SubmissionForm
-# from camel.forms import MultipleChoiceAnswerForm
+from camel.models import Module, Book, BookNode, Label, Answer, SingleChoiceAnswer, Submission
+from camel.forms import UserForm, AnswerForm, SubmissionForm
+# from camel.forms import SingleChoiceAnswerForm
 
 #--------------------
 # basic
@@ -40,7 +36,6 @@ from camel.forms import AnswerForm, UserForm, SubmissionForm
 # site homepage
 def index(request):
     return render(request, 'index.html', {})
-
 
 #--------------------
 # model-based views
@@ -113,6 +108,32 @@ class BookNode_DetailView(DetailView):
         return context
 
 # the following should be implemented with javascript on the client
+# should use mptt instance methods instead of mpath
+def selected(request, pk, node_type):
+    context = RequestContext(request)
+    booknode = BookNode.objects.get( pk=pk )
+    module  = Module.objects.get( code=booknode.mpath[:6] )
+    chapter = BookNode.objects.get( mpath=booknode.mpath[:12] )
+    context['module']  = module
+    context['chapter']  = chapter
+    context['book']  = Book.objects.get( tree=chapter.get_root_node() )
+    context['user']  = request.user
+
+    context['node_type'] = node_type
+    if node_type == 'theorem':
+        qset = BookNode.objects.filter(node_class="theorem", mpath__startswith=chapter.mpath).order_by('mpath')
+    elif node_type == 'test':
+        qset = BookNode.objects.filter(node_type__in=['singlechoice','multiplechoice'], mpath__startswith=chapter.mpath).order_by('mpath')
+    else:
+        qset = BookNode.objects.filter(node_type=node_type, mpath__startswith=chapter.mpath).order_by('mpath')
+    context['booknodes'] = qset
+
+    context['next'] = chapter.get_next()
+    context['prev'] = chapter.get_prev()
+    context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
+    return render(request, 'chapter_selected_nodes.html', context)
+
+# the following should be implemented with javascript on the client
 def theorems(request, pk):
     context = RequestContext(request)
     booknode = BookNode.objects.get( pk=pk )
@@ -122,15 +143,12 @@ def theorems(request, pk):
     context['book']  = Book.objects.get( tree=chapter.get_root_node() )
     context['chapter']  = chapter
     qset = BookNode.objects.filter(node_class="theorem", mpath__startswith=chapter.mpath ).order_by('mpath')
-    qset = qset.exclude(node_type="example").exclude(node_type="exercise")
+    qset = qset.exclude(node_type="example").exclude(node_type="exercise").exclude(node_type="test").exclude(node_type="homework")
     context['blocks'] = qset
     context['blocktype'] = 'theorem'
-
-    # navigation
     context['next'] = chapter.get_next()
     context['prev'] = chapter.get_prev()
     context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
-    
     return render(request, 'chapter_blocks.html', context)
 
 def examples(request, pk):
@@ -144,12 +162,9 @@ def examples(request, pk):
     qset = BookNode.objects.filter(node_type="example", mpath__startswith=chapter.mpath ).order_by('mpath')
     context['blocks'] = qset
     context['blocktype'] = 'example'
-
-    # navigation
     context['next'] = chapter.get_next()
     context['prev'] = chapter.get_prev()
     context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
-    
     return render(request, 'chapter_blocks.html', context)
 
 def exercises(request, pk):
@@ -163,15 +178,12 @@ def exercises(request, pk):
     qset = BookNode.objects.filter(node_type="exercise", mpath__startswith=chapter.mpath ).order_by('mpath')
     context['blocks'] = qset
     context['blocktype'] = 'exercise'
-
-    # navigation
     context['next'] = chapter.get_next()
     context['prev'] = chapter.get_prev()
     context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
-    
     return render(request, 'chapter_blocks.html', context)
 
-def assignments(request, pk):
+def tests(request, pk):
     context = RequestContext(request)
     booknode = BookNode.objects.get( pk=pk )
     module  = Module.objects.get( code=booknode.mpath[:6] )
@@ -179,15 +191,28 @@ def assignments(request, pk):
     context['module']  = module
     context['chapter']  = chapter
     context['book']  = Book.objects.get( tree=chapter.get_root_node() )
-    qset = BookNode.objects.filter(node_class="assignment", mpath__startswith=chapter.mpath ).order_by('mpath')
+    qset = BookNode.objects.filter(node_type__in=["singlechoice","multiplechoice"], mpath__startswith=chapter.mpath ).order_by('mpath')
     context['blocks'] = qset
-    context['blocktype'] = 'assignment'
-
-    # navigation
+    context['blocktype'] = 'test'
     context['next'] = chapter.get_next()
     context['prev'] = chapter.get_prev()
     context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
-    
+    return render(request, 'chapter_blocks.html', context)
+
+def homeworks(request, pk):
+    context = RequestContext(request)
+    booknode = BookNode.objects.get( pk=pk )
+    module  = Module.objects.get( code=booknode.mpath[:6] )
+    chapter = BookNode.objects.get( mpath=booknode.mpath[:12] )
+    context['module']  = module
+    context['chapter']  = chapter
+    context['book']  = Book.objects.get( tree=chapter.get_root_node() )
+    qset = BookNode.objects.filter(node_type="homework", mpath__startswith=chapter.mpath ).order_by('mpath')
+    context['blocks'] = qset
+    context['blocktype'] = 'homework'
+    context['next'] = chapter.get_next()
+    context['prev'] = chapter.get_prev()
+    context['toc'] = BookNode.objects.filter( node_type="chapter", mpath__startswith=module.code).order_by('mpath')
     return render(request, 'chapter_blocks.html', context)
 
 
@@ -272,10 +297,10 @@ def sctest(request, pk):
     context['chapter'] = chapter
     context['questions'] = questions
     context['book']  = Book.objects.get( tree=chapter.get_root_node() )
-    context['toc'] = BookNode.objects.filter( node_type="homework", mpath__startswith=test.mpath[:9] ).order_by('mpath')
+    context['toc'] = BookNode.objects.filter( node_type="homework", mpath__startswith=chapter.mpath ).order_by('mpath')
 
     # navigation
-    tests = BookNode.objects.filter( node_type="multiplechoice", mpath__startswith=test.mpath[:9] ).order_by('mpath')
+    tests = BookNode.objects.filter( node_type__in=['singlechoice','multiplechoice'], mpath__startswith=chapter.mpath ).order_by('mpath')
     next = tests.filter( mpath__gt=test.mpath )
     prev = tests.filter( mpath__lt=test.mpath ).order_by('-mpath')
     context['next'] = next[0] if next else None
@@ -286,7 +311,7 @@ def sctest(request, pk):
     # create question-choices-answer triplets (answer=None is not yet attempted)
     for qu in questions:
         choices = BookNode.objects.filter( node_type__in=['choice','correctchoice'], mpath__startswith=qu.mpath)
-        answer = MultipleChoiceAnswer.objects.filter(user=request.user, question=qu).first() # returns none if not yet attempted
+        answer = SingleChoiceAnswer.objects.filter(user=request.user, question=qu).first() # returns none if not yet attempted
         triplets.append([ qu, choices, answer])
 
     context['triplets'] = triplets
@@ -317,7 +342,7 @@ def sctest(request, pk):
                     cho = ch[chno-1]
                     if an:
                         an.delete()
-                    an = MultipleChoiceAnswer(user=request.user, question=qu, choice=cho)
+                    an = SingleChoiceAnswer(user=request.user, question=qu, choice=cho)
                     an.save
                     trip[2] = an
                     
@@ -405,89 +430,7 @@ def homework(request, pk):
             return render_to_response('index.html', context)
     else: # not POST
         return render_to_response('homework.html', context)
-    
-
-def question(request, pk):
-    context = RequestContext(request)
-    qu = BookNode.objects.get(pk=pk)
-    context['module']  = get_object_or_404( Module, code=qu.mpath[:6] )
-    context['question'] = qu
-    context['subtree'] = qu.get_descendants(include_self=True)
-    context['chapter'] = qu.get_parent_by_type('chapter')
-    context['exercise'] = qu.get_parent_by_type('exercise')
-    context['toc'] = qu.get_siblings(include_self=True)
-
-    # navigation
-    questions = BookNode.objects.filter( node_type="question", mpath__startswith=qu.mpath[:12] ).order_by('mpath')
-    next = questions.filter( mpath__gt=qu.mpath )
-    prev = questions.filter( mpath__lt=qu.mpath ).order_by('-pk')
-    context['next'] = next[0] if next else None
-    context['prev'] = prev[0] if prev else None
-    
-	# answer form 
-    # retreive current saved answer (if any)
-    ans = Answer.objects.filter(question=qu, user=request.user).first()
-    if ans:
-        form = AnswerForm(instance=ans)
-    else:
-        form = AnswerForm( initial={'question': qu, 'user': request.user})
-
-    # gulp
-    if request.method == 'POST':
-        form = AnswerForm(request.POST)
-        if form.is_valid():
-            ques = form.cleaned_data['question']
-            user = form.cleaned_data['user']
-            current_answer = Answer.objects.filter(question=ques, user=user).first()
-            if current_answer:
-                current_answer.text = form.cleaned_data['text']
-                current_answer.is_readonly = form.cleaned_data['is_readonly']
-                current_answer.save()
-            else:
-                answer = form.save(commit=False)
-                answer.save()
-        if 'preview-answer' in request.POST:
-            print "PREVIEW"
-        elif 'save-answer' in request.POST:
-            print "SAVE"
-        else:
-            print "ANFFODUS"
-
-        
-    context['form'] = form
-    return render(request, 'question.html', context)
-
-# # ANSWERS
-# def saveanswer(request):
-#     context = RequestContext(request)
-#     print 'BING-A'
-#     if request.method == 'POST':
-#         form = AnswerForm(request.POST)
-#         if form.is_valid():
-#             ques = form.cleaned_data['question']
-#             user = form.cleaned_data['user']
-#             current_answer = Answer.objects.filter(question=ques, user=user).first()
-#             if current_answer:
-#                 current_answer.text = form.cleaned_data['text']
-#                 current_answer.is_readonly = form.cleaned_data['is_readonly']
-#                 current_answer.save()
-#             else:
-#                 answer = form.save(commit=False)
-#                 answer.save()
-#             # return HTTPResponseRedirect( reverse('question') )
-#             context['question'] = ques
-#             context['module']  = Module.objects.get( code=ques.mpath[:6] )
-#             return render_to_response('save_success.html', context)
-#         else:
-#             context['debug'] = form.errors
-#             # form = ContactForm(data=request.POST, files=request.FILES)
-#             return render_to_response('question.html', context)
-#     else: # not POST
-#         return render_to_response('question.html', context)
-#
-#     print 'BING-C'
-#     return render(request, 'question.html', context)
-
+   
 # SEARCH
 def search_form(request):
     return render(request, 'search_form.html')
@@ -501,121 +444,9 @@ def search(request):
     else:
         return HttpResponse('Please submit a search term.')
     
-
-# def test(request):
-#     context = RequestContext(request)
-#     return render(request, 'quiz.html', context)
-#
-# def module_quiz(request, module):
-#     context = RequestContext(request)
-#     return render(request, 'index.html', context)
-#
-# def quiz(request):
-#     context = {'uname': 'mrurdd'}
-#     questions = BookNode.objects.filter(node_type='question')
-#     question = random.choice( questions )
-#     context['chapter'] = question.get_parent_by_type('chapter')
-#     context['exercise'] = question.get_parent_by_type('exercise')
-#     context['question'] = question
-#     context['question_tree'] = question.get_descendants(include_self=True)
-#     form = AnswerForm()
-#     form.fields['question'] = question
-#     form.fields['question'].widget = forms.HiddenInput()
-#     current_user = request.user
-#     print current_user.username
-#     if current_user.is_authenticated():
-#         print current_user.username
-#         form.fields['user'] = current_user
-#     print form.fields
-#     context['answer_form'] = form
-#     return render(request, 'quiz.html', context)
-#
-#
-# def decision(request):
-#     if request.method == 'POST':
-#         context = {}
-#         form = AnswerForm(request.POST)
-#
-#         print form.data
-#         if form.is_valid():
-#             question = form.cleaned_data['question']
-#             if question:
-#
-#                 # student answer
-#                 user_answer = Answer(
-#                     student = None,  # get user name
-#                     question = question,
-#                     answer  = form.cleaned_data['answer'],
-#                     )
-#                 context['user_answer'] = user_answer
-#
-#                 #  camel answer
-#                 camel_answer = Answer(
-#                     student = None,
-#                     question = question,
-#                     answer  = None # get from database
-#                     )
-#                 context['camel_answer'] = camel_answer
-#
-#
-#                 # decide whether the user is correct
-#                 if user_answer == camel_answer:
-#                     context['decision'] = 'Correct'
-#                 else:
-#                     context['decision'] = 'Incorrect'
-#
-#                 # retrieve all answers to this question (posts)
-#                 context['all_answers'] = Answers.objects.filter(question=question).order_by('pk')
-#             else:
-#                 context['message'] = form.data # for debugging
-#         else:
-#             context['message'] = form.errors
-#         print context
-#         return render(request, 'decision.html', context)
-#     else:
-#         form = AnswerForm()
-#         return render(request, 'quiz.html', { 'form': form })
-#
-#
-#
-# # list of modules
-# def module_list(request):
-#     modules = Module.objects.all().order_by('code')
-#     return render(request, 'modules.html', {'modules': modules})
-#
-# # list of chapters
-# def module_detail(request, module_code):
-#     module = get_object_or_404(Module, code=module_code)
-#     chapters = BookNode.objects.filter(module=module, node_type='chapter').order_by('node_id')
-#     return render(request, 'module_detail.html', {'module': module, 'chapters': chapters})
-#
-# # showtex
-# def chapter_detail(request, module_code, chapter_number):
-#     module = get_object_or_404(Module, code=module_code)
-#     chapter = BookNode.objects.get(module=module, node_type='chapter', number=chapter_number)
-#
-#     # table of contents (siblings of current chapter)
-#     toc = []
-#     chaps = chapter.get_siblings(include_self=True)
-#     for chap in chaps:
-#         toc.append(chap)
-#
-#     # subtree (descendants of current chapter)
-#     subtree = chapter.get_descendants(include_self=True)
-#
-#     # search subtree for references
-#     labs= [ref.htex for ref in subtree.filter(node_type='reference')]
-#     refs = [ BookNode.objects.filter(label=lab)[0] for lab in labs ]
-#     print refs
-#
-#
-#     return render(request, 'chapter_detail.html', {'module': module, 'refs': refs, 'toc': toc, 'chapter': chapter, 'subtree': subtree})
-
 #--------------------
 # users
 #--------------------
-
-# login
 def login_view(request):
     context = RequestContext(request)
     if request.method == 'POST':
@@ -636,7 +467,7 @@ def login_view(request):
     else:
         return render_to_response('login.html', {}, context)
 
-# @login_required
+@login_required
 def userhome(request, pk):
     return render(request, 'userhome.html', {})
 

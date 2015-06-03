@@ -1,17 +1,13 @@
-'''
-camel: forms.py
-'''
+# -*- coding: utf-8 -*-
 
 from django import forms
 from django.forms.models import modelformset_factory
 from django.contrib.auth.models import User
 
-from camel.models import Module, BookNode, Label, Answer, MultipleChoiceAnswer, Submission
-
-# from camel.marker import Report
+from camel.models import Module, BookNode, Label, Answer, SingleChoiceAnswer, Submission
 
 
-
+# not sure where this came from
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
@@ -19,6 +15,7 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'email', 'password')
 
         
+# free-text answer form
 class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
@@ -26,64 +23,24 @@ class AnswerForm(forms.ModelForm):
         widgets = {
             'question': forms.HiddenInput(),
             'user': forms.HiddenInput(),
+            'is_readonly': forms.HiddenInput(),
             'text': forms.Textarea(
                 attrs={'cols': '64', 'id': 'answer-text', 'required': True, 'placeholder': 'Type answer here...'}
             ),
-            'readonly': forms.CheckboxInput(attrs={'label': 'readonly'}),
         }
 
-# class MultipleChoiceAnswerForm(forms.ModelForm):
-#     # choices = forms.ModelChoiceField(
-#     #     queryset = BookNode.objects.filter( node_type__in=['choice','correctchoice'] ).order_by('mpath'),
-#     #     # queryset = queryset,
-#     #     empty_label=None,
-#     #     # choices = ['a','b'],
-#     #     widget = forms.RadioSelect(),
-#     # )
-#     # choices = forms.ModelChoiceField(
-#     #     queryset = BookNode.objects.filter( node_type__in=['choice','correctchoice'] ).order_by('mpath'),
-#     #     # queryset = queryset,
-#     #     empty_label=None,
-#     #     # choices = ['a','b'],
-#     #     widget = forms.RadioSelect(),
-#     # )
-#     # alternatives = forms.ModelChoiceField(
-#     #     queryset = BookNode.objects.filter( node_type__in=['choice','correctchoice'] ).order_by('mpath'),
-#     #     empty_label=None,
-#     #     widget = forms.RadioSelect(),
-#     # )
-#
-#     # def __init__(self, choices=None):
-#     #     super.__init__(self)
-#
-#     # alternatives = forms.ChoiceField(
-#     #     choices = BookNode.objects.filter( node_type__in=['choice','correctchoice'] ).order_by('mpath'),
-#     #     widget = forms.RadioSelect(),
-#     # )
-#
-#     # alternatives = forms.ModelChoiceField(
-#     #     queryset = BookNode.objects.filter( node_type__in=['choice','correctchoice'] ).order_by('mpath'),
-#     #     empty_label=None,
-#     #     widget = forms.RadioSelect(),
-#     # )
-#
+#  single-choice answer form (doesn't work)
+# class SingleChoiceAnswerForm(forms.ModelForm):
 #     class Meta:
-#         model = MultipleChoiceAnswer
+#         model = SingleChoiceAnswer
 #         fields = ['question', 'user', 'choice', 'is_readonly']
 #         widgets = {
-#             'user': forms.HiddenInput(),        # Fkey to user
-#             'question': forms.HiddenInput(),    # FKey to question
-#             'choice': forms.HiddenInput(),      # Fkey to choice
-#             # 'choice': forms.Textarea(
-#             #     attrs={'cols': '64', 'id': 'answer-text', 'required': True, 'placeholder': 'Type answer here...'}
-#             # ),
-#             # 'choice': forms.ChoiceField(
-#             #     widget = forms.RadioSelect(),
-#             #     choices = ['a','b']
-#             #     # choices = BookNode.objects.filter( node_type__in=['choice','correctchoice'] ).order_by('mpath')
-#             #     # queryset = BookNode.objects.filter( node_type__in=['choice','correctchoice'] ).order_by('mpath')
-#             # ),
-#             'readonly': forms.CheckboxInput(attrs={'label': 'readonly'}),
+#             'question': forms.HiddenInput(),
+#             'user': forms.HiddenInput(),
+#             'is_readonly': forms.HiddenInput(),
+#             'choice': forms.ChoiceField(
+#                 attrs={'choices' : BookNode.objects.filter( node_type__in=['choice','correctchoice'] ).order_by('mpath'),
+#             ),
 #         }
 
 # homework submission form (no visible fields)
@@ -95,17 +52,4 @@ class SubmissionForm(forms.ModelForm):
             'user': forms.HiddenInput(),
             'assignment': forms.HiddenInput(),
         }
-
-
-# formsets
-# from django.forms.formsets import formset_factory
-# AnswerFormSet = formset_factory(AnswerForm)
-
-# from django.forms.models import modelformset_factory
-#
-# MultipleChoiceAnswerFormSet = modelformset_factory(
-#     MultipleChoiceAnswer,
-#     form=MultipleChoiceAnswerForm,
-#     extra=0,
-# )
         

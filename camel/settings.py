@@ -1,4 +1,4 @@
-# Django settings for camel project.
+# django settings for camel project.
 
 import os
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))

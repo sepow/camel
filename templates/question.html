@@ -81,7 +81,7 @@ debug message: {{ debug }}
 	<h5>Question {{ question.number }}</h5>
 	{% with question.get_descendants as subtree %}
 		<div class="question">
-			{% include "question_block.html" %}
+			{% include "question_node_" %}
 		</div>
 	{% endwith %}
 

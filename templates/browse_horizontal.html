@@ -21,7 +21,7 @@
 	{% load mptt_tags %}
 	{% for block in blocks %}
 		{% with block.get_descendants_inc_self as subtree %}
-				{% include "block.html" %}
+				{% include "node.html" %}
 		{% endwith %}
 	{% endfor %}
 	</ul>

@@ -223,7 +223,7 @@ table.exercises {
     border:1px solid #000;
 }
 /* styles for latex blocks */
-div.theorem, div.lemma, div.proof, div.remark, div.definition, div.homework, div.multiplechoice, div.example, div.exercise, div.question, div.question-block, div.answerbox {
+div.theorem, div.lemma, div.proof, div.remark, div.definition, div.homework, div.singlechoice, div.multiplechoice, div.example, div.exercise, div.question, div.question-block, div.answerbox {
     border:1px solid #000;
 	padding:3px;
 	
@@ -286,7 +286,7 @@ div.homework {
 	background:pink;
 	padding:5px;
 }
-div.multiplechoice {
+div.singlechoice, div.multiplechoice {
 	background:lightblue;
 	padding:5px;
 }

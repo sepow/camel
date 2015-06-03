@@ -5,8 +5,6 @@ from django.contrib.auth.models import User
 
 from mptt.models import MPTTModel, TreeForeignKey
 
-# import camel.book as bt
-
 # these should be moved to settings.py
 ACADEMIC_YEARS = (
     ('2014-15', '2014-15'),
@@ -18,10 +16,6 @@ MODULE_CODES = (
     ('MA0003','MA0003'),
     ('MA1234','MA1234'),
     ('MA1501','MA1501'),
-)
-USER_TYPES = (
-    ('STU','Student'),
-    ('STA','Staff'),
 )
 
 #------------------------------------------------
@@ -215,7 +209,7 @@ class Answer(models.Model):
         s = s + unicode('|' + str(self.is_readonly) )
         return s
 
-class MultipleChoiceAnswer(models.Model):
+class SingleChoiceAnswer(models.Model):
     user = models.ForeignKey(User)
     question = models.ForeignKey(BookNode)
     choice = models.ForeignKey(BookNode, related_name='mcanswer_choice')

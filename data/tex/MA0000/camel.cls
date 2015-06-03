@@ -99,6 +99,7 @@
 \newcommand{\solutionname}{Solution}
 \newcommand{\proofname}{Proof}
 \newcommand{\homeworkname}{Homework}
+\newcommand{\singlechoicename}{Test}
 \newcommand{\multiplechoicename}{Test}
 \if@cymraeg
 	\renewcommand{\academicyearname}{Blwyddyn}
@@ -111,6 +112,7 @@
 	\renewcommand{\solutionname}{Datrysiad}
 	\renewcommand{\proofname}{Prawf}
 	\renewcommand{\homeworkname}{Gwaith Cartref}
+	\renewcommand{\singlechoicename}{Prawf}
 	\renewcommand{\multiplechoicename}{Prawf}
 \fi	
 
@@ -152,9 +154,6 @@
 % default settings (override in screen section)
 %-------------------------------------------------
 
-% dummy commands (to be set in screen section)
-\newcommand{\slidebreak}{}
-
 % hyperref
 \RequirePackage{hyperref}
 \hypersetup{pdfborder = {0 0 0}}
@@ -167,17 +166,17 @@
 \renewcommand{\labelenumii}{(\alph{enumii})}
 
 % chapters, sections, headers & footers
-\RequirePackage[pagestyles]{titlesec}
-\RequirePackage{titletoc}
+\usepackage[pagestyles]{titlesec}
+\usepackage{titletoc}
 \setcounter{tocdepth}{1}
+%\renewcommand{\chaptername}{Lecture}
 \titleformat{\chapter}
 	{\bfseries\huge}{\chaptername~\thechapter}{1em}{}
 \titleformat{\section}
 	{\Large\bfseries}{\thesection}{1em}{}
-
 \newpagestyle{main}[\small\scshape]{
 \headrule
-\sethead{\themodulecode}{}{\footnotesize\thechapter.~\chaptertitle} % odd
+\sethead{\themodulecode}{}{\thechapter.~\chaptertitle} % odd
 \footrule
 \setfoot{\footnotesize\if@blanks Student Copy\else\if@answers Instructor Copy\else Complete Notes\fi\fi}{}{\thepage}
 }
@@ -215,9 +214,12 @@
 \newtheorem{conclusion}[theorem]{\conclusionnamex}
 \newtheorem{exercise}[theorem]{\exercisenamex}
 
+
 %-------------------------------------------------
 % boxes
 %-------------------------------------------------
+%\RequirePackage{tcolorbox}
+%\tcbuselibrary{breakable}
 \RequirePackage{xcolor}
 
 \RequirePackage[framemethod=TikZ]{mdframed}
@@ -313,13 +315,21 @@
   \par\vspace{2ex}\noindent\textbf{\homeworkname\space\thehomework\space\homeworktitle\normalsize} \par
 }{}
 
-\newcounter{multiplechoice}[chapter]
-\renewcommand{\themultiplechoice}{\thechapter.\arabic{multiplechoice}}
+\newcounter{test}[chapter]
+\renewcommand{\thetest}{\thechapter.\arabic{test}}
+
+\newcommand{\singlechoicetitle}{}
+\newenvironment{singlechoice}[1][]{%
+  \refstepcounter{test}
+  \ifthenelse{\isempty{#1}}{\renewcommand{\singlechoicetitle}{}}{\renewcommand{\singlechoicetitle}{(#1)}}
+  \par\vspace{2ex}\noindent\textbf{\singlechoicename\space\thetest\space\singlechoicetitle\normalsize} \par
+}{}
+
 \newcommand{\multiplechoicetitle}{}
 \newenvironment{multiplechoice}[1][]{%
-  \refstepcounter{multiplechoice}
+  \refstepcounter{test}
   \ifthenelse{\isempty{#1}}{\renewcommand{\multiplechoicetitle}{}}{\renewcommand{\multiplechoicetitle}{(#1)}}
-  \par\vspace{2ex}\noindent\textbf{\multiplechoicename\space\themultiplechoice\space\multiplechoicetitle\normalsize} \par
+  \par\vspace{2ex}\noindent\textbf{\multiplechoicename\space\thetest\space\multiplechoicetitle\normalsize} \par
 }{}
 
 %-------------------------------------------------
@@ -327,38 +337,17 @@
 %-------------------------------------------------
 \if@screen
 
-	% override dummy commands
-	\renewcommand{\slidebreak}{\newpage}
-
 	% layout
 	\geometry{a4paper,landscape}
 	\geometry{left=15mm,right=15mm,top=18mm,bottom=18mm}
-
-	% titles (via titlesec)	
-	\renewcommand{\chaptername}{}
-    \titleformat{\chapter}
-    	{\bfseries\LARGE}{\thechapter}{1em}{}
-	\titlespacing*{\chapter}{0pt}{-50pt}{20pt}
-    \titleformat{\section}
-    	{\bfseries\large}{\thesection}{1em}{}
-    \titleformat{\subsection}
-    	{\bfseries\normalsize}{\thesection}{1em}{}
 	
-	% pagestyle (via titlesec)
-    \newpagestyle{slides}[\small\scshape]{
-        \sethead{}{}{\scriptsize\thechapter.~\chaptertitle}
-        \footrule
-        \setfoot{}{}{\scriptsize\thepage}
-    }
-    \pagestyle{slides}
-
-
 	% fonts
 	\renewcommand{\familydefault}{\sfdefault}
 	\RequirePackage[T1]{fontenc}
 	\RequirePackage{lmodern}
 	\RequirePackage{exscale} 
-	\RequirePackage[fontsize=22pt]{scrextend}
+	\RequirePackage{scrextend}
+	\changefontsizes{16pt}
 
 	% spacing
 	\renewcommand\baselinestretch{1.1}
@@ -375,7 +364,7 @@
 	    \setlength{\itemsep}{0ex plus 0.2ex}
 	    \setlength{\leftmargin}{4ex}
 	    \setlength{\rightmargin}{2ex}
-	    \setlength{\topsep}{0ex}
+	    \setlength{\topsep}{1ex}
 	}}{\end{list}}
 	
 	% custom enumerate
@@ -383,7 +372,7 @@
 	\begin{list}{(\arabic{enumi})}{%
 	    \usecounter{enumi}
 	    \setlength{\itemsep}{0.25ex plus 0.15ex}
-	    \setlength{\leftmargin}{2ex}
+	    \setlength{\leftmargin}{4ex}
 	    \setlength{\rightmargin}{2ex}
 	}} {\end{list}}
 

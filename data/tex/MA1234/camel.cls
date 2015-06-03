@@ -99,6 +99,7 @@
 \newcommand{\solutionname}{Solution}
 \newcommand{\proofname}{Proof}
 \newcommand{\homeworkname}{Homework}
+\newcommand{\singlechoicename}{Test}
 \newcommand{\multiplechoicename}{Test}
 \if@cymraeg
 	\renewcommand{\academicyearname}{Blwyddyn}
@@ -111,6 +112,7 @@
 	\renewcommand{\solutionname}{Datrysiad}
 	\renewcommand{\proofname}{Prawf}
 	\renewcommand{\homeworkname}{Gwaith Cartref}
+	\renewcommand{\singlechoicename}{Prawf}
 	\renewcommand{\multiplechoicename}{Prawf}
 \fi	
 
@@ -313,13 +315,21 @@
   \par\vspace{2ex}\noindent\textbf{\homeworkname\space\thehomework\space\homeworktitle\normalsize} \par
 }{}
 
-\newcounter{multiplechoice}[chapter]
-\renewcommand{\themultiplechoice}{\thechapter.\arabic{multiplechoice}}
+\newcounter{test}[chapter]
+\renewcommand{\thetest}{\thechapter.\arabic{test}}
+
+\newcommand{\singlechoicetitle}{}
+\newenvironment{singlechoice}[1][]{%
+  \refstepcounter{test}
+  \ifthenelse{\isempty{#1}}{\renewcommand{\singlechoicetitle}{}}{\renewcommand{\singlechoicetitle}{(#1)}}
+  \par\vspace{2ex}\noindent\textbf{\singlechoicename\space\thetest\space\singlechoicetitle\normalsize} \par
+}{}
+
 \newcommand{\multiplechoicetitle}{}
 \newenvironment{multiplechoice}[1][]{%
-  \refstepcounter{multiplechoice}
+  \refstepcounter{test}
   \ifthenelse{\isempty{#1}}{\renewcommand{\multiplechoicetitle}{}}{\renewcommand{\multiplechoicetitle}{(#1)}}
-  \par\vspace{2ex}\noindent\textbf{\multiplechoicename\space\themultiplechoice\space\multiplechoicetitle\normalsize} \par
+  \par\vspace{2ex}\noindent\textbf{\multiplechoicename\space\thetest\space\multiplechoicetitle\normalsize} \par
 }{}
 
 %-------------------------------------------------
@@ -414,7 +424,7 @@
 		\huge \theacademicyear \\[8ex]
 		\huge Book~\thebooknumber\@ifundefined{thebooktitle}{\mbox{}}{.~\thebooktitle} \\[5ex]
 		\LARGE \@ifundefined{thebookauthor}{\mbox{}}{\thebookauthor} \\[1ex]
-		\Large \@ifundefined{thebookdate}{\today}{\thebookdate} \\[4ex]
+		\Large \@ifundefined{thebookdate}{\mbox{}}{\thebookdate} \\[4ex]
 %		\Large \@ifundefined{thebookversion}{v\today}{\thebookversion} \\[1ex]
 	\end{center}
 	\vfill

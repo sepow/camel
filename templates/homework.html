@@ -96,22 +96,7 @@
 </span>
 </div-->
 
-<div>
-<span style="float:left">
-&larr; <a href="{% url 'chapter-detail' chapter.pk %}">Chapter {{ chapter.number}}. {{ chapter.title }}</a>
-</span>
-<span style="float:right">
-<a href="{% url 'chapter-theorems' chapter.pk %}">Theorems</a>
-|
-<a href="{% url 'chapter-examples' chapter.pk %}">Examples</a>
-|
-<a href="{% url 'chapter-exercises' chapter.pk %}">Exercises</a>
-|
-<a href="{% url 'chapter-assignments' chapter.pk %}">Assignments</a>
-</span>
-</div>
-
-<br>
+{% include "chapter_navigation_block.html" %}
 
 <h2>{{ homework.node_type | title }} {{ chapter.number }}.{{ homework.number }}</h2>
 
@@ -123,7 +108,7 @@
 		<b>Question {{ question.number }}</b><br>
 		<div class="question">
 			{% with question.get_descendants as subtree %}
-					{% include "block.html" %}
+					{% include "booknode.html" %}
 			{% endwith %}
 			<div class="answerbox">
 				<a onclick="toggle_visibility('answer{{ question.number }}')">
