@@ -3,23 +3,7 @@
 {% block content-main %}
 
 
-  <div class="question-block">
-    <a href="/homework/{{ question.id }}"<b>Question {{ question.number }}</b></a><br>
-    {{ question }}
-    <div class="question">
-      {% with question.get_descendants as subtree %}
-        {% include "booknode.html" %}
-      {% endwith %}
-    </div>
-
-    {% for answer in question.answer_set.all %}
-      <div style="background-color: pink">
-        <p>Student: {{ answer.user }}</p>
-        <p>Answer: {{ answer.text }}</p>
-      </div>
-    {% endfor %}
-  </div>
-
+  {% include 'review/question_block.html' %}
 
 
 {% endblock %}

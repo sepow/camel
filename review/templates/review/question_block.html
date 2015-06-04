@@ -1,0 +1,18 @@
+<div class="question-block">
+  <a href="/homework/{{ question.id }}"<b>Question {{ question.number }}</b></a><br>
+  {{ question }}
+  <div class="question">
+    {% with question.get_descendants as subtree %}
+      {% include "booknode.html" %}
+    {% endwith %}
+  </div>
+</div>
+  {% for answer in question.answer_set.all %}
+    <div class="remark">
+        <div class="blocktitle">{{ answer.user }}</div>
+        <div>
+          {{ answer.text }}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
