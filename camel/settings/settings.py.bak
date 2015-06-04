@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'mptt',
 	'camel',
+    'review',
 )
 
 MIDDLEWARE_CLASSES = (

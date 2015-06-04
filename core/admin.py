@@ -1,11 +1,12 @@
-'''
+"""
 camel: admin.py
-'''
+"""
 from django.contrib import admin
 
 from core.models import (
     Module, Book, BookNode, Label, Answer, SingleChoiceAnswer, Submission
 )
+
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'last_name', 'first_name', 'email')
