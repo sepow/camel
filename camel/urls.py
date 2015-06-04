@@ -10,10 +10,10 @@ admin.autodiscover()
 
 from django.conf import settings
 
-import core.views
+from core import views
 
 from django.views.generic import ListView
-from models import Module
+from core.models import Module
 
 urlpatterns = patterns('',
 

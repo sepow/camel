@@ -125,7 +125,7 @@ import sys, os, re, logging
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 
-import camel.models
+import core.models
 from django.db.models import ImageField
 
 #------------------------------------------------
@@ -259,7 +259,7 @@ class Node(object):
     def write_to_camel_database(self, parent=None, commit=False, prefix=None, is_readonly=False):
 
         # create booknode
-        booknode = camel.models.BookNode(node_id=self.node_id)
+        booknode = core.models.BookNode(node_id=self.node_id)
 
         booknode.mpath = self.mpath()
         if prefix:
@@ -1382,19 +1382,19 @@ def main(args=None):
         preamble = p.parse_preamble( main_tex )
         code = preamble['module_code']
         year = preamble['academic_year']
-        module = camel.models.Module.objects.filter(code=code, year=year).first()
+        module = core.models.Module.objects.filter(code=code, year=year).first()
         if not module:
             out.info( 'Creating new module %s/%s' % (code, year) )
-            module = camel.models.Module(code=code, year=year, title=preamble['module_title'])
+            module = core.models.Module(code=code, year=year, title=preamble['module_title'])
             module.save()
         else:
             out.info( 'Updating existing module %s/%s' % (code, year) )
 
         number = preamble['book_number']
-        bk = camel.models.Book.objects.filter(module=module, number=number).first()
+        bk = core.models.Book.objects.filter(module=module, number=number).first()
         if bk:
             out.info( 'Existing book %s/%s/%s will be deleted' % (code, year, number) )
-            for booknode in camel.models.BookNode.objects.filter(mpath__startswith=bk.tree.mpath):
+            for booknode in core.models.BookNode.objects.filter(mpath__startswith=bk.tree.mpath):
                 booknode.delete()
             bk.delete()
         
@@ -1405,11 +1405,11 @@ def main(args=None):
         
         # print preamble
         
-        cbook = camel.models.Book()
+        cbook = core.models.Book()
         code = preamble['module_code']
         year = preamble['academic_year']
         
-        cbook.module = camel.models.Module.objects.filter(code=code, year=year).first()
+        cbook.module = core.models.Module.objects.filter(code=code, year=year).first()
         if 'book_number' in preamble:
             cbook.number = int(preamble['book_number'])
         else:
@@ -1437,7 +1437,7 @@ def main(args=None):
         # write labels to database
         pairs = book.get_label_mpaths()
         for pair in pairs:
-            lab = camel.models.Label()
+            lab = core.models.Label()
             lab.book = cbook
             lab.text = prefix + '.' + pair[0]
             lab.mpath = prefix + pair[1]

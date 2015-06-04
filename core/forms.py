@@ -4,7 +4,7 @@ from django import forms
 from django.forms.models import modelformset_factory
 from django.contrib.auth.models import User
 
-from camel.models import Module, BookNode, Label, Answer, SingleChoiceAnswer, Submission
+from core.models import Module, BookNode, Label, Answer, SingleChoiceAnswer, Submission
 
 
 # not sure where this came from
