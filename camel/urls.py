@@ -44,14 +44,17 @@ urlpatterns = patterns('',
     url(r'^sctest/(?P<pk>\d+)/$', camel.views.sctest, name="sctest"),
     # url(r'mctest/(?P<pk>\d+)/$', camel.views.mctest, name="mctest"),
 
-	# users 
+	# users
 	url(r'^home/(?P<pk>\d+)/$', camel.views.userhome, name="user-home"),
 	url(r'^login/$', camel.views.login_view, name="login"),
     url(r'^logout/$', camel.views.logout_view, name="logout"),
-   
+
     # search
     url(r'^search-form/$', camel.views.search_form),
     url(r'^search/$', camel.views.search),
+
+    # review app
+    url(r'^review/$', include('review.urls', namespace='review'))
 
 )
 
@@ -60,5 +63,3 @@ if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT,}),
     )
-    
-
