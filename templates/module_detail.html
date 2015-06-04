@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 
-{% block title %} 
+{% block title %}
 	{{ module.code }}
 {% endblock %}
 
@@ -12,7 +12,7 @@
 {% block content-main %}
 
 {% if module %}
-   	<h2><u>{{ module.code}} {{ module.title }} ({{ module.year }})</u></h2>
+   	<h2><u>{{ module.long_name }}</u></h2>
 {% endif %}
 
 <h3>Books</h3>
@@ -50,4 +50,3 @@
 <span class="left">{% if prev %}<a href="{{ prev.get_absolute_url }}">&lt; {{ prev.code }}</a>{% endif %}</span>
 <span class="right">{% if next %}<a href="{{ next.get_absolute_url }}">{{ next.code }} &gt;</a>{% endif %}</span>
 {% endblock %}
-

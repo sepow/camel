@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import View
 
-from core.models import BookNode
+from core.models import BookNode, Module
 
 
 class StaffRequiredMixin(object):
@@ -18,7 +18,16 @@ class ReviewIndexView(StaffRequiredMixin, View):
 
     def get(self, request):
         books_with_answers = BookNode.objects.filter(node_type="question")
-        return render(request, "review/index.html", {"books": books_with_answers})
+        modules = Module.objects.all()
+        return render(request, "review/index.html", {"books": books_with_answers, "modules": modules})
+
+
+class ReviewBookView(StaffRequiredMixin, View):
+
+    def get(self, request):
+        books = BookNode.objects.filter(node_type="question")
+        return ""
+
 
 
 class ReviewQuestionView(StaffRequiredMixin, View):

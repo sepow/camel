@@ -3,10 +3,23 @@
 {% block content-main %}
 
 
+<h1>Select Books to Review Answers</h1>
+
+{% for module in modules %}
+  <h2><u>{{ module.long_name }}</u></h2>
+  {% for book in module.book_module.all %}
+    <a href="/book/{{ book.id }}">{{ book }}</a>
+  {% endfor %}
+{% endfor %}
+
+
+{% comment %}
+<h1>Review Students' Answers</h1>
+
 {% for question in books %}
   {% include 'review/question_block.html' %}
 {% endfor %}
 
-
+{% endcomment %}
 
 {% endblock %}
