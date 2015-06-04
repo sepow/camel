@@ -14,6 +14,8 @@ backup/*
 *.synctex.gz
 *.thm
 *.toc
+*.db     # sqlite databases
+.idea/*  # pycharm files
 
 bin/*
 include/*
