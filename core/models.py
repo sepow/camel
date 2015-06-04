@@ -38,6 +38,10 @@ class Module(models.Model):
     def __unicode__(self):
         return self.code
 
+    @property
+    def long_name(self):
+        return "{} {} ({})".format(self.code, self.title, self.year)
+
     # def get_absolute_url(self):
     #     return reverse('module-detail', kwargs={'module_code': self.code})
 

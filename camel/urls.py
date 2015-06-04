@@ -53,6 +53,9 @@ urlpatterns = patterns('',
     url(r'^search-form/$', views.search_form),
     url(r'^search/$', views.search),
 
+    # review app
+    url(r'^review/', include('review.urls', namespace='review'))
+
 )
 
 if settings.DEBUG:

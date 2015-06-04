@@ -14,5 +14,18 @@ backup/*
 *.synctex.gz
 *.thm
 *.toc
+
+# sqlite databases
 *.db
+
+# pycharm files
 .idea/*
+
+bin/*
+# VirtualEnv files
+include/*
+lib/*
+local/*
+
+# IPython files
+share/*
