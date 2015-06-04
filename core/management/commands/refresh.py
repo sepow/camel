@@ -13,8 +13,8 @@ from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
-from camel.booktree import TexParser
-from camel.models import Module, BookNode
+from core.booktree import TexParser
+from core.models import Module, BookNode
 
 SITE_ROOT = getattr(settings, 'SITE_ROOT')
 TEX_ROOT  = getattr(settings, 'TEX_ROOT')
@@ -23,7 +23,7 @@ out = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     '''
-    Currently deletes the existing booktree entirely, which will be a problemm when answers 
+    Currently deletes the existing booktree entirely, which will be a problemm when answers
     and submissions point to question and assessment objects.
     '''
     args = 'module_code (, module_code, ...)'
@@ -38,44 +38,44 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        
+
         # process argument (module code)
         if not args:
             print 'Usage: python manage.py refresh <module_code> --option'
             return
-        
+
         # info
         timestr = time.strftime("%Y.%m.%d.%H.%M.%S")
         out.info('Logging started at %s', timestr)
         # out.info('SITE_ROOT = %s' % SITE_ROOT)
         # out.info('TEX_ROOT  = %s' % TEX_ROOT)
-        
+
         # iterate over modules
         for module_code in args:
             out.info('BEGIN processing %s', module_code)
-            
+
             # find main.tex
             main_tex = os.path.join(TEX_ROOT, module_code, 'main.tex')
-                                
+
             # create book tree
             p = TexParser()
             preamble = p.parse_preamble( main_tex )
             book = p.parse_book( main_tex )
             book.title = preamble['book_title']
-            
+
             # xml output
             if options['xml']:
                 xml = book.prettyprint_xml()
                 self.stdout.write( xml )
-            
+
             # labels
             elif options['labels']:
                 pairs = book.get_label_mpaths()
                 col_width = max( [len(pair[0]) for pair in pairs] ) + 2  # padding
                 for pair in pairs:
                     self.stdout.write( pair[0].ljust(col_width) + pair[1] )
-            
-            # database 
+
+            # database
             elif options['db'] or options['commit']:
 
                 # check whether this module already exists in the database
@@ -110,7 +110,7 @@ class Command(BaseCommand):
 
                 # save module
                 mo.save()
-        
+
                 # write to database
                 if options['commit']:
                     book.write_to_camel_database(module=mo, commit=True)
@@ -120,7 +120,7 @@ class Command(BaseCommand):
             # default: text output
             else:
                 print book
-        
+
         # end iterate over modules
 
 
