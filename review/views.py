@@ -26,7 +26,12 @@ class ReviewBookView(StaffRequiredMixin, View):
 
     def get(self, request, book_pk):
         book = Book.objects.get(pk=book_pk)
-        return render(request, "review/book_index.html", {"book": book})
+        booknode = book.tree
+        chapter = BookNode.objects.get(mpath=booknode.mpath[:12] )
+
+        booknodes = BookNode.objects.filter(node_type="question", mpath__startswith=chapter.mpath).order_by('mpath')
+
+        return render(request, "review/book_index.html", {"book": book, "questions": booknodes})
 
 
 class ReviewQuestionView(StaffRequiredMixin, View):
