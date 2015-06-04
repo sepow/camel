@@ -14,7 +14,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
 from core.booktree import TexParser
-from core.models import Module, BookNode
+from core.models import Module, BookNode, Book, Label
 
 SITE_ROOT = getattr(settings, 'SITE_ROOT')
 TEX_ROOT  = getattr(settings, 'TEX_ROOT')
@@ -33,8 +33,7 @@ class Command(BaseCommand):
         make_option("--text", action="store_true", dest="text", default=False, help="print document tree to stdout"),
         make_option("--xml", action="store_true", dest="xml", default=False, help="print xml tree to stdout"),
         make_option("--labels", action="store_true", dest="labels", help="print (label, mpath) pairs to stdout"),
-        make_option("--db", action="store_true", dest="db", default=False, help="test write to database"),
-        make_option("--commit", action="store_true", dest="commit", default=False, help="write to database"),
+        make_option("--db", action="store_true", dest="db", default=False, help="write to database"),
     )
 
     def handle(self, *args, **options):
@@ -74,53 +73,67 @@ class Command(BaseCommand):
                 col_width = max( [len(pair[0]) for pair in pairs] ) + 2  # padding
                 for pair in pairs:
                     self.stdout.write( pair[0].ljust(col_width) + pair[1] )
-
-            # database
-            elif options['db'] or options['commit']:
+                    
+                    
+            # camel database output
+            if options['db']:
 
                 # check whether this module already exists in the database
+                preamble = p.parse_preamble( main_tex )
                 code = preamble['module_code']
                 year = preamble['academic_year']
-                modules = Module.objects.filter(code=code, year=year)
-                if not modules:
-                    out.info( 'Creating new module %s/%s' % (code, year) )
-                    mo = Module(code=code, year=year, title=preamble['module_title'], newcommands='')
-                    mo.save()
-                elif len(modules) == 1:
-                    out.info( 'Updating existing module %s/%s (existing doctree will be deleted)' % (code, year) )
-                    mo = modules[0]
-                    for bo in BookNode.objects.filter(module=mo):
-                        bo.delete()
+                module = Module.objects.filter(code=code, year=year).first()
+                if not module:
+                    out.warning( 'Module %s/%s does not exist - do nothing' % (code, year) )
+                    # out.info( 'Creating new module %s/%s' % (code, year) )
+                    # module = Module(code=code, year=year, title=preamble['module_title'])
+                    # module.save()
                 else:
-                    out.error('Error: database contains more than one (%s, %s)!' % (code, year) )
-                    continue
+                    out.info( 'Updating existing module %s/%s' % (code, year) )
 
-                # hack to set user-defined latex macros
-                nc = ''
-                nc += r'\newcommand{\N}{\mathbb{N}}'
-                nc += r'\newcommand{\Z}{\mathbb{Z}}'
-                nc += r'\newcommand{\R}{\mathbb{R}}'
-                nc += r'\newcommand{\C}{\mathbb{C}}'
-                nc += r'\newcommand{\prob}{\mathbb{P}}'
-                nc += r'\newcommand{\expe}{\mathbb{E}}'
-                nc += r'\newcommand{\var}{\text{Var}}'
-                nc += r'\newcommand{\cov}{\text{Cov}}'
-                nc += r'\newcommand{\supp}{\text{supp}}'
-                mo.newcommands = nc
-
-                # save module
-                mo.save()
-
-                # write to database
-                if options['commit']:
-                    book.write_to_camel_database(module=mo, commit=True)
+                number = preamble['book_number']
+                bk = Book.objects.filter(module=module, number=number).first()
+                if bk:
+                    out.info( 'Existing book %s/%s/%s will be deleted' % (code, year, number) )
+                    for booknode in BookNode.objects.filter(mpath__startswith=bk.tree.mpath):
+                        booknode.delete()
+                    bk.delete()
+        
+                cbook = Book()
+                code = preamble['module_code']
+                year = preamble['academic_year']
+        
+                cbook.module = Module.objects.filter(code=code, year=year).first()
+                if 'book_number' in preamble:
+                    cbook.number = int(preamble['book_number'])
                 else:
-                    book.write_to_camel_database(module=mo, commit=False)
+                    cbook.number = 0
+                if 'book_title' in preamble:
+                    cbook.title = preamble['book_title']
+                if 'book_author' in preamble:
+                    cbook.author = preamble['book_author']
+                if 'book_version' in preamble:
+                    cbook.version = preamble['book_version']
+                if 'new_commands' in preamble:
+                    cbook.new_commands = preamble['new_commands']
+            
+                hexstr = hex( cbook.number )[2:].zfill(2)
+                prefix = code + '.' + hexstr
 
-            # default: text output
-            else:
-                print book
+                # write book database
+                cbook.tree = book.write_to_camel_database(prefix=prefix, commit=True)
+                cbook.save()
+          
+                # write labels to database
+                pairs = book.get_label_mpaths()
+                for pair in pairs:
+                    lab = Label()
+                    lab.book = cbook
+                    lab.text = prefix + '.' + pair[0]
+                    lab.mpath = prefix + pair[1]
+                    lab.save()
+                    print lab                    
 
-        # end iterate over modules
+
 
 
