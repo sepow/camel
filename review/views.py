@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from camel.models import BookNode
+from core.models import BookNode
 
 
 def index(request):
