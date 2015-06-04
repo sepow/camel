@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+
+{% block breadcrumbs %}
+  &nbsp;<a href="{% url 'review:index' %}">Review</a>&nbsp;&gt;&nbsp;{{ book.title }}
+{% endblock %}
+
+
 {% block content-main %}
 
 
