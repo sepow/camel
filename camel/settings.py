@@ -41,10 +41,10 @@ if LIVEHOST:
 else:
     DATABASES = {
 	    'default': {
-    	    'ENGINE': 'django.db.backends.sqlite3', 
+    	    'ENGINE': 'django.db.backends.sqlite3',
     	    'NAME': os.path.join(SITE_ROOT, 'data') + '/camel.db',
-	    }		
-    }   
+	    }
+    }
 
 # Application definition
 INSTALLED_APPS = (
@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'mptt',
 	'camel',
+    'review',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -149,7 +150,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         }
-        
+
     },
     'loggers': {
 	     'django.request': {
