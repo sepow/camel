@@ -14,12 +14,18 @@ backup/*
 *.synctex.gz
 *.thm
 *.toc
-*.db     # sqlite databases
-.idea/*  # pycharm files
+
+# sqlite databases
+*.db
+
+# pycharm files
+.idea/*
 
 bin/*
+# VirtualEnv files
 include/*
 lib/*
 local/*
 
+# IPython files
 share/*
