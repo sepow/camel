@@ -4,13 +4,22 @@
 
 <p>Hello</p>
 
-{% for book in books %}
-  {% if book.answer_set.all %}
-    <h1>{{ book.title }}</h1>
-  {% endif %}
-  {% for answer in book.answer_set.all %}
-    <p>{{ answer }}</p>
-  {% endfor %}
+{% for question in books %}
+  <div class="question-block">
+    <a href="/homework/{{ question.id }}"<b>Question {{ question.number }}</b></a><br>
+    <div class="question">
+      {% with question.get_descendants as subtree %}
+        {% include "booknode.html" %}
+      {% endwith %}
+    </div>
+
+    {% for answer in question.answer_set.all %}
+      <div style="background-color: pink">
+        <p>Student: {{ answer.user }}</p>
+        <p>Answer: {{ answer.text }}</p>
+      </div>
+    {% endfor %}
+  </div>
 {% endfor %}
 
 
