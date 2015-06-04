@@ -1,19 +1,7 @@
 [
 	{
-		"model": "camel.module", 
 		"pk": 1, 
-		"fields": {
-			"year": "2015-16", 
-			"code": "MA0000", 
-			"title": "The Camel System", 
-			"teacher": 11, 
-			"students": [101,102,103,104,105,106], 
-			"twitter_widget_id": ""
-		}
-	},
-	{
-		"pk": 2, 
-		"model": "camel.module", 
+		"model": "core.module", 
 		"fields": {
 			"year": "2015-16", 
 			"code": "MA1234", 
@@ -24,25 +12,13 @@
 		}
 	},
 	{
-		"pk": 3, 
-		"model": "camel.module", 
+		"model": "core.module", 
+		"pk": 2, 
 		"fields": {
 			"year": "2015-16", 
-			"code": "MA1501", 
-			"title": "Statistical Inference",
-			"teacher": 13, 
-			"students": [101,102,103,104,105,106], 
-			"twitter_widget_id": ""
-		}
-	},
-	{
-		"pk": 4, 
-		"model": "camel.module", 
-		"fields": {
-			"year": "2015-16", 
-			"code": "MA0003", 
-			"title": "Preliminary Mathematics I",
-			"teacher": 14, 
+			"code": "MA0000", 
+			"title": "The Camel System", 
+			"teacher": 11, 
 			"students": [101,102,103,104,105,106], 
 			"twitter_widget_id": ""
 		}
