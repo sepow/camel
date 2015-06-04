@@ -7,6 +7,7 @@
 {% for question in books %}
   <div class="question-block">
     <a href="/homework/{{ question.id }}"<b>Question {{ question.number }}</b></a><br>
+    {{ question }}
     <div class="question">
       {% with question.get_descendants as subtree %}
         {% include "booknode.html" %}
