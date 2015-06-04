@@ -16,6 +16,7 @@ from django.template import RequestContext
 # auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
 # model-based views
@@ -448,24 +449,14 @@ def search(request):
 # users
 #--------------------
 def login_view(request):
-    context = RequestContext(request)
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request, user)
-                return render(request, 'userhome.html', {'pk': user.pk})
-
-                return HttpResponseRedirect('/')
-            else:
-                return HttpResponse("Account is inactive.")
-        else:
-            print "Invalid login details: %s, %s" % (username, password)
-            return HttpResponse("Login incorrect.")
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return render(request, 'userhome.html', {'pk': form.get_user_id()})
     else:
-        return render_to_response('login.html', {}, context)
+        form = AuthenticationForm(request)
+    return render(request, "login.html", {"form": form})
 
 @login_required
 def userhome(request, pk):
