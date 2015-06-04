@@ -49,6 +49,7 @@ class Module_ListView(ListView):
 class Module_DetailView(DetailView):
     model = Module
     template_name = 'module_detail.html'
+
     def get_context_data(self, **kwargs):
         context = super(Module_DetailView, self).get_context_data(**kwargs)
         module = self.get_object()
@@ -109,17 +110,20 @@ class BookNode_DetailView(DetailView):
 
 # the following should be implemented with javascript on the client
 # should use mptt instance methods instead of mpath
+
 def selected(request, pk, node_type):
-    context = RequestContext(request)
-    booknode = BookNode.objects.get( pk=pk )
-    module  = Module.objects.get( code=booknode.mpath[:6] )
-    chapter = BookNode.objects.get( mpath=booknode.mpath[:12] )
+    context = {}
+    booknode = BookNode.objects.get(pk=pk)
+    module  = Module.objects.get(code=booknode.mpath[:6] )
+    chapter = BookNode.objects.get(mpath=booknode.mpath[:12] )
+
     context['module']  = module
     context['chapter']  = chapter
     context['book']  = Book.objects.get( tree=chapter.get_root_node() )
     context['user']  = request.user
 
     context['node_type'] = node_type
+
     if node_type == 'theorem':
         qset = BookNode.objects.filter(node_class="theorem", mpath__startswith=chapter.mpath).order_by('mpath')
     elif node_type == 'test':
