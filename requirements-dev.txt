@@ -1,0 +1,2 @@
+-r requirements-base.txt
+ipython==2.3.1
