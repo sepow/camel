@@ -26,8 +26,8 @@ from django.views.generic.detail import DetailView
 # from django.utils.decorators import method_decorator
 
 # camel
-from camel.models import Module, Book, BookNode, Label, Answer, SingleChoiceAnswer, Submission
-from camel.forms import UserForm, AnswerForm, SubmissionForm
+from core.models import Module, Book, BookNode, Label, Answer, SingleChoiceAnswer, Submission
+from core.forms import UserForm, AnswerForm, SubmissionForm
 # from camel.forms import SingleChoiceAnswerForm
 
 #--------------------
@@ -235,8 +235,8 @@ def edit_answer(request, pk):
     prev = questions.filter( mpath__lt=qu.mpath ).order_by('-pk')
     context['next'] = next[0] if next else None
     context['prev'] = prev[0] if prev else None
-    
-	# answer form 
+
+	# answer form
     # retreive current saved answer (if any)
     ans = Answer.objects.filter(question=qu, user=request.user).first()
     if ans:
@@ -250,15 +250,15 @@ def edit_answer(request, pk):
         if form.is_valid():
             ques = form.cleaned_data['question']
             user = form.cleaned_data['user']
-            
+
             # search for saved answer
             answer = Answer.objects.filter(question=ques, user=user).first()
-            
+
             # create new answer if required
             if not answer:
                 answer = form.save(commit=False)
                 answer.save()
-                
+
             # switch on button pressed
             if 'save-answer' in request.POST:
                 answer.text = form.cleaned_data['text']
@@ -345,13 +345,13 @@ def sctest(request, pk):
                     an = SingleChoiceAnswer(user=request.user, question=qu, choice=cho)
                     an.save
                     trip[2] = an
-                    
+
             context["triplets"] = triplets
             form = SubmissionForm( initial={'user': request.user, 'assignment':test.pk} )
             context['form'] = form
-            
+
             if 'submit-test' in request.POST:
-                
+
                 # update submission
                 submission = form.save(commit=False)
                 submission.save()
@@ -361,13 +361,13 @@ def sctest(request, pk):
                         answer.submission = submission
                         answer.save()
             return render_to_response('sctest.html', context)
-            
+
         else:
             context['debug'] = form.errors
             return render_to_response('index.html', context)
     else: # not POST
         return render_to_response('sctest.html', context)
-    
+
 # homework (question set)
 @login_required
 def homework(request, pk):
@@ -392,7 +392,7 @@ def homework(request, pk):
     questions = BookNode.objects.filter(node_type='question', mpath__startswith=hwk.mpath).order_by('mpath')
     context['questions'] = questions
     answers = []
-    
+
     # create question-answer pairs (answer=None is not yet attempted/saved)
     for qu in questions:
         answers.append( Answer.objects.filter(user=request.user, question=qu).first() )
@@ -409,7 +409,7 @@ def homework(request, pk):
     form = SubmissionForm( initial={'user': request.user, 'assignment':hwk.pk, 'declaraion': False} )
     form.fields['answers'] = answers
     context['form'] = form
-    
+
     if request.method == 'POST':
         # deal with form (submit)
         form = SubmissionForm(request.POST)
@@ -430,7 +430,7 @@ def homework(request, pk):
             return render_to_response('index.html', context)
     else: # not POST
         return render_to_response('homework.html', context)
-   
+
 # SEARCH
 def search_form(request):
     return render(request, 'search_form.html')
@@ -443,7 +443,7 @@ def search(request):
             {'results': results, 'query': q})
     else:
         return HttpResponse('Please submit a search term.')
-    
+
 #--------------------
 # users
 #--------------------
@@ -457,7 +457,7 @@ def login_view(request):
             if user.is_active:
                 login(request, user)
                 return render(request, 'userhome.html', {'pk': user.pk})
-                
+
                 return HttpResponseRedirect('/')
             else:
                 return HttpResponse("Account is inactive.")

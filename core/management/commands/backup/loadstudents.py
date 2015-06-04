@@ -12,7 +12,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
 from django.contrib.auth.models import User
-from camel.models import Student
+from core.models import Student
 
 XLS_ROOT  = getattr(settings, 'XLS_ROOT')
 

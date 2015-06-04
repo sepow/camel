@@ -12,7 +12,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from camel.models import Module
+from core.models import Module
 
 SIMS_ROOT  = getattr(settings, 'SIMS_ROOT')
 
