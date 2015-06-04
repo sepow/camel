@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import View
 
-from core.models import BookNode, Module
+from core.models import BookNode, Module, Book
 
 
 class StaffRequiredMixin(object):
@@ -24,10 +24,9 @@ class ReviewIndexView(StaffRequiredMixin, View):
 
 class ReviewBookView(StaffRequiredMixin, View):
 
-    def get(self, request):
-        books = BookNode.objects.filter(node_type="question")
-        return ""
-
+    def get(self, request, book_pk):
+        book = Book.objects.get(pk=book_pk)
+        return render(request, "review/book_index.html", {"book": book})
 
 
 class ReviewQuestionView(StaffRequiredMixin, View):

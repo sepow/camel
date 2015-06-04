@@ -8,7 +8,7 @@
 {% for module in modules %}
   <h2><u>{{ module.long_name }}</u></h2>
   {% for book in module.book_module.all %}
-    <a href="/book/{{ book.id }}">{{ book }}</a>
+    <a href="/review/book/{{ book.id }}">{{ book.number }}. {{ book.title }}</a>
   {% endfor %}
 {% endfor %}
 
