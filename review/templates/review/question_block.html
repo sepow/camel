@@ -1,6 +1,5 @@
 <div class="question-block">
   <a href="/review/question/{{ question.id }}"<b>Question {{ question.number }}</b></a><br>
-  {{ question }}
   <div class="question">
     {% with question.get_descendants as subtree %}
       {% include "booknode.html" %}
