@@ -23,10 +23,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-	# list views
+    # list views
     url(r'^modules/$', views.Module_ListView.as_view(), name='module-list'),
 
-	# detail views
+    # detail views
     url(r'^module/(?P<pk>\d+)/$', views.Module_DetailView.as_view(), name="module-detail"),
     url(r'^book/(?P<pk>\d+)/$', views.Book_DetailView.as_view(), name="book-detail"),
     url(r'^chapter/(?P<pk>\d+)/$', views.Chapter_DetailView.as_view(), name="chapter-detail"),
@@ -44,9 +44,9 @@ urlpatterns = patterns('',
     url(r'^sctest/(?P<pk>\d+)/$', views.sctest, name="sctest"),
     # url(r'mctest/(?P<pk>\d+)/$', views.mctest, name="mctest"),
 
-	# users
-	url(r'^home/(?P<pk>\d+)/$', views.userhome, name="user-home"),
-	url(r'^login/$', views.login_view, name="login"),
+    # users
+    url(r'^home/(?P<pk>\d+)/$', views.userhome, name="user-home"),
+    url(r'^login/$', views.login_view, name="login"),
     url(r'^logout/$', views.logout_view, name="logout"),
 
     # search
