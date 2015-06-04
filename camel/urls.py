@@ -54,7 +54,7 @@ urlpatterns = patterns('',
     url(r'^search/$', views.search),
 
     # review app
-    url(r'^review/$', include('review.urls', namespace='review'))
+    url(r'^review/', include('review.urls', namespace='review'))
 
 )
 
@@ -63,5 +63,3 @@ if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT,}),
     )
-    
-

@@ -3,7 +3,6 @@
 {% block content-main %}
 
 
-{% for question in books %}
   <div class="question-block">
     <a href="/homework/{{ question.id }}"<b>Question {{ question.number }}</b></a><br>
     {{ question }}
@@ -20,7 +19,6 @@
       </div>
     {% endfor %}
   </div>
-{% endfor %}
 
 
 
